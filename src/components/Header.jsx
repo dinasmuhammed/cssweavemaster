@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, User, Heart, ShoppingCart, Menu, X } from 'lucide-react';
+import { Badge } from "@/components/ui/badge";
+import { useCart } from '../context/CartContext';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { cartItems } = useCart();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   return (
-    <header className="bg-cream-100">
+    <header className="bg-cream-100 sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="py-2 text-center text-sm bg-cream-200">
           WE ARE DELIVERING ACROSS INDIA AND INTERNATIONALLY!
@@ -30,7 +33,10 @@ const Header = () => {
             <Search className="w-6 h-6 cursor-pointer" />
             <User className="w-6 h-6 cursor-pointer" />
             <Heart className="w-6 h-6 cursor-pointer" />
-            <ShoppingCart className="w-6 h-6 cursor-pointer" />
+            <div className="relative">
+              <ShoppingCart className="w-6 h-6 cursor-pointer" />
+              <Badge className="absolute -top-2 -right-2 bg-green-800">{cartItems.length}</Badge>
+            </div>
           </div>
           <div className="md:hidden">
             <button onClick={toggleMenu}>
@@ -51,7 +57,10 @@ const Header = () => {
               <Search className="w-6 h-6" />
               <User className="w-6 h-6" />
               <Heart className="w-6 h-6" />
-              <ShoppingCart className="w-6 h-6" />
+              <div className="relative">
+                <ShoppingCart className="w-6 h-6" />
+                <Badge className="absolute -top-2 -right-2 bg-green-800">{cartItems.length}</Badge>
+              </div>
             </div>
           </div>
         )}

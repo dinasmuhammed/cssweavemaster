@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import HeroSection from '../components/HeroSection';
 import OurHappyStore from '../components/OurHappyStore';
 import OurHappyClients from '../components/OurHappyClients';
@@ -9,14 +10,19 @@ import WhyHennaByFathima from '../components/WhyHennaByFathima';
 
 const Home = () => {
   return (
-    <div>
+    <div className="space-y-16">
       <HeroSection />
-      <OurHappyStore />
+      <OurServices />
+      <AboutUs />
+      <WhyHennaByFathima />
       <OurHappyClients />
       <HennaMoments />
-      <AboutUs />
-      <OurServices />
-      <WhyHennaByFathima />
+      <OurHappyStore />
+      <div className="text-center">
+        <Link to="/shop" className="bg-green-800 text-white px-6 py-3 rounded-full text-lg hover:bg-green-700 transition-colors inline-block">
+          Visit Our Shop
+        </Link>
+      </div>
     </div>
   );
 };

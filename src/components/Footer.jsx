@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { Facebook, Instagram, Twitter } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -8,13 +10,51 @@ const Footer = () => {
           <div>
             <h3 className="text-xl font-bold mb-4">Contact</h3>
             <p>+91 8086647124</p>
-            <p>mail@gmail.com</p>
+            <p>info@hennabyfathima.com</p>
             <p>Henna by Fathima Mehendi Studio</p>
             <p>South Koduvally</p>
             <p>Koduvally, Kozhikode</p>
             <p>Kerala - 673572</p>
           </div>
-          {/* Add more footer sections as needed */}
+          <div>
+            <h3 className="text-xl font-bold mb-4">Quick Links</h3>
+            <ul className="space-y-2">
+              <li><Link to="/" className="hover:text-cream-100">Home</Link></li>
+              <li><Link to="/shop" className="hover:text-cream-100">Shop</Link></li>
+              <li><Link to="/services" className="hover:text-cream-100">Services</Link></li>
+              <li><Link to="/workshop" className="hover:text-cream-100">Workshop</Link></li>
+              <li><Link to="/contact" className="hover:text-cream-100">Contact Us</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="text-xl font-bold mb-4">Follow Us</h3>
+            <div className="flex space-x-4">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+                <Facebook className="w-6 h-6" />
+              </a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+                <Instagram className="w-6 h-6" />
+              </a>
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+                <Twitter className="w-6 h-6" />
+              </a>
+            </div>
+          </div>
+          <div>
+            <h3 className="text-xl font-bold mb-4">Newsletter</h3>
+            <p className="mb-2">Subscribe to our newsletter for updates and offers</p>
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className="w-full p-2 text-green-900 rounded"
+            />
+            <button className="mt-2 bg-cream-100 text-green-900 px-4 py-2 rounded hover:bg-cream-200 transition-colors">
+              Subscribe
+            </button>
+          </div>
+        </div>
+        <div className="mt-8 text-center">
+          <p>&copy; 2023 Henna by Fathima. All rights reserved.</p>
         </div>
       </div>
     </footer>

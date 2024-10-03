@@ -3,14 +3,25 @@ import { Link } from 'react-router-dom';
 import { Search, User, Heart, ShoppingCart, Menu, X } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import { useCart } from '../context/CartContext';
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { cartItems } = useCart();
+  const { cartItems, removeFromCart } = useCart();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
   return (
     <header className="bg-cream-100 sticky top-0 z-50">
@@ -33,10 +44,33 @@ const Header = () => {
             <Search className="w-6 h-6 cursor-pointer" />
             <User className="w-6 h-6 cursor-pointer" />
             <Heart className="w-6 h-6 cursor-pointer" />
-            <div className="relative">
-              <ShoppingCart className="w-6 h-6 cursor-pointer" />
-              <Badge className="absolute -top-2 -right-2 bg-green-800">{cartItems.length}</Badge>
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <div className="relative">
+                  <ShoppingCart className="w-6 h-6 cursor-pointer" />
+                  <Badge className="absolute -top-2 -right-2 bg-green-800">{cartItems.length}</Badge>
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuLabel>Your Cart</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {cartItems.map((item) => (
+                  <DropdownMenuItem key={item.id} className="flex justify-between">
+                    <span>{item.name} (x{item.quantity})</span>
+                    <span>₹{item.price * item.quantity}</span>
+                  </DropdownMenuItem>
+                ))}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <strong>Total: ₹{totalPrice}</strong>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/cart">
+                    <Button className="w-full">View Cart</Button>
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
           <div className="md:hidden">
             <button onClick={toggleMenu}>
@@ -57,10 +91,10 @@ const Header = () => {
               <Search className="w-6 h-6" />
               <User className="w-6 h-6" />
               <Heart className="w-6 h-6" />
-              <div className="relative">
+              <Link to="/cart" className="relative">
                 <ShoppingCart className="w-6 h-6" />
                 <Badge className="absolute -top-2 -right-2 bg-green-800">{cartItems.length}</Badge>
-              </div>
+              </Link>
             </div>
           </div>
         )}

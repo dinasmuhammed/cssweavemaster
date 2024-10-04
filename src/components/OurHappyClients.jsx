@@ -3,25 +3,11 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 
 const testimonials = [
   {
-    name: 'Sona K',
-    image: '/client1.jpg',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    name: 'Hanan P',
+    image: 'https://i.ibb.co/4jVpvqQ/image.png',
+    text: 'I recently discovered that Henna by Fathima is one of the few unique store with Mehndi products .  Not only did they have the item I was looking for, but they also offer wide variety of products in this sector. I’m thrilled with the quality and will definitely shop at your store again in the future. Highly recommended!',
   },
-  {
-    name: 'Priya M',
-    image: '/client2.jpg',
-    text: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-  },
-  {
-    name: 'Rahul S',
-    image: '/client3.jpg',
-    text: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-  },
-  {
-    name: 'Anita R',
-    image: '/client4.jpg',
-    text: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-  },
+  
 ];
 
 const OurHappyClients = () => {

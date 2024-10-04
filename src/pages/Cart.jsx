@@ -21,6 +21,7 @@ const Cart = () => {
     state: '',
     district: '',
   });
+  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
 
   const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
@@ -34,9 +35,14 @@ const Cart = () => {
 
   const handlePurchase = (e) => {
     e.preventDefault();
-    // Here you would typically send the form data and cart items to your backend
-    console.log('Purchase Data:', { ...formData, items: cartItems, totalPrice });
-    alert('Thank you for your purchase!');
+    setShowPaymentDialog(true);
+  };
+
+  const handlePayment = () => {
+    // Here you would typically integrate with a real payment gateway
+    console.log('Processing UPI payment...');
+    alert('Payment successful! Thank you for your purchase.');
+    setShowPaymentDialog(false);
     // Reset form and cart here
   };
 
@@ -110,6 +116,31 @@ const Cart = () => {
           </div>
         </>
       )}
+      
+      {/* UPI Payment Dialog */}
+      <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>UPI Payment</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="bg-gray-100 p-4 rounded-lg text-center">
+              <p className="text-2xl font-bold">₹{totalPrice}</p>
+              <p className="text-sm text-gray-600">Total Amount</p>
+            </div>
+            <div>
+              <Label htmlFor="upiId">Enter UPI ID</Label>
+              <Input id="upiId" placeholder="yourname@upi" required />
+            </div>
+            <Button onClick={handlePayment} className="w-full bg-green-600 hover:bg-green-700">
+              Pay Now
+            </Button>
+            <p className="text-xs text-center text-gray-500">
+              By clicking "Pay Now", you agree to our Terms and Conditions.
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

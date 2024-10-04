@@ -1,10 +1,10 @@
 import React from 'react';
 
 const services = [
-  { name: 'Bridal Henna Package', image: '/bridal-henna.jpg' },
-  { name: 'Henna Products', image: '/henna-products.jpg' },
-  { name: 'Party Henna', image: '/party-henna.jpg' },
-  { name: 'Workshops', image: '/workshops.jpg' },
+  { name: 'Bridal Henna Package', image: 'https://i.ibb.co/G3CRLj4/Screenshot-2024-10-04-165522.png' },
+  { name: 'Henna Products', image: 'https://i.ibb.co/h2fqTRD/Screenshot-2024-10-04-165533.png' },
+  { name: 'Party Henna', image: 'https://i.ibb.co/w0YLy9k/Screenshot-2024-10-04-165544.png' },
+  { name: 'Workshops', image: 'https://i.ibb.co/gmB1zsq/Screenshot-2024-10-04-165552.png' },
 ];
 
 const OurServices = () => {

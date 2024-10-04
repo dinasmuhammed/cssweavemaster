@@ -12,6 +12,8 @@ import Services from './pages/Services';
 import Workshop from './pages/Workshop';
 import Contact from './pages/Contact';
 import Cart from './pages/Cart';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
 
 const queryClient = new QueryClient();
 
@@ -32,6 +34,8 @@ const App = () => {
                   <Route path="/workshop" element={<Workshop />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/cart" element={<Cart />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<Signup />} />
                 </Routes>
               </main>
               <Footer />

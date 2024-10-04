@@ -40,9 +40,14 @@ const Header = () => {
             <Link to="/workshop" className="hover:text-green-800">Workshop</Link>
             <Link to="/contact" className="hover:text-green-800">Contact us</Link>
           </div>
-          <div className="hidden md:flex space-x-4">
+          <div className="hidden md:flex space-x-4 items-center">
             <Search className="w-6 h-6 cursor-pointer" />
-            <User className="w-6 h-6 cursor-pointer" />
+            <Link to="/login">
+              <Button variant="outline" size="sm">Login</Button>
+            </Link>
+            <Link to="/signup">
+              <Button size="sm">Sign Up</Button>
+            </Link>
             <Heart className="w-6 h-6 cursor-pointer" />
             <DropdownMenu>
               <DropdownMenuTrigger>
@@ -86,10 +91,11 @@ const Header = () => {
               <Link to="/services" className="hover:text-green-800" onClick={toggleMenu}>Services</Link>
               <Link to="/workshop" className="hover:text-green-800" onClick={toggleMenu}>Workshop</Link>
               <Link to="/contact" className="hover:text-green-800" onClick={toggleMenu}>Contact us</Link>
+              <Link to="/login" className="hover:text-green-800" onClick={toggleMenu}>Login</Link>
+              <Link to="/signup" className="hover:text-green-800" onClick={toggleMenu}>Sign Up</Link>
             </div>
             <div className="flex justify-around py-4">
               <Search className="w-6 h-6" />
-              <User className="w-6 h-6" />
               <Heart className="w-6 h-6" />
               <Link to="/cart" className="relative">
                 <ShoppingCart className="w-6 h-6" />

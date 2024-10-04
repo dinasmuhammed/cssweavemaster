@@ -129,8 +129,9 @@ const Cart = () => {
               <p className="text-sm text-gray-600">Total Amount</p>
             </div>
             <div>
-              <Label htmlFor="upiId">Enter UPI ID</Label>
-              <Input id="upiId" placeholder="yourname@upi" required />
+              <Label htmlFor="upiId">UPI ID for Payment</Label>
+              <Input id="upiId" value="adnanmuhammad4393@okicici" readOnly className="bg-gray-100" />
+              <p className="text-sm text-gray-600 mt-1">Please use this UPI ID to make your payment</p>
             </div>
             <Button onClick={handlePayment} className="w-full bg-green-600 hover:bg-green-700">
               Pay Now

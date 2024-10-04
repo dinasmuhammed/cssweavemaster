@@ -7,7 +7,7 @@ const AboutUs = () => {
         <h2 className="text-3xl font-bold text-center text-green-800 mb-8">About Us</h2>
         <div className="flex flex-col md:flex-row items-center">
           <div className="md:w-1/2 mb-8 md:mb-0">
-            <img src="/fathima.jpg" alt="Fathima Shamsudheen" className="w-full max-w-md mx-auto rounded-lg" />
+            <img src="https://i.postimg.cc/wBxJsq1n/image.png" alt="Fathima Shamsudheen" className="w-full max-w-md mx-auto rounded-lg" />
           </div>
           <div className="md:w-1/2 md:pl-8">
             <h3 className="text-2xl font-bold mb-4">Meet the Artist</h3>

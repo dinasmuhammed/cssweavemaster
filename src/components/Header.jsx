@@ -31,7 +31,7 @@ const Header = () => {
         </div>
         <nav className="flex justify-between items-center py-4">
           <div className="text-3xl font-bold text-green-800">
-            <img src="/logo.png" alt="Henna by Fathima" className="h-12" />
+            <img src="https://i.postimg.cc/T3N2Cfkz/image.png" alt="Henna by Fathima" className="h-16 mx-auto object-cover" />
           </div>
           <div className="hidden md:flex space-x-6">
             <Link to="/" className="hover:text-green-800">Home</Link>

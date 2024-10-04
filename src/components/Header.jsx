@@ -26,8 +26,8 @@ const Header = () => {
   return (
     <header className="bg-cream-100 sticky top-0 z-50">
       <div className="container mx-auto px-4">
-        <div className="py-2 text-center text-sm bg-cream-200">
-          WE ARE DELIVERING ACROSS INDIA AND INTERNATIONALLY!
+        <div className="py-2 text-center text-sm bg-cream-200 animate-pulse">
+          <span className="font-bold">WE ARE DELIVERING ACROSS INDIA AND INTERNATIONALLY!</span>
         </div>
         <nav className="flex justify-between items-center py-4">
           <div className="text-3xl font-bold text-green-800">

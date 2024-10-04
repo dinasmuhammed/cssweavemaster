@@ -6,7 +6,7 @@ const HeroSection = () => {
     <section className="relative h-screen">
       <div className="absolute inset-0">
         <img 
-          src="https://i.postimg.cc/HkR3w7CF/image.png" 
+          src="https://i.postimg.cc/14x50HJf/image.png" 
           alt="Hero" 
           className="w-full h-full object-cover"
         />

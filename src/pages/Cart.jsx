@@ -39,10 +39,14 @@ const Cart = () => {
     setShowPaymentDialog(true);
   };
 
-  const openUPIPaymentLink = (upiId, amount, orderId, customerName) => {
+  const openUPIPaymentLink = (upiId, amount, orderId) => {
     const notes = encodeURIComponent(JSON.stringify({
       orderId: orderId,
-      customerName: customerName,
+      customerName: formData.name,
+      phoneNumber: formData.phoneNumber,
+      address: formData.address,
+      state: formData.state,
+      district: formData.district,
       items: cartItems.map(item => `${item.name} (x${item.quantity})`).join(', ')
     }));
     const upiUrl = `upi://pay?pa=${upiId}&pn=Henna%20by%20Fathima&am=${amount}&cu=INR&tn=Order%20Payment&tr=${orderId}&notes=${notes}`;
@@ -51,7 +55,7 @@ const Cart = () => {
 
   const handlePayment = () => {
     const orderId = `ORDER-${Date.now()}`;
-    openUPIPaymentLink('adnanmuhammad4393@okicici', totalPrice, orderId, formData.name);
+    openUPIPaymentLink('adnanmuhammad4393@okicici', totalPrice, orderId);
     toast({
       title: "Payment Initiated",
       description: "You will be redirected to complete the UPI payment.",

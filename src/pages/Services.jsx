@@ -5,22 +5,22 @@ const services = [
   {
     title: 'Bridal Henna',
     description: 'Exquisite and intricate designs for your special day.',
-    image: '/bridal-henna.jpg',
+    image: 'https://i.postimg.cc/FRRFYbt1/Screenshot-2024-10-06-101248.png',
   },
   {
     title: 'Party Henna',
     description: 'Beautiful designs for all your celebrations and events.',
-    image: '/party-henna.jpg',
+    image: 'https://i.postimg.cc/3JDXym7L/Screenshot-2024-10-06-101639.png',
   },
   {
     title: 'Corporate Events',
     description: 'Add a touch of culture to your corporate gatherings.',
-    image: '/corporate-henna.jpg',
+    image: 'https://i.postimg.cc/htc1HhWp/Screenshot-2024-10-06-101737.png',
   },
   {
     title: 'Henna Tattoos',
     description: 'Temporary body art for a unique and stylish look.',
-    image: '/henna-tattoo.jpg',
+    image: 'https://i.postimg.cc/vZKD5Szf/Screenshot-2024-10-06-101849.png',
   },
 ];
 

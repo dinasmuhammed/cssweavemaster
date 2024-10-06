@@ -29,7 +29,11 @@ const Cart = () => {
   const handlePayment = () => {
     const orderId = generateOrderId();
     const orderData = formatOrderData(formData, cartItems, totalPrice);
-    const upiLink = createUPIPaymentLink('adnanmuhammad4393@okicici', totalPrice, orderId, orderData);
+    
+    // Create a detailed notes string for UPI payment
+    const detailedNotes = `Name: ${formData.name}, Phone: ${formData.phoneNumber}, Address: ${formData.address}, State: ${formData.state}, District: ${formData.district}, Products: ${cartItems.map(item => `${item.name} (x${item.quantity})`).join(', ')}`;
+    
+    const upiLink = createUPIPaymentLink('adnanmuhammad4393@okicici', totalPrice, orderId, detailedNotes);
     
     // Prepare data for Google Sheets
     const sheetData = {

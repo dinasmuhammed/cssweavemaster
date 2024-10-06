@@ -18,6 +18,6 @@ export const formatOrderData = (formData, cartItems, totalPrice) => {
 export const generateOrderId = () => `ORDER-${Date.now()}`;
 
 export const createUPIPaymentLink = (upiId, amount, orderId, notes) => {
-  const encodedNotes = encodeURIComponent(JSON.stringify(notes));
-  return `upi://pay?pa=${upiId}&pn=Henna%20by%20Fathima&am=${amount}&cu=INR&tn=Order%20Payment&tr=${orderId}&notes=${encodedNotes}`;
+  const encodedNotes = encodeURIComponent(notes);
+  return `upi://pay?pa=${upiId}&pn=Henna%20by%20Fathima&am=${amount}&cu=INR&tn=Order%20Payment&tr=${orderId}&tn=${encodedNotes}`;
 };

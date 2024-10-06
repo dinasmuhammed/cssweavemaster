@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { Button } from "@/components/ui/button";
-import { Trash2, Heart, ShoppingCart, Plus, Minus } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -32,8 +31,24 @@ const Cart = () => {
     const orderData = formatOrderData(formData, cartItems, totalPrice);
     const upiLink = createUPIPaymentLink('adnanmuhammad4393@okicici', totalPrice, orderId, orderData);
     
-    // Here you would typically send orderData to your backend
-    console.log('Order data to be sent to backend:', orderData);
+    // Prepare data for Google Sheets
+    const sheetData = {
+      timestamp: new Date().toISOString(),
+      orderId: orderId,
+      customerName: formData.name,
+      phoneNumber: formData.phoneNumber,
+      address: formData.address,
+      state: formData.state,
+      district: formData.district,
+      items: cartItems.map(item => `${item.name} (x${item.quantity})`).join(', '),
+      totalPrice: totalPrice
+    };
+
+    // Log the data that would be sent to Google Sheets
+    console.log('Data to be sent to Google Sheets:', sheetData);
+
+    // Here you would typically send sheetData to your backend
+    // The backend would then handle the Google Sheets integration
 
     window.location.href = upiLink;
     toast({

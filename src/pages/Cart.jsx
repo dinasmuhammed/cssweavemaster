@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { Button } from "@/components/ui/button";
 import { Trash2 } from 'lucide-react';
@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "@/components/ui/use-toast";
 
 const Cart = () => {
   const { cartItems, removeFromCart } = useCart();
@@ -38,13 +39,43 @@ const Cart = () => {
     setShowPaymentDialog(true);
   };
 
-  const handlePayment = () => {
-    // Here you would typically integrate with a real payment gateway
-    console.log('Processing UPI payment...');
-    alert('Payment successful! Thank you for your purchase.');
-    setShowPaymentDialog(false);
-    // Reset form and cart here
+  const openUPIPaymentLink = (upiId, amount, orderId, customerName) => {
+    const notes = encodeURIComponent(JSON.stringify({
+      orderId: orderId,
+      customerName: customerName,
+      items: cartItems.map(item => `${item.name} (x${item.quantity})`).join(', ')
+    }));
+    const upiUrl = `upi://pay?pa=${upiId}&pn=Henna%20by%20Fathima&am=${amount}&cu=INR&tn=Order%20Payment&tr=${orderId}&notes=${notes}`;
+    window.location.href = upiUrl;
   };
+
+  const handlePayment = () => {
+    const orderId = `ORDER-${Date.now()}`;
+    openUPIPaymentLink('adnanmuhammad4393@okicici', totalPrice, orderId, formData.name);
+    toast({
+      title: "Payment Initiated",
+      description: "You will be redirected to complete the UPI payment.",
+    });
+  };
+
+  useEffect(() => {
+    const buyNowButtons = document.querySelectorAll('.buy-now-btn');
+    buyNowButtons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        const upiId = e.target.dataset.upiId;
+        const price = e.target.dataset.price;
+        const orderId = `ORDER-${Date.now()}`;
+        openUPIPaymentLink(upiId, price, orderId, 'Customer');
+      });
+    });
+
+    return () => {
+      buyNowButtons.forEach(button => {
+        button.removeEventListener('click', () => {});
+      });
+    };
+  }, []);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -117,7 +148,6 @@ const Cart = () => {
         </>
       )}
       
-      {/* UPI Payment Dialog */}
       <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -133,7 +163,7 @@ const Cart = () => {
               <Input id="upiId" value="adnanmuhammad4393@okicici" readOnly className="bg-gray-100" />
               <p className="text-sm text-gray-600 mt-1">Please use this UPI ID to make your payment</p>
             </div>
-            <Button onClick={handlePayment} className="w-full bg-green-600 hover:bg-green-700">
+            <Button onClick={handlePayment} className="w-full bg-green-600 hover:bg-green-700 buy-now-btn" data-upi-id="adnanmuhammad4393@okicici" data-price={totalPrice}>
               Pay Now
             </Button>
             <p className="text-xs text-center text-gray-500">

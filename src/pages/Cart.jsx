@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { Button } from "@/components/ui/button";
-import { Trash2 } from 'lucide-react';
+import { Trash2, Heart, ShoppingCart, Plus, Minus } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
 
 const Cart = () => {
-  const { cartItems, removeFromCart } = useCart();
+  const { cartItems, removeFromCart, updateQuantity, saveForLater, savedItems, moveToCart } = useCart();
   const [formData, setFormData] = useState({
     name: '',
     phoneNumber: '',
@@ -58,24 +58,42 @@ const Cart = () => {
     });
   };
 
-  useEffect(() => {
-    const buyNowButtons = document.querySelectorAll('.buy-now-btn');
-    buyNowButtons.forEach(button => {
-      button.addEventListener('click', (e) => {
-        e.preventDefault();
-        const upiId = e.target.dataset.upiId;
-        const price = e.target.dataset.price;
-        const orderId = `ORDER-${Date.now()}`;
-        openUPIPaymentLink(upiId, price, orderId, 'Customer');
-      });
-    });
-
-    return () => {
-      buyNowButtons.forEach(button => {
-        button.removeEventListener('click', () => {});
-      });
-    };
-  }, []);
+  const CartItem = ({ item, isSaved = false }) => (
+    <div key={item.id} className="flex items-center justify-between border-b pb-4">
+      <div className="flex items-center">
+        <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded mr-4" />
+        <div>
+          <h3 className="font-semibold">{item.name}</h3>
+          <p>Price: ₹{item.price}</p>
+          {!isSaved && (
+            <div className="flex items-center mt-2">
+              <Button variant="outline" size="sm" onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}>
+                <Minus className="w-4 h-4" />
+              </Button>
+              <span className="mx-2">{item.quantity}</span>
+              <Button variant="outline" size="sm" onClick={() => updateQuantity(item.id, item.quantity + 1)}>
+                <Plus className="w-4 h-4" />
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="flex items-center">
+        {isSaved ? (
+          <Button variant="outline" className="mr-2" onClick={() => moveToCart(item.id)}>
+            <ShoppingCart className="w-4 h-4 mr-2" /> Move to Cart
+          </Button>
+        ) : (
+          <Button variant="outline" className="mr-2" onClick={() => saveForLater(item.id)}>
+            <Heart className="w-4 h-4 mr-2" /> Save for Later
+          </Button>
+        )}
+        <Button variant="destructive" onClick={() => removeFromCart(item.id)}>
+          <Trash2 className="w-4 h-4" />
+        </Button>
+      </div>
+    </div>
+  );
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -86,19 +104,7 @@ const Cart = () => {
         <>
           <div className="space-y-4">
             {cartItems.map((item) => (
-              <div key={item.id} className="flex items-center justify-between border-b pb-4">
-                <div className="flex items-center">
-                  <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded mr-4" />
-                  <div>
-                    <h3 className="font-semibold">{item.name}</h3>
-                    <p>Quantity: {item.quantity}</p>
-                    <p>Price: ₹{item.price * item.quantity}</p>
-                  </div>
-                </div>
-                <Button variant="destructive" onClick={() => removeFromCart(item.id)}>
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </div>
+              <CartItem key={item.id} item={item} />
             ))}
           </div>
           <div className="mt-8">
@@ -146,6 +152,17 @@ const Cart = () => {
             </Dialog>
           </div>
         </>
+      )}
+      
+      {savedItems.length > 0 && (
+        <div className="mt-8">
+          <h2 className="text-2xl font-bold mb-4">Saved for Later</h2>
+          <div className="space-y-4">
+            {savedItems.map((item) => (
+              <CartItem key={item.id} item={item} isSaved={true} />
+            ))}
+          </div>
+        </div>
       )}
       
       <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>

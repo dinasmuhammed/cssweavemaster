@@ -8,7 +8,13 @@ const OurHappyStore = () => {
         <p className="text-center text-lg mb-8">Visit us in-store to experience beautiful henna art on your hands and shop our range of organic henna products.</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
-            <img src="/store-image.jpg" alt="Our Store" className="w-full h-64 object-cover rounded-lg" />
+           <iframe
+  src="https://www.youtube.com/embed/qUKTRihRkkc?autoplay=1&mute=1&loop=1&playlist=qUKTRihRkkc"
+  className="w-full h-64 object-cover rounded-lg"
+  allow="autoplay; encrypted-media"
+  allowfullscreen>
+</iframe>
+
           </div>
           <div>
             <h3 className="text-xl font-bold mb-4">Henna by Fathima Mehendi Studio</h3>

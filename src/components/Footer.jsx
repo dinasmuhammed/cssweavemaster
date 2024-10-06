@@ -55,6 +55,17 @@ const Footer = () => {
         </div>
         <div className="mt-8 text-center">
           <p>&copy; 2023 Henna by Fathima. All rights reserved.</p>
+          <p className="mt-2 text-sm">
+            This website is developed by{' '}
+            <a
+              href="https://adwebcomicagency.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-cream-100"
+            >
+              AD Web Comic Agency
+            </a>
+          </p>
         </div>
       </div>
     </footer>

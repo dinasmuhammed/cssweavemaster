@@ -13,23 +13,12 @@ const AboutUs = () => {
             <h3 className="text-2xl font-bold mb-4">Meet the Artist</h3>
             <h4 className="text-xl font-semibold mb-2">Fathima Shamsudheen - Owner, Founder & Lead Artist</h4>
             <p className="text-gray-600 mb-4">
-              Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying
-              out print, graphic or web designs. The passage is attributed to an unknown
-              typesetter in the 15th century who is thought to have scrambled parts of
-              Cicero's De Finibus Bonorum et Malorum for use in a type specimen book. It
-              usually begins with:
+            At Henna by Fathima, we believe that just as everyone deserves a diamond, henna is an essential part of joy and celebration. Our passion lies in adorning hands with rich, deep red designs, symbolizing companionship, new beginnings, and the simple pleasure of henna art.
+
+
             </p>
             <p className="text-gray-600">
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-              tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
-              amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-              et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-              ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-              in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-              Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-              deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur
-              adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-              aliqua. Ut enim ad minim veniam, quis nostrud exercitation"
+             We are dedicated to providing a personalized experience tailored to each of our clients. From high-quality products and exceptional services to hands-on workshops, Henna by Fathima adds a touch of beauty and sweetness to every occasion, ensuring that your special moments are truly unforgettable.
             </p>
           </div>
         </div>

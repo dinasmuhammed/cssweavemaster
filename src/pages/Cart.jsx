@@ -62,7 +62,13 @@ const Cart = () => {
         <>
           <div className="space-y-4">
             {cartItems.map((item) => (
-              <CartItem key={item.id} item={item} removeFromCart={removeFromCart} updateQuantity={updateQuantity} saveForLater={saveForLater} />
+              <CartItem 
+                key={item.id} 
+                item={item} 
+                removeFromCart={removeFromCart} 
+                updateQuantity={updateQuantity} 
+                saveForLater={saveForLater} 
+              />
             ))}
           </div>
           <div className="mt-8">
@@ -87,7 +93,13 @@ const Cart = () => {
           <h2 className="text-2xl font-bold mb-4">Saved for Later</h2>
           <div className="space-y-4">
             {savedItems.map((item) => (
-              <CartItem key={item.id} item={item} isSaved={true} moveToCart={moveToCart} removeFromCart={removeFromCart} />
+              <CartItem 
+                key={item.id} 
+                item={item} 
+                isSaved={true} 
+                moveToCart={moveToCart} 
+                removeFromCart={removeFromCart} 
+              />
             ))}
           </div>
         </div>

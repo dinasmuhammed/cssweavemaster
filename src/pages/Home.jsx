@@ -7,7 +7,6 @@ import HennaMoments from '../components/HennaMoments';
 import AboutUs from '../components/AboutUs';
 import OurServices from '../components/OurServices';
 import WhyHennaByFathima from '../components/WhyHennaByFathima';
-import NotificationButton from '../components/NotificationButton';
 
 const Home = () => {
   return (
@@ -20,15 +19,9 @@ const Home = () => {
       <HennaMoments />
       <OurHappyStore />
       <div className="text-center space-y-4">
-        <div className="flex justify-center items-center space-x-4">
-          <Link to="/shop" className="bg-green-800 text-white px-6 py-3 rounded-full text-lg hover:bg-green-700 transition-colors inline-block">
-            Visit Our Shop
-          </Link>
-          <NotificationButton 
-            message="Welcome to Henna by Fathima! Explore our services and products." 
-            title="Welcome"
-          />
-        </div>
+        <Link to="/shop" className="bg-green-800 text-white px-6 py-3 rounded-full text-lg hover:bg-green-700 transition-colors inline-block">
+          Visit Our Shop
+        </Link>
       </div>
     </div>
   );

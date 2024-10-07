@@ -20,10 +20,10 @@ const Home = () => {
       <HennaMoments />
       <OurHappyStore />
       <div className="text-center space-y-4">
-        <Link to="/shop" className="bg-green-800 text-white px-6 py-3 rounded-full text-lg hover:bg-green-700 transition-colors inline-block">
-          Visit Our Shop
-        </Link>
-        <div>
+        <div className="flex justify-center items-center space-x-4">
+          <Link to="/shop" className="bg-green-800 text-white px-6 py-3 rounded-full text-lg hover:bg-green-700 transition-colors inline-block">
+            Visit Our Shop
+          </Link>
           <NotificationButton 
             message="Welcome to Henna by Fathima! Explore our services and products." 
             title="Welcome"

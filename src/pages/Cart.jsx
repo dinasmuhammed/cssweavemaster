@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
 import { calculateTotalPrice, formatOrderData, generateOrderId, createUPIPaymentLink } from '../utils/cartUtils';
 import CartItem from '../components/CartItem';
@@ -30,12 +28,10 @@ const Cart = () => {
     const orderId = generateOrderId();
     const orderData = formatOrderData(formData, cartItems, totalPrice);
     
-    // Create a detailed notes string for UPI payment
     const detailedNotes = `Order: ${orderId}, Name: ${formData.name}, Phone: ${formData.phoneNumber}, Address: ${formData.address}, State: ${formData.state}, District: ${formData.district}, Products: ${cartItems.map(item => `${item.name} (x${item.quantity})`).join(', ')}`;
     
     const upiLink = createUPIPaymentLink('shamfathi.k-2@oksbi', totalPrice, orderId, detailedNotes);
     
-    // Prepare data for Google Sheets
     const sheetData = {
       timestamp: new Date().toISOString(),
       orderId: orderId,
@@ -48,11 +44,7 @@ const Cart = () => {
       totalPrice: totalPrice
     };
 
-    // Log the data that would be sent to Google Sheets
     console.log('Data to be sent to Google Sheets:', sheetData);
-
-    // Here you would typically send sheetData to your backend
-    // The backend would then handle the Google Sheets integration
 
     window.location.href = upiLink;
     toast({
@@ -110,11 +102,6 @@ const Cart = () => {
             <div className="bg-gray-100 p-4 rounded-lg text-center">
               <p className="text-2xl font-bold">₹{totalPrice}</p>
               <p className="text-sm text-gray-600">Total Amount</p>
-            </div>
-            <div>
-              <Label htmlFor="upiId">UPI ID for Payment</Label>
-              <Input id="upiId" value="shamfathi.k-2@oksbi" readOnly className="bg-gray-100" />
-              <p className="text-sm text-gray-600 mt-1">Please use this UPI ID to make your payment</p>
             </div>
             <Button onClick={handlePayment} className="w-full bg-green-600 hover:bg-green-700 buy-now-btn">
               Pay Now

@@ -36,45 +36,45 @@ const Header = () => {
   return (
     <header className="bg-cream-100 sticky top-0 z-50">
       <div className="container mx-auto px-4">
-        <div className="py-2 text-center text-sm bg-cream-200 animate-pulse">
+        <div className="py-2 text-center text-xs sm:text-sm bg-cream-200 animate-pulse">
           <span className="font-bold">WE ARE DELIVERING ACROSS INDIA AND INTERNATIONALLY!</span>
         </div>
         <nav className="flex justify-between items-center py-4">
-          <div className="text-3xl font-bold text-green-800">
-            <img src="https://i.postimg.cc/T3N2Cfkz/image.png" alt="Henna by Fathima" className="h-16 mx-auto object-cover" />
+          <div className="text-2xl sm:text-3xl font-bold text-green-800">
+            <img src="https://i.postimg.cc/T3N2Cfkz/image.png" alt="Henna by Fathima" className="h-12 sm:h-16 mx-auto object-cover" />
           </div>
-          <div className="hidden md:flex space-x-6">
-            <Link to="/" className="hover:text-green-800">Home</Link>
-            <Link to="/shop" className="hover:text-green-800">Shop</Link>
-            <Link to="/services" className="hover:text-green-800">Services</Link>
-            <Link to="/workshop" className="hover:text-green-800">Workshop</Link>
-            <Link to="/contact" className="hover:text-green-800">Contact us</Link>
+          <div className="hidden md:flex space-x-4 lg:space-x-6">
+            <Link to="/" className="hover:text-green-800 text-sm lg:text-base">Home</Link>
+            <Link to="/shop" className="hover:text-green-800 text-sm lg:text-base">Shop</Link>
+            <Link to="/services" className="hover:text-green-800 text-sm lg:text-base">Services</Link>
+            <Link to="/workshop" className="hover:text-green-800 text-sm lg:text-base">Workshop</Link>
+            <Link to="/contact" className="hover:text-green-800 text-sm lg:text-base">Contact us</Link>
           </div>
-          <div className="hidden md:flex space-x-4 items-center">
+          <div className="hidden md:flex space-x-2 lg:space-x-4 items-center">
             <form onSubmit={handleSearch} className="relative">
               <Input
                 type="text"
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pr-8"
+                className="pr-8 w-24 lg:w-32"
               />
               <button type="submit" className="absolute right-2 top-1/2 transform -translate-y-1/2">
                 <Search className="w-4 h-4" />
               </button>
             </form>
             <Link to="/login">
-              <Button variant="outline" size="sm">Login</Button>
+              <Button variant="outline" size="sm" className="text-xs lg:text-sm">Login</Button>
             </Link>
             <Link to="/signup">
-              <Button size="sm">Sign Up</Button>
+              <Button size="sm" className="text-xs lg:text-sm">Sign Up</Button>
             </Link>
-            <Heart className="w-6 h-6 cursor-pointer" />
+            <Heart className="w-5 h-5 lg:w-6 lg:h-6 cursor-pointer" />
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <div className="relative">
-                  <ShoppingCart className="w-6 h-6 cursor-pointer" />
-                  <Badge className="absolute -top-2 -right-2 bg-green-800">{cartItems.length}</Badge>
+                  <ShoppingCart className="w-5 h-5 lg:w-6 lg:h-6 cursor-pointer" />
+                  <Badge className="absolute -top-2 -right-2 bg-green-800 text-xs">{cartItems.length}</Badge>
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
@@ -92,7 +92,7 @@ const Header = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Link to="/cart">
-                    <Button className="w-full">View Cart</Button>
+                    <Button className="w-full text-xs lg:text-sm">View Cart</Button>
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -106,7 +106,7 @@ const Header = () => {
         </nav>
         {isMenuOpen && (
           <div className="md:hidden">
-            <div className="flex flex-col space-y-4 py-4">
+            <div className="flex flex-col space-y-2 py-4">
               <Link to="/" className="hover:text-green-800" onClick={toggleMenu}>Home</Link>
               <Link to="/shop" className="hover:text-green-800" onClick={toggleMenu}>Shop</Link>
               <Link to="/services" className="hover:text-green-800" onClick={toggleMenu}>Services</Link>

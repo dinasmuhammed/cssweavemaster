@@ -31,9 +31,9 @@ const Cart = () => {
     const orderData = formatOrderData(formData, cartItems, totalPrice);
     
     // Create a detailed notes string for UPI payment
-    const detailedNotes = `Name: ${formData.name}, Phone: ${formData.phoneNumber}, Address: ${formData.address}, State: ${formData.state}, District: ${formData.district}, Products: ${cartItems.map(item => `${item.name} (x${item.quantity})`).join(', ')}`;
+    const detailedNotes = `Order: ${orderId}, Name: ${formData.name}, Phone: ${formData.phoneNumber}, Address: ${formData.address}, State: ${formData.state}, District: ${formData.district}, Products: ${cartItems.map(item => `${item.name} (x${item.quantity})`).join(', ')}`;
     
-    const upiLink = createUPIPaymentLink('adnanmuhammad4393@okicici', totalPrice, orderId, detailedNotes);
+    const upiLink = createUPIPaymentLink('shamfathi.k-2@oksbi', totalPrice, orderId, detailedNotes);
     
     // Prepare data for Google Sheets
     const sheetData = {
@@ -113,7 +113,7 @@ const Cart = () => {
             </div>
             <div>
               <Label htmlFor="upiId">UPI ID for Payment</Label>
-              <Input id="upiId" value="adnanmuhammad4393@okicici" readOnly className="bg-gray-100" />
+              <Input id="upiId" value="shamfathi.k-2@oksbi" readOnly className="bg-gray-100" />
               <p className="text-sm text-gray-600 mt-1">Please use this UPI ID to make your payment</p>
             </div>
             <Button onClick={handlePayment} className="w-full bg-green-600 hover:bg-green-700 buy-now-btn">

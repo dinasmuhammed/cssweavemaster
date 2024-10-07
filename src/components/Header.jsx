@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Search, Heart, ShoppingCart, Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Heart, ShoppingCart, Menu, X, User } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import { useCart } from '../context/CartContext';
 import { Button } from "@/components/ui/button";
@@ -12,26 +12,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
   const { cartItems } = useCart();
-  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-    }
-  };
 
   return (
     <header className="bg-cream-100 sticky top-0 z-50">
@@ -51,24 +41,19 @@ const Header = () => {
             <Link to="/contact" className="hover:text-green-800 text-sm lg:text-base">Contact us</Link>
           </div>
           <div className="hidden md:flex space-x-2 lg:space-x-4 items-center">
-            <form onSubmit={handleSearch} className="relative">
-              <Input
-                type="text"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pr-8 w-24 lg:w-32"
-              />
-              <button type="submit" className="absolute right-2 top-1/2 transform -translate-y-1/2">
-                <Search className="w-4 h-4" />
-              </button>
-            </form>
-            <Link to="/login">
-              <Button variant="outline" size="sm" className="text-xs lg:text-sm">Login</Button>
-            </Link>
-            <Link to="/signup">
-              <Button size="sm" className="text-xs lg:text-sm">Sign Up</Button>
-            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <User className="w-5 h-5 lg:w-6 lg:h-6 cursor-pointer" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>
+                  <Link to="/login">Login</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/signup">Sign Up</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Heart className="w-5 h-5 lg:w-6 lg:h-6 cursor-pointer" />
             <DropdownMenu>
               <DropdownMenuTrigger>
@@ -115,18 +100,6 @@ const Header = () => {
               <Link to="/login" className="hover:text-green-800" onClick={toggleMenu}>Login</Link>
               <Link to="/signup" className="hover:text-green-800" onClick={toggleMenu}>Sign Up</Link>
             </div>
-            <form onSubmit={handleSearch} className="flex items-center py-4">
-              <Input
-                type="text"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-grow"
-              />
-              <button type="submit" className="ml-2">
-                <Search className="w-6 h-6" />
-              </button>
-            </form>
           </div>
         )}
       </div>

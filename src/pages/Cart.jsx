@@ -11,6 +11,7 @@ const Cart = () => {
   const { cartItems, removeFromCart, updateQuantity, saveForLater, savedItems, moveToCart } = useCart();
   const [formData, setFormData] = useState({ name: '', phoneNumber: '', address: '', state: '', district: '' });
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
+  const upiId = 'shamfathi.k-2@oksbi'; // UPI ID added here
 
   const totalPrice = calculateTotalPrice(cartItems);
 
@@ -30,7 +31,7 @@ const Cart = () => {
     
     const detailedNotes = `Order: ${orderId}, Name: ${formData.name}, Phone: ${formData.phoneNumber}, Address: ${formData.address}, State: ${formData.state}, District: ${formData.district}, Products: ${cartItems.map(item => `${item.name} (x${item.quantity})`).join(', ')}`;
     
-    const upiLink = createUPIPaymentLink('shamfathi.k-2@oksbi', totalPrice, orderId, detailedNotes);
+    const upiLink = createUPIPaymentLink(upiId, totalPrice, orderId, detailedNotes);
     
     const sheetData = {
       timestamp: new Date().toISOString(),
@@ -114,6 +115,10 @@ const Cart = () => {
             <div className="bg-gray-100 p-4 rounded-lg text-center">
               <p className="text-2xl font-bold">₹{totalPrice}</p>
               <p className="text-sm text-gray-600">Total Amount</p>
+            </div>
+            <div className="bg-gray-100 p-4 rounded-lg text-center">
+              <p className="text-lg font-semibold">UPI ID</p>
+              <p className="text-xl">{upiId}</p>
             </div>
             <Button onClick={handlePayment} className="w-full bg-green-600 hover:bg-green-700 buy-now-btn">
               Pay Now

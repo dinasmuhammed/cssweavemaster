@@ -5,12 +5,12 @@ import { ShoppingCart, Star } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
 const products = [
-  { id: 1, name: 'Natural Henna Powder', price: 199, image: '/henna-powder.jpg', rating: 4.5 },
-  { id: 2, name: 'Ready-to-Use Henna Cone', price: 99, image: '/henna-cone.jpg', rating: 4.2 },
-  { id: 3, name: 'Henna Stencils Set', price: 299, image: '/henna-stencils.jpg', rating: 4.7 },
-  { id: 4, name: 'Organic Henna Oil', price: 249, image: '/henna-oil.jpg', rating: 4.3 },
-  { id: 5, name: 'Henna Applicator Bottle', price: 149, image: '/henna-bottle.jpg', rating: 4.1 },
-  { id: 6, name: 'Bridal Henna Kit', price: 999, image: '/bridal-kit.jpg', rating: 4.8 },
+  { id: 1, name: 'Organic Nail Cones', price: 199, image: 'https://i.postimg.cc/CKbjSySR/image.png', rating: 8.5 },
+  { id: 2, name: ' Organic Henna Cones', price: 99, image: 'https://i.postimg.cc/hjrTQ9Jg/image.png', rating: 4.2 },
+  { id: 3, name: 'Diy Kit', price: 299, image: 'https://i.postimg.cc/44WpJQkQ/image.png', rating: 4.7 },
+  { id: 4, name: 'Hair henna Power', price: 249, image: 'https://i.postimg.cc/13qFrxgv/image.png', rating: 4.3 },
+  { id: 5, name: ' Essential Oils', price: 149, image: 'https://i.postimg.cc/9MJwQCSQ/image.png', rating: 4.1 },
+  { id: 6, name: 'Bridal Henna Power', price: 999, image: 'https://i.postimg.cc/HsfcxSSX/image.png', rating: 4.8 },
 ];
 
 const Shop = () => {

@@ -14,6 +14,7 @@ import Contact from './pages/Contact';
 import Cart from './pages/Cart';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import SavedItems from './pages/SavedItems';
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => {
                   <Route path="/cart" element={<Cart />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/signup" element={<Signup />} />
+                  <Route path="/saved" element={<SavedItems />} />
                 </Routes>
               </main>
               <Footer />

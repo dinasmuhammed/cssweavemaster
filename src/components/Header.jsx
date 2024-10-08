@@ -100,6 +100,7 @@ const Header = () => {
               <Link to="/services" className="hover:text-green-800" onClick={toggleMenu}>Services</Link>
               <Link to="/workshop" className="hover:text-green-800" onClick={toggleMenu}>Workshop</Link>
               <Link to="/contact" className="hover:text-green-800" onClick={toggleMenu}>Contact us</Link>
+              <Link to="/saved" className="hover:text-green-800" onClick={toggleMenu}>Saved Items</Link>
               <Link to="/login" className="hover:text-green-800" onClick={toggleMenu}>Login</Link>
               <Link to="/signup" className="hover:text-green-800" onClick={toggleMenu}>Sign Up</Link>
             </div>

@@ -15,11 +15,9 @@ import {
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { cartItems } = useCart();
+  const { cartItems, savedItems } = useCart();
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
@@ -40,7 +38,7 @@ const Header = () => {
             <Link to="/workshop" className="hover:text-green-800 text-sm lg:text-base">Workshop</Link>
             <Link to="/contact" className="hover:text-green-800 text-sm lg:text-base">Contact us</Link>
           </div>
-          <div className="hidden md:flex space-x-2 lg:space-x-4 items-center">
+          <div className="flex space-x-2 lg:space-x-4 items-center">
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <User className="w-5 h-5 lg:w-6 lg:h-6 cursor-pointer" />
@@ -54,7 +52,12 @@ const Header = () => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <Heart className="w-5 h-5 lg:w-6 lg:h-6 cursor-pointer" />
+            <Link to="/saved" className="relative">
+              <Heart className="w-5 h-5 lg:w-6 lg:h-6 cursor-pointer" />
+              {savedItems.length > 0 && (
+                <Badge className="absolute -top-2 -right-2 bg-green-800 text-xs">{savedItems.length}</Badge>
+              )}
+            </Link>
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <div className="relative">

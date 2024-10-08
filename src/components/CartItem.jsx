@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Trash2, Heart, ShoppingCart, Plus, Minus, Undo2 } from 'lucide-react';
 
 const CartItem = ({ item, isSaved = false, removeFromCart, updateQuantity, saveForLater, moveToCart }) => (
-  <div key={item.id} className="flex items-center justify-between border-b pb-4">
-    <div className="flex items-center">
+  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b pb-4">
+    <div className="flex items-center mb-2 sm:mb-0">
       <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded mr-4" />
       <div>
         <h3 className="font-semibold">{item.name}</h3>
@@ -22,22 +22,22 @@ const CartItem = ({ item, isSaved = false, removeFromCart, updateQuantity, saveF
         )}
       </div>
     </div>
-    <div className="flex items-center">
+    <div className="flex flex-col sm:flex-row items-start sm:items-center mt-2 sm:mt-0">
       {isSaved ? (
         <>
-          <Button variant="outline" className="mr-2" onClick={() => moveToCart(item.id)}>
+          <Button variant="outline" className="mb-2 sm:mb-0 sm:mr-2 w-full sm:w-auto" onClick={() => moveToCart(item.id)}>
             <ShoppingCart className="w-4 h-4 mr-2" /> Move to Cart
           </Button>
-          <Button variant="outline" onClick={() => removeFromCart(item.id)}>
+          <Button variant="outline" className="w-full sm:w-auto" onClick={() => removeFromCart(item.id)}>
             <Undo2 className="w-4 h-4 mr-2" /> Undo
           </Button>
         </>
       ) : (
         <>
-          <Button variant="outline" className="mr-2" onClick={() => saveForLater(item.id)}>
+          <Button variant="outline" className="mb-2 sm:mb-0 sm:mr-2 w-full sm:w-auto" onClick={() => saveForLater(item.id)}>
             <Heart className="w-4 h-4 mr-2" /> Save for Later
           </Button>
-          <Button variant="destructive" onClick={() => removeFromCart(item.id)}>
+          <Button variant="destructive" className="w-full sm:w-auto" onClick={() => removeFromCart(item.id)}>
             <Trash2 className="w-4 h-4" />
           </Button>
         </>

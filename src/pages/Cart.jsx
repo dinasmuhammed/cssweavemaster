@@ -11,7 +11,7 @@ const Cart = () => {
   const { cartItems, removeFromCart, updateQuantity, saveForLater, savedItems, moveToCart } = useCart();
   const [formData, setFormData] = useState({ name: '', phoneNumber: '', address: '', state: '', district: '' });
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
-  const upiId = 'shamfathi.k-2@oksbi'; // UPI ID added here
+  const upiId = 'shamfathi.k-2@oksbi';
 
   const totalPrice = calculateTotalPrice(cartItems);
 
@@ -56,7 +56,7 @@ const Cart = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-green-800 mb-6">Your Cart</h1>
+      <h1 className="text-2xl sm:text-3xl font-bold text-green-800 mb-6">Your Cart</h1>
       {cartItems.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
@@ -73,10 +73,10 @@ const Cart = () => {
             ))}
           </div>
           <div className="mt-8">
-            <h2 className="text-2xl font-bold mb-4">Total: ₹{totalPrice}</h2>
+            <h2 className="text-xl sm:text-2xl font-bold mb-4">Total: ₹{totalPrice}</h2>
             <Dialog>
               <DialogTrigger asChild>
-                <Button className="w-full md:w-auto">Proceed to Purchase</Button>
+                <Button className="w-full sm:w-auto">Proceed to Purchase</Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
@@ -91,7 +91,7 @@ const Cart = () => {
       
       {savedItems.length > 0 && (
         <div className="mt-8">
-          <h2 className="text-2xl font-bold mb-4">Saved for Later</h2>
+          <h2 className="text-xl sm:text-2xl font-bold mb-4">Saved for Later</h2>
           <div className="space-y-4">
             {savedItems.map((item) => (
               <CartItem 
@@ -113,12 +113,12 @@ const Cart = () => {
           </DialogHeader>
           <div className="space-y-4">
             <div className="bg-gray-100 p-4 rounded-lg text-center">
-              <p className="text-2xl font-bold">₹{totalPrice}</p>
+              <p className="text-xl sm:text-2xl font-bold">₹{totalPrice}</p>
               <p className="text-sm text-gray-600">Total Amount</p>
             </div>
             <div className="bg-gray-100 p-4 rounded-lg text-center">
-              <p className="text-lg font-semibold">UPI ID</p>
-              <p className="text-xl">{upiId}</p>
+              <p className="text-base sm:text-lg font-semibold">UPI ID</p>
+              <p className="text-lg sm:text-xl">{upiId}</p>
             </div>
             <Button onClick={handlePayment} className="w-full bg-green-600 hover:bg-green-700 buy-now-btn">
               Pay Now

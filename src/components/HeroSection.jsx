@@ -5,8 +5,8 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 const HeroSection = () => {
   const images = [
     "https://i.postimg.cc/14x50HJf/image.png",
-    "https://i.postimg.cc/example-image-2.jpg",
-    "https://i.postimg.cc/example-image-3.jpg",
+    "https://i.postimg.cc/WbSYckSB/Screenshot-2024-10-08-095057.png",
+    "https://i.postimg.cc/y8dQ18bk/Screenshot-2024-10-08-095107.png",
   ];
 
   return (

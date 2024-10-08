@@ -20,8 +20,6 @@ const Header = () => {
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-  const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-
   useEffect(() => {
     if (cartItems.length > 0) {
       setShowCartBadge(true);
@@ -32,8 +30,7 @@ const Header = () => {
 
   const CartButton = ({ className = "" }) => (
     <Link to="/cart" className={`flex items-center relative ${className}`}>
-      <ShoppingCart className="w-5 h-5 mr-2" />
-      <span>Cart ({cartItems.length})</span>
+      <ShoppingCart className="w-5 h-5" />
       {showCartBadge && cartItems.length > 0 && (
         <Badge className="absolute -top-2 -right-2 bg-green-500 text-white animate-pulse">
           {cartItems.length}
@@ -41,6 +38,8 @@ const Header = () => {
       )}
     </Link>
   );
+
+  const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
   return (
     <header className="bg-cream-100 sticky top-0 z-50">

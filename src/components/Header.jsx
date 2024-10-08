@@ -21,6 +21,13 @@ const Header = () => {
 
   const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
+  const CartButton = ({ className = "" }) => (
+    <Link to="/cart" className={`flex items-center ${className}`}>
+      <ShoppingCart className="w-5 h-5 mr-2" />
+      <span>Cart ({cartItems.length})</span>
+    </Link>
+  );
+
   return (
     <header className="bg-cream-100 sticky top-0 z-50">
       <div className="container mx-auto px-4">
@@ -58,33 +65,9 @@ const Header = () => {
                 <Badge className="absolute -top-2 -right-2 bg-green-800 text-xs">{savedItems.length}</Badge>
               )}
             </Link>
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <div className="relative">
-                  <ShoppingCart className="w-5 h-5 lg:w-6 lg:h-6 cursor-pointer" />
-                  <Badge className="absolute -top-2 -right-2 bg-green-800 text-xs">{cartItems.length}</Badge>
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>Your Cart</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {cartItems.map((item) => (
-                  <DropdownMenuItem key={item.id} className="flex justify-between">
-                    <span>{item.name} (x{item.quantity})</span>
-                    <span>₹{item.price * item.quantity}</span>
-                  </DropdownMenuItem>
-                ))}
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <strong>Total: ₹{totalPrice}</strong>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="/cart">
-                    <Button className="w-full text-xs lg:text-sm">View Cart</Button>
-                  </Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <div className="hidden md:block">
+              <CartButton />
+            </div>
           </div>
           <div className="md:hidden">
             <button onClick={toggleMenu}>
@@ -103,6 +86,7 @@ const Header = () => {
               <Link to="/saved" className="hover:text-green-800" onClick={toggleMenu}>Saved Items</Link>
               <Link to="/login" className="hover:text-green-800" onClick={toggleMenu}>Login</Link>
               <Link to="/signup" className="hover:text-green-800" onClick={toggleMenu}>Sign Up</Link>
+              <CartButton className="hover:text-green-800" onClick={toggleMenu} />
             </div>
           </div>
         )}

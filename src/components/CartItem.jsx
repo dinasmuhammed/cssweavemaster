@@ -4,9 +4,9 @@ import { Trash2, Heart, ShoppingCart, Plus, Minus, Undo2 } from 'lucide-react';
 
 const CartItem = ({ item, isSaved = false, removeFromCart, updateQuantity, saveForLater, moveToCart }) => (
   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b pb-4">
-    <div className="flex items-center mb-2 sm:mb-0">
+    <div className="flex items-center mb-2 sm:mb-0 w-full sm:w-auto">
       <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded mr-4" />
-      <div>
+      <div className="flex-grow">
         <h3 className="font-semibold">{item.name}</h3>
         <p>Price: ₹{item.price}</p>
         {!isSaved && (
@@ -22,7 +22,7 @@ const CartItem = ({ item, isSaved = false, removeFromCart, updateQuantity, saveF
         )}
       </div>
     </div>
-    <div className="flex flex-col sm:flex-row items-start sm:items-center mt-2 sm:mt-0">
+    <div className="flex flex-col sm:flex-row items-start sm:items-center mt-2 sm:mt-0 w-full sm:w-auto">
       {isSaved ? (
         <>
           <Button variant="outline" className="mb-2 sm:mb-0 sm:mr-2 w-full sm:w-auto" onClick={() => moveToCart(item.id)}>

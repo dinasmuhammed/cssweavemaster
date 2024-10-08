@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, ShoppingCart, Menu, X, User } from 'lucide-react';
+import { Heart, ShoppingCart, Menu, X, User, Bell } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import { useCart } from '../context/CartContext';
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import NotificationButton from './NotificationButton';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -44,8 +46,12 @@ const Header = () => {
   return (
     <header className="bg-cream-100 sticky top-0 z-50">
       <div className="container mx-auto px-4">
-        <div className="py-2 text-center text-xs sm:text-sm bg-cream-200 animate-pulse">
+        <div className="py-2 text-center text-xs sm:text-sm bg-cream-200 flex items-center justify-center space-x-2">
           <span className="font-bold">WE ARE DELIVERING ACROSS INDIA AND INTERNATIONALLY!</span>
+          <NotificationButton 
+            message="We deliver our products across India and internationally. Enjoy our services wherever you are!" 
+            title="Delivery Information"
+          />
         </div>
         <nav className="flex justify-between items-center py-4">
           <div className="text-2xl sm:text-3xl font-bold text-green-800">

@@ -20,9 +20,9 @@ const NotificationButton = ({ message, title = "Notification", duration = 3000 }
             onClick={showNotification} 
             variant="ghost" 
             size="icon"
-            className="rounded-full"
+            className="w-6 h-6 p-0"
           >
-            <Bell className="h-5 w-5" />
+            <Bell className="h-4 w-4" />
             <span className="sr-only">Show Notification</span>
           </Button>
         </TooltipTrigger>

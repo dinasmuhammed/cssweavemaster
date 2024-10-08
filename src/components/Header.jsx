@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, ShoppingCart, Menu, X, User } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
@@ -16,15 +16,29 @@ import {
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { cartItems, savedItems } = useCart();
+  const [showCartBadge, setShowCartBadge] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
+  useEffect(() => {
+    if (cartItems.length > 0) {
+      setShowCartBadge(true);
+      const timer = setTimeout(() => setShowCartBadge(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [cartItems]);
+
   const CartButton = ({ className = "" }) => (
-    <Link to="/cart" className={`flex items-center ${className}`}>
+    <Link to="/cart" className={`flex items-center relative ${className}`}>
       <ShoppingCart className="w-5 h-5 mr-2" />
       <span>Cart ({cartItems.length})</span>
+      {showCartBadge && cartItems.length > 0 && (
+        <Badge className="absolute -top-2 -right-2 bg-green-500 text-white animate-pulse">
+          {cartItems.length}
+        </Badge>
+      )}
     </Link>
   );
 

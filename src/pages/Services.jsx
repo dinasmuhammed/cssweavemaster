@@ -1,5 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 const services = [
   {
@@ -25,6 +29,30 @@ const services = [
 ];
 
 const Services = () => {
+  const [bookingForm, setBookingForm] = useState({
+    name: '',
+    phone: '',
+    service: '',
+    message: ''
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setBookingForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const whatsappNumber = '918086647124';
+    const message = `New Booking Request:%0A
+Name: ${bookingForm.name}%0A
+Phone: ${bookingForm.phone}%0A
+Service: ${bookingForm.service}%0A
+Message: ${bookingForm.message}`;
+    
+    window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
+  };
+
   return (
     <div>
       <h1 className="text-3xl font-bold text-green-800 mb-6">Our Services</h1>
@@ -44,11 +72,26 @@ const Services = () => {
       </div>
       <div className="mt-12">
         <h2 className="text-2xl font-bold text-green-800 mb-4">Book a Service</h2>
-        <p className="mb-4">To book any of our services or for more information, please contact us:</p>
-        <ul className="list-disc list-inside">
-          <li>Phone: +91 8086647124</li>
-          <li>Email: bookings@hennabyfathima.com</li>
-        </ul>
+        <p className="mb-4">To book any of our services or for more information, please fill out the form below:</p>
+        <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
+          <div>
+            <Label htmlFor="name">Name</Label>
+            <Input id="name" name="name" value={bookingForm.name} onChange={handleInputChange} required />
+          </div>
+          <div>
+            <Label htmlFor="phone">Phone Number</Label>
+            <Input id="phone" name="phone" value={bookingForm.phone} onChange={handleInputChange} required />
+          </div>
+          <div>
+            <Label htmlFor="service">Service</Label>
+            <Input id="service" name="service" value={bookingForm.service} onChange={handleInputChange} required />
+          </div>
+          <div>
+            <Label htmlFor="message">Message</Label>
+            <Textarea id="message" name="message" value={bookingForm.message} onChange={handleInputChange} />
+          </div>
+          <Button type="submit">Send Booking Request</Button>
+        </form>
       </div>
     </div>
   );

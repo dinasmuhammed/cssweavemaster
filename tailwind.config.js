@@ -79,8 +79,7 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       fontFamily: {
-        decorative: ['Great Vibes', 'cursive'],
-        body: ['system-ui', 'sans-serif'],
+        sans: ['system-ui', 'sans-serif'],
       },
     },
   },

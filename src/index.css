@@ -1,3 +1,5 @@
+@import url('https://fonts.cdnfonts.com/css/axiforma');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -71,6 +73,12 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans text-base;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
   }
 }

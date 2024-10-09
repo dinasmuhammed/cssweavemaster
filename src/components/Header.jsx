@@ -52,16 +52,16 @@ const Header = () => {
         </div>
         <nav className="flex justify-between items-center py-4">
           <div className="text-2xl sm:text-3xl font-bold text-green-800">
-            <img src="https://i.postimg.cc/T3N2Cfkz/image.png" alt="Henna by Fathima" className="h-12 sm:h-16 mx-auto object-cover" />
+            <img src="https://i.postimg.cc/T3N2Cfkz/image.png" alt="Henna by Fathima" className="h-10 sm:h-12 md:h-16 mx-auto object-cover" />
           </div>
-          <div className="hidden md:flex space-x-4 lg:space-x-6">
+          <div className="hidden lg:flex space-x-6">
             <Link to="/" className="hover:text-green-800 text-sm lg:text-base">Home</Link>
             <Link to="/shop" className="hover:text-green-800 text-sm lg:text-base">Shop</Link>
             <Link to="/services" className="hover:text-green-800 text-sm lg:text-base">Services</Link>
             <Link to="/workshop" className="hover:text-green-800 text-sm lg:text-base">Workshop</Link>
             <Link to="/contact" className="hover:text-green-800 text-sm lg:text-base">Contact us</Link>
           </div>
-          <div className="flex space-x-2 lg:space-x-4 items-center">
+          <div className="flex space-x-4 items-center">
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <User className="w-5 h-5 lg:w-6 lg:h-6 cursor-pointer" />
@@ -81,18 +81,18 @@ const Header = () => {
                 <Badge className="absolute -top-2 -right-2 bg-green-800 text-xs">{savedItems.length}</Badge>
               )}
             </Link>
-            <div className="hidden md:block">
+            <div className="hidden lg:block">
               <CartButton />
             </div>
           </div>
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <button onClick={toggleMenu}>
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </nav>
         {isMenuOpen && (
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <div className="flex flex-col space-y-2 py-4">
               <Link to="/" className="hover:text-green-800" onClick={toggleMenu}>Home</Link>
               <Link to="/shop" className="hover:text-green-800" onClick={toggleMenu}>Shop</Link>

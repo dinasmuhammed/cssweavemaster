@@ -18,11 +18,11 @@ const Login = () => {
   };
 
   return (
-    <div className="container mx-auto max-w-md mt-10">
-      <h1 className="text-2xl font-bold mb-5">Login</h1>
-      <form onSubmit={handleSubmit} action="https://formbold.com/s/oY2eW" method="POST" className="space-y-4">
+    <div className="container mx-auto px-4 py-8 max-w-md">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center text-green-800">Login</h1>
+      <form onSubmit={handleSubmit} action="https://formbold.com/s/oY2eW" method="POST" className="space-y-6">
         <div>
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email" className="text-sm font-medium">Email</Label>
           <Input
             id="email"
             name="email"
@@ -30,10 +30,11 @@ const Login = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            className="mt-1 w-full"
           />
         </div>
         <div>
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password" className="text-sm font-medium">Password</Label>
           <Input
             id="password"
             name="password"
@@ -41,10 +42,11 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            className="mt-1 w-full"
           />
         </div>
         <input type="hidden" name="form_type" value="login" />
-        <Button type="submit" className="w-full">Login</Button>
+        <Button type="submit" className="w-full bg-green-800 hover:bg-green-700">Login</Button>
       </form>
     </div>
   );

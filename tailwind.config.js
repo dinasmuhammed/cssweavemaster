@@ -2,21 +2,16 @@
 module.exports = {
   darkMode: ["class"],
   content: [
-    "./pages/**/*.{js,jsx}",
-    "./components/**/*.{js,jsx}",
-    "./app/**/*.{js,jsx}",
-    "./src/**/*.{js,jsx}",
-  ],
-  prefix: "",
+    './pages/**/*.{js,jsx}',
+    './components/**/*.{js,jsx}',
+    './app/**/*.{js,jsx}',
+    './src/**/*.{js,jsx}',
+	],
   theme: {
     container: {
       center: true,
-      padding: "1rem",
+      padding: "2rem",
       screens: {
-        sm: "640px",
-        md: "768px",
-        lg: "1024px",
-        xl: "1280px",
         "2xl": "1400px",
       },
     },
@@ -55,13 +50,6 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        cream: {
-          100: '#FFF9F3',
-          200: '#FFF5E6',
-        },
-        green: {
-          800: '#0F4C3A',
-        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -70,22 +58,24 @@ module.exports = {
       },
       keyframes: {
         "accordion-down": {
-          from: { height: "0" },
+          from: { height: 0 },
           to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
+          to: { height: 0 },
+        },
+        hover: {
+          '0%, 100%': { transform: 'translateY(0) scale(1.1)' },
+          '50%': { transform: 'translateY(-10px) scale(1.1)' },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-      },
-      fontFamily: {
-        sans: ['Axiforma', 'system-ui', 'sans-serif'],
+        "hover": "hover 5s ease-in-out infinite",
       },
     },
   },
   plugins: [require("tailwindcss-animate")],
-};
+}

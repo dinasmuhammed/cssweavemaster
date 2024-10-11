@@ -55,7 +55,7 @@ const Footer = () => {
         </div>
         <div className="mt-8 text-center">
           <p className="text-sm sm:text-base">&copy; 2023 Henna by Fathima. All rights reserved.</p>
-          <div className="mt-4 bg-green-800 p-4 rounded-lg shadow-lg">
+          <div className="w-full p-2 text-green-900 rounded text-sm sm:text-base">
             <p className="text-base sm:text-lg font-semibold">
               Crafted with ❤️ by
             </p>

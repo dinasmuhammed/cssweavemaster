@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Link } from 'react-router-dom';
 
 const HeroSection = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -27,7 +28,7 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-screen overflow-hidden">
+    <section className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-screen overflow-hidden bg-cream-100">
       <Carousel className="w-full h-full">
         <CarouselContent>
           {images.map((image, index) => (
@@ -42,13 +43,27 @@ const HeroSection = () => {
                   }}
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                  <div className="text-center px-4 max-w-3xl">
-                    <div className="mb-8">
-                      <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-2">Henna</h1>
-                      <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white">BY FATHIMA</h2>
-                    </div>
-                    <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-white mb-4 sm:mb-8">Let us adorn you with beautiful bridal henna that makes your special moments unforgettable.</p>
-                    <Button className="bg-green-800 hover:bg-green-700 text-white text-sm sm:text-base">Book Now</Button>
+                  <div className="text-center px-4 max-w-3xl relative">
+                    {/* Top-left leaf */}
+                    <img src="https://i.postimg.cc/8zbXPZXW/leaf-top-left.png" alt="Leaf" className="absolute top-0 left-0 w-24 h-24 -translate-x-full -translate-y-full" />
+                    
+                    {/* Top-right leaf */}
+                    <img src="https://i.postimg.cc/8zbXPZXW/leaf-top-left.png" alt="Leaf" className="absolute top-0 right-0 w-24 h-24 translate-x-full -translate-y-full transform scale-x-[-1]" />
+                    
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">Welcome to Henna by Fathima!</h1>
+                    <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white mb-6">
+                      Let us adorn you with beautiful bridal henna<br />
+                      that makes your special moments unforgettable.
+                    </p>
+                    <Button asChild className="bg-green-800 hover:bg-green-700 text-white text-sm sm:text-base px-6 py-3">
+                      <Link to="/services">View Packages</Link>
+                    </Button>
+                    
+                    {/* Bottom-left leaf */}
+                    <img src="https://i.postimg.cc/8zbXPZXW/leaf-top-left.png" alt="Leaf" className="absolute bottom-0 left-0 w-24 h-24 -translate-x-full translate-y-full transform rotate-180" />
+                    
+                    {/* Bottom-right leaf */}
+                    <img src="https://i.postimg.cc/8zbXPZXW/leaf-top-left.png" alt="Leaf" className="absolute bottom-0 right-0 w-24 h-24 translate-x-full translate-y-full transform scale-x-[-1] rotate-180" />
                   </div>
                 </div>
               </div>

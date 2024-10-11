@@ -14,7 +14,7 @@ const HeroSection = () => {
     const handleMouseMove = (event) => {
       const { clientX, clientY } = event;
       const { innerWidth, innerHeight } = window;
-      const x = (clientX / innerWidth - 0.5) * 20; // Adjust multiplier for more/less movement
+      const x = (clientX / innerWidth - 0.5) * 20;
       const y = (clientY / innerHeight - 0.5) * 20;
       setMousePosition({ x, y });
     };
@@ -43,7 +43,11 @@ const HeroSection = () => {
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                   <div className="text-center px-4 max-w-3xl">
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-2 sm:mb-4">Welcome to Henna by Fathima!</h1>
+                    <img 
+                      src="https://i.postimg.cc/T3N2Cfkz/image.png" 
+                      alt="Henna by Fathima Logo" 
+                      className="mx-auto mb-8 w-64 h-auto"
+                    />
                     <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-white mb-4 sm:mb-8">Let us adorn you with beautiful bridal henna that makes your special moments unforgettable.</p>
                     <Button className="bg-green-800 hover:bg-green-700 text-white text-sm sm:text-base">Book Now</Button>
                   </div>

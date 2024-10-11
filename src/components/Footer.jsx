@@ -67,7 +67,7 @@ const Footer = () => {
             >
               AD Web Comic Agency
             </a>
-            <p className="text-xs sm:text-sm mt-2">Elevating digital experiences through innovative web solutions</p>
+            <p className="text-xs sm:text-sm mt-2">Elevating digital experiences</p>
           </div>
         </div>
       </div>

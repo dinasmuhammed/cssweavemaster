@@ -43,11 +43,10 @@ const HeroSection = () => {
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                   <div className="text-center px-4 max-w-3xl">
-                    <img 
-                      src="https://i.postimg.cc/T3N2Cfkz/image.png" 
-                      alt="Henna by Fathima Logo" 
-                      className="mx-auto mb-8 w-64 h-auto"
-                    />
+                    <div className="mb-8">
+                      <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-2">Henna</h1>
+                      <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white">BY FATHIMA</h2>
+                    </div>
                     <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-white mb-4 sm:mb-8">Let us adorn you with beautiful bridal henna that makes your special moments unforgettable.</p>
                     <Button className="bg-green-800 hover:bg-green-700 text-white text-sm sm:text-base">Book Now</Button>
                   </div>

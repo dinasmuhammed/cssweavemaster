@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Search, User, Heart, ShoppingCart, Menu, X } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Search, User, Heart, ShoppingCart } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import { useCart } from '../context/CartContext';
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,10 +13,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const { cartItems, savedItems } = useCart();
+  const navigate = useNavigate();
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const handleSearch = (e) => {
+    e.preventDefault();
+    navigate(`/shop?search=${encodeURIComponent(searchTerm)}`);
+  };
 
   return (
     <header className="bg-cream-100 sticky top-0 z-50">
@@ -35,7 +40,18 @@ const Header = () => {
             <img src="https://i.postimg.cc/T3N2Cfkz/image.png" alt="Henna by Fathima" className="h-10 sm:h-12 md:h-16 mx-auto object-cover" />
           </div>
           <div className="flex space-x-4 items-center">
-            <Search className="w-5 h-5 text-green-800 cursor-pointer" />
+            <form onSubmit={handleSearch} className="relative">
+              <Input
+                type="text"
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pr-8"
+              />
+              <Button type="submit" variant="ghost" className="absolute right-0 top-0 h-full">
+                <Search className="w-5 h-5 text-green-800" />
+              </Button>
+            </form>
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <User className="w-5 h-5 text-green-800 cursor-pointer" />

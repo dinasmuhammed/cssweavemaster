@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -14,16 +14,20 @@ const HennaMoments = () => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
+  const intervalRef = useRef(null);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
+  const startAutoSlide = () => {
+    intervalRef.current = setInterval(() => {
       if (!isHovering) {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
       }
     }, 3000);
+  };
 
-    return () => clearInterval(interval);
-  }, [isHovering, images.length]);
+  useEffect(() => {
+    startAutoSlide();
+    return () => clearInterval(intervalRef.current);
+  }, [isHovering]);
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
@@ -39,7 +43,7 @@ const HennaMoments = () => {
         <h2 className="text-3xl font-bold text-center text-green-800 mb-4">Henna Moments</h2>
         <p className="text-center mb-8">Follow our instagram page for more @hennabyfathima</p>
         <div 
-          className="relative h-24 overflow-hidden"
+          className="relative h-0 pb-[20%] overflow-hidden"
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >

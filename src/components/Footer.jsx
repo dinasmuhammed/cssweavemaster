@@ -57,9 +57,9 @@ const Footer = () => {
           <p className="text-sm sm:text-base">&copy; 2023 Henna by Fathima. All rights reserved.</p>
         </div>
       </div>
-      {/* Watermark */}
-      <div className="fixed bottom-4 right-4 text-white text-opacity-40 text-xs sm:text-sm font-sans z-50 pointer-events-none">
-        <p className="text-right">
+      {/* Centered Watermark */}
+      <div className="absolute bottom-4 left-0 right-0 text-white text-opacity-40 text-xs sm:text-sm font-sans z-50 pointer-events-none text-center">
+        <p>
           Crafted with <span className="text-[#004d26]">❤️</span> by
         </p>
         <p className="font-semibold">AD Web Comic Agency</p>

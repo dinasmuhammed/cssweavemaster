@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const HennaMoments = () => {
-  const images = Array.from({ length: 50 }, (_, index) => `https://picsum.photos/seed/${index}/300/200`);
+  const images = Array.from({ length: 50 }, () => "https://i.postimg.cc/9Q94vdZQ/Screenshot-2024-10-08-101001.png");
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);

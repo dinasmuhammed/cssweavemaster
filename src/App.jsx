@@ -15,7 +15,6 @@ import Cart from './pages/Cart';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import SavedItems from './pages/SavedItems';
-import SearchResults from './pages/SearchResults';
 
 const queryClient = new QueryClient();
 
@@ -39,7 +38,6 @@ const App = () => {
                   <Route path="/login" element={<Login />} />
                   <Route path="/signup" element={<Signup />} />
                   <Route path="/saved" element={<SavedItems />} />
-                  <Route path="/search" element={<SearchResults />} />
                 </Routes>
               </main>
               <Footer />

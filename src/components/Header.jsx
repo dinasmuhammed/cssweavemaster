@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Search, User, Heart, ShoppingCart, Menu, X } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
@@ -27,30 +27,41 @@ const Header = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  // Close menu when clicking outside
+  useEffect(() => {
+    const closeMenu = (e) => {
+      if (isMenuOpen && !e.target.closest('.mobile-menu') && !e.target.closest('.menu-button')) {
+        setIsMenuOpen(false);
+      }
+    };
+    document.addEventListener('click', closeMenu);
+    return () => document.removeEventListener('click', closeMenu);
+  }, [isMenuOpen]);
+
   return (
     <header className="bg-cream-100 sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="py-2 text-center text-xs sm:text-sm bg-cream-200">
           <span className="font-bold">WE ARE DELIVERING ACROSS INDIA AND INTERNATIONALLY!</span>
         </div>
-        <nav className="flex flex-wrap justify-between items-center py-4">
+        <nav className="flex justify-between items-center py-4">
           <div className="flex items-center">
-            <Button variant="ghost" className="md:hidden mr-2" onClick={toggleMenu}>
+            <Button variant="ghost" className="md:hidden mr-2 menu-button" onClick={toggleMenu}>
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
             <Link to="/" className="text-2xl sm:text-3xl font-bold text-green-800">
               <img src="https://i.postimg.cc/T3N2Cfkz/image.png" alt="Henna by Fathima" className="h-10 sm:h-12 md:h-16 object-cover" />
             </Link>
           </div>
-          <div className={`${isMenuOpen ? 'block' : 'hidden'} md:flex flex-col md:flex-row items-start md:items-center w-full md:w-auto mt-4 md:mt-0`}>
-            <Link to="/" className="text-green-800 hover:text-green-700 mb-2 md:mb-0 md:mr-6">Home</Link>
-            <Link to="/shop" className="text-green-800 hover:text-green-700 mb-2 md:mb-0 md:mr-6">Shop</Link>
-            <Link to="/services" className="text-green-800 hover:text-green-700 mb-2 md:mb-0 md:mr-6">Services</Link>
-            <Link to="/workshop" className="text-green-800 hover:text-green-700 mb-2 md:mb-0 md:mr-6">Workshop</Link>
-            <Link to="/contact" className="text-green-800 hover:text-green-700 mb-2 md:mb-0 md:mr-6">Contact us</Link>
+          <div className={`mobile-menu md:flex flex-col md:flex-row items-start md:items-center absolute md:static left-0 right-0 bg-cream-100 md:bg-transparent ${isMenuOpen ? 'block' : 'hidden'} md:block top-full md:top-auto`}>
+            <Link to="/" className="block md:inline-block text-green-800 hover:text-green-700 py-2 md:py-0 px-4 md:px-0 md:mr-6" onClick={() => setIsMenuOpen(false)}>Home</Link>
+            <Link to="/shop" className="block md:inline-block text-green-800 hover:text-green-700 py-2 md:py-0 px-4 md:px-0 md:mr-6" onClick={() => setIsMenuOpen(false)}>Shop</Link>
+            <Link to="/services" className="block md:inline-block text-green-800 hover:text-green-700 py-2 md:py-0 px-4 md:px-0 md:mr-6" onClick={() => setIsMenuOpen(false)}>Services</Link>
+            <Link to="/workshop" className="block md:inline-block text-green-800 hover:text-green-700 py-2 md:py-0 px-4 md:px-0 md:mr-6" onClick={() => setIsMenuOpen(false)}>Workshop</Link>
+            <Link to="/contact" className="block md:inline-block text-green-800 hover:text-green-700 py-2 md:py-0 px-4 md:px-0 md:mr-6" onClick={() => setIsMenuOpen(false)}>Contact us</Link>
           </div>
-          <div className="flex items-center mt-4 md:mt-0">
-            <form onSubmit={handleSearch} className="relative mr-4">
+          <div className="flex items-center">
+            <form onSubmit={handleSearch} className="relative mr-4 hidden md:block">
               <Input
                 type="text"
                 placeholder="Search..."

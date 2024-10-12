@@ -4,7 +4,7 @@ import { Facebook, Instagram, Twitter } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="bg-green-900 text-white py-8 relative">
+    <footer className="bg-green-900 text-white py-8">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           <div>
@@ -56,11 +56,6 @@ const Footer = () => {
         <div className="mt-8 text-center">
           <p className="text-sm sm:text-base">&copy; 2024 Henna by Fathima. All rights reserved.</p>
         </div>
-      </div>
-      {/* Centered Watermark */}
-      <div className="absolute bottom-4 left-0 right-0 text-white text-opacity-40 text-xs sm:text-sm font-sans z-50 pointer-events-none text-center">
-        <p className="font-semibold">AD Web Comic Agency</p>
-        <p className="text-[10px] sm:text-xs">Elevating digital experiences</p>
       </div>
     </footer>
   );

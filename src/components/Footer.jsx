@@ -4,7 +4,7 @@ import { Facebook, Instagram, Twitter } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="bg-green-900 text-white py-8">
+    <footer className="bg-green-900 text-white py-8 relative">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           <div>
@@ -55,21 +55,15 @@ const Footer = () => {
         </div>
         <div className="mt-8 text-center">
           <p className="text-sm sm:text-base">&copy; 2023 Henna by Fathima. All rights reserved.</p>
-          <div className="w-full mt-4 p-4 bg-green-800 rounded-lg">
-            <p className="text-lg sm:text-xl font-semibold">
-              Crafted with ❤️ by
-            </p>
-            <a
-              href="https://adwebcomicagency.vercel.app/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xl sm:text-2xl font-bold text-cream-100 hover:text-white transition-colors"
-            >
-              AD Web Comic Agency
-            </a>
-            <p className="text-sm mt-2">Elevating digital experiences</p>
-          </div>
         </div>
+      </div>
+      {/* Watermark */}
+      <div className="fixed bottom-4 right-4 text-white text-opacity-40 text-xs sm:text-sm font-sans z-50 pointer-events-none">
+        <p className="text-right">
+          Crafted with <span className="text-[#004d26]">❤️</span> by
+        </p>
+        <p className="font-semibold">AD Web Comic Agency</p>
+        <p className="text-[10px] sm:text-xs">Elevating digital experiences</p>
       </div>
     </footer>
   );

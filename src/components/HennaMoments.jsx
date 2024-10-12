@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const HennaMoments = () => {
   const images = [
@@ -11,33 +11,34 @@ const HennaMoments = () => {
     'https://i.postimg.cc/gjRcmSpb/Screenshot-2024-10-06-095258.png',
   ];
 
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 3000); // Change image every 3 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section className="py-16 bg-cream-100">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center text-green-800 mb-4">Henna Moments</h2>
         <p className="text-center mb-8">Follow our instagram page for more @hennabyfathima</p>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {images.map((image, index) => (
-            <motion.div
-              key={index}
-              className="overflow-hidden rounded-lg"
-              whileHover={{ scale: 1.05 }}
-              animate={{ y: [0, -5, 0] }}
-              transition={{ 
-                y: {
-                  repeat: Infinity,
-                  duration: 2,
-                  ease: "easeInOut"
-                }
-              }}
-            >
-              <img 
-                src={image} 
-                alt={`Henna Moment ${index + 1}`} 
-                className="w-full h-40 object-cover"
-              />
-            </motion.div>
-          ))}
+        <div className="relative h-96 overflow-hidden">
+          <AnimatePresence>
+            <motion.img
+              key={currentIndex}
+              src={images[currentIndex]}
+              alt={`Henna Moment ${currentIndex + 1}`}
+              className="absolute top-0 left-0 w-full h-full object-cover"
+              initial={{ opacity: 0, scale: 1.1 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.5 }}
+            />
+          </AnimatePresence>
         </div>
       </div>
     </section>

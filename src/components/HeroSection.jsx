@@ -45,11 +45,10 @@ const HeroSection = () => {
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                   <div className="text-center px-4 max-w-3xl relative">
                     {/* Top-left leaf */}
-                    <img src="https://i.postimg.cc/8zbXPZXW/leaf-top-left.png" alt="Leaf" className="absolute top-0 left-0 w-24 h-24 -translate-x-full -translate-y-full" />
+                    
                     
                     {/* Top-right leaf */}
-                    <img src="https://i.postimg.cc/8zbXPZXW/leaf-top-left.png" alt="Leaf" className="absolute top-0 right-0 w-24 h-24 translate-x-full -translate-y-full transform scale-x-[-1]" />
-                    
+                   
                     <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">Welcome to Henna by Fathima!</h1>
                     <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white mb-6">
                       Let us adorn you with beautiful bridal henna<br />

@@ -3,7 +3,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const HennaMoments = () => {
-  const imageUrl = "https://i.postimg.cc/9Q94vdZQ/Screenshot-2024-10-08-101001.png";
+  const imageUrls = [
+    "https://i.postimg.cc/9Q94vdZQ/Screenshot-2024-10-08-101001.png",
+    "https://i.postimg.cc/Xq4yw4nL/henna-2.jpg",
+    "https://i.postimg.cc/8CmBZH5T/henna-3.jpg",
+    "https://i.postimg.cc/RZsKNjfT/henna-4.jpg",
+    "https://i.postimg.cc/QCXj5sNQ/henna-5.jpg",
+    "https://i.postimg.cc/MHcP9xZY/henna-6.jpg"
+  ];
   const totalImages = 50;
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -53,7 +60,7 @@ const HennaMoments = () => {
               {[...Array(6)].map((_, index) => (
                 <img
                   key={index}
-                  src={imageUrl}
+                  src={imageUrls[(currentIndex + index) % imageUrls.length]}
                   alt={`Henna Moment ${currentIndex + index + 1}`}
                   className="h-full w-1/6 object-cover"
                 />

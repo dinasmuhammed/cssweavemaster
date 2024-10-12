@@ -23,7 +23,7 @@ const HennaMoments = () => {
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [isHovering]);
+  }, [isHovering, images.length]);
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
@@ -43,13 +43,13 @@ const HennaMoments = () => {
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >
-          <AnimatePresence>
+          <AnimatePresence initial={false}>
             <motion.div
               key={currentIndex}
               className="absolute top-0 left-0 w-full h-full flex"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              initial={{ opacity: 0, x: 300 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -300 }}
               transition={{ duration: 0.5 }}
             >
               {images.map((image, index) => (
@@ -62,22 +62,18 @@ const HennaMoments = () => {
               ))}
             </motion.div>
           </AnimatePresence>
-          {isHovering && (
-            <>
-              <button
-                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-full p-2 transition-opacity duration-300"
-                onClick={handlePrev}
-              >
-                <ChevronLeft className="w-6 h-6 text-green-800" />
-              </button>
-              <button
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-full p-2 transition-opacity duration-300"
-                onClick={handleNext}
-              >
-                <ChevronRight className="w-6 h-6 text-green-800" />
-              </button>
-            </>
-          )}
+          <button
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-full p-2 transition-opacity duration-300 opacity-0 hover:opacity-100"
+            onClick={handlePrev}
+          >
+            <ChevronLeft className="w-6 h-6 text-green-800" />
+          </button>
+          <button
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-full p-2 transition-opacity duration-300 opacity-0 hover:opacity-100"
+            onClick={handleNext}
+          >
+            <ChevronRight className="w-6 h-6 text-green-800" />
+          </button>
         </div>
       </div>
     </section>

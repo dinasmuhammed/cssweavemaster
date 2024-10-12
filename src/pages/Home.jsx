@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import WhyHennaByFathima from '../components/WhyHennaByFathima';
 import OurServices from '../components/OurServices';
+import HennaMoments from '../components/HennaMoments';
 
 const Home = () => {
   return (
@@ -48,6 +49,9 @@ const Home = () => {
 
       {/* Our Services Section */}
       <OurServices />
+
+      {/* Henna Moments Section */}
+      <HennaMoments />
     </div>
   );
 };

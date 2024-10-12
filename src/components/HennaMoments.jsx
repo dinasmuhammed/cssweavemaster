@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 const HennaMoments = () => {
   const images = [
@@ -17,7 +18,25 @@ const HennaMoments = () => {
         <p className="text-center mb-8">Follow our instagram page for more @hennabyfathima</p>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {images.map((image, index) => (
-            <img key={index} src={image} alt={`Henna Moment ${index + 1}`} className="w-full h-40 object-cover rounded-lg" />
+            <motion.div
+              key={index}
+              className="overflow-hidden rounded-lg"
+              whileHover={{ scale: 1.05 }}
+              animate={{ y: [0, -5, 0] }}
+              transition={{ 
+                y: {
+                  repeat: Infinity,
+                  duration: 2,
+                  ease: "easeInOut"
+                }
+              }}
+            >
+              <img 
+                src={image} 
+                alt={`Henna Moment ${index + 1}`} 
+                className="w-full h-40 object-cover"
+              />
+            </motion.div>
           ))}
         </div>
       </div>

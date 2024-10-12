@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const HennaMoments = () => {
-  const images = Array.from({ length: 50 }, () => "https://i.postimg.cc/9Q94vdZQ/Screenshot-2024-10-08-101001.png");
+  const imageUrl = "https://i.postimg.cc/9Q94vdZQ/Screenshot-2024-10-08-101001.png";
+  const totalImages = 50;
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
@@ -12,7 +13,7 @@ const HennaMoments = () => {
   const startAutoSlide = () => {
     intervalRef.current = setInterval(() => {
       if (!isHovering) {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % totalImages);
       }
     }, 3000);
   };
@@ -23,11 +24,11 @@ const HennaMoments = () => {
   }, [isHovering]);
 
   const handlePrev = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + totalImages) % totalImages);
   };
 
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % totalImages);
   };
 
   return (
@@ -49,10 +50,10 @@ const HennaMoments = () => {
               exit={{ opacity: 0, x: -300 }}
               transition={{ duration: 0.5 }}
             >
-              {images.slice(currentIndex, currentIndex + 6).map((image, index) => (
+              {[...Array(6)].map((_, index) => (
                 <img
                   key={index}
-                  src={image}
+                  src={imageUrl}
                   alt={`Henna Moment ${currentIndex + index + 1}`}
                   className="h-full w-1/6 object-cover"
                 />

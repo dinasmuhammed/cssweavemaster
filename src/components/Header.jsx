@@ -20,7 +20,9 @@ const Header = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    navigate(`/shop?search=${encodeURIComponent(searchTerm)}`);
+    if (searchTerm.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
+    }
   };
 
   const toggleMenu = () => {

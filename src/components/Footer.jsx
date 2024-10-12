@@ -54,7 +54,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="mt-8 text-center">
-          <p className="text-sm sm:text-base">&copy; 2023 Henna by Fathima. All rights reserved.</p>
+          <p className="text-sm sm:text-base">&copy; 2024 Henna by Fathima. All rights reserved.</p>
         </div>
       </div>
       {/* Centered Watermark */}

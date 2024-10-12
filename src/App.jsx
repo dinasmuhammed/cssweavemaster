@@ -27,7 +27,7 @@ const App = () => {
           <Router>
             <div className="flex flex-col min-h-screen bg-cream-100">
               <Header />
-              <main className="flex-grow container mx-auto px-4 py-8">
+              <main className="flex-grow container mx-auto px-4 py-8 w-full max-w-7xl">
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/shop" element={<Shop />} />

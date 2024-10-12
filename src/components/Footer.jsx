@@ -46,28 +46,28 @@ const Footer = () => {
             <input
               type="email"
               placeholder="Enter your email"
-              className="w-full p-2 text-green-900 rounded text-sm sm:text-base"
+              className="w-full p-2 text-green-900 rounded text-sm sm:text-base mb-2"
             />
-            <button className="mt-2 bg-cream-100 text-green-900 px-4 py-2 rounded hover:bg-cream-200 transition-colors text-sm sm:text-base">
+            <button className="w-full bg-cream-100 text-green-900 px-4 py-2 rounded hover:bg-cream-200 transition-colors text-sm sm:text-base">
               Subscribe
             </button>
           </div>
         </div>
         <div className="mt-8 text-center">
           <p className="text-sm sm:text-base">&copy; 2023 Henna by Fathima. All rights reserved.</p>
-          <div className="w-full p-2 text-green-900 rounded text-sm sm:text-base">
-            <p className="text-base sm:text-lg font-semibold">
+          <div className="w-full mt-4 p-4 bg-green-800 rounded-lg">
+            <p className="text-lg sm:text-xl font-semibold">
               Crafted with ❤️ by
             </p>
             <a
               href="https://adwebcomicagency.vercel.app/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-lg sm:text-xl font-bold text-cream-100 hover:text-white transition-colors"
+              className="text-xl sm:text-2xl font-bold text-cream-100 hover:text-white transition-colors"
             >
               AD Web Comic Agency
             </a>
-            <p className="text-xs sm:text-sm mt-2">Elevating digital experiences</p>
+            <p className="text-sm mt-2">Elevating digital experiences</p>
           </div>
         </div>
       </div>

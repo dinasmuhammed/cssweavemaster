@@ -21,13 +21,13 @@ const Header = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
+    setIsMenuOpen(false);
   };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  // Close menu when clicking outside
   useEffect(() => {
     const closeMenu = (e) => {
       if (isMenuOpen && !e.target.closest('.mobile-menu') && !e.target.closest('.menu-button')) {
@@ -80,20 +80,20 @@ const Header = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem>
-                    <Link to="/login">Login</Link>
+                    <Link to="/login" onClick={() => setIsMenuOpen(false)}>Login</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link to="/signup">Sign Up</Link>
+                    <Link to="/signup" onClick={() => setIsMenuOpen(false)}>Sign Up</Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-              <Link to="/saved" className="relative">
+              <Link to="/saved" className="relative" onClick={() => setIsMenuOpen(false)}>
                 <Heart className="w-5 h-5 text-green-800 cursor-pointer" />
                 {savedItems.length > 0 && (
                   <Badge className="absolute -top-2 -right-2 bg-green-800 text-xs">{savedItems.length}</Badge>
                 )}
               </Link>
-              <Link to="/cart" className="relative">
+              <Link to="/cart" className="relative" onClick={() => setIsMenuOpen(false)}>
                 <ShoppingCart className="w-5 h-5 text-green-800 cursor-pointer" />
                 {cartItems.length > 0 && (
                   <Badge className="absolute -top-2 -right-2 bg-green-800 text-xs">{cartItems.length}</Badge>

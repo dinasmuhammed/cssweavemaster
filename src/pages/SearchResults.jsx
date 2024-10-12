@@ -5,6 +5,21 @@ import { Button } from "@/components/ui/button";
 import { ShoppingCart } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
+const allProducts = [
+  { id: 1, name: 'Organic Nail Cones', price: 199, image: 'https://i.postimg.cc/CKbjSySR/image.png', rating: 8.5, category: 'product' },
+  { id: 2, name: 'Organic Henna Cones', price: 99, image: 'https://i.postimg.cc/hjrTQ9Jg/image.png', rating: 4.2, category: 'product' },
+  { id: 3, name: 'Diy Kit', price: 299, image: 'https://i.postimg.cc/44WpJQkQ/image.png', rating: 4.7, category: 'product' },
+  { id: 4, name: 'Hair henna Power', price: 249, image: 'https://i.postimg.cc/13qFrxgv/image.png', rating: 4.3, category: 'product' },
+  { id: 5, name: 'Essential Oils', price: 149, image: 'https://i.postimg.cc/9MJwQCSQ/image.png', rating: 4.1, category: 'product' },
+  { id: 6, name: 'Bridal Henna Power', price: 999, image: 'https://i.postimg.cc/HsfcxSSX/image.png', rating: 4.8, category: 'product' },
+];
+
+const services = [
+  { id: 7, name: 'Bridal Henna Package', price: 1999, image: 'https://i.postimg.cc/G3CRLj4/Screenshot-2024-10-04-165522.png', category: 'service' },
+  { id: 8, name: 'Party Henna', price: 999, image: 'https://i.postimg.cc/w0YLy9k/Screenshot-2024-10-04-165544.png', category: 'service' },
+  { id: 9, name: 'Workshops', price: 499, image: 'https://i.postimg.cc/gmB1zsq/Screenshot-2024-10-04-165552.png', category: 'service' },
+];
+
 const SearchResults = () => {
   const [results, setResults] = useState([]);
   const location = useLocation();
@@ -13,20 +28,15 @@ const SearchResults = () => {
   const { addToCart } = useCart();
 
   useEffect(() => {
-    // Simulated search function
-    const searchProducts = (query) => {
-      // This is a mock function. In a real application, you would fetch data from an API or database.
-      const allItems = [
-        ...allProducts,
-        ...services.map(service => ({ ...service, category: 'service' }))
-      ];
+    const searchItems = (query) => {
+      const allItems = [...allProducts, ...services];
       return allItems.filter(item => 
         item.name.toLowerCase().includes(query.toLowerCase()) ||
-        (item.description && item.description.toLowerCase().includes(query.toLowerCase()))
+        item.category.toLowerCase().includes(query.toLowerCase())
       );
     };
 
-    setResults(searchProducts(query));
+    setResults(searchItems(query));
   }, [query]);
 
   return (
@@ -44,7 +54,6 @@ const SearchResults = () => {
               </CardHeader>
               <CardContent>
                 <img src={item.image} alt={item.name} className="w-full h-48 object-cover rounded-md mb-4" />
-                <p>{item.description}</p>
                 <p className="font-bold mt-2">₹{item.price}</p>
               </CardContent>
               <CardFooter>

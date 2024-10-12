@@ -59,9 +59,6 @@ const Footer = () => {
       </div>
       {/* Centered Watermark */}
       <div className="absolute bottom-4 left-0 right-0 text-white text-opacity-40 text-xs sm:text-sm font-sans z-50 pointer-events-none text-center">
-        <p>
-          Crafted with <span className="text-[#004d26]">❤️</span> by
-        </p>
         <p className="font-semibold">AD Web Comic Agency</p>
         <p className="text-[10px] sm:text-xs">Elevating digital experiences</p>
       </div>

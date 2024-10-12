@@ -26,18 +26,25 @@ const HennaMoments = () => {
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center text-green-800 mb-4">Henna Moments</h2>
         <p className="text-center mb-8">Follow our instagram page for more @hennabyfathima</p>
-        <div className="relative h-96 overflow-hidden">
+        <div className="relative h-24 overflow-hidden">
           <AnimatePresence>
-            <motion.img
+            <motion.div
               key={currentIndex}
-              src={images[currentIndex]}
-              alt={`Henna Moment ${currentIndex + 1}`}
-              className="absolute top-0 left-0 w-full h-full object-cover"
-              initial={{ opacity: 0, scale: 1.1 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
+              className="absolute top-0 left-0 w-full h-full flex"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
-            />
+            >
+              {images.map((image, index) => (
+                <img
+                  key={index}
+                  src={image}
+                  alt={`Henna Moment ${index + 1}`}
+                  className="h-full w-1/6 object-cover"
+                />
+              ))}
+            </motion.div>
           </AnimatePresence>
         </div>
       </div>

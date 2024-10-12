@@ -26,7 +26,7 @@ const reasons = [
 
 const WhyHennaByFathima = () => {
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-cream-100">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center text-green-800 mb-12">Why Henna by Fathima?</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -39,6 +39,11 @@ const WhyHennaByFathima = () => {
           ))}
         </div>
       </div>
+      <img 
+        src="https://i.postimg.cc/8zbXPZXW/leaf-top-left.png" 
+        alt="Decorative Leaf" 
+        className="absolute bottom-0 right-0 w-24 h-24 transform translate-x-1/2 translate-y-1/2 scale-x-[-1] rotate-180"
+      />
     </section>
   );
 };

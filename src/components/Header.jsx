@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, User, Heart, ShoppingCart, Menu, X } from 'lucide-react';
+import { Search, Heart, ShoppingCart, Menu, X } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import { useCart } from '../context/CartContext';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 const Header = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -74,19 +68,6 @@ const Header = () => {
               </Button>
             </form>
             <div className="flex space-x-4">
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <User className="w-5 h-5 text-green-800 cursor-pointer" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem>
-                    <Link to="/login" onClick={() => setIsMenuOpen(false)}>Login</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link to="/signup" onClick={() => setIsMenuOpen(false)}>Sign Up</Link>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
               <Link to="/saved" className="relative" onClick={() => setIsMenuOpen(false)}>
                 <Heart className="w-5 h-5 text-green-800 cursor-pointer" />
                 {savedItems.length > 0 && (

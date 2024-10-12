@@ -44,10 +44,6 @@ const HeroSection = () => {
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                   <div className="text-center px-4 max-w-3xl relative">
-                    {/* Top-left leaf */}
-                    
-                    
-                    {/* Top-right leaf */}
                    
                     <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">Welcome to Henna by Fathima!</h1>
                     <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white mb-6">

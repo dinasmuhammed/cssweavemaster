@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 
 const services = [
-  { name: 'Bridal Henna Package', image: 'https://i.postimg.cc/G3CRLj4/Screenshot-2024-10-04-165522.png' },
-  { name: 'Henna Products', image: 'https://i.postimg.cc/h2fqTRD/Screenshot-2024-10-04-165533.png' },
-  { name: 'Party Henna', image: 'https://i.postimg.cc/w0YLy9k/Screenshot-2024-10-04-165544.png' },
-  { name: 'Workshops', image: 'https://i.postimg.cc/gmB1zsq/Screenshot-2024-10-04-165552.png' },
+  { name: 'Bridal Henna Package', image: 'https://i.postimg.cc/2SGPxtQr/Screenshot-2024-10-13-173602.png' },
+  { name: 'Henna Products', image: 'https://i.postimg.cc/sDddf7fd/Screenshot-2024-10-13-173328.png' },
+  { name: 'Party Henna', image: 'https://i.postimg.cc/MGXrmpZm/Screenshot-2024-10-13-173745.png' },
+  { name: 'Workshops', image: 'https://i.postimg.cc/bNxXZrdG/Screenshot-2024-10-13-173523.png' },
 ];
 
 const OurServices = () => {

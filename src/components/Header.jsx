@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Heart, ShoppingCart, Menu, X } from 'lucide-react';
+import { Search, User, Heart, ShoppingCart, Menu, X } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import { useCart } from '../context/CartContext';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Header = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -15,13 +21,13 @@ const Header = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
-    setIsMenuOpen(false);
   };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  // Close menu when clicking outside
   useEffect(() => {
     const closeMenu = (e) => {
       if (isMenuOpen && !e.target.closest('.mobile-menu') && !e.target.closest('.menu-button')) {
@@ -68,13 +74,26 @@ const Header = () => {
               </Button>
             </form>
             <div className="flex space-x-4">
-              <Link to="/saved" className="relative" onClick={() => setIsMenuOpen(false)}>
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <User className="w-5 h-5 text-green-800 cursor-pointer" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem>
+                    <Link to="/login">Login</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link to="/signup">Sign Up</Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Link to="/saved" className="relative">
                 <Heart className="w-5 h-5 text-green-800 cursor-pointer" />
                 {savedItems.length > 0 && (
                   <Badge className="absolute -top-2 -right-2 bg-green-800 text-xs">{savedItems.length}</Badge>
                 )}
               </Link>
-              <Link to="/cart" className="relative" onClick={() => setIsMenuOpen(false)}>
+              <Link to="/cart" className="relative">
                 <ShoppingCart className="w-5 h-5 text-green-800 cursor-pointer" />
                 {cartItems.length > 0 && (
                   <Badge className="absolute -top-2 -right-2 bg-green-800 text-xs">{cartItems.length}</Badge>

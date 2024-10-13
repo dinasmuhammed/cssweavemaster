@@ -3,15 +3,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const HennaMoments = () => {
-  const imageUrls = [
-    "https://i.postimg.cc/9Q94vdZQ/Screenshot-2024-10-08-101001.png",
-    "https://i.postimg.cc/WzfvSHLd/81e36964-d066-49ec-a655-e08a82b68d95.jpg",
-    "https://i.postimg.cc/tJcKFnWP/IMG-4258.avif",
-    "https://i.postimg.cc/xTJDngVP/466e2ef6-8869-4e92-aee0-9ed18a4ab7fa.jpg",
-    "https://i.postimg.cc/5tJZ5VYP/Screenshot-2024-10-13-172431.png",
-    "https://i.postimg.cc/ydYt5yTc/Screenshot-2024-10-13-172527.png"
+  const images = [
+    'https://i.postimg.cc/FsDg0Dcx/Screenshot-2024-10-06-095020.png',
+    'https://i.postimg.cc/7Y6TrDGg/Screenshot-2024-10-06-095122.png',
+    'https://i.postimg.cc/J0t7vr60/Screenshot-2024-10-06-095141.png',
+    'https://i.postimg.cc/rpJ8p07z/Screenshot-2024-10-06-095158.png',
+    'https://i.postimg.cc/7hT8Sft3/Screenshot-2024-10-06-095212.png',
+    'https://i.postimg.cc/gjRcmSpb/Screenshot-2024-10-06-095258.png',
   ];
-  const totalImages = 450;
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
@@ -20,7 +19,7 @@ const HennaMoments = () => {
   const startAutoSlide = () => {
     intervalRef.current = setInterval(() => {
       if (!isHovering) {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % totalImages);
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
       }
     }, 3000);
   };
@@ -31,11 +30,11 @@ const HennaMoments = () => {
   }, [isHovering]);
 
   const handlePrev = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + totalImages) % totalImages);
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
   };
 
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % totalImages);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
   };
 
   return (
@@ -57,11 +56,11 @@ const HennaMoments = () => {
               exit={{ opacity: 0, x: -300 }}
               transition={{ duration: 0.5 }}
             >
-              {[...Array(6)].map((_, index) => (
+              {images.map((image, index) => (
                 <img
                   key={index}
-                  src={imageUrls[(currentIndex + index) % imageUrls.length]}
-                  alt={`Henna Moment ${currentIndex + index + 1}`}
+                  src={image}
+                  alt={`Henna Moment ${index + 1}`}
                   className="h-full w-1/6 object-cover"
                 />
               ))}

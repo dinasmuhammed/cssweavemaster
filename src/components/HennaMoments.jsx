@@ -5,13 +5,13 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 const HennaMoments = () => {
   const imageUrls = [
     "https://i.postimg.cc/9Q94vdZQ/Screenshot-2024-10-08-101001.png",
-    "https://i.postimg.cc/Xq4yw4nL/henna-2.jpg",
-    "https://i.postimg.cc/8CmBZH5T/henna-3.jpg",
-    "https://i.postimg.cc/RZsKNjfT/henna-4.jpg",
-    "https://i.postimg.cc/QCXj5sNQ/henna-5.jpg",
-    "https://i.postimg.cc/MHcP9xZY/henna-6.jpg"
+    "https://i.postimg.cc/WzfvSHLd/81e36964-d066-49ec-a655-e08a82b68d95.jpg",
+    "https://i.postimg.cc/tJcKFnWP/IMG-4258.avif",
+    "https://i.postimg.cc/xTJDngVP/466e2ef6-8869-4e92-aee0-9ed18a4ab7fa.jpg",
+    "https://i.postimg.cc/5tJZ5VYP/Screenshot-2024-10-13-172431.png",
+    "https://i.postimg.cc/ydYt5yTc/Screenshot-2024-10-13-172527.png"
   ];
-  const totalImages = 50;
+  const totalImages = 450;
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);

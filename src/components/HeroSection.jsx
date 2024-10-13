@@ -10,9 +10,10 @@ import {
 } from "@/components/ui/carousel";
 
 const images = [
-  "https://i.postimg.cc/14x50HJf/image.png",
-  "https://i.postimg.cc/WbSYckSB/Screenshot-2024-10-08-095057.png",
-  "https://i.postimg.cc/y8dQ18bk/Screenshot-2024-10-08-095107.png",
+  "https://i.postimg.cc/Kj3LYHX1/basic-mehendi.jpg",
+  "https://i.postimg.cc/3xZQH8Hv/premium-bridal.jpg",
+  "https://i.postimg.cc/CKbjSySR/image.png",
+  "https://i.postimg.cc/hjrTQ9Jg/image.png",
 ];
 
 const HeroSection = () => {
@@ -26,13 +27,13 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-screen">
+    <section className="relative h-screen">
       <Carousel className="w-full h-full" opts={{ loop: true }}>
         <CarouselContent>
           {images.map((image, index) => (
             <CarouselItem key={index}>
               <div 
-                className="relative w-full h-full overflow-hidden"
+                className="relative w-full h-screen overflow-hidden"
                 onMouseMove={handleMouseMove}
               >
                 <img
@@ -44,14 +45,14 @@ const HeroSection = () => {
                   }}
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-white p-4">
-                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 sm:mb-4 text-center">
-                    Welcome to Henna by Fathima
+                  <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 text-center">
+                    Henna by Fathima
                   </h1>
-                  <p className="text-sm sm:text-base md:text-lg lg:text-xl mb-4 sm:mb-6 text-center max-w-2xl">
-                    Experience the art of henna with our professional services and products
+                  <p className="text-xl sm:text-2xl md:text-3xl mb-8 text-center">
+                    Exquisite Henna Designs for Your Special Moments
                   </p>
                   <Button asChild className="bg-green-800 hover:bg-green-700 text-white">
-                    <Link to="/shop">Shop Now</Link>
+                    <Link to="/services">View Our Services</Link>
                   </Button>
                 </div>
               </div>

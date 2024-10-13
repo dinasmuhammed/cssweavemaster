@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 const services = [
   { name: 'Bridal Henna Package', image: 'https://i.postimg.cc/2SGPxtQr/Screenshot-2024-10-13-173602.png' },
   { name: 'Henna Products', image: 'https://i.postimg.cc/sDddf7fd/Screenshot-2024-10-13-173328.png' },
-  { name: 'Party Henna', image: 'https://i.postimg.cc/sDddf7fd/Screenshot-2024-10-13-173328.png' },
+  { name: 'Party Henna', image: 'https://i.postimg.cc/MGXrmpZm/Screenshot-2024-10-13-173745.png' },
   { name: 'Workshops', image: 'https://i.postimg.cc/bNxXZrdG/Screenshot-2024-10-13-173523.png' },
 ];
 

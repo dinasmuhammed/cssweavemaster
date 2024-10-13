@@ -38,23 +38,23 @@ const Shop = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl sm:text-3xl font-bold text-green-800 mb-6">Our Shop</h1>
-      <p className="text-sm sm:text-lg mb-8">Discover our range of high-quality henna products and mehendi packages for all your needs.</p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+      <p className="text-sm sm:text-base mb-8">Discover our range of high-quality henna products and mehendi packages for all your needs.</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
         {products.map((product) => (
-          <Card key={product.id} className="flex flex-col">
+          <Card key={product.id} className="flex flex-col h-full">
             <CardHeader>
-              <CardTitle className="text-lg sm:text-xl">{product.name}</CardTitle>
-              <CardDescription className="text-sm sm:text-base">₹{product.price}</CardDescription>
+              <CardTitle className="text-lg">{product.name}</CardTitle>
+              <CardDescription className="text-sm">₹{product.price}</CardDescription>
             </CardHeader>
             <CardContent className="flex-grow">
-              <img src={product.image} alt={product.name} className="w-full h-40 sm:h-48 object-cover rounded-md mb-4" />
+              <img src={product.image} alt={product.name} className="w-full h-40 object-cover rounded-md mb-4" />
               <div className="flex items-center mb-2">
-                <Star className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400 mr-1" />
-                <span className="text-sm sm:text-base">{product.rating}</span>
+                <Star className="w-4 h-4 text-yellow-400 mr-1" />
+                <span className="text-sm">{product.rating}</span>
               </div>
             </CardContent>
             <CardFooter>
-              <Button className="w-full flex items-center justify-center text-sm sm:text-base" onClick={() => addToCart(product)}>
+              <Button className="w-full flex items-center justify-center text-sm" onClick={() => addToCart(product)}>
                 <ShoppingCart className="mr-2 h-4 w-4" /> Add to Cart
               </Button>
             </CardFooter>

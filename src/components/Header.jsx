@@ -38,43 +38,51 @@ const Header = () => {
         <div className="py-2 text-center text-xs sm:text-sm bg-cream-200">
           <span className="font-bold">WE ARE DELIVERING ACROSS INDIA AND INTERNATIONALLY!</span>
         </div>
-        <nav className="flex justify-between items-center py-4">
-          <div className="flex items-center">
-            <Button variant="ghost" className="md:hidden mr-2 menu-button" onClick={toggleMenu}>
+        <nav className="flex flex-wrap justify-between items-center py-4">
+          <div className="flex items-center w-full sm:w-auto justify-between">
+            <Button variant="ghost" className="sm:hidden mr-2 menu-button" onClick={toggleMenu}>
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
             <Link to="/" className="text-2xl sm:text-3xl font-bold text-green-800">
               <img src="https://i.postimg.cc/T3N2Cfkz/image.png" alt="Henna by Fathima" className="h-10 sm:h-12 md:h-16 object-cover" />
             </Link>
+            <div className="flex sm:hidden">
+              <Link to="/saved" className="mr-4">
+                <Heart className="w-5 h-5 text-green-800" />
+              </Link>
+              <Link to="/cart">
+                <ShoppingCart className="w-5 h-5 text-green-800" />
+              </Link>
+            </div>
           </div>
-          <div className={`mobile-menu md:flex flex-col md:flex-row items-start md:items-center absolute md:static left-0 right-0 bg-cream-100 md:bg-transparent ${isMenuOpen ? 'block' : 'hidden'} md:block top-full md:top-auto`}>
-            <Link to="/" className="block md:inline-block text-green-800 hover:text-green-700 py-2 md:py-0 px-4 md:px-0 md:mr-6" onClick={() => setIsMenuOpen(false)}>Home</Link>
-            <Link to="/shop" className="block md:inline-block text-green-800 hover:text-green-700 py-2 md:py-0 px-4 md:px-0 md:mr-6" onClick={() => setIsMenuOpen(false)}>Shop</Link>
-            <Link to="/services" className="block md:inline-block text-green-800 hover:text-green-700 py-2 md:py-0 px-4 md:px-0 md:mr-6" onClick={() => setIsMenuOpen(false)}>Services</Link>
-            <Link to="/workshop" className="block md:inline-block text-green-800 hover:text-green-700 py-2 md:py-0 px-4 md:px-0 md:mr-6" onClick={() => setIsMenuOpen(false)}>Workshop</Link>
-            <Link to="/contact" className="block md:inline-block text-green-800 hover:text-green-700 py-2 md:py-0 px-4 md:px-0 md:mr-6" onClick={() => setIsMenuOpen(false)}>Contact us</Link>
+          <div className={`mobile-menu w-full sm:flex sm:w-auto flex-col sm:flex-row items-start sm:items-center ${isMenuOpen ? 'block' : 'hidden'} sm:block mt-4 sm:mt-0`}>
+            <Link to="/" className="block text-green-800 hover:text-green-700 py-2 sm:py-0 sm:mr-6" onClick={() => setIsMenuOpen(false)}>Home</Link>
+            <Link to="/shop" className="block text-green-800 hover:text-green-700 py-2 sm:py-0 sm:mr-6" onClick={() => setIsMenuOpen(false)}>Shop</Link>
+            <Link to="/services" className="block text-green-800 hover:text-green-700 py-2 sm:py-0 sm:mr-6" onClick={() => setIsMenuOpen(false)}>Services</Link>
+            <Link to="/workshop" className="block text-green-800 hover:text-green-700 py-2 sm:py-0 sm:mr-6" onClick={() => setIsMenuOpen(false)}>Workshop</Link>
+            <Link to="/contact" className="block text-green-800 hover:text-green-700 py-2 sm:py-0 sm:mr-6" onClick={() => setIsMenuOpen(false)}>Contact us</Link>
           </div>
-          <div className="flex items-center">
-            <form onSubmit={handleSearch} className="relative mr-4 hidden md:block">
+          <div className="hidden sm:flex items-center mt-4 sm:mt-0">
+            <form onSubmit={handleSearch} className="relative mr-4">
               <Input
                 type="text"
                 placeholder="Search..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pr-8 w-full md:w-auto"
+                className="pr-8 w-full sm:w-auto"
               />
               <Button type="submit" variant="ghost" className="absolute right-0 top-0 h-full">
                 <Search className="w-5 h-5 text-green-800" />
               </Button>
             </form>
             <div className="flex space-x-4">
-              <Link to="/saved" className="relative" onClick={() => setIsMenuOpen(false)}>
+              <Link to="/saved" className="relative">
                 <Heart className="w-5 h-5 text-green-800 cursor-pointer" />
                 {savedItems.length > 0 && (
                   <Badge className="absolute -top-2 -right-2 bg-green-800 text-xs">{savedItems.length}</Badge>
                 )}
               </Link>
-              <Link to="/cart" className="relative" onClick={() => setIsMenuOpen(false)}>
+              <Link to="/cart" className="relative">
                 <ShoppingCart className="w-5 h-5 text-green-800 cursor-pointer" />
                 {cartItems.length > 0 && (
                   <Badge className="absolute -top-2 -right-2 bg-green-800 text-xs">{cartItems.length}</Badge>

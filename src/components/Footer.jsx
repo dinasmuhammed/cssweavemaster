@@ -7,7 +7,7 @@ const Footer = () => {
     <footer className="bg-green-900 text-white py-8">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div>
+          <div className="text-center sm:text-left">
             <h3 className="text-lg font-bold mb-4">Contact</h3>
             <p className="text-sm">+91 8086647124</p>
             <p className="text-sm">info@hennabyfathima.com</p>
@@ -16,7 +16,7 @@ const Footer = () => {
             <p className="text-sm">Koduvally, Kozhikode</p>
             <p className="text-sm">Kerala - 673572</p>
           </div>
-          <div>
+          <div className="text-center sm:text-left">
             <h3 className="text-lg font-bold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li><Link to="/" className="hover:text-cream-100 text-sm">Home</Link></li>
@@ -26,9 +26,9 @@ const Footer = () => {
               <li><Link to="/contact" className="hover:text-cream-100 text-sm">Contact Us</Link></li>
             </ul>
           </div>
-          <div>
+          <div className="text-center sm:text-left">
             <h3 className="text-lg font-bold mb-4">Follow Us</h3>
-            <div className="flex space-x-4">
+            <div className="flex justify-center sm:justify-start space-x-4">
               <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
                 <Facebook className="w-6 h-6" />
               </a>
@@ -40,7 +40,7 @@ const Footer = () => {
               </a>
             </div>
           </div>
-          <div>
+          <div className="text-center sm:text-left">
             <h3 className="text-lg font-bold mb-4">Newsletter</h3>
             <p className="mb-2 text-sm">Subscribe to our newsletter for updates and offers</p>
             <input

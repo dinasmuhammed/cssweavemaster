@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import {
@@ -17,17 +17,32 @@ const images = [
 ];
 
 const HeroSection = () => {
+  const [hoverPosition, setHoverPosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e) => {
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - left) / width;
+    const y = (e.clientY - top) / height;
+    setHoverPosition({ x, y });
+  };
+
   return (
     <section className="relative h-screen">
       <Carousel className="w-full h-full" opts={{ loop: true }}>
         <CarouselContent>
           {images.map((image, index) => (
             <CarouselItem key={index}>
-              <div className="relative w-full h-screen">
+              <div 
+                className="relative w-full h-screen overflow-hidden"
+                onMouseMove={handleMouseMove}
+              >
                 <img
                   src={image}
                   alt={`Hero image ${index + 1}`}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-transform duration-300 ease-out"
+                  style={{
+                    transform: `scale(1.1) translate(${(hoverPosition.x - 0.5) * 10}px, ${(hoverPosition.y - 0.5) * 10}px)`,
+                  }}
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-white p-4">
                   <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 text-center">

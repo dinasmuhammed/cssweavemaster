@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Toaster } from "sonner";
+import { Toaster, toast } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CartProvider } from './context/CartContext';
@@ -14,10 +14,48 @@ import Contact from './pages/Contact';
 import Cart from './pages/Cart';
 import SavedItems from './pages/SavedItems';
 import SearchResults from './pages/SearchResults';
+import { checkNetworkSpeed } from './utils/networkUtils';
 
 const queryClient = new QueryClient();
 
 const App = () => {
+  const [isSlowNetwork, setIsSlowNetwork] = useState(false);
+
+  useEffect(() => {
+    const checkSpeed = async () => {
+      try {
+        const speed = await checkNetworkSpeed();
+        if (speed < 1) { // If speed is less than 1 Mbps
+          setIsSlowNetwork(true);
+          toast.error("Your network is slow. The website may not function optimally.", {
+            duration: Infinity,
+          });
+        }
+      } catch (error) {
+        console.error("Error checking network speed:", error);
+      }
+    };
+
+    checkSpeed();
+  }, []);
+
+  if (isSlowNetwork) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-cream-100">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-green-800 mb-4">Network Issue Detected</h1>
+          <p className="text-green-700">Your network connection is slow. The website may not function properly.</p>
+          <button
+            className="mt-4 bg-green-800 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors"
+            onClick={() => window.location.reload()}
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>

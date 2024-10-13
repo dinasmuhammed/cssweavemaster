@@ -15,10 +15,10 @@ const WelcomeSection = () => {
         </Button>
       </div>
       <div className="absolute top-0 left-0 w-1/4 h-full">
-        <img src="https://i.postimg.cc/Kj3zcyVw/image.png" alt="Henna leaves" className="w-full h-full object-contain object-left-top" />
+        <img src="https://i.postimg.cc/vBr7WJnv/leaf10-removebg-preview.png" alt="Henna leaves" className="w-full h-full object-contain object-left-top" />
       </div>
       <div className="absolute bottom-0 right-0 w-1/4 h-full transform rotate-180">
-        <img src="https://i.postimg.cc/Kj3zcyVw/image.png" alt="Henna leaves" className="w-full h-full object-contain object-left-top" />
+        <img src="https://i.postimg.cc/vBr7WJnv/leaf10-removebg-preview.png" alt="Henna leaves" className="w-full h-full object-contain object-left-top" />
       </div>
     </section>
   );

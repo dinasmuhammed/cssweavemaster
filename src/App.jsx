@@ -26,7 +26,7 @@ const App = () => {
     const checkSpeed = async () => {
       try {
         const speed = await checkNetworkSpeed();
-        if (speed < 1) { // If speed is less than 1 Mbps
+        if (speed < 1) {
           setIsSlowNetwork(true);
           toast.error("Your network is slow. The website may not function optimally.", {
             duration: Infinity,
@@ -53,7 +53,7 @@ const App = () => {
   if (isSlowNetwork) {
     return (
       <div className="flex items-center justify-center h-screen bg-cream-100">
-        <div className="text-center">
+        <div className="text-center px-4">
           <h1 className="text-2xl font-bold text-green-800 mb-4">Network Issue Detected</h1>
           <p className="text-green-700 mb-4">Your network connection is slow. The website may not function properly.</p>
           <button

@@ -31,7 +31,7 @@ const Contact = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-green-800 mb-6">Contact Us</h1>
+      <h1 className="text-2xl sm:text-3xl font-bold text-green-800 mb-6">Contact Us</h1>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="space-y-8">
           <form onSubmit={handleSubmit} className="space-y-4">

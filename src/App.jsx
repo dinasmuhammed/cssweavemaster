@@ -20,6 +20,7 @@ const queryClient = new QueryClient();
 
 const App = () => {
   const [isSlowNetwork, setIsSlowNetwork] = useState(false);
+  const [isCheckingNetwork, setIsCheckingNetwork] = useState(true);
 
   useEffect(() => {
     const checkSpeed = async () => {
@@ -33,20 +34,30 @@ const App = () => {
         }
       } catch (error) {
         console.error("Error checking network speed:", error);
+      } finally {
+        setIsCheckingNetwork(false);
       }
     };
 
     checkSpeed();
   }, []);
 
+  if (isCheckingNetwork) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-cream-100">
+        <p className="text-green-800 text-xl">Checking network speed...</p>
+      </div>
+    );
+  }
+
   if (isSlowNetwork) {
     return (
       <div className="flex items-center justify-center h-screen bg-cream-100">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-green-800 mb-4">Network Issue Detected</h1>
-          <p className="text-green-700">Your network connection is slow. The website may not function properly.</p>
+          <p className="text-green-700 mb-4">Your network connection is slow. The website may not function properly.</p>
           <button
-            className="mt-4 bg-green-800 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors"
+            className="bg-green-800 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors"
             onClick={() => window.location.reload()}
           >
             Retry

@@ -47,11 +47,17 @@ const Header = () => {
               <img src="https://i.postimg.cc/T3N2Cfkz/image.png" alt="Henna by Fathima" className="h-10 sm:h-12 md:h-16 object-cover" />
             </Link>
             <div className="flex sm:hidden">
-              <Link to="/saved" className="mr-4">
+              <Link to="/saved" className="mr-4 relative">
                 <Heart className="w-5 h-5 text-green-800" />
+                {savedItems.length > 0 && (
+                  <Badge className="absolute -top-2 -right-2 bg-green-800 text-xs">{savedItems.length}</Badge>
+                )}
               </Link>
-              <Link to="/cart">
+              <Link to="/cart" className="relative">
                 <ShoppingCart className="w-5 h-5 text-green-800" />
+                {cartItems.length > 0 && (
+                  <Badge className="absolute -top-2 -right-2 bg-green-800 text-xs">{cartItems.length}</Badge>
+                )}
               </Link>
             </div>
           </div>

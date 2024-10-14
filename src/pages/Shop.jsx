@@ -43,18 +43,18 @@ const Shop = () => {
         {products.map((product) => (
           <Card key={product.id} className="flex flex-col h-full">
             <CardHeader>
-              <CardTitle className="text-lg">{product.name}</CardTitle>
+              <CardTitle className="text-base sm:text-lg">{product.name}</CardTitle>
               <CardDescription className="text-sm">₹{product.price}</CardDescription>
             </CardHeader>
             <CardContent className="flex-grow">
-              <img src={product.image} alt={product.name} className="w-full h-40 object-cover rounded-md mb-4" />
+              <img src={product.image} alt={product.name} className="w-full h-32 sm:h-40 object-cover rounded-md mb-4" />
               <div className="flex items-center mb-2">
                 <Star className="w-4 h-4 text-yellow-400 mr-1" />
                 <span className="text-sm">{product.rating}</span>
               </div>
             </CardContent>
             <CardFooter>
-              <Button className="w-full flex items-center justify-center text-sm" onClick={() => addToCart(product)}>
+              <Button className="w-full flex items-center justify-center text-xs sm:text-sm" onClick={() => addToCart(product)}>
                 <ShoppingCart className="mr-2 h-4 w-4" /> Add to Cart
               </Button>
             </CardFooter>

@@ -40,6 +40,12 @@ const App = () => {
     };
 
     checkSpeed();
+
+    // Add viewport meta tag
+    const viewportMeta = document.createElement('meta');
+    viewportMeta.name = "viewport";
+    viewportMeta.content = "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no";
+    document.getElementsByTagName('head')[0].appendChild(viewportMeta);
   }, []);
 
   if (isCheckingNetwork) {

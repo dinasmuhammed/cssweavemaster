@@ -10,11 +10,13 @@ const Home = () => {
   return (
     <div className="space-y-16 bg-cream-100">
       <HeroSection />
-      <WelcomeSection />
-      <WhyHennaByFathima />
-      <OurServices />
-      <AboutUs />
-      <HennaMoments />
+      <main>
+        <WelcomeSection />
+        <WhyHennaByFathima />
+        <OurServices />
+        <AboutUs />
+        <HennaMoments />
+      </main>
     </div>
   );
 };

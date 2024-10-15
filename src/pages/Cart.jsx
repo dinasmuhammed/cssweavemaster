@@ -14,6 +14,7 @@ const Cart = () => {
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [paymentComplete, setPaymentComplete] = useState(false);
   const upiId = 'shamfathi.k-2@oksbi';
+  const whatsappNumber = '919656778058';
 
   const totalPrice = calculateTotalPrice(cartItems);
 
@@ -51,6 +52,10 @@ const Cart = () => {
         title: "Bill Downloaded",
         description: "Your bill has been downloaded successfully.",
       });
+
+      // Open WhatsApp with the order details
+      const whatsappMessage = encodeURIComponent(`New order: ${orderId}\nTotal: ₹${totalPrice}\nDetails: ${detailedNotes}`);
+      window.open(`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`, '_blank');
     }, 3000); // Simulating a 3-second payment process
 
     window.location.href = upiLink;

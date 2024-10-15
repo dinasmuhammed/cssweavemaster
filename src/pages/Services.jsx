@@ -1,98 +1,122 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 
-const services = [
-  {
-    title: 'Bridal Henna',
-    description: 'Exquisite and intricate designs for your special day.',
-    image: 'https://i.postimg.cc/FRRFYbt1/Screenshot-2024-10-06-101248.png',
-  },
-  {
-    title: 'Party Henna',
-    description: 'Beautiful designs for all your celebrations and events.',
-    image: 'https://i.postimg.cc/3JDXym7L/Screenshot-2024-10-06-101639.png',
-  },
-  {
-    title: 'Corporate Events',
-    description: 'Add a touch of culture to your corporate gatherings.',
-    image: 'https://i.postimg.cc/htc1HhWp/Screenshot-2024-10-06-101737.png',
-  },
-  {
-    title: 'Henna Tattoos',
-    description: 'Temporary body art for a unique and stylish look.',
-    image: 'https://i.postimg.cc/vZKD5Szf/Screenshot-2024-10-06-101849.png',
-  },
-];
+const ServicePackage = ({ title, images, details, buttonText }) => (
+  <div className="mb-12">
+    <h2 className="text-2xl font-bold text-green-800 mb-4">{title}</h2>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+      {images.map((src, index) => (
+        <img key={index} src={src} alt={`${title} design ${index + 1}`} className="w-full h-48 object-cover rounded-lg" />
+      ))}
+    </div>
+    <ul className="list-disc list-inside mb-4">
+      {details.map((detail, index) => (
+        <li key={index} className="text-green-700">{detail}</li>
+      ))}
+    </ul>
+    <Button asChild className="bg-green-800 hover:bg-green-700 text-white">
+      <Link to="/contact">{buttonText}</Link>
+    </Button>
+  </div>
+);
 
 const Services = () => {
-  const [bookingForm, setBookingForm] = useState({
-    name: '',
-    phone: '',
-    service: '',
-    message: ''
-  });
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setBookingForm(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const whatsappNumber = '918086647124';
-    const message = `New Booking Request:%0A
-Name: ${bookingForm.name}%0A
-Phone: ${bookingForm.phone}%0A
-Service: ${bookingForm.service}%0A
-Message: ${bookingForm.message}`;
-    
-    window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
-  };
+  const services = [
+    {
+      title: "BRIDAL & ENGAGEMENT HENNA",
+      images: [
+        "https://i.postimg.cc/Xq8Q3QZY/bridal-1.jpg",
+        "https://i.postimg.cc/3x7Lkc5f/bridal-2.jpg",
+        "https://i.postimg.cc/Xq8Q3QZY/bridal-1.jpg",
+      ],
+      packages: [
+        {
+          name: "SILVER PACKAGE",
+          details: [
+            "Hands (both sides)",
+            "Includes both hands up to wrist sides",
+            "Includes Henna Care Aftercare",
+            "1-2 Hours with Natural Application",
+          ],
+          buttonText: "Enquire for Price",
+        },
+        {
+          name: "GOLD PACKAGE",
+          details: [
+            "Hands (Front & Back)",
+            "Includes both hands up to mid-forearm",
+            "Includes Henna Care Aftercare",
+            "2-3 Hours with Natural Application",
+          ],
+          buttonText: "Enquire for Price",
+        },
+        {
+          name: "PLATINUM PACKAGE",
+          details: [
+            "Hands, Feet & Legs",
+            "Includes both hands up to mid-forearm",
+            "Includes Henna Care Aftercare",
+            "3-4 Hours with Natural Application",
+          ],
+          buttonText: "Enquire for Price",
+        },
+      ],
+    },
+    {
+      title: "PARTY HENNA",
+      images: [
+        "https://i.postimg.cc/L8QSRZnb/party-1.jpg",
+        "https://i.postimg.cc/L8QSRZnb/party-1.jpg",
+        "https://i.postimg.cc/L8QSRZnb/party-1.jpg",
+      ],
+      packages: [
+        {
+          name: "SIMPLE DESIGNS",
+          details: [
+            "15-20 Minutes per hand",
+            "1-2 Hours with Natural Application",
+          ],
+          buttonText: "Enquire for Price",
+        },
+        {
+          name: "HEAVY DESIGNS",
+          details: [
+            "Includes Henna Care Aftercare",
+            "2-3 Hours with Natural Application",
+          ],
+          buttonText: "Enquire for Price",
+        },
+      ],
+    },
+  ];
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold text-green-800 mb-6">Our Services</h1>
-      <p className="text-lg mb-8">Experience the art of henna with our professional services.</p>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {services.map((service, index) => (
-          <Card key={index}>
-            <CardHeader>
-              <CardTitle>{service.title}</CardTitle>
-              <CardDescription>{service.description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <img src={service.image} alt={service.title} className="w-full h-48 object-cover rounded-md" />
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-      <div className="mt-12">
-        <h2 className="text-2xl font-bold text-green-800 mb-4">Book a Service</h2>
-        <p className="mb-4">To book any of our services or for more information, please fill out the form below:</p>
-        <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
-          <div>
-            <Label htmlFor="name">Name</Label>
-            <Input id="name" name="name" value={bookingForm.name} onChange={handleInputChange} required />
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold text-green-800 mb-8">Our Services</h1>
+      {services.map((service, index) => (
+        <div key={index} className="mb-16">
+          <h2 className="text-2xl font-bold text-green-800 mb-4">{service.title}</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            {service.images.map((src, imgIndex) => (
+              <img key={imgIndex} src={src} alt={`${service.title} ${imgIndex + 1}`} className="w-full h-48 object-cover rounded-lg" />
+            ))}
           </div>
-          <div>
-            <Label htmlFor="phone">Phone Number</Label>
-            <Input id="phone" name="phone" value={bookingForm.phone} onChange={handleInputChange} required />
-          </div>
-          <div>
-            <Label htmlFor="service">Service</Label>
-            <Input id="service" name="service" value={bookingForm.service} onChange={handleInputChange} required />
-          </div>
-          <div>
-            <Label htmlFor="message">Message</Label>
-            <Textarea id="message" name="message" value={bookingForm.message} onChange={handleInputChange} />
-          </div>
-          <Button type="submit">Send Booking Request</Button>
-        </form>
-      </div>
+          {service.packages.map((pkg, pkgIndex) => (
+            <ServicePackage
+              key={pkgIndex}
+              title={pkg.name}
+              images={service.images}
+              details={pkg.details}
+              buttonText={pkg.buttonText}
+            />
+          ))}
+        </div>
+      ))}
+      <p className="text-sm text-green-700 italic mt-8">
+        Note : The final amount depends on the complexity of the design and the customer's requirements.<br />
+        The total price will be finalized after the work is completed.
+      </p>
     </div>
   );
 };

@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 
 const HeroSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
+  const carouselRef = useRef(null);
   const images = [
     "https://i.postimg.cc/14x50HJf/image.png",
     "https://i.postimg.cc/WbSYckSB/Screenshot-2024-10-08-095057.png",
@@ -11,12 +13,20 @@ const HeroSection = () => {
   ];
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 5000); // Change image every 5 seconds
-
+    let interval;
+    if (!isHovering) {
+      interval = setInterval(() => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+        if (carouselRef.current) {
+          carouselRef.current.scrollTo({
+            left: carouselRef.current.scrollLeft + carouselRef.current.offsetWidth,
+            behavior: 'smooth'
+          });
+        }
+      }, 5000); // Change image every 5 seconds
+    }
     return () => clearInterval(interval);
-  }, [images.length]);
+  }, [isHovering, images.length]);
 
   const hoverVariants = {
     hover: {
@@ -30,13 +40,17 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative h-screen w-full overflow-hidden bg-cream-100">
-      <Carousel className="w-full h-full">
-        <CarouselContent>
+    <section 
+      className="relative w-full overflow-hidden bg-cream-100"
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+    >
+      <Carousel className="w-full">
+        <CarouselContent ref={carouselRef}>
           {images.map((image, index) => (
-            <CarouselItem key={index} className="w-full h-full">
+            <CarouselItem key={index} className="w-full">
               <motion.div
-                className="relative w-full h-full"
+                className="relative w-full h-screen"
                 variants={hoverVariants}
                 whileHover="hover"
               >
@@ -52,8 +66,6 @@ const HeroSection = () => {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="hidden sm:flex" />
-        <CarouselNext className="hidden sm:flex" />
       </Carousel>
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
         {images.map((_, index) => (
@@ -62,7 +74,15 @@ const HeroSection = () => {
             className={`w-3 h-3 rounded-full ${
               index === currentIndex ? 'bg-white' : 'bg-white bg-opacity-50'
             }`}
-            onClick={() => setCurrentIndex(index)}
+            onClick={() => {
+              setCurrentIndex(index);
+              if (carouselRef.current) {
+                carouselRef.current.scrollTo({
+                  left: index * carouselRef.current.offsetWidth,
+                  behavior: 'smooth'
+                });
+              }
+            }}
           />
         ))}
       </div>

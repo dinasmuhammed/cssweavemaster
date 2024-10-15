@@ -48,15 +48,6 @@ const HeroSection = () => {
                   animate={{ opacity: index === currentIndex ? 1 : 0 }}
                   transition={{ duration: 1 }}
                 />
-                <motion.div
-                  className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center"
-                  initial={{ opacity: 0 }}
-                  whileHover={{ opacity: 1 }}
-                >
-                  <p className="text-white text-2xl md:text-4xl font-bold text-center px-4">
-                    Discover the Art of Henna
-                  </p>
-                </motion.div>
               </motion.div>
             </CarouselItem>
           ))}

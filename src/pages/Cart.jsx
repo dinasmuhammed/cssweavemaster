@@ -36,6 +36,14 @@ const Cart = () => {
     
     const upiLink = createUPIPaymentLink(upiId, totalPrice, orderId, detailedNotes);
     
+    // Open UPI payment link in a new window/tab
+    window.open(upiLink, '_blank');
+
+    toast({
+      title: "Payment Initiated",
+      description: "A new window has opened for UPI payment. Please complete the payment there.",
+    });
+
     // Simulate payment completion (in a real scenario, you'd verify the payment)
     setTimeout(() => {
       setPaymentComplete(true);
@@ -57,12 +65,6 @@ const Cart = () => {
       const whatsappMessage = encodeURIComponent(`New order: ${orderId}\nTotal: ₹${totalPrice}\nDetails: ${detailedNotes}`);
       window.open(`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`, '_blank');
     }, 3000); // Simulating a 3-second payment process
-
-    window.location.href = upiLink;
-    toast({
-      title: "Payment Initiated",
-      description: "You will be redirected to complete the UPI payment.",
-    });
   };
 
   return (

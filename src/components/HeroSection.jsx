@@ -21,9 +21,9 @@ const HeroSection = () => {
   const hoverVariants = {
     hover: {
       scale: 1.05,
+      filter: "brightness(1.1)",
       transition: {
-        duration: 10,
-        yoyo: Infinity,
+        duration: 0.3,
         ease: "easeInOut",
       },
     },
@@ -38,7 +38,7 @@ const HeroSection = () => {
               <motion.div
                 className="relative w-full h-full"
                 variants={hoverVariants}
-                animate="hover"
+                whileHover="hover"
               >
                 <motion.img 
                   src={image} 
@@ -48,6 +48,15 @@ const HeroSection = () => {
                   animate={{ opacity: index === currentIndex ? 1 : 0 }}
                   transition={{ duration: 1 }}
                 />
+                <motion.div
+                  className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center"
+                  initial={{ opacity: 0 }}
+                  whileHover={{ opacity: 1 }}
+                >
+                  <p className="text-white text-2xl md:text-4xl font-bold text-center px-4">
+                    Discover the Art of Henna
+                  </p>
+                </motion.div>
               </motion.div>
             </CarouselItem>
           ))}
@@ -55,6 +64,17 @@ const HeroSection = () => {
         <CarouselPrevious className="hidden sm:flex" />
         <CarouselNext className="hidden sm:flex" />
       </Carousel>
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+        {images.map((_, index) => (
+          <button
+            key={index}
+            className={`w-3 h-3 rounded-full ${
+              index === currentIndex ? 'bg-white' : 'bg-white bg-opacity-50'
+            }`}
+            onClick={() => setCurrentIndex(index)}
+          />
+        ))}
+      </div>
     </section>
   );
 };

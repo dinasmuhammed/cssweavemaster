@@ -46,9 +46,9 @@ const HeroSection = () => {
       onMouseLeave={() => setIsHovering(false)}
     >
       <Carousel className="w-full">
-        <CarouselContent ref={carouselRef}>
+        <CarouselContent ref={carouselRef} className="w-full">
           {images.map((image, index) => (
-            <CarouselItem key={index} className="w-full">
+            <CarouselItem key={index} className="w-full p-0">
               <motion.div
                 className="relative w-full h-screen"
                 variants={hoverVariants}

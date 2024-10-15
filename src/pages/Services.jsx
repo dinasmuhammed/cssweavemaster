@@ -1,32 +1,61 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
+import { motion } from 'framer-motion';
 
 const ServicePackage = ({ title, details, images, buttonText, isReversed }) => (
-  <div className={`mb-12 flex flex-col ${isReversed ? 'md:flex-row-reverse' : 'md:flex-row'}`}>
+  <motion.div 
+    className={`mb-12 flex flex-col ${isReversed ? 'md:flex-row-reverse' : 'md:flex-row'}`}
+    initial={{ opacity: 0, y: 50 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5 }}
+  >
     <div className={`md:w-1/2 ${isReversed ? 'md:pl-8' : 'md:pr-8'}`}>
-      <h3 className="text-xl font-semibold mb-4">{title}</h3>
-      <ul className="list-disc list-inside mb-4">
+      <h3 className="text-2xl font-semibold mb-4 text-green-800">{title}</h3>
+      <ul className="list-disc list-inside mb-6 space-y-2">
         {details.map((detail, index) => (
-          <li key={index}>{detail}</li>
+          <li key={index} className="text-gray-700">{detail}</li>
         ))}
       </ul>
-      <Button className="bg-green-800 hover:bg-green-700 text-white">{buttonText}</Button>
+      <Button className="bg-green-800 hover:bg-green-700 text-white transition-all duration-300 transform hover:scale-105">
+        {buttonText}
+      </Button>
     </div>
-    <div className="md:w-1/2 grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 md:mt-0">
+    <div className="md:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 md:mt-0">
       {images.map((src, index) => (
-        <img key={index} src={src} alt={`${title} - Image ${index + 1}`} className="w-full h-48 object-cover rounded-lg" />
+        <motion.img 
+          key={index} 
+          src={src} 
+          alt={`${title} - Image ${index + 1}`} 
+          className="w-full h-48 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+          whileHover={{ scale: 1.05 }}
+          transition={{ duration: 0.2 }}
+        />
       ))}
     </div>
-  </div>
+  </motion.div>
 );
 
 const Services = () => {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-green-800 mb-8">Our Services</h1>
+    <div className="container mx-auto px-4 py-12">
+      <motion.h1 
+        className="text-4xl font-bold text-green-800 mb-12 text-center"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        Our Services
+      </motion.h1>
       
       <section className="mb-16">
-        <h2 className="text-2xl font-bold text-green-800 mb-6">BRIDAL & ENGAGEMENT HENNA</h2>
+        <motion.h2 
+          className="text-3xl font-bold text-green-800 mb-8 text-center"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          BRIDAL & ENGAGEMENT HENNA
+        </motion.h2>
         
         <ServicePackage
           title="SILVER PACKAGE"
@@ -83,7 +112,14 @@ const Services = () => {
       </section>
 
       <section>
-        <h2 className="text-2xl font-bold text-green-800 mb-6">PARTY HENNA</h2>
+        <motion.h2 
+          className="text-3xl font-bold text-green-800 mb-8 text-center"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          PARTY HENNA
+        </motion.h2>
         
         <ServicePackage
           title="SIMPLE DESIGNS"
@@ -102,10 +138,15 @@ const Services = () => {
         />
       </section>
 
-      <p className="text-sm text-gray-600 mt-8">
+      <motion.p 
+        className="text-sm text-gray-600 mt-12 text-center max-w-2xl mx-auto"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+      >
         Note: The final amount charged will be dependent on the complexity of the design and the customer's requirements.
         The exact price will be finalized after the work is completed.
-      </p>
+      </motion.p>
     </div>
   );
 };

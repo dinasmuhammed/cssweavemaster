@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 const HeroSection = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
   const images = [
     "https://i.postimg.cc/14x50HJf/image.png",
     "https://i.postimg.cc/WbSYckSB/Screenshot-2024-10-08-095057.png",
@@ -10,18 +10,22 @@ const HeroSection = () => {
   ];
 
   useEffect(() => {
-    const handleMouseMove = (event) => {
-      const { clientX, clientY } = event;
-      const { innerWidth, innerHeight } = window;
-      const x = (clientX / innerWidth - 0.5) * 20;
-      const y = (clientY / innerHeight - 0.5) * 20;
-      setMousePosition({ x, y });
+    let animationFrameId;
+    let time = 0;
+
+    const animate = () => {
+      const x = Math.sin(time) * 10; // Adjust the 10 to increase/decrease horizontal movement
+      const y = Math.cos(time) * 10; // Adjust the 10 to increase/decrease vertical movement
+      setOffset({ x, y });
+
+      time += 0.01; // Adjust to change animation speed
+      animationFrameId = requestAnimationFrame(animate);
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    animate();
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
+      cancelAnimationFrame(animationFrameId);
     };
   }, []);
 
@@ -37,7 +41,7 @@ const HeroSection = () => {
                   alt={`Hero ${index + 1}`} 
                   className="w-full h-full object-cover transition-transform duration-300 ease-out"
                   style={{
-                    transform: `translate(${mousePosition.x}px, ${mousePosition.y}px) scale(1.1)`,
+                    transform: `translate(${offset.x}px, ${offset.y}px) scale(1.1)`,
                   }}
                 />
               </div>

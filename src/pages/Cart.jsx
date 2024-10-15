@@ -52,18 +52,25 @@ const Cart = () => {
         description: "Your payment has been processed successfully.",
       });
 
-      // Generate and download the bill
+      // Generate the bill
       const billContent = generateBill(orderData);
+
+      // Send bill via WhatsApp
+      const whatsappMessage = encodeURIComponent(`New order: ${orderId}\nTotal: ₹${totalPrice}\n\nBill:\n${billContent}`);
+      window.open(`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`, '_blank');
+
+      toast({
+        title: "Bill Sent",
+        description: "Your bill has been sent via WhatsApp.",
+      });
+
+      // Download the bill locally as well
       downloadBill(billContent, orderId);
 
       toast({
         title: "Bill Downloaded",
-        description: "Your bill has been downloaded successfully.",
+        description: "Your bill has also been downloaded locally.",
       });
-
-      // Open WhatsApp with the order details
-      const whatsappMessage = encodeURIComponent(`New order: ${orderId}\nTotal: ₹${totalPrice}\nDetails: ${detailedNotes}`);
-      window.open(`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`, '_blank');
     }, 3000); // Simulating a 3-second payment process
   };
 

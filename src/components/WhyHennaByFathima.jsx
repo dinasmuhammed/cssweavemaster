@@ -1,5 +1,6 @@
 import React from 'react';
 import { Leaf, Hand, GraduationCap, ShoppingBag } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const reasons = [
   {
@@ -28,14 +29,28 @@ const WhyHennaByFathima = () => {
   return (
     <section className="py-16 bg-white">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center text-green-800 mb-12">Why Henna by Fathima?</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <motion.h2 
+          className="text-3xl font-bold text-center text-green-800 mb-12"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          Why Henna by Fathima?
+        </motion.h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {reasons.map((reason, index) => (
-            <div key={index} className="text-center">
+            <motion.div 
+              key={index} 
+              className="text-center p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              whileHover={{ scale: 1.05 }}
+            >
               <div className="flex justify-center mb-4">{reason.icon}</div>
               <h3 className="text-xl font-semibold mb-2">{reason.title}</h3>
               <p className="text-gray-600">{reason.description}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

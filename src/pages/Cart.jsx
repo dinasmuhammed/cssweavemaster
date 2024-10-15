@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/use-toast";
 import { calculateTotalPrice, formatOrderData, generateOrderId, createUPIPaymentLink } from '../utils/cartUtils';
-import { generateBill, sendBillToWhatsApp } from '../utils/billUtils';
+import { generateBill, downloadBill } from '../utils/billUtils';
 import CartItem from '../components/CartItem';
 import PurchaseForm from '../components/PurchaseForm';
 
@@ -45,14 +45,12 @@ const Cart = () => {
 
       // Generate and download the bill
       const billContent = generateBill(orderData);
-      const blob = new Blob([billContent], { type: 'text/plain' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = `bill_${orderId}.txt`;
-      link.click();
+      downloadBill(billContent, orderId);
 
-      // Send bill to WhatsApp
-      sendBillToWhatsApp('9656778508', billContent);
+      toast({
+        title: "Bill Downloaded",
+        description: "Your bill has been downloaded successfully.",
+      });
     }, 3000); // Simulating a 3-second payment process
 
     window.location.href = upiLink;

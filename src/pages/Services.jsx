@@ -1,20 +1,22 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 
-const ServicePackage = ({ title, details, images, buttonText }) => (
-  <div className="mb-12">
-    <h3 className="text-xl font-semibold mb-4">{title}</h3>
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+const ServicePackage = ({ title, details, images, buttonText, isReversed }) => (
+  <div className={`mb-12 flex flex-col ${isReversed ? 'md:flex-row-reverse' : 'md:flex-row'}`}>
+    <div className={`md:w-1/2 ${isReversed ? 'md:pl-8' : 'md:pr-8'}`}>
+      <h3 className="text-xl font-semibold mb-4">{title}</h3>
+      <ul className="list-disc list-inside mb-4">
+        {details.map((detail, index) => (
+          <li key={index}>{detail}</li>
+        ))}
+      </ul>
+      <Button className="bg-green-800 hover:bg-green-700 text-white">{buttonText}</Button>
+    </div>
+    <div className="md:w-1/2 grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 md:mt-0">
       {images.map((src, index) => (
         <img key={index} src={src} alt={`${title} - Image ${index + 1}`} className="w-full h-48 object-cover rounded-lg" />
       ))}
     </div>
-    <ul className="list-disc list-inside mb-4">
-      {details.map((detail, index) => (
-        <li key={index}>{detail}</li>
-      ))}
-    </ul>
-    <Button className="bg-green-800 hover:bg-green-700 text-white">{buttonText}</Button>
   </div>
 );
 
@@ -36,9 +38,11 @@ const Services = () => {
           images={[
             "https://example.com/bridal-henna-1.jpg",
             "https://example.com/bridal-henna-2.jpg",
-            "https://example.com/bridal-henna-3.jpg"
+            "https://example.com/bridal-henna-3.jpg",
+            "https://example.com/bridal-henna-4.jpg",
           ]}
           buttonText="Request to Book"
+          isReversed={false}
         />
 
         <ServicePackage
@@ -50,11 +54,13 @@ const Services = () => {
             "2-3 Hours with Natural Application"
           ]}
           images={[
-            "https://example.com/bridal-henna-4.jpg",
             "https://example.com/bridal-henna-5.jpg",
-            "https://example.com/bridal-henna-6.jpg"
+            "https://example.com/bridal-henna-6.jpg",
+            "https://example.com/bridal-henna-7.jpg",
+            "https://example.com/bridal-henna-8.jpg",
           ]}
           buttonText="Request to Book"
+          isReversed={true}
         />
 
         <ServicePackage
@@ -66,11 +72,13 @@ const Services = () => {
             "4-5 Hours with Natural Application"
           ]}
           images={[
-            "https://example.com/bridal-henna-7.jpg",
-            "https://example.com/bridal-henna-8.jpg",
-            "https://example.com/bridal-henna-9.jpg"
+            "https://example.com/bridal-henna-9.jpg",
+            "https://example.com/bridal-henna-10.jpg",
+            "https://example.com/bridal-henna-11.jpg",
+            "https://example.com/bridal-henna-12.jpg",
           ]}
           buttonText="Request to Book"
+          isReversed={false}
         />
       </section>
 
@@ -86,23 +94,11 @@ const Services = () => {
           images={[
             "https://example.com/party-henna-1.jpg",
             "https://example.com/party-henna-2.jpg",
-            "https://example.com/party-henna-3.jpg"
-          ]}
-          buttonText="Request to Book"
-        />
-
-        <ServicePackage
-          title="HEAVY DESIGNS"
-          details={[
-            "Includes Henna Care Aftercare",
-            "30-45 Minutes with Natural Application"
-          ]}
-          images={[
+            "https://example.com/party-henna-3.jpg",
             "https://example.com/party-henna-4.jpg",
-            "https://example.com/party-henna-5.jpg",
-            "https://example.com/party-henna-6.jpg"
           ]}
           buttonText="Request to Book"
+          isReversed={true}
         />
       </section>
 

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 const HeroSection = () => {
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [currentIndex, setCurrentIndex] = useState(0);
   const images = [
     "https://i.postimg.cc/14x50HJf/image.png",
     "https://i.postimg.cc/WbSYckSB/Screenshot-2024-10-08-095057.png",
@@ -10,24 +11,23 @@ const HeroSection = () => {
   ];
 
   useEffect(() => {
-    let animationFrameId;
-    let time = 0;
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 5000); // Change image every 5 seconds
 
-    const animate = () => {
-      const x = Math.sin(time) * 10; // Adjust the 10 to increase/decrease horizontal movement
-      const y = Math.cos(time) * 10; // Adjust the 10 to increase/decrease vertical movement
-      setOffset({ x, y });
+    return () => clearInterval(interval);
+  }, [images.length]);
 
-      time += 0.01; // Adjust to change animation speed
-      animationFrameId = requestAnimationFrame(animate);
-    };
-
-    animate();
-
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, []);
+  const hoverVariants = {
+    hover: {
+      scale: 1.05,
+      transition: {
+        duration: 10,
+        yoyo: Infinity,
+        ease: "easeInOut",
+      },
+    },
+  };
 
   return (
     <section className="relative h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[70vh] xl:h-screen overflow-hidden bg-cream-100">
@@ -35,16 +35,20 @@ const HeroSection = () => {
         <CarouselContent>
           {images.map((image, index) => (
             <CarouselItem key={index} className="w-full h-full">
-              <div className="relative w-full h-full">
-                <img 
+              <motion.div
+                className="relative w-full h-full"
+                variants={hoverVariants}
+                animate="hover"
+              >
+                <motion.img 
                   src={image} 
                   alt={`Hero ${index + 1}`} 
                   className="w-full h-full object-cover transition-transform duration-300 ease-out"
-                  style={{
-                    transform: `translate(${offset.x}px, ${offset.y}px) scale(1.1)`,
-                  }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: index === currentIndex ? 1 : 0 }}
+                  transition={{ duration: 1 }}
                 />
-              </div>
+              </motion.div>
             </CarouselItem>
           ))}
         </CarouselContent>

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/use-toast";
 import { calculateTotalPrice, formatOrderData, generateOrderId, createUPIPaymentLink } from '../utils/cartUtils';
+import { generateBill, sendBillToWhatsApp } from '../utils/billUtils';
 import CartItem from '../components/CartItem';
 import PurchaseForm from '../components/PurchaseForm';
 
@@ -11,6 +12,7 @@ const Cart = () => {
   const { cartItems, removeFromCart, updateQuantity, saveForLater, savedItems, moveToCart } = useCart();
   const [formData, setFormData] = useState({ name: '', phoneNumber: '', address: '', state: '', district: '' });
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
+  const [paymentComplete, setPaymentComplete] = useState(false);
   const upiId = 'shamfathi.k-2@oksbi';
 
   const totalPrice = calculateTotalPrice(cartItems);
@@ -25,7 +27,7 @@ const Cart = () => {
     setShowPaymentDialog(true);
   };
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
     const orderId = generateOrderId();
     const orderData = formatOrderData(formData, cartItems, totalPrice);
     
@@ -33,19 +35,25 @@ const Cart = () => {
     
     const upiLink = createUPIPaymentLink(upiId, totalPrice, orderId, detailedNotes);
     
-    const sheetData = {
-      timestamp: new Date().toISOString(),
-      orderId: orderId,
-      customerName: formData.name,
-      phoneNumber: formData.phoneNumber,
-      address: formData.address,
-      state: formData.state,
-      district: formData.district,
-      items: cartItems.map(item => `${item.name} (x${item.quantity})`).join(', '),
-      totalPrice: totalPrice
-    };
+    // Simulate payment completion (in a real scenario, you'd verify the payment)
+    setTimeout(() => {
+      setPaymentComplete(true);
+      toast({
+        title: "Payment Completed",
+        description: "Your payment has been processed successfully.",
+      });
 
-    console.log('Data to be sent to Google Sheets:', sheetData);
+      // Generate and download the bill
+      const billContent = generateBill(orderData);
+      const blob = new Blob([billContent], { type: 'text/plain' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `bill_${orderId}.txt`;
+      link.click();
+
+      // Send bill to WhatsApp
+      sendBillToWhatsApp('9656778508', billContent);
+    }, 3000); // Simulating a 3-second payment process
 
     window.location.href = upiLink;
     toast({

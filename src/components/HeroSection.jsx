@@ -23,6 +23,11 @@ const HeroSection = () => {
             alt="Henna design on hands" 
             className="w-full h-full object-cover"
           />
+          <img 
+            src="https://i.postimg.cc/Xq8Q3QZY/bridal-1.jpg" 
+            alt="Bride with henna" 
+            className="absolute top-1/4 -left-1/4 w-2/3 h-2/3 object-cover rounded-lg shadow-lg z-20"
+          />
         </div>
       </div>
       <img 

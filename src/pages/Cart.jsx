@@ -48,17 +48,17 @@ const Cart = () => {
     const orderId = generateOrderId();
     const orderData = formatOrderData(formData, cartItems, totalPrice);
 
-    // Simulate UPI payment process
+    // Create UPI payment link
     const upiId = "hennabyfathima@upi"; // Replace with your actual UPI ID
     const upiPaymentLink = createUPIPaymentLink(upiId, totalPrice, orderId, `Order for ${formData.name}`);
 
     // Show UPI payment instructions
     toast.info("UPI Payment Instructions", {
-      description: "Please complete the payment using your preferred UPI app. Once done, come back to this page.",
-      duration: 10000,
+      description: "Please use any UPI app (Google Pay, PhonePe, Paytm, BHIM, etc.) to complete the payment. After payment, return to this page.",
+      duration: 15000,
     });
 
-    // Open UPI payment link in a new tab
+    // Open UPI payment link
     window.open(upiPaymentLink, '_blank');
 
     // Simulate payment verification process
@@ -68,9 +68,9 @@ const Cart = () => {
       if (simulatedSuccess) {
         handlePaymentSuccess({ payment_id: `upi_${Date.now()}` }, orderData);
       } else {
-        handlePaymentFailure({ description: "Payment verification failed. Please try again." });
+        handlePaymentFailure({ description: "Payment verification failed. Please try again or use a different UPI app." });
       }
-    }, 5000); // Simulate a 5-second verification process
+    }, 10000); // Simulate a 10-second verification process
   };
 
   const handlePaymentSuccess = (response, orderData) => {
@@ -88,7 +88,7 @@ const Cart = () => {
 
   const handlePaymentFailure = (error) => {
     setIsProcessing(false);
-    const errorMessage = error ? `Error: ${error.description || error.message}` : "There was an error processing your payment. Please try again.";
+    const errorMessage = error ? `Error: ${error.description || error.message}` : "There was an error processing your payment. Please try again or use a different UPI app.";
     toast.error("Payment Failed", {
       description: errorMessage,
     });
@@ -143,7 +143,7 @@ const Cart = () => {
                   className="w-full bg-green-600 hover:bg-green-700 buy-now-btn mt-4"
                   disabled={isProcessing}
                 >
-                  {isProcessing ? "Processing Payment..." : "Pay Now via UPI"}
+                  {isProcessing ? "Verifying Payment..." : "Pay Now via Any UPI App"}
                 </Button>
               </DialogContent>
             </Dialog>

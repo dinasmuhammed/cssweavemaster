@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/use-toast";
 import { calculateTotalPrice, formatOrderData, generateOrderId, createUPIPaymentLink } from '../utils/cartUtils';
-import { generateBill, downloadBill } from '../utils/billUtils';
+import { generateBill } from '../utils/billUtils';
 import CartItem from '../components/CartItem';
 import PurchaseForm from '../components/PurchaseForm';
 
@@ -36,7 +36,6 @@ const Cart = () => {
     
     const upiLink = createUPIPaymentLink(upiId, totalPrice, orderId, detailedNotes);
     
-    // Open UPI payment link in a new window/tab
     window.open(upiLink, '_blank');
 
     toast({
@@ -44,7 +43,6 @@ const Cart = () => {
       description: "A new window has opened for UPI payment. Please complete the payment there.",
     });
 
-    // Simulate payment completion (in a real scenario, you'd verify the payment)
     setTimeout(() => {
       setPaymentComplete(true);
       toast({
@@ -52,10 +50,8 @@ const Cart = () => {
         description: "Your payment has been processed successfully.",
       });
 
-      // Generate the bill
       const billContent = generateBill(orderData);
 
-      // Send bill via WhatsApp
       const whatsappMessage = encodeURIComponent(`New order: ${orderId}\nTotal: ₹${totalPrice}\n\nBill:\n${billContent}`);
       window.open(`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`, '_blank');
 
@@ -63,15 +59,7 @@ const Cart = () => {
         title: "Bill Sent",
         description: "Your bill has been sent via WhatsApp.",
       });
-
-      // Download the bill locally as well
-      downloadBill(billContent, orderId);
-
-      toast({
-        title: "Bill Downloaded",
-        description: "Your bill has also been downloaded locally.",
-      });
-    }, 3000); // Simulating a 3-second payment process
+    }, 3000);
   };
 
   return (

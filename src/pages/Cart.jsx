@@ -48,29 +48,35 @@ const Cart = () => {
     const orderId = generateOrderId();
     const orderData = formatOrderData(formData, cartItems, totalPrice);
 
-    // Simulate Razorpay UPI payment
-    const upiId = "example@upi"; // Replace with your UPI ID
+    // Simulate UPI payment process
+    const upiId = "hennabyfathima@upi"; // Replace with your actual UPI ID
     const upiPaymentLink = createUPIPaymentLink(upiId, totalPrice, orderId, `Order for ${formData.name}`);
 
-    // Simulate payment process
+    // Show UPI payment instructions
+    toast.info("UPI Payment Instructions", {
+      description: "Please complete the payment using your preferred UPI app. Once done, come back to this page.",
+      duration: 10000,
+    });
+
+    // Open UPI payment link in a new tab
+    window.open(upiPaymentLink, '_blank');
+
+    // Simulate payment verification process
     setTimeout(() => {
       const simulatedSuccess = Math.random() > 0.2; // 80% success rate
 
       if (simulatedSuccess) {
-        handlePaymentSuccess({ razorpay_payment_id: `sim_${Date.now()}` }, orderData);
+        handlePaymentSuccess({ payment_id: `upi_${Date.now()}` }, orderData);
       } else {
-        handlePaymentFailure({ description: "Simulated payment failure" });
+        handlePaymentFailure({ description: "Payment verification failed. Please try again." });
       }
-    }, 2000); // Simulate a 2-second payment process
-
-    // Open UPI payment link in a new tab (for demonstration purposes)
-    window.open(upiPaymentLink, '_blank');
+    }, 5000); // Simulate a 5-second verification process
   };
 
   const handlePaymentSuccess = (response, orderData) => {
     setIsProcessing(false);
     toast.success("Payment Completed", {
-      description: "Your payment has been processed successfully.",
+      description: `Your payment of ₹${totalPrice} has been processed successfully. Order ID: ${orderData.orderId}`,
     });
 
     // Send order details via WhatsApp
@@ -137,7 +143,7 @@ const Cart = () => {
                   className="w-full bg-green-600 hover:bg-green-700 buy-now-btn mt-4"
                   disabled={isProcessing}
                 >
-                  {isProcessing ? "Processing..." : "Pay Now (UPI)"}
+                  {isProcessing ? "Processing Payment..." : "Pay Now via UPI"}
                 </Button>
               </DialogContent>
             </Dialog>

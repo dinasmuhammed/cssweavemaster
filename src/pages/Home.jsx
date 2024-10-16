@@ -8,9 +8,9 @@ import HennaMoments from '../components/HennaMoments';
 
 const Home = () => {
   return (
-    <div className="space-y-16 bg-cream-100">
+    <div className="space-y-8 sm:space-y-16 bg-cream-100">
       <HeroSection />
-      <main>
+      <main className="px-4 sm:px-0">
         <WelcomeSection />
         <WhyHennaByFathima />
         <OurServices />

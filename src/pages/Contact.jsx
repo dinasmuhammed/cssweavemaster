@@ -60,7 +60,7 @@ const Contact = () => {
               />
             </div>
             <div>
-              <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
+              <label htmlFor="message"className="block text-sm font-medium text-gray-700">Message</label>
               <Textarea
                 id="message"
                 name="message"
@@ -80,7 +80,7 @@ const Contact = () => {
             <p>Address: Henna by Fathima Mehndi Studio, South Koduvally, Koduvally, Kozhikode, Kerala - 673572</p>
           </div>
         </div>
-        <div className="w-full h-[450px] lg:h-full">
+        <div className="w-full h-[300px] lg:h-full">
           <iframe 
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3911.804472477242!2d75.9017245!3d11.3489877!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba64371e0cd4cd9%3A0x6bc7783ba1876049!2sHenna%20by%20Fathima%20Mehndi%20Studio!5e0!3m2!1sen!2sin!4v1728914176105!5m2!1sen!2sin" 
             width="100%" 

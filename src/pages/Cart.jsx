@@ -47,7 +47,7 @@ const Cart = () => {
   const handlePayment = () => {
     if (isProcessing) return;
     setIsProcessing(true);
-    initializePayment(formData, cartItems, totalPrice, handlePaymentSuccess);
+    initializePayment(formData, cartItems, totalPrice, handlePaymentSuccess, handlePaymentError);
   };
 
   const handlePaymentSuccess = async (response, orderData) => {
@@ -64,18 +64,26 @@ const Cart = () => {
       { duration: 5000 }
     );
 
-    sendWhatsAppMessage(orderData.orderId, JSON.stringify(orderData, null, 2));
-    await sendOrderEmail(orderData);
-    clearCart();
-    setShowPaymentDialog(false);
+    try {
+      await sendWhatsAppMessage(orderData.orderId, JSON.stringify(orderData, null, 2));
+      await sendOrderEmail(orderData);
+      clearCart();
+      setShowPaymentDialog(false);
+    } catch (error) {
+      console.error('Error in post-payment processing:', error);
+      toast.error('There was an issue processing your order. Please contact support.');
+    }
+  };
+
+  const handlePaymentError = (error) => {
+    setIsProcessing(false);
+    console.error('Payment error:', error);
+    toast.error('Payment failed. Please try again or contact support.');
   };
 
   const sendWhatsAppMessage = (orderId, orderDetails) => {
     const whatsappMessage = encodeURIComponent(`New order: ${orderId}\nTotal: ₹${totalPrice}\n\nOrder Details:\n${orderDetails}`);
     window.open(`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`, '_blank');
-    toast.success("Order Placed", {
-      description: "Your order details have been sent via WhatsApp.",
-    });
   };
 
   if (cartItems.length === 0 && savedItems.length === 0) {

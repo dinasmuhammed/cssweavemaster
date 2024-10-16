@@ -24,7 +24,22 @@ const Cart = () => {
 
   const handlePurchase = (e) => {
     e.preventDefault();
-    setShowPaymentDialog(true);
+    if (validateForm()) {
+      setShowPaymentDialog(true);
+    }
+  };
+
+  const validateForm = () => {
+    const { name, phoneNumber, address, state, district } = formData;
+    if (!name || !phoneNumber || !address || !state || !district) {
+      toast.error("Please fill in all fields");
+      return false;
+    }
+    if (!/^\d{10}$/.test(phoneNumber)) {
+      toast.error("Please enter a valid 10-digit phone number");
+      return false;
+    }
+    return true;
   };
 
   const handlePayment = async () => {
@@ -35,29 +50,14 @@ const Cart = () => {
     const orderData = formatOrderData(formData, cartItems, totalPrice);
 
     const options = {
-      key: "rzp_live_lhUJoR9PnyhX0q", // Updated Razorpay API key
-      amount: totalPrice * 100, // Amount in paise
+      key: "rzp_live_lhUJoR9PnyhX0q",
+      amount: totalPrice * 100,
       currency: "INR",
       name: "Henna by Fathima",
       description: `Order: ${orderId}`,
       order_id: orderId,
       handler: function (response) {
-        setIsProcessing(false);
-        toast.success("Payment Completed", {
-          description: "Your payment has been processed successfully.",
-        });
-
-        const billContent = generateBill(orderData);
-
-        const whatsappMessage = encodeURIComponent(`New order: ${orderId}\nTotal: ₹${totalPrice}\n\nBill:\n${billContent}`);
-        window.open(`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`, '_blank');
-
-        toast.success("Bill Sent", {
-          description: "Your bill has been sent via WhatsApp.",
-        });
-
-        clearCart();
-        setShowPaymentDialog(false);
+        handlePaymentSuccess(response, orderData);
       },
       prefill: {
         name: formData.name,
@@ -67,12 +67,7 @@ const Cart = () => {
         color: "#16a34a",
       },
       modal: {
-        ondismiss: function() {
-          setIsProcessing(false);
-          toast.error("Payment Cancelled", {
-            description: "Your payment process was cancelled.",
-          });
-        }
+        ondismiss: handlePaymentFailure
       }
     };
 
@@ -81,11 +76,36 @@ const Cart = () => {
       paymentObject.open();
     } catch (error) {
       console.error("Razorpay error:", error);
-      setIsProcessing(false);
-      toast.error("Payment Error", {
-        description: "There was an error processing your payment. Please try again.",
-      });
+      handlePaymentFailure();
     }
+  };
+
+  const handlePaymentSuccess = (response, orderData) => {
+    setIsProcessing(false);
+    toast.success("Payment Completed", {
+      description: "Your payment has been processed successfully.",
+    });
+
+    const billContent = generateBill(orderData);
+    sendWhatsAppMessage(orderData.orderId, billContent);
+
+    clearCart();
+    setShowPaymentDialog(false);
+  };
+
+  const handlePaymentFailure = () => {
+    setIsProcessing(false);
+    toast.error("Payment Failed", {
+      description: "There was an error processing your payment. Please try again.",
+    });
+  };
+
+  const sendWhatsAppMessage = (orderId, billContent) => {
+    const whatsappMessage = encodeURIComponent(`New order: ${orderId}\nTotal: ₹${totalPrice}\n\nBill:\n${billContent}`);
+    window.open(`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`, '_blank');
+    toast.success("Bill Sent", {
+      description: "Your bill has been sent via WhatsApp.",
+    });
   };
 
   if (cartItems.length === 0 && savedItems.length === 0) {

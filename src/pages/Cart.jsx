@@ -7,6 +7,7 @@ import { calculateTotalPrice, formatOrderData, generateOrderId, createUPIPayment
 import CartItem from '../components/CartItem';
 import PurchaseForm from '../components/PurchaseForm';
 import { CreditCard, CheckCircle2, XCircle, Loader2 } from 'lucide-react';
+import { sendOrderEmail } from '../utils/emailUtils';
 
 const Cart = () => {
   const { cartItems, removeFromCart, updateQuantity, saveForLater, savedItems, moveToCart, clearCart } = useCart();
@@ -49,11 +50,9 @@ const Cart = () => {
     const orderId = generateOrderId();
     const orderData = formatOrderData(formData, cartItems, totalPrice);
 
-    // Create UPI payment link
     const upiId = "hennabyfathima@upi"; // Replace with your actual UPI ID
     const upiPaymentLink = createUPIPaymentLink(upiId, totalPrice, orderId, `Order for ${formData.name}`);
 
-    // Show UPI payment instructions
     toast.info("UPI Payment Instructions", {
       description: (
         <div className="flex items-center space-x-2">
@@ -64,22 +63,20 @@ const Cart = () => {
       duration: 15000,
     });
 
-    // Open UPI payment link
     window.open(upiPaymentLink, '_blank');
 
-    // Simulate payment verification process
     setTimeout(() => {
-      const simulatedSuccess = Math.random() > 0.2; // 80% success rate
+      const simulatedSuccess = Math.random() > 0.2;
 
       if (simulatedSuccess) {
         handlePaymentSuccess({ payment_id: `upi_${Date.now()}` }, orderData);
       } else {
         handlePaymentFailure({ description: "Payment verification failed. Please try again or use a different UPI app." });
       }
-    }, 10000); // Simulate a 10-second verification process
+    }, 10000);
   };
 
-  const handlePaymentSuccess = (response, orderData) => {
+  const handlePaymentSuccess = async (response, orderData) => {
     setIsProcessing(false);
     toast.success(
       <div className="flex items-center space-x-2">
@@ -95,6 +92,9 @@ const Cart = () => {
 
     // Send order details via WhatsApp
     sendWhatsAppMessage(orderData.orderId, JSON.stringify(orderData, null, 2));
+
+    // Send order details via email
+    await sendOrderEmail(orderData);
 
     clearCart();
     setShowPaymentDialog(false);

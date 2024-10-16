@@ -32,7 +32,7 @@ const Cart = () => {
     const orderData = formatOrderData(formData, cartItems, totalPrice);
 
     const options = {
-      key: "YOUR_RAZORPAY_KEY_ID", // Replace with your Razorpay Key ID
+      key: "rzp_live_lhUJoR9PnyhX0q", // Updated with the provided live key ID
       amount: totalPrice * 100, // Amount in paise
       currency: "INR",
       name: "Henna by Fathima",

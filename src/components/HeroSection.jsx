@@ -50,14 +50,14 @@ const HeroSection = () => {
           {images.map((image, index) => (
             <CarouselItem key={index} className="w-full p-0">
               <motion.div
-                className="relative w-full h-screen"
+                className="relative w-full h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-screen"
                 variants={hoverVariants}
                 whileHover="hover"
               >
                 <motion.img 
                   src={image} 
                   alt={`Hero ${index + 1}`} 
-                  className="w-full h-full object-cover transition-transform duration-300 ease-out"
+                  className="w-full h-full object-cover object-center transition-transform duration-300 ease-out"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: index === currentIndex ? 1 : 0 }}
                   transition={{ duration: 1 }}
@@ -71,7 +71,7 @@ const HeroSection = () => {
         {images.map((_, index) => (
           <button
             key={index}
-            className={`w-3 h-3 rounded-full ${
+            className={`w-2 h-2 md:w-3 md:h-3 rounded-full ${
               index === currentIndex ? 'bg-white' : 'bg-white bg-opacity-50'
             }`}
             onClick={() => {

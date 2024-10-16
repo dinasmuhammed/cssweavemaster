@@ -4,7 +4,6 @@ export const calculateTotalPrice = (items) => {
 
 export const formatOrderData = (formData, cartItems, totalPrice) => {
   return {
-    orderId: generateOrderId(),
     customerName: formData.name,
     phoneNumber: formData.phoneNumber,
     address: formData.address,
@@ -16,7 +15,7 @@ export const formatOrderData = (formData, cartItems, totalPrice) => {
   };
 };
 
-export const generateOrderId = () => `HBF-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+export const generateOrderId = () => `ORDER-${Date.now()}`;
 
 export const createUPIPaymentLink = (upiId, amount, orderId, notes) => {
   const encodedNotes = encodeURIComponent(notes);

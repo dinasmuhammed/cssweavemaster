@@ -13,6 +13,7 @@ const Cart = () => {
   const [formData, setFormData] = useState({ name: '', phoneNumber: '', address: '', state: '', district: '' });
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [paymentComplete, setPaymentComplete] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const whatsappNumber = '919656778058';
 
   const totalPrice = calculateTotalPrice(cartItems);
@@ -28,6 +29,7 @@ const Cart = () => {
   };
 
   const handlePayment = async () => {
+    setIsProcessing(true);
     const orderId = generateOrderId();
     const orderData = formatOrderData(formData, cartItems, totalPrice);
 
@@ -40,6 +42,7 @@ const Cart = () => {
       order_id: orderId,
       handler: function (response) {
         setPaymentComplete(true);
+        setIsProcessing(false);
         toast({
           title: "Payment Completed",
           description: "Your payment has been processed successfully.",
@@ -62,10 +65,30 @@ const Cart = () => {
       theme: {
         color: "#16a34a",
       },
+      modal: {
+        ondismiss: function() {
+          setIsProcessing(false);
+          toast({
+            title: "Payment Cancelled",
+            description: "Your payment process was cancelled.",
+            variant: "destructive",
+          });
+        }
+      }
     };
 
-    const razorpay = new window.Razorpay(options);
-    razorpay.open();
+    try {
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
+    } catch (error) {
+      console.error("Razorpay error:", error);
+      setIsProcessing(false);
+      toast({
+        title: "Payment Error",
+        description: "There was an error processing your payment. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -130,8 +153,12 @@ const Cart = () => {
               <p className="text-xl sm:text-2xl font-bold">₹{totalPrice}</p>
               <p className="text-sm text-gray-600">Total Amount</p>
             </div>
-            <Button onClick={handlePayment} className="w-full bg-green-600 hover:bg-green-700 buy-now-btn">
-              Pay Now
+            <Button 
+              onClick={handlePayment} 
+              className="w-full bg-green-600 hover:bg-green-700 buy-now-btn"
+              disabled={isProcessing}
+            >
+              {isProcessing ? "Processing..." : "Pay Now"}
             </Button>
             <p className="text-xs text-center text-gray-500">
               By clicking "Pay Now", you agree to our Terms and Conditions.

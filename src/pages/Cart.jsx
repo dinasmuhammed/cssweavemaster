@@ -35,7 +35,7 @@ const Cart = () => {
     const orderData = formatOrderData(formData, cartItems, totalPrice);
 
     const options = {
-      key: "rzp_live_lhUJoR9PnyhX0q", // Replace with your actual Razorpay key
+      key: "rzp_live_lhUJoR9PnyhX0q", // Updated Razorpay API key
       amount: totalPrice * 100, // Amount in paise
       currency: "INR",
       name: "Henna by Fathima",
@@ -56,8 +56,8 @@ const Cart = () => {
           description: "Your bill has been sent via WhatsApp.",
         });
 
-        clearCart(); // Clear the cart after successful payment
-        setShowPaymentDialog(false); // Close the payment dialog
+        clearCart();
+        setShowPaymentDialog(false);
       },
       prefill: {
         name: formData.name,

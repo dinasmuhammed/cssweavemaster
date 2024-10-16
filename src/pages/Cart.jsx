@@ -73,11 +73,17 @@ const Cart = () => {
       }
     };
 
-    const razorpay = new window.Razorpay(options);
-    razorpay.on('payment.failed', function (response){
-      handlePaymentFailure(response.error);
-    });
-    razorpay.open();
+    try {
+      const razorpay = new window.Razorpay(options);
+      razorpay.on('payment.failed', function (response){
+        handlePaymentFailure(response.error);
+      });
+      razorpay.open();
+    } catch (error) {
+      console.error("Error initializing Razorpay:", error);
+      toast.error("Unable to initialize payment. Please try again.");
+      setIsProcessing(false);
+    }
   };
 
   const handlePaymentSuccess = (response, orderData) => {
@@ -137,9 +143,6 @@ const Cart = () => {
           <div className="mt-8">
             <h2 className="text-xl sm:text-2xl font-bold mb-4">Total: ₹{totalPrice}</h2>
             <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
-              <DialogTrigger asChild>
-                <Button className="w-full sm:w-auto">Proceed to Purchase</Button>
-              </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                   <DialogTitle>Complete Your Purchase</DialogTitle>

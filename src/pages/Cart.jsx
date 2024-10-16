@@ -3,7 +3,7 @@ import { useCart } from '../context/CartContext';
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/use-toast";
-import { calculateTotalPrice, formatOrderData, generateOrderId, createUPIPaymentLink } from '../utils/cartUtils';
+import { calculateTotalPrice, formatOrderData, generateOrderId } from '../utils/cartUtils';
 import { generateBill } from '../utils/billUtils';
 import CartItem from '../components/CartItem';
 import PurchaseForm from '../components/PurchaseForm';
@@ -13,7 +13,6 @@ const Cart = () => {
   const [formData, setFormData] = useState({ name: '', phoneNumber: '', address: '', state: '', district: '' });
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [paymentComplete, setPaymentComplete] = useState(false);
-  const upiId = 'shamfathi.k-2@oksbi';
   const whatsappNumber = '919656778058';
 
   const totalPrice = calculateTotalPrice(cartItems);
@@ -31,35 +30,42 @@ const Cart = () => {
   const handlePayment = async () => {
     const orderId = generateOrderId();
     const orderData = formatOrderData(formData, cartItems, totalPrice);
-    
-    const detailedNotes = `Order: ${orderId}, Name: ${formData.name}, Phone: ${formData.phoneNumber}, Address: ${formData.address}, State: ${formData.state}, District: ${formData.district}, Products: ${cartItems.map(item => `${item.name} (x${item.quantity})`).join(', ')}`;
-    
-    const upiLink = createUPIPaymentLink(upiId, totalPrice, orderId, detailedNotes);
-    
-    window.open(upiLink, '_blank');
 
-    toast({
-      title: "Payment Initiated",
-      description: "A new window has opened for UPI payment. Please complete the payment there.",
-    });
+    const options = {
+      key: "YOUR_RAZORPAY_KEY_ID", // Replace with your Razorpay Key ID
+      amount: totalPrice * 100, // Amount in paise
+      currency: "INR",
+      name: "Henna by Fathima",
+      description: `Order: ${orderId}`,
+      order_id: orderId,
+      handler: function (response) {
+        setPaymentComplete(true);
+        toast({
+          title: "Payment Completed",
+          description: "Your payment has been processed successfully.",
+        });
 
-    setTimeout(() => {
-      setPaymentComplete(true);
-      toast({
-        title: "Payment Completed",
-        description: "Your payment has been processed successfully.",
-      });
+        const billContent = generateBill(orderData);
 
-      const billContent = generateBill(orderData);
+        const whatsappMessage = encodeURIComponent(`New order: ${orderId}\nTotal: ₹${totalPrice}\n\nBill:\n${billContent}`);
+        window.open(`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`, '_blank');
 
-      const whatsappMessage = encodeURIComponent(`New order: ${orderId}\nTotal: ₹${totalPrice}\n\nBill:\n${billContent}`);
-      window.open(`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`, '_blank');
+        toast({
+          title: "Bill Sent",
+          description: "Your bill has been sent via WhatsApp.",
+        });
+      },
+      prefill: {
+        name: formData.name,
+        contact: formData.phoneNumber,
+      },
+      theme: {
+        color: "#16a34a",
+      },
+    };
 
-      toast({
-        title: "Bill Sent",
-        description: "Your bill has been sent via WhatsApp.",
-      });
-    }, 3000);
+    const razorpay = new window.Razorpay(options);
+    razorpay.open();
   };
 
   return (
@@ -117,16 +123,12 @@ const Cart = () => {
       <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>UPI Payment</DialogTitle>
+            <DialogTitle>Razorpay Payment</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="bg-gray-100 p-4 rounded-lg text-center">
               <p className="text-xl sm:text-2xl font-bold">₹{totalPrice}</p>
               <p className="text-sm text-gray-600">Total Amount</p>
-            </div>
-            <div className="bg-gray-100 p-4 rounded-lg text-center">
-              <p className="text-base sm:text-lg font-semibold">UPI ID</p>
-              <p className="text-lg sm:text-xl">{upiId}</p>
             </div>
             <Button onClick={handlePayment} className="w-full bg-green-600 hover:bg-green-700 buy-now-btn">
               Pay Now

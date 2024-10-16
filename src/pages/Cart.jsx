@@ -3,7 +3,7 @@ import { useCart } from '../context/CartContext';
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { calculateTotalPrice, formatOrderData, generateOrderId } from '../utils/cartUtils';
+import { calculateTotalPrice, formatOrderData, generateOrderId, createUPIPaymentLink } from '../utils/cartUtils';
 import CartItem from '../components/CartItem';
 import PurchaseForm from '../components/PurchaseForm';
 
@@ -48,36 +48,23 @@ const Cart = () => {
     const orderId = generateOrderId();
     const orderData = formatOrderData(formData, cartItems, totalPrice);
 
-    const options = {
-      key: "rzp_live_lhUJoR9PnyhX0q", // Replace with your actual Razorpay key
-      amount: totalPrice * 100, // Amount in paise
-      currency: "INR",
-      name: "Henna by Fathima",
-      description: `Order: ${orderId}`,
-      order_id: orderId,
-      handler: function (response) {
-        handlePaymentSuccess(response, orderData);
-      },
-      prefill: {
-        name: formData.name,
-        contact: formData.phoneNumber,
-      },
-      theme: {
-        color: "#16a34a",
-      },
-      modal: {
-        ondismiss: function() {
-          setIsProcessing(false);
-          toast.info("Payment cancelled");
-        }
-      }
-    };
+    // Simulate Razorpay UPI payment
+    const upiId = "example@upi"; // Replace with your UPI ID
+    const upiPaymentLink = createUPIPaymentLink(upiId, totalPrice, orderId, `Order for ${formData.name}`);
 
-    const razorpay = new window.Razorpay(options);
-    razorpay.on('payment.failed', function (response){
-      handlePaymentFailure(response.error);
-    });
-    razorpay.open();
+    // Simulate payment process
+    setTimeout(() => {
+      const simulatedSuccess = Math.random() > 0.2; // 80% success rate
+
+      if (simulatedSuccess) {
+        handlePaymentSuccess({ razorpay_payment_id: `sim_${Date.now()}` }, orderData);
+      } else {
+        handlePaymentFailure({ description: "Simulated payment failure" });
+      }
+    }, 2000); // Simulate a 2-second payment process
+
+    // Open UPI payment link in a new tab (for demonstration purposes)
+    window.open(upiPaymentLink, '_blank');
   };
 
   const handlePaymentSuccess = (response, orderData) => {
@@ -150,7 +137,7 @@ const Cart = () => {
                   className="w-full bg-green-600 hover:bg-green-700 buy-now-btn mt-4"
                   disabled={isProcessing}
                 >
-                  {isProcessing ? "Processing..." : "Pay Now"}
+                  {isProcessing ? "Processing..." : "Pay Now (UPI)"}
                 </Button>
               </DialogContent>
             </Dialog>

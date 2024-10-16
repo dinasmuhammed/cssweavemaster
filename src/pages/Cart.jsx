@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { calculateTotalPrice, formatOrderData, generateOrderId, createUPIPaymentLink } from '../utils/cartUtils';
 import CartItem from '../components/CartItem';
 import PurchaseForm from '../components/PurchaseForm';
+import { CreditCard, CheckCircle2, XCircle, Loader2 } from 'lucide-react';
 
 const Cart = () => {
   const { cartItems, removeFromCart, updateQuantity, saveForLater, savedItems, moveToCart, clearCart } = useCart();
@@ -54,7 +55,12 @@ const Cart = () => {
 
     // Show UPI payment instructions
     toast.info("UPI Payment Instructions", {
-      description: "Please use any UPI app (Google Pay, PhonePe, Paytm, BHIM, etc.) to complete the payment. After payment, return to this page.",
+      description: (
+        <div className="flex items-center space-x-2">
+          <CreditCard className="w-5 h-5 text-blue-500" />
+          <span>Please use any UPI app to complete the payment. After payment, return to this page.</span>
+        </div>
+      ),
       duration: 15000,
     });
 
@@ -75,9 +81,17 @@ const Cart = () => {
 
   const handlePaymentSuccess = (response, orderData) => {
     setIsProcessing(false);
-    toast.success("Payment Completed", {
-      description: `Your payment of ₹${totalPrice} has been processed successfully. Order ID: ${orderData.orderId}`,
-    });
+    toast.success(
+      <div className="flex items-center space-x-2">
+        <CheckCircle2 className="w-5 h-5 text-green-500" />
+        <div>
+          <p className="font-semibold">Payment Completed</p>
+          <p className="text-sm">Amount: ₹{totalPrice}</p>
+          <p className="text-sm">Order ID: {orderData.orderId}</p>
+        </div>
+      </div>,
+      { duration: 5000 }
+    );
 
     // Send order details via WhatsApp
     sendWhatsAppMessage(orderData.orderId, JSON.stringify(orderData, null, 2));
@@ -89,9 +103,16 @@ const Cart = () => {
   const handlePaymentFailure = (error) => {
     setIsProcessing(false);
     const errorMessage = error ? `Error: ${error.description || error.message}` : "There was an error processing your payment. Please try again or use a different UPI app.";
-    toast.error("Payment Failed", {
-      description: errorMessage,
-    });
+    toast.error(
+      <div className="flex items-center space-x-2">
+        <XCircle className="w-5 h-5 text-red-500" />
+        <div>
+          <p className="font-semibold">Payment Failed</p>
+          <p className="text-sm">{errorMessage}</p>
+        </div>
+      </div>,
+      { duration: 5000 }
+    );
   };
 
   const sendWhatsAppMessage = (orderId, orderDetails) => {
@@ -131,19 +152,32 @@ const Cart = () => {
             <h2 className="text-xl sm:text-2xl font-bold mb-4">Total: ₹{totalPrice}</h2>
             <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
               <DialogTrigger asChild>
-                <Button className="w-full sm:w-auto">Proceed to Purchase</Button>
+                <Button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white transition-all duration-300">Proceed to Purchase</Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                  <DialogTitle>Complete Your Purchase</DialogTitle>
+                  <DialogTitle className="flex items-center space-x-2">
+                    <CreditCard className="w-5 h-5 text-blue-500" />
+                    <span>Complete Your Purchase</span>
+                  </DialogTitle>
                 </DialogHeader>
                 <PurchaseForm formData={formData} handleInputChange={handleInputChange} handlePurchase={handlePurchase} cartItems={cartItems} />
                 <Button 
                   onClick={handlePayment} 
-                  className="w-full bg-green-600 hover:bg-green-700 buy-now-btn mt-4"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white transition-all duration-300 flex items-center justify-center space-x-2"
                   disabled={isProcessing}
                 >
-                  {isProcessing ? "Verifying Payment..." : "Pay Now via Any UPI App"}
+                  {isProcessing ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <span>Verifying Payment...</span>
+                    </>
+                  ) : (
+                    <>
+                      <CreditCard className="w-5 h-5" />
+                      <span>Pay Now via Any UPI App</span>
+                    </>
+                  )}
                 </Button>
               </DialogContent>
             </Dialog>

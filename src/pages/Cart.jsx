@@ -3,7 +3,8 @@ import { useCart } from '../context/CartContext';
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { calculateTotalPrice, formatOrderData, generateOrderId, createUPIPaymentLink } from '../utils/cartUtils';
+import { calculateTotalPrice, formatOrderData, generateOrderId } from '../utils/cartUtils';
+import { initializeRazorpayPayment } from '../utils/paymentUtils';
 import CartItem from '../components/CartItem';
 import PurchaseForm from '../components/PurchaseForm';
 
@@ -12,7 +13,6 @@ const Cart = () => {
   const [formData, setFormData] = useState({ name: '', phoneNumber: '', address: '', state: '', district: '' });
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const whatsappNumber = '919656778058';
 
   const totalPrice = calculateTotalPrice(cartItems);
 
@@ -48,23 +48,11 @@ const Cart = () => {
     const orderId = generateOrderId();
     const orderData = formatOrderData(formData, cartItems, totalPrice);
 
-    // Simulate Razorpay UPI payment
-    const upiId = "example@upi"; // Replace with your UPI ID
-    const upiPaymentLink = createUPIPaymentLink(upiId, totalPrice, orderId, `Order for ${formData.name}`);
-
-    // Simulate payment process
-    setTimeout(() => {
-      const simulatedSuccess = Math.random() > 0.2; // 80% success rate
-
-      if (simulatedSuccess) {
-        handlePaymentSuccess({ razorpay_payment_id: `sim_${Date.now()}` }, orderData);
-      } else {
-        handlePaymentFailure({ description: "Simulated payment failure" });
-      }
-    }, 2000); // Simulate a 2-second payment process
-
-    // Open UPI payment link in a new tab (for demonstration purposes)
-    window.open(upiPaymentLink, '_blank');
+    try {
+      await initializeRazorpayPayment(orderData, totalPrice, formData, handlePaymentSuccess, handlePaymentError);
+    } catch (error) {
+      handlePaymentError(error);
+    }
   };
 
   const handlePaymentSuccess = (response, orderData) => {
@@ -73,26 +61,18 @@ const Cart = () => {
       description: "Your payment has been processed successfully.",
     });
 
-    // Send order details via WhatsApp
-    sendWhatsAppMessage(orderData.orderId, JSON.stringify(orderData, null, 2));
+    // Here you would typically send the order details to your backend
+    console.log("Order placed:", orderData);
 
     clearCart();
     setShowPaymentDialog(false);
   };
 
-  const handlePaymentFailure = (error) => {
+  const handlePaymentError = (error) => {
     setIsProcessing(false);
     const errorMessage = error ? `Error: ${error.description || error.message}` : "There was an error processing your payment. Please try again.";
     toast.error("Payment Failed", {
       description: errorMessage,
-    });
-  };
-
-  const sendWhatsAppMessage = (orderId, orderDetails) => {
-    const whatsappMessage = encodeURIComponent(`New order: ${orderId}\nTotal: ₹${totalPrice}\n\nOrder Details:\n${orderDetails}`);
-    window.open(`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`, '_blank');
-    toast.success("Order Placed", {
-      description: "Your order details have been sent via WhatsApp.",
     });
   };
 
@@ -137,7 +117,7 @@ const Cart = () => {
                   className="w-full bg-green-600 hover:bg-green-700 buy-now-btn mt-4"
                   disabled={isProcessing}
                 >
-                  {isProcessing ? "Processing..." : "Pay Now (UPI)"}
+                  {isProcessing ? "Processing..." : "Pay Now (Razorpay)"}
                 </Button>
               </DialogContent>
             </Dialog>

@@ -1,9 +1,8 @@
 import { toast } from "sonner";
-import { formatOrderData, generateOrderId } from './cartUtils';
 
-export const handleRazorpayPayment = (orderData, totalPrice, formData, onSuccess, onError) => {
+export const initializeRazorpayPayment = (orderData, totalPrice, formData, onSuccess, onError) => {
   const options = {
-    key: "rzp_live_lhUJoR9PnyhX0q",
+    key: "rzp_live_lhUJoR9PnyhX0q", // Razorpay API Key
     amount: totalPrice * 100, // Razorpay expects amount in paise
     currency: "INR",
     name: "Henna by Fathima",
@@ -26,22 +25,6 @@ export const handleRazorpayPayment = (orderData, totalPrice, formData, onSuccess
     }
   };
 
-  try {
-    const rzp = new window.Razorpay(options);
-    rzp.open();
-  } catch (error) {
-    console.error('Error initializing Razorpay:', error);
-    onError(error);
-  }
-};
-
-export const initializePayment = (formData, cartItems, totalPrice, onSuccess, onError) => {
-  try {
-    const orderId = generateOrderId();
-    const orderData = formatOrderData(formData, cartItems, totalPrice);
-    handleRazorpayPayment(orderData, totalPrice, formData, onSuccess, onError);
-  } catch (error) {
-    console.error('Error initializing payment:', error);
-    onError(error);
-  }
+  const rzp = new window.Razorpay(options);
+  rzp.open();
 };

@@ -24,15 +24,51 @@ const ShippingAndPrivacy = () => {
 
         <section>
           <h2 className="text-2xl font-semibold text-green-700 mt-8 mb-4">Privacy Policy</h2>
-          <p>At Henna by Fathima, we are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or make a purchase from us.</p>
-          <h3>1. Information We Collect</h3>
-          <p>We collect personal information that you voluntarily provide to us when you express an interest in obtaining information about us or our products and services, when you participate in activities on the website, or otherwise when you contact us.</p>
-          <h3>2. How We Use Your Information</h3>
-          <p>We use personal information collected via our website for a variety of business purposes described below. We process your personal information for these purposes in reliance on our legitimate business interests, in order to enter into or perform a contract with you, with your consent, and/or for compliance with our legal obligations.</p>
-          <h3>3. Will Your Information Be Shared With Anyone?</h3>
-          <p>We only share information with your consent, to comply with laws, to provide you with services, to protect your rights, or to fulfill business obligations.</p>
-          <h3>4. Do We Use Cookies And Other Tracking Technologies?</h3>
-          <p>We may use cookies and similar tracking technologies to access or store information.</p>
+          <p>At Henna by Fathima, we value your privacy and are committed to protecting the personal information you share with us. This Privacy Policy outlines how we collect, use, and safeguard your information.</p>
+          
+          <h3 className="text-xl font-semibold text-green-600 mt-6 mb-3">1. Information We Collect</h3>
+          <p>We may collect the following information when you interact with our services:</p>
+          <ul className="list-disc pl-6 mb-4">
+            <li><strong>Personal Information:</strong> Name, email address, phone number, and other details provided during bookings or inquiries.</li>
+            <li><strong>Usage Data:</strong> Information about how you interact with our website, including IP address, browser type, and pages visited.</li>
+          </ul>
+
+          <h3 className="text-xl font-semibold text-green-600 mt-6 mb-3">2. How We Use Your Information</h3>
+          <p>Your personal information is used to:</p>
+          <ul className="list-disc pl-6 mb-4">
+            <li>Process and manage bookings or inquiries.</li>
+            <li>Provide customer support and respond to your requests.</li>
+            <li>Improve our services and website functionality.</li>
+            <li>Send promotional offers, updates, and other relevant communications (with your consent).</li>
+          </ul>
+
+          <h3 className="text-xl font-semibold text-green-600 mt-6 mb-3">3. How We Share Your Information</h3>
+          <p>We do not sell or rent your personal information to third parties. We may share your data:</p>
+          <ul className="list-disc pl-6 mb-4">
+            <li>With trusted service providers who assist us in operating our website and services (e.g., hosting providers).</li>
+            <li>When required by law, to comply with legal obligations or protect our rights.</li>
+          </ul>
+
+          <h3 className="text-xl font-semibold text-green-600 mt-6 mb-3">4. Data Security</h3>
+          <p>We implement appropriate security measures to protect your information from unauthorized access or disclosure. However, please be aware that no method of transmission over the internet is completely secure.</p>
+
+          <h3 className="text-xl font-semibold text-green-600 mt-6 mb-3">5. Your Rights</h3>
+          <p>You have the right to:</p>
+          <ul className="list-disc pl-6 mb-4">
+            <li>Access and review your personal information.</li>
+            <li>Request corrections to inaccurate data.</li>
+            <li>Withdraw your consent for receiving promotional communications.</li>
+            <li>Request the deletion of your personal information.</li>
+          </ul>
+
+          <h3 className="text-xl font-semibold text-green-600 mt-6 mb-3">6. Cookies</h3>
+          <p>We may use cookies to enhance your experience on our website. Cookies help us understand your preferences and provide personalized content. You can adjust your browser settings to refuse cookies if you prefer.</p>
+
+          <h3 className="text-xl font-semibold text-green-600 mt-6 mb-3">7. Changes to This Policy</h3>
+          <p>We may update this Privacy Policy from time to time. Any changes will be posted on this page, and you are encouraged to review it regularly.</p>
+
+          <h3 className="text-xl font-semibold text-green-600 mt-6 mb-3">8. Contact Us</h3>
+          <p>If you have any questions or concerns about our Privacy Policy, please contact us at: <a href="tel:+918086647124" className="text-green-800 hover:underline">+91 8086647124</a></p>
         </section>
       </div>
     </div>

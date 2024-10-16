@@ -48,6 +48,10 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  const clearCart = () => {
+    setCartItems([]);
+  };
+
   return (
     <CartContext.Provider value={{ 
       cartItems, 
@@ -56,7 +60,8 @@ export const CartProvider = ({ children }) => {
       updateQuantity, 
       saveForLater, 
       moveToCart,
-      savedItems 
+      savedItems,
+      clearCart
     }}>
       {children}
     </CartContext.Provider>

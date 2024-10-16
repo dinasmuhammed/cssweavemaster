@@ -9,7 +9,7 @@ import CartItem from '../components/CartItem';
 import PurchaseForm from '../components/PurchaseForm';
 
 const Cart = () => {
-  const { cartItems, removeFromCart, updateQuantity, saveForLater, savedItems, moveToCart } = useCart();
+  const { cartItems, removeFromCart, updateQuantity, saveForLater, savedItems, moveToCart, clearCart } = useCart();
   const [formData, setFormData] = useState({ name: '', phoneNumber: '', address: '', state: '', district: '' });
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -28,7 +28,9 @@ const Cart = () => {
   };
 
   const handlePayment = async () => {
+    if (isProcessing) return;
     setIsProcessing(true);
+
     const orderId = generateOrderId();
     const orderData = formatOrderData(formData, cartItems, totalPrice);
 
@@ -54,8 +56,8 @@ const Cart = () => {
           description: "Your bill has been sent via WhatsApp.",
         });
 
-        // Clear cart or perform any other necessary actions
-        // This part depends on your cart management logic
+        clearCart(); // Clear the cart after successful payment
+        setShowPaymentDialog(false); // Close the payment dialog
       },
       prefill: {
         name: formData.name,
@@ -74,16 +76,31 @@ const Cart = () => {
       }
     };
 
-    const paymentObject = new window.Razorpay(options);
-    paymentObject.open();
+    try {
+      const paymentObject = new window.Razorpay(options);
+      paymentObject.open();
+    } catch (error) {
+      console.error("Razorpay error:", error);
+      setIsProcessing(false);
+      toast.error("Payment Error", {
+        description: "There was an error processing your payment. Please try again.",
+      });
+    }
   };
+
+  if (cartItems.length === 0 && savedItems.length === 0) {
+    return (
+      <div className="container mx-auto px-4 py-8 text-center">
+        <h1 className="text-2xl sm:text-3xl font-bold text-green-800 mb-6">Your Cart is Empty</h1>
+        <p>You have no items in your cart. Start shopping to add items!</p>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl sm:text-3xl font-bold text-green-800 mb-6">Your Cart</h1>
-      {cartItems.length === 0 ? (
-        <p>Your cart is empty.</p>
-      ) : (
+      {cartItems.length > 0 && (
         <>
           <div className="space-y-4">
             {cartItems.map((item) => (
@@ -98,7 +115,7 @@ const Cart = () => {
           </div>
           <div className="mt-8">
             <h2 className="text-xl sm:text-2xl font-bold mb-4">Total: ₹{totalPrice}</h2>
-            <Dialog>
+            <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
               <DialogTrigger asChild>
                 <Button className="w-full sm:w-auto">Proceed to Purchase</Button>
               </DialogTrigger>
@@ -107,6 +124,13 @@ const Cart = () => {
                   <DialogTitle>Complete Your Purchase</DialogTitle>
                 </DialogHeader>
                 <PurchaseForm formData={formData} handleInputChange={handleInputChange} handlePurchase={handlePurchase} cartItems={cartItems} />
+                <Button 
+                  onClick={handlePayment} 
+                  className="w-full bg-green-600 hover:bg-green-700 buy-now-btn mt-4"
+                  disabled={isProcessing}
+                >
+                  {isProcessing ? "Processing..." : "Pay Now"}
+                </Button>
               </DialogContent>
             </Dialog>
           </div>
@@ -129,30 +153,6 @@ const Cart = () => {
           </div>
         </div>
       )}
-      
-      <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Razorpay Payment</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className="bg-gray-100 p-4 rounded-lg text-center">
-              <p className="text-xl sm:text-2xl font-bold">₹{totalPrice}</p>
-              <p className="text-sm text-gray-600">Total Amount</p>
-            </div>
-            <Button 
-              onClick={handlePayment} 
-              className="w-full bg-green-600 hover:bg-green-700 buy-now-btn"
-              disabled={isProcessing}
-            >
-              {isProcessing ? "Processing..." : "Pay Now"}
-            </Button>
-            <p className="text-xs text-center text-gray-500">
-              By clicking "Pay Now", you agree to our Terms and Conditions.
-            </p>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };

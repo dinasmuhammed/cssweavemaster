@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { calculateTotalPrice, formatOrderData, generateOrderId } from '../utils/cartUtils';
 import { generateBill } from '../utils/billUtils';
 import CartItem from '../components/CartItem';
@@ -12,7 +12,6 @@ const Cart = () => {
   const { cartItems, removeFromCart, updateQuantity, saveForLater, savedItems, moveToCart } = useCart();
   const [formData, setFormData] = useState({ name: '', phoneNumber: '', address: '', state: '', district: '' });
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
-  const [paymentComplete, setPaymentComplete] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const whatsappNumber = '919656778058';
 
@@ -34,17 +33,15 @@ const Cart = () => {
     const orderData = formatOrderData(formData, cartItems, totalPrice);
 
     const options = {
-      key: "rzp_live_lhUJoR9PnyhX0q",
-      amount: totalPrice * 100,
+      key: "rzp_live_lhUJoR9PnyhX0q", // Replace with your actual Razorpay key
+      amount: totalPrice * 100, // Amount in paise
       currency: "INR",
       name: "Henna by Fathima",
       description: `Order: ${orderId}`,
       order_id: orderId,
       handler: function (response) {
-        setPaymentComplete(true);
         setIsProcessing(false);
-        toast({
-          title: "Payment Completed",
+        toast.success("Payment Completed", {
           description: "Your payment has been processed successfully.",
         });
 
@@ -53,10 +50,12 @@ const Cart = () => {
         const whatsappMessage = encodeURIComponent(`New order: ${orderId}\nTotal: ₹${totalPrice}\n\nBill:\n${billContent}`);
         window.open(`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`, '_blank');
 
-        toast({
-          title: "Bill Sent",
+        toast.success("Bill Sent", {
           description: "Your bill has been sent via WhatsApp.",
         });
+
+        // Clear cart or perform any other necessary actions
+        // This part depends on your cart management logic
       },
       prefill: {
         name: formData.name,
@@ -68,27 +67,15 @@ const Cart = () => {
       modal: {
         ondismiss: function() {
           setIsProcessing(false);
-          toast({
-            title: "Payment Cancelled",
+          toast.error("Payment Cancelled", {
             description: "Your payment process was cancelled.",
-            variant: "destructive",
           });
         }
       }
     };
 
-    try {
-      const razorpay = new window.Razorpay(options);
-      razorpay.open();
-    } catch (error) {
-      console.error("Razorpay error:", error);
-      setIsProcessing(false);
-      toast({
-        title: "Payment Error",
-        description: "There was an error processing your payment. Please try again.",
-        variant: "destructive",
-      });
-    }
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
   };
 
   return (

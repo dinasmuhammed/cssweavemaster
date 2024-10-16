@@ -33,8 +33,7 @@ const Footer = () => {
             <ul className="space-y-2">
               <li><Link to="/terms-and-conditions" className="hover:underline text-sm transition-colors duration-300">Terms and Conditions</Link></li>
               <li><Link to="/cancellation-and-refund" className="hover:underline text-sm transition-colors duration-300">Cancellation and Refund</Link></li>
-              <li><Link to="/shipping" className="hover:underline text-sm transition-colors duration-300">Shipping</Link></li>
-              <li><Link to="/privacy-policy" className="hover:underline text-sm transition-colors duration-300">Privacy Policy</Link></li>
+              <li><Link to="/shipping-and-privacy" className="hover:underline text-sm transition-colors duration-300">Shipping & Privacy Policy</Link></li>
             </ul>
           </nav>
           <div className="text-center sm:text-left">

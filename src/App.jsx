@@ -16,8 +16,7 @@ import SavedItems from './pages/SavedItems';
 import SearchResults from './pages/SearchResults';
 import TermsAndConditions from './pages/TermsAndConditions';
 import CancellationAndRefund from './pages/CancellationAndRefund';
-import Shipping from './pages/Shipping';
-import PrivacyPolicy from './pages/PrivacyPolicy';
+import ShippingAndPrivacy from './pages/ShippingAndPrivacy';
 import { checkNetworkSpeed } from './utils/networkUtils';
 
 const queryClient = new QueryClient();
@@ -97,8 +96,7 @@ const App = () => {
                   <Route path="/search" element={<SearchResults />} />
                   <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
                   <Route path="/cancellation-and-refund" element={<CancellationAndRefund />} />
-                  <Route path="/shipping" element={<Shipping />} />
-                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                  <Route path="/shipping-and-privacy" element={<ShippingAndPrivacy />} />
                 </Routes>
               </main>
               <Footer />

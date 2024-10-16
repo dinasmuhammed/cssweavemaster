@@ -32,8 +32,8 @@ const Cart = () => {
     const orderData = formatOrderData(formData, cartItems, totalPrice);
 
     const options = {
-      key: "rzp_live_lhUJoR9PnyhX0q", // Updated with the provided live key ID
-      amount: totalPrice * 100, // Amount in paise
+      key: "rzp_live_lhUJoR9PnyhX0q",
+      amount: totalPrice * 100,
       currency: "INR",
       name: "Henna by Fathima",
       description: `Order: ${orderId}`,

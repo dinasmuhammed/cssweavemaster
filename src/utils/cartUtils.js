@@ -19,9 +19,7 @@ export const generateOrderId = () => `ORDER-${Date.now()}`;
 
 export const createUPIPaymentLink = (upiId, amount, orderId, notes) => {
   const encodedNotes = encodeURIComponent(notes);
-  // If the encoded notes are too long, truncate them
   const truncatedNotes = encodedNotes.length > 250 ? encodedNotes.slice(0, 250) + '...' : encodedNotes;
   
-  // Create a more universal UPI link
   return `upi://pay?pa=${upiId}&pn=Henna%20by%20Fathima&am=${amount}&cu=INR&tn=${encodeURIComponent(`Order Payment: ${orderId}`)}&tn=${truncatedNotes}`;
 };

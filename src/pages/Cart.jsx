@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { calculateTotalPrice, formatOrderData, generateOrderId } from '../utils/cartUtils';
 import CartItem from '../components/CartItem';
@@ -49,7 +49,7 @@ const Cart = () => {
     const orderData = formatOrderData(formData, cartItems, totalPrice);
 
     const options = {
-      key: "rzp_live_lhUJoR9PnyhX0q", // Your provided Razorpay key
+      key: "rzp_live_lhUJoR9PnyhX0q", // Replace with your actual Razorpay key
       amount: totalPrice * 100, // Amount in paise
       currency: "INR",
       name: "Henna by Fathima",
@@ -73,17 +73,11 @@ const Cart = () => {
       }
     };
 
-    try {
-      const razorpay = new window.Razorpay(options);
-      razorpay.on('payment.failed', function (response){
-        handlePaymentFailure(response.error);
-      });
-      razorpay.open();
-    } catch (error) {
-      console.error("Error initializing Razorpay:", error);
-      toast.error("Unable to initialize payment. Please try again.");
-      setIsProcessing(false);
-    }
+    const razorpay = new window.Razorpay(options);
+    razorpay.on('payment.failed', function (response){
+      handlePaymentFailure(response.error);
+    });
+    razorpay.open();
   };
 
   const handlePaymentSuccess = (response, orderData) => {
@@ -143,6 +137,9 @@ const Cart = () => {
           <div className="mt-8">
             <h2 className="text-xl sm:text-2xl font-bold mb-4">Total: ₹{totalPrice}</h2>
             <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
+              <DialogTrigger asChild>
+                <Button className="w-full sm:w-auto">Proceed to Purchase</Button>
+              </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                   <DialogTitle>Complete Your Purchase</DialogTitle>

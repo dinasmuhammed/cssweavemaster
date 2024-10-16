@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-const sendOrderEmail = async (orderDetails) => {
+export const sendOrderEmail = async (orderDetails) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: 'hennabyfathima.in@gmail.com',
@@ -32,5 +32,3 @@ const sendOrderEmail = async (orderDetails) => {
     console.error('Error sending order email:', error);
   }
 };
-
-module.exports = { sendOrderEmail };

@@ -67,12 +67,18 @@ const Cart = () => {
         color: "#16a34a",
       },
       modal: {
-        ondismiss: handlePaymentFailure
+        ondismiss: function() {
+          setIsProcessing(false);
+          toast.info("Payment cancelled");
+        }
       }
     };
 
     try {
       const paymentObject = new window.Razorpay(options);
+      paymentObject.on('payment.failed', function (response){
+        handlePaymentFailure(response.error);
+      });
       paymentObject.open();
     } catch (error) {
       console.error("Razorpay error:", error);
@@ -95,7 +101,7 @@ const Cart = () => {
 
   const handlePaymentFailure = (error) => {
     setIsProcessing(false);
-    const errorMessage = error ? `Error: ${error.message}` : "There was an error processing your payment. Please try again.";
+    const errorMessage = error ? `Error: ${error.description || error.message}` : "There was an error processing your payment. Please try again.";
     toast.error("Payment Failed", {
       description: errorMessage,
     });

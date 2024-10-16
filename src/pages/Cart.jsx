@@ -76,7 +76,7 @@ const Cart = () => {
       paymentObject.open();
     } catch (error) {
       console.error("Razorpay error:", error);
-      handlePaymentFailure();
+      handlePaymentFailure(error);
     }
   };
 
@@ -93,10 +93,11 @@ const Cart = () => {
     setShowPaymentDialog(false);
   };
 
-  const handlePaymentFailure = () => {
+  const handlePaymentFailure = (error) => {
     setIsProcessing(false);
+    const errorMessage = error ? `Error: ${error.message}` : "There was an error processing your payment. Please try again.";
     toast.error("Payment Failed", {
-      description: "There was an error processing your payment. Please try again.",
+      description: errorMessage,
     });
   };
 

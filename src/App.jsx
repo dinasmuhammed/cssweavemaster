@@ -14,6 +14,10 @@ import Contact from './pages/Contact';
 import Cart from './pages/Cart';
 import SavedItems from './pages/SavedItems';
 import SearchResults from './pages/SearchResults';
+import TermsAndConditions from './pages/TermsAndConditions';
+import CancellationAndRefund from './pages/CancellationAndRefund';
+import Shipping from './pages/Shipping';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import { checkNetworkSpeed } from './utils/networkUtils';
 
 const queryClient = new QueryClient();
@@ -91,6 +95,10 @@ const App = () => {
                   <Route path="/cart" element={<Cart />} />
                   <Route path="/saved" element={<SavedItems />} />
                   <Route path="/search" element={<SearchResults />} />
+                  <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+                  <Route path="/cancellation-and-refund" element={<CancellationAndRefund />} />
+                  <Route path="/shipping" element={<Shipping />} />
+                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 </Routes>
               </main>
               <Footer />

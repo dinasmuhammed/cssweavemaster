@@ -28,6 +28,15 @@ const Footer = () => {
               <li><Link to="/contact" className="hover:underline text-sm transition-colors duration-300">Contact Us</Link></li>
             </ul>
           </nav>
+          <nav className="text-center sm:text-left">
+            <h3 className="text-lg font-bold mb-4">Legal</h3>
+            <ul className="space-y-2">
+              <li><Link to="/terms-and-conditions" className="hover:underline text-sm transition-colors duration-300">Terms and Conditions</Link></li>
+              <li><Link to="/cancellation-and-refund" className="hover:underline text-sm transition-colors duration-300">Cancellation and Refund</Link></li>
+              <li><Link to="/shipping" className="hover:underline text-sm transition-colors duration-300">Shipping</Link></li>
+              <li><Link to="/privacy-policy" className="hover:underline text-sm transition-colors duration-300">Privacy Policy</Link></li>
+            </ul>
+          </nav>
           <div className="text-center sm:text-left">
             <h3 className="text-lg font-bold mb-4">Follow Us</h3>
             <div className="flex justify-center sm:justify-start space-x-4">
@@ -41,23 +50,6 @@ const Footer = () => {
                 <Twitter className="w-6 h-6" />
               </a>
             </div>
-          </div>
-          <div className="text-center sm:text-left">
-            <h3 className="text-lg font-bold mb-4">Newsletter</h3>
-            <p className="mb-2 text-sm">Subscribe to our newsletter for updates and offers</p>
-            <form onSubmit={(e) => e.preventDefault()} className="space-y-2">
-              <label htmlFor="email" className="sr-only">Email address</label>
-              <input
-                type="email"
-                id="email"
-                placeholder="Enter your email"
-                className="w-full p-2 text-green-900 rounded text-sm transition-all duration-300 focus:ring-2 focus:ring-cream-100"
-                required
-              />
-              <button type="submit" className="w-full bg-cream-100 text-green-900 px-4 py-2 rounded hover:bg-cream-200 transition-colors duration-300 text-sm">
-                Subscribe
-              </button>
-            </form>
           </div>
         </div>
         <div className="mt-8 text-center">

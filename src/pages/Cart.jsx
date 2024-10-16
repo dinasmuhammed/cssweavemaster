@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { calculateTotalPrice, formatOrderData, generateOrderId } from '../utils/cartUtils';
-import { generateBill } from '../utils/billUtils';
 import CartItem from '../components/CartItem';
 import PurchaseForm from '../components/PurchaseForm';
 
@@ -50,8 +49,8 @@ const Cart = () => {
     const orderData = formatOrderData(formData, cartItems, totalPrice);
 
     const options = {
-      key: "rzp_live_lhUJoR9PnyhX0q",
-      amount: totalPrice * 100,
+      key: "rzp_live_lhUJoR9PnyhX0q", // Replace with your actual Razorpay key
+      amount: totalPrice * 100, // Amount in paise
       currency: "INR",
       name: "Henna by Fathima",
       description: `Order: ${orderId}`,
@@ -74,16 +73,11 @@ const Cart = () => {
       }
     };
 
-    try {
-      const paymentObject = new window.Razorpay(options);
-      paymentObject.on('payment.failed', function (response){
-        handlePaymentFailure(response.error);
-      });
-      paymentObject.open();
-    } catch (error) {
-      console.error("Razorpay error:", error);
-      handlePaymentFailure(error);
-    }
+    const razorpay = new window.Razorpay(options);
+    razorpay.on('payment.failed', function (response){
+      handlePaymentFailure(response.error);
+    });
+    razorpay.open();
   };
 
   const handlePaymentSuccess = (response, orderData) => {
@@ -92,8 +86,8 @@ const Cart = () => {
       description: "Your payment has been processed successfully.",
     });
 
-    const billContent = generateBill(orderData);
-    sendWhatsAppMessage(orderData.orderId, billContent);
+    // Send order details via WhatsApp
+    sendWhatsAppMessage(orderData.orderId, JSON.stringify(orderData, null, 2));
 
     clearCart();
     setShowPaymentDialog(false);
@@ -107,11 +101,11 @@ const Cart = () => {
     });
   };
 
-  const sendWhatsAppMessage = (orderId, billContent) => {
-    const whatsappMessage = encodeURIComponent(`New order: ${orderId}\nTotal: ₹${totalPrice}\n\nBill:\n${billContent}`);
+  const sendWhatsAppMessage = (orderId, orderDetails) => {
+    const whatsappMessage = encodeURIComponent(`New order: ${orderId}\nTotal: ₹${totalPrice}\n\nOrder Details:\n${orderDetails}`);
     window.open(`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`, '_blank');
-    toast.success("Bill Sent", {
-      description: "Your bill has been sent via WhatsApp.",
+    toast.success("Order Placed", {
+      description: "Your order details have been sent via WhatsApp.",
     });
   };
 

@@ -61,8 +61,8 @@ const Cart = () => {
       description: "Your payment has been processed successfully.",
     });
 
-    // Here you would typically send the order details to your backend
-    console.log("Order placed:", orderData);
+    // Send order details to backend
+    sendOrderToBackend(orderData, response.razorpay_payment_id);
 
     clearCart();
     setShowPaymentDialog(false);
@@ -74,6 +74,30 @@ const Cart = () => {
     toast.error("Payment Failed", {
       description: errorMessage,
     });
+  };
+
+  const sendOrderToBackend = async (orderData, paymentId) => {
+    try {
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ...orderData, paymentId }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send order to backend');
+      }
+
+      const data = await response.json();
+      console.log('Order sent to backend:', data);
+    } catch (error) {
+      console.error('Error sending order to backend:', error);
+      toast.error("Failed to process order", {
+        description: "Your payment was successful, but we couldn't process your order. Please contact support.",
+      });
+    }
   };
 
   if (cartItems.length === 0 && savedItems.length === 0) {

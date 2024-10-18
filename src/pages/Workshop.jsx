@@ -1,68 +1,72 @@
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import CountdownTimer from '../components/CountdownTimer';
+import { motion } from 'framer-motion';
 
-const workshops = [
-  {
-    title: 'Beginner Henna Workshop',
-    description: 'Learn the basics of henna application and simple designs.',
-    duration: '3 hours',
-    price: '₹1,999',
-  },
-  {
-    title: 'Advanced Bridal Henna Techniques',
-    description: 'Master intricate bridal designs and advanced techniques.',
-    duration: '6 hours',
-    price: '₹3,999',
-  },
-  {
-    title: 'Henna for Kids',
-    description: 'A fun and interactive workshop for children to explore henna art.',
-    duration: '2 hours',
-    price: '₹999',
-  },
-  {
-    title: 'Modern Henna Designs',
-    description: 'Explore contemporary henna patterns and fusion styles.',
-    duration: '4 hours',
-    price: '₹2,499',
-  },
+const workshopImages = [
+  "https://example.com/workshop-image-1.jpg",
+  "https://example.com/workshop-image-2.jpg",
+  "https://example.com/workshop-image-3.jpg",
+  "https://example.com/workshop-image-4.jpg",
+  "https://example.com/workshop-image-5.jpg",
 ];
 
 const Workshop = () => {
-  // Set the target date to 4 months from now
-  const targetDate = new Date();
-  targetDate.setMonth(targetDate.getMonth() + 4);
-
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold text-green-800 mb-6">Henna Workshops</h1>
-      <div className="bg-cream-100 p-8 rounded-lg shadow-lg text-center mb-12">
-        <h2 className="text-3xl font-bold text-green-800 mb-4">Coming Soon!</h2>
-        <p className="text-xl mb-6">Our workshops will be available in:</p>
-        <CountdownTimer targetDate={targetDate} />
-        <p className="mt-6 text-lg">Stay tuned for our exciting henna workshops where you can learn and enhance your skills!</p>
+    <div className="container mx-auto px-4 py-12 bg-cream-100">
+      <motion.h1 
+        className="text-4xl md:text-5xl font-bold text-green-800 mb-8 text-center"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        One day Mehendi Workshop
+      </motion.h1>
+
+      <motion.p 
+        className="text-lg md:text-xl text-center mb-12 max-w-3xl mx-auto"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
+        Join us for an exciting Mehendi Workshop where you can learn the art of henna applications! Whether you're a beginner or looking to refine your skills, this workshop is perfect for everyone.
+      </motion.p>
+
+      <div className="flex justify-center items-center mb-16">
+        <p className="text-xl mr-4">For more Details</p>
+        <Button 
+          variant="default" 
+          size="lg"
+          className="bg-green-800 hover:bg-green-700 text-white"
+        >
+          Enquire Now
+        </Button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 opacity-50 pointer-events-none">
-        {workshops.map((workshop, index) => (
-          <Card key={index}>
-            <CardHeader>
-              <CardTitle>{workshop.title}</CardTitle>
-              <CardDescription>{workshop.description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p><strong>Duration:</strong> {workshop.duration}</p>
-              <p><strong>Price:</strong> {workshop.price}</p>
-              <Button className="mt-4" disabled>Book Now</Button>
-            </CardContent>
-          </Card>
+
+      <motion.div 
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-16"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+      >
+        {workshopImages.map((image, index) => (
+          <img 
+            key={index} 
+            src={image} 
+            alt={`Workshop image ${index + 1}`} 
+            className="w-full h-64 object-cover rounded-lg shadow-md"
+          />
         ))}
-      </div>
-      <div className="mt-12 opacity-50 pointer-events-none">
-        <h2 className="text-2xl font-bold text-green-800 mb-4">Custom Workshops</h2>
-        <p className="mb-4">We also offer customized workshops for groups, events, and corporate team-building. Contact us for more information and pricing.</p>
-        <Button disabled>Enquire About Custom Workshops</Button>
+      </motion.div>
+
+      <div className="flex justify-center items-center">
+        <p className="text-xl mr-4">Click here for detailed brochure</p>
+        <Button 
+          variant="outline" 
+          size="lg"
+          className="border-green-800 text-green-800 hover:bg-green-800 hover:text-white"
+        >
+          Download
+        </Button>
       </div>
     </div>
   );

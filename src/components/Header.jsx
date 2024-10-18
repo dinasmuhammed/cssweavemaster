@@ -1,104 +1,97 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Search, Heart, ShoppingCart, Menu, X } from 'lucide-react';
-import { Badge } from "@/components/ui/badge";
-import { useCart } from '../context/CartContext';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ShoppingCart, Heart, Search, Menu, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useCart } from '../context/CartContext';
 
 const Header = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const { cartItems, savedItems } = useCart();
-  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
-    setIsMenuOpen(false);
-  };
+  const [searchQuery, setSearchQuery] = useState('');
+  const { cartItems } = useCart();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  useEffect(() => {
-    const closeMenu = (e) => {
-      if (isMenuOpen && !e.target.closest('.mobile-menu') && !e.target.closest('.menu-button')) {
-        setIsMenuOpen(false);
-      }
-    };
-    document.addEventListener('click', closeMenu);
-    return () => document.removeEventListener('click', closeMenu);
-  }, [isMenuOpen]);
+  const handleSearch = (e) => {
+    e.preventDefault();
+    // Implement search functionality
+    console.log('Searching for:', searchQuery);
+  };
 
   return (
-    <header className="bg-cream-100 sticky top-0 z-50 shadow-md">
-      <div className="container mx-auto px-4">
-        <div className="py-2 text-center text-xs sm:text-sm bg-cream-200">
-          <span className="font-bold">WE ARE DELIVERING ACROSS INDIA AND INTERNATIONALLY!</span>
-        </div>
-        <nav className="flex flex-wrap justify-between items-center py-4" aria-label="Main navigation">
-          <div className="flex items-center w-full sm:w-auto justify-between">
-            <Button variant="ghost" className="sm:hidden mr-2 menu-button" onClick={toggleMenu} aria-expanded={isMenuOpen} aria-controls="mobile-menu">
-              <span className="sr-only">{isMenuOpen ? 'Close menu' : 'Open menu'}</span>
-              {isMenuOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
-            </Button>
-            <Link to="/" className="text-2xl sm:text-3xl font-bold text-green-800 transition-transform duration-300 hover:scale-105">
-              <img src="https://i.postimg.cc/T3N2Cfkz/image.png" alt="Henna by Fathima" className="h-10 sm:h-12 md:h-16 object-cover" />
-            </Link>
-            <div className="flex sm:hidden">
-              <Link to="/saved" className="mr-4 relative" aria-label={`Saved items (${savedItems.length})`}>
-                <Heart className="w-5 h-5 text-green-800 transition-colors duration-300 hover:text-green-600" aria-hidden="true" />
-                {savedItems.length > 0 && (
-                  <Badge className="absolute -top-2 -right-2 bg-green-800 text-xs">{savedItems.length}</Badge>
-                )}
-              </Link>
-              <Link to="/cart" className="relative" aria-label={`Cart (${cartItems.length} items)`}>
-                <ShoppingCart className="w-5 h-5 text-green-800 transition-colors duration-300 hover:text-green-600" aria-hidden="true" />
-                {cartItems.length > 0 && (
-                  <Badge className="absolute -top-2 -right-2 bg-green-800 text-xs">{cartItems.length}</Badge>
-                )}
-              </Link>
-            </div>
-          </div>
-          <div id="mobile-menu" className={`mobile-menu w-full sm:flex sm:w-auto flex-col sm:flex-row items-start sm:items-center ${isMenuOpen ? 'block' : 'hidden'} sm:block mt-4 sm:mt-0`}>
-            <Link to="/" className="block text-green-800 hover:text-green-700 py-2 sm:py-0 sm:mr-6 transition-colors duration-300" onClick={() => setIsMenuOpen(false)}>Home</Link>
-            <Link to="/shop" className="block text-green-800 hover:text-green-700 py-2 sm:py-0 sm:mr-6 transition-colors duration-300" onClick={() => setIsMenuOpen(false)}>Shop</Link>
-            <Link to="/services" className="block text-green-800 hover:text-green-700 py-2 sm:py-0 sm:mr-6 transition-colors duration-300" onClick={() => setIsMenuOpen(false)}>Services</Link>
-            <Link to="/workshop" className="block text-green-800 hover:text-green-700 py-2 sm:py-0 sm:mr-6 transition-colors duration-300" onClick={() => setIsMenuOpen(false)}>Workshop</Link>
-            <Link to="/contact" className="block text-green-800 hover:text-green-700 py-2 sm:py-0 sm:mr-6 transition-colors duration-300" onClick={() => setIsMenuOpen(false)}>Contact us</Link>
-          </div>
-          <div className="hidden sm:flex items-center mt-4 sm:mt-0">
-            <form onSubmit={handleSearch} className="relative mr-4">
-              <Input
-                type="text"
-                placeholder="Search..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pr-8 w-full sm:w-auto transition-all duration-300 focus:ring-2 focus:ring-green-500"
-                aria-label="Search"
-              />
-              <Button type="submit" variant="ghost" className="absolute right-0 top-0 h-full transition-colors duration-300 hover:text-green-600" aria-label="Submit search">
-                <Search className="w-5 h-5 text-green-800" aria-hidden="true" />
-              </Button>
-            </form>
-            <div className="flex space-x-4">
-              <Link to="/saved" className="relative group" aria-label={`Saved items (${savedItems.length})`}>
-                <Heart className="w-5 h-5 text-green-800 transition-colors duration-300 group-hover:text-green-600" aria-hidden="true" />
-                {savedItems.length > 0 && (
-                  <Badge className="absolute -top-2 -right-2 bg-green-800 text-xs group-hover:bg-green-600 transition-colors duration-300">{savedItems.length}</Badge>
-                )}
-              </Link>
-              <Link to="/cart" className="relative group" aria-label={`Cart (${cartItems.length} items)`}>
-                <ShoppingCart className="w-5 h-5 text-green-800 transition-colors duration-300 group-hover:text-green-600" aria-hidden="true" />
-                {cartItems.length > 0 && (
-                  <Badge className="absolute -top-2 -right-2 bg-green-800 text-xs group-hover:bg-green-600 transition-colors duration-300">{cartItems.length}</Badge>
-                )}
-              </Link>
-            </div>
-          </div>
+    <header className="bg-green-800 text-white py-4">
+      <div className="container mx-auto px-4 flex justify-between items-center">
+        <Link to="/" className="text-2xl font-bold">Henna by Fathima</Link>
+        <nav className="hidden md:block">
+          <ul className="flex space-x-4">
+            <li><Link to="/" className="hover:text-cream-100">Home</Link></li>
+            <li><Link to="/shop" className="hover:text-cream-100">Shop</Link></li>
+            <li><Link to="/services" className="hover:text-cream-100">Services</Link></li>
+            <li><Link to="/workshop" className="hover:text-cream-100">Workshop</Link></li>
+            <li><Link to="/our-happy-clients" className="hover:text-cream-100">Our Happy Clients</Link></li>
+            <li><Link to="/contact" className="hover:text-cream-100">Contact</Link></li>
+          </ul>
         </nav>
+        <div className="flex items-center space-x-4">
+          <form onSubmit={handleSearch} className="hidden md:flex">
+            <Input
+              type="search"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="mr-2"
+            />
+            <Button type="submit" variant="secondary">
+              <Search className="h-4 w-4" />
+            </Button>
+          </form>
+          <Link to="/saved" className="text-white hover:text-cream-100">
+            <Heart className="h-6 w-6" />
+          </Link>
+          <Link to="/cart" className="text-white hover:text-cream-100 relative">
+            <ShoppingCart className="h-6 w-6" />
+            {cartItems.length > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                {cartItems.length}
+              </span>
+            )}
+          </Link>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="md:hidden">
+                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuItem>
+                <Link to="/" className="w-full">Home</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link to="/shop" className="w-full">Shop</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link to="/services" className="w-full">Services</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link to="/workshop" className="w-full">Workshop</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link to="/our-happy-clients" className="w-full">Our Happy Clients</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link to="/contact" className="w-full">Contact</Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
     </header>
   );

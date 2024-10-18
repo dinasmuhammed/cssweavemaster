@@ -8,7 +8,7 @@ const WelcomeSection = () => {
     <section className="py-8 sm:py-12 md:py-16 bg-cream-100 relative overflow-hidden">
       <div className="container mx-auto px-4 text-center relative z-10">
         <motion.h2 
-          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-green-800 mb-4"
+          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-green-800 mb-4 font-heading"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -16,7 +16,7 @@ const WelcomeSection = () => {
           Welcome to Henna by Fathima!
         </motion.h2>
         <motion.p 
-          className="text-base sm:text-lg md:text-xl lg:text-2xl text-green-800 mb-6 sm:mb-8 max-w-3xl mx-auto"
+          className="text-base sm:text-lg md:text-xl lg:text-2xl text-green-800 mb-6 sm:mb-8 max-w-3xl mx-auto font-sans"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
@@ -39,7 +39,20 @@ const WelcomeSection = () => {
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.6 }}
       >
-        <img src="https://i.postimg.cc/vBr7WJnv/leaf10-removebg-preview.png" alt="Henna leaves" className="w-full h-full object-contain object-left-top" />
+        <motion.img 
+          src="https://i.postimg.cc/vBr7WJnv/leaf10-removebg-preview.png" 
+          alt="Henna leaves" 
+          className="w-full h-full object-contain object-left-top"
+          animate={{
+            y: [0, -10, 0],
+            rotate: [0, 5, 0],
+          }}
+          transition={{
+            duration: 5,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
       </motion.div>
       <motion.div 
         className="absolute bottom-0 right-0 w-1/4 h-full transform rotate-180"
@@ -47,7 +60,20 @@ const WelcomeSection = () => {
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.8 }}
       >
-        <img src="https://i.postimg.cc/vBr7WJnv/leaf10-removebg-preview.png" alt="Henna leaves" className="w-full h-full object-contain object-left-top" />
+        <motion.img 
+          src="https://i.postimg.cc/vBr7WJnv/leaf10-removebg-preview.png" 
+          alt="Henna leaves" 
+          className="w-full h-full object-contain object-left-top"
+          animate={{
+            y: [0, 10, 0],
+            rotate: [0, -5, 0],
+          }}
+          transition={{
+            duration: 5,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
       </motion.div>
     </section>
   );

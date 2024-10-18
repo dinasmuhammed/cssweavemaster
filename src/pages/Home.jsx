@@ -4,7 +4,7 @@ import WelcomeSection from '../components/WelcomeSection';
 import WhyHennaByFathima from '../components/WhyHennaByFathima';
 import OurServices from '../components/OurServices';
 import AboutUs from '../components/AboutUs';
-import OurHappyClients from '../components/OurHappyClients';
+import HennaMoments from '../components/HennaMoments';
 
 const Home = () => {
   return (
@@ -15,7 +15,7 @@ const Home = () => {
         <WhyHennaByFathima />
         <OurServices />
         <AboutUs />
-        <OurHappyClients />
+        <HennaMoments />
       </main>
     </div>
   );

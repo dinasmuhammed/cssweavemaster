@@ -84,6 +84,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Axiforma', 'system-ui', 'sans-serif'],
+        heading: ['"Jacques Francois"', 'serif'],
       },
     },
   },

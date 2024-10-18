@@ -41,29 +41,29 @@ const OurHappyClients = () => {
   }, []);
 
   return (
-    <section className="py-16 bg-cream-100">
+    <section className="py-8 sm:py-16 bg-cream-100">
       <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center text-green-800 mb-12">Our Happy Clients</h2>
+        <h2 className="text-3xl sm:text-4xl font-bold text-center text-green-800 mb-8 sm:mb-12">Our Happy Clients</h2>
         <Carousel className="w-full max-w-4xl mx-auto" selectedIndex={activeIndex} setSelectedIndex={setActiveIndex}>
           <CarouselContent>
             {testimonials.map((testimonial, index) => (
-              <CarouselItem key={index} className="p-4">
-                <div className="bg-white p-8 rounded-lg shadow-lg text-center relative">
-                  <Quote className="absolute top-4 left-4 text-green-800 opacity-20 w-12 h-12" />
-                  <img src={testimonial.image} alt={testimonial.name} className="w-24 h-24 rounded-full mx-auto mb-6 object-cover border-4 border-green-800" />
-                  <h3 className="text-2xl font-bold mb-2 text-green-800">{testimonial.name}</h3>
-                  <div className="flex justify-center mb-4">
+              <CarouselItem key={index} className="p-2 sm:p-4">
+                <div className="bg-white p-6 sm:p-8 rounded-lg shadow-lg text-center relative">
+                  <Quote className="absolute top-2 sm:top-4 left-2 sm:left-4 text-green-800 opacity-20 w-8 sm:w-12 h-8 sm:h-12" />
+                  <img src={testimonial.image} alt={testimonial.name} className="w-16 h-16 sm:w-24 sm:h-24 rounded-full mx-auto mb-4 sm:mb-6 object-cover border-2 sm:border-4 border-green-800" />
+                  <h3 className="text-xl sm:text-2xl font-bold mb-2 text-green-800">{testimonial.name}</h3>
+                  <div className="flex justify-center mb-3 sm:mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="text-yellow-400 w-5 h-5 fill-current" />
+                      <Star key={i} className="text-yellow-400 w-4 h-4 sm:w-5 sm:h-5 fill-current" />
                     ))}
                   </div>
-                  <p className="text-gray-600 italic text-lg">&ldquo;{testimonial.text}&rdquo;</p>
+                  <p className="text-gray-600 italic text-sm sm:text-lg">&ldquo;{testimonial.text}&rdquo;</p>
                 </div>
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2" />
-          <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2" />
+          <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 hidden sm:flex" />
+          <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 hidden sm:flex" />
         </Carousel>
       </div>
     </section>

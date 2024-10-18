@@ -1,6 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import ServicePackage from '../components/ServicePackage';
+import AdditionalInfo from '../components/AdditionalInfo';
+import Aftercare from '../components/Aftercare';
+import TravelFee from '../components/TravelFee';
 
 const Services = () => {
   return (
@@ -78,7 +81,7 @@ const Services = () => {
         />
       </section>
 
-      <section>
+      <section className="mb-12 sm:mb-16">
         <motion.h2 
           className="text-2xl sm:text-3xl font-bold text-green-800 mb-6 sm:mb-8 text-center"
           initial={{ opacity: 0, x: -20 }}
@@ -105,15 +108,30 @@ const Services = () => {
         />
       </section>
 
-      <motion.p 
-        className="text-xs sm:text-sm text-gray-600 mt-8 sm:mt-12 text-center max-w-2xl mx-auto"
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          <AdditionalInfo />
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
+          <Aftercare />
+        </motion.div>
+      </div>
+
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
+        transition={{ duration: 0.5, delay: 0.5 }}
       >
-        Note: The final amount charged will be dependent on the complexity of the design and the customer's requirements.
-        The exact price will be finalized after the work is completed.
-      </motion.p>
+        <TravelFee />
+      </motion.div>
     </div>
   );
 };

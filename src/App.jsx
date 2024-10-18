@@ -17,7 +17,6 @@ import SearchResults from './pages/SearchResults';
 import TermsAndConditions from './pages/TermsAndConditions';
 import CancellationAndRefund from './pages/CancellationAndRefund';
 import ShippingAndPrivacy from './pages/ShippingAndPrivacy';
-import OurHappyClients from './components/OurHappyClients';
 import { checkNetworkSpeed } from './utils/networkUtils';
 
 const queryClient = new QueryClient();
@@ -98,7 +97,6 @@ const App = () => {
                   <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
                   <Route path="/cancellation-and-refund" element={<CancellationAndRefund />} />
                   <Route path="/shipping-and-privacy" element={<ShippingAndPrivacy />} />
-                  <Route path="/our-happy-clients" element={<OurHappyClients />} />
                 </Routes>
               </main>
               <Footer />

@@ -1,11 +1,20 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import ServicePackage from '../components/ServicePackage';
 import AdditionalInfo from '../components/AdditionalInfo';
 import Aftercare from '../components/Aftercare';
 import TravelFee from '../components/TravelFee';
 
 const Services = () => {
+  const services = [
+    { title: "BRIDAL & ENGAGEMENT HENNA", link: "/services#bridal" },
+    { title: "PARTY HENNA", link: "/services#party" },
+    { title: "ADDITIONAL INFO", link: "/services#additional-info" },
+    { title: "AFTERCARE", link: "/services#aftercare" },
+    { title: "TRAVEL FEE", link: "/services#travel-fee" },
+  ];
+
   return (
     <div className="container mx-auto px-4 py-8 sm:py-12">
       <motion.h1 
@@ -17,7 +26,22 @@ const Services = () => {
         Our Services
       </motion.h1>
       
-      <section className="mb-12 sm:mb-16">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        {services.map((service, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+          >
+            <Link to={service.link} className="block p-6 bg-cream-100 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+              <h2 className="text-xl font-semibold text-green-800 text-center">{service.title}</h2>
+            </Link>
+          </motion.div>
+        ))}
+      </div>
+
+      <section id="bridal" className="mb-12 sm:mb-16">
         <motion.h2 
           className="text-2xl sm:text-3xl font-bold text-green-800 mb-6 sm:mb-8 text-center"
           initial={{ opacity: 0, x: -20 }}
@@ -81,7 +105,7 @@ const Services = () => {
         />
       </section>
 
-      <section className="mb-12 sm:mb-16">
+      <section id="party" className="mb-12 sm:mb-16">
         <motion.h2 
           className="text-2xl sm:text-3xl font-bold text-green-800 mb-6 sm:mb-8 text-center"
           initial={{ opacity: 0, x: -20 }}
@@ -108,7 +132,7 @@ const Services = () => {
         />
       </section>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+      <div id="additional-info" className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -116,7 +140,7 @@ const Services = () => {
         >
           <AdditionalInfo />
         </motion.div>
-        <motion.div
+        <motion.div id="aftercare"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
@@ -125,7 +149,7 @@ const Services = () => {
         </motion.div>
       </div>
 
-      <motion.div
+      <motion.div id="travel-fee"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.5 }}

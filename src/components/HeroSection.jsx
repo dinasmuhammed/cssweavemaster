@@ -50,7 +50,7 @@ const HeroSection = () => {
           {images.map((image, index) => (
             <CarouselItem key={index} className="w-full p-0">
               <motion.div
-                className="relative w-full h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-screen"
+                className="relative w-full h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[70vh] xl:h-screen"
                 variants={hoverVariants}
                 whileHover="hover"
               >

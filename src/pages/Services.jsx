@@ -1,28 +1,15 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ServicePackage from '../components/ServicePackage';
 import AdditionalInfo from '../components/AdditionalInfo';
 import Aftercare from '../components/Aftercare';
 import TravelFee from '../components/TravelFee';
 
 const Services = () => {
-  const location = useLocation();
-
-  useEffect(() => {
-    if (location.hash) {
-      const element = document.getElementById(location.hash.slice(1));
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-  }, [location]);
-
   const services = [
     { title: "BRIDAL & ENGAGEMENT HENNA", link: "/services#bridal" },
-    { title: "HENNA PRODUCTS", link: "/services#products" },
     { title: "PARTY HENNA", link: "/services#party" },
-    { title: "WORKSHOPS", link: "/services#workshops" },
     { title: "ADDITIONAL INFO", link: "/services#additional-info" },
     { title: "AFTERCARE", link: "/services#aftercare" },
     { title: "TRAVEL FEE", link: "/services#travel-fee" },
@@ -118,35 +105,6 @@ const Services = () => {
         />
       </section>
 
-      <section id="products" className="mb-12 sm:mb-16">
-        <motion.h2 
-          className="text-2xl sm:text-3xl font-bold text-green-800 mb-6 sm:mb-8 text-center"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          HENNA PRODUCTS
-        </motion.h2>
-        
-        <ServicePackage
-          title="HENNA PRODUCTS"
-          details={[
-            "High-quality henna cones",
-            "Natural henna powder",
-            "Henna aftercare products",
-            "DIY henna kits"
-          ]}
-          images={[
-            "https://example.com/henna-product-1.jpg",
-            "https://example.com/henna-product-2.jpg",
-            "https://example.com/henna-product-3.jpg",
-            "https://example.com/henna-product-4.jpg",
-          ]}
-          buttonText="Shop Now"
-          isReversed={false}
-        />
-      </section>
-
       <section id="party" className="mb-12 sm:mb-16">
         <motion.h2 
           className="text-2xl sm:text-3xl font-bold text-green-800 mb-6 sm:mb-8 text-center"
@@ -170,35 +128,6 @@ const Services = () => {
             "https://example.com/party-henna-4.jpg",
           ]}
           buttonText="Request to Book"
-          isReversed={true}
-        />
-      </section>
-
-      <section id="workshops" className="mb-12 sm:mb-16">
-        <motion.h2 
-          className="text-2xl sm:text-3xl font-bold text-green-800 mb-6 sm:mb-8 text-center"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          WORKSHOPS
-        </motion.h2>
-        
-        <ServicePackage
-          title="HENNA WORKSHOPS"
-          details={[
-            "Learn henna application techniques",
-            "Understand henna mixing and cone preparation",
-            "Practice various henna designs",
-            "Small group sessions for personalized attention"
-          ]}
-          images={[
-            "https://example.com/workshop-1.jpg",
-            "https://example.com/workshop-2.jpg",
-            "https://example.com/workshop-3.jpg",
-            "https://example.com/workshop-4.jpg",
-          ]}
-          buttonText="Book Workshop"
           isReversed={true}
         />
       </section>

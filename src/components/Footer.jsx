@@ -42,10 +42,10 @@ const Footer = () => {
               <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="hover:text-cream-100 transition-colors duration-300">
                 <Facebook className="w-6 h-6" />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="hover:text-cream-100 transition-colors duration-300">
+              <a href="https://www.instagram.com/hennabyfathima__/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="hover:text-cream-100 transition-colors duration-300">
                 <Instagram className="w-6 h-6" />
               </a>
-              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="hover:text-cream-100 transition-colors duration-300">
+              <a href="https://youtu.be/qUKTRihRkkc?si=AlTdujs-lKPpIqbx" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="hover:text-cream-100 transition-colors duration-300">
                 <Youtube className="w-6 h-6" />
               </a>
             </div>

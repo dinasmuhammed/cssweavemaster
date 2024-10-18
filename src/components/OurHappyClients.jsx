@@ -3,20 +3,20 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 
 const testimonials = [
   {
-    name: 'Sona K',
-    text: 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in .',
+    name: 'Aisha M.',
+    text: 'The henna designs by Fathima are absolutely stunning! Her attention to detail and creativity made my wedding day even more special. Highly recommended!',
   },
   {
-    name: 'Sona K',
-    text: 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in .',
+    name: 'Priya S.',
+    text: 'I attended one of Fathima\'s workshops, and it was an amazing experience. She\'s not only talented but also a great teacher. I learned so much about henna art!',
   },
   {
-    name: 'Sona K',
-    text: 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in .',
+    name: 'Zara K.',
+    text: 'The quality of henna products from this store is unmatched. I love how long-lasting and vibrant the color is. Will definitely be a repeat customer!',
   },
   {
-    name: 'Sona K',
-    text: 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in .',
+    name: 'Meera R.',
+    text: 'Fathima\'s henna service for our family gathering was exceptional. Everyone was in awe of her intricate designs. She\'s truly gifted!',
   },
 ];
 

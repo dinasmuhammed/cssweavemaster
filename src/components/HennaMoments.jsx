@@ -6,7 +6,7 @@ const HennaMoments = () => {
   const imageUrls = [
     "https://i.postimg.cc/9Q94vdZQ/Screenshot-2024-10-08-101001.png",
     "https://i.postimg.cc/WzfvSHLd/81e36964-d066-49ec-a655-e08a82b68d95.jpg",
-    "https://i.postimg.cc/tJcKFnWP/IMG-4258.avif",
+    "https://i.ibb.co/r3SqJdP/072a2867-34cf-4288-aeac-4adb7509b17e.jpg",
     "https://i.postimg.cc/xTJDngVP/466e2ef6-8869-4e92-aee0-9ed18a4ab7fa.jpg",
     "https://i.postimg.cc/5tJZ5VYP/Screenshot-2024-10-13-172431.png",
     "https://i.postimg.cc/ydYt5yTc/Screenshot-2024-10-13-172527.png"

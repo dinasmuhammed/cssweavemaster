@@ -6,6 +6,7 @@ import OurServices from '../components/OurServices';
 import AboutUs from '../components/AboutUs';
 import HennaMoments from '../components/HennaMoments';
 import OurHappyClients from '../components/OurHappyClients';
+import OurHappyStore from '../components/OurHappyStore';
 
 const Home = () => {
   return (
@@ -17,6 +18,7 @@ const Home = () => {
         <OurServices />
         <AboutUs />
         <OurHappyClients />
+        <OurHappyStore />
         <HennaMoments />
       </main>
     </div>

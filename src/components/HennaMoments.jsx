@@ -39,12 +39,12 @@ const HennaMoments = () => {
   };
 
   return (
-    <section className="py-16 bg-cream-100">
+    <section className="py-8 sm:py-12 md:py-16 bg-cream-100">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center text-green-800 mb-4">Henna Moments</h2>
-        <p className="text-center mb-8">Follow our instagram page for more @hennabyfathima</p>
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-green-800 mb-4">Henna Moments</h2>
+        <p className="text-center mb-8 text-sm sm:text-base">Follow our instagram page for more @hennabyfathima</p>
         <div 
-          className="relative h-0 pb-[20%] overflow-hidden"
+          className="relative h-0 pb-[60%] sm:pb-[40%] md:pb-[30%] lg:pb-[20%] overflow-hidden"
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >
@@ -62,7 +62,7 @@ const HennaMoments = () => {
                   key={index}
                   src={imageUrls[(currentIndex + index) % imageUrls.length]}
                   alt={`Henna Moment ${currentIndex + index + 1}`}
-                  className="h-full w-1/6 object-cover"
+                  className="h-full w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/6 object-cover"
                 />
               ))}
             </motion.div>

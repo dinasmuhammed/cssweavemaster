@@ -43,7 +43,7 @@ const OurHappyClients = () => {
   return (
     <section className="py-8 sm:py-16 bg-cream-100">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl sm:text-4xl font-bold text-center text-green-800 mb-8 sm:mb-12">Our Happy Clients</h2>
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-green-800 mb-8 sm:mb-12">Our Happy Clients</h2>
         <Carousel className="w-full max-w-4xl mx-auto" selectedIndex={activeIndex} setSelectedIndex={setActiveIndex}>
           <CarouselContent>
             {testimonials.map((testimonial, index) => (
@@ -51,13 +51,13 @@ const OurHappyClients = () => {
                 <div className="bg-white p-6 sm:p-8 rounded-lg shadow-lg text-center relative">
                   <Quote className="absolute top-2 sm:top-4 left-2 sm:left-4 text-green-800 opacity-20 w-8 sm:w-12 h-8 sm:h-12" />
                   <img src={testimonial.image} alt={testimonial.name} className="w-16 h-16 sm:w-24 sm:h-24 rounded-full mx-auto mb-4 sm:mb-6 object-cover border-2 sm:border-4 border-green-800" />
-                  <h3 className="text-xl sm:text-2xl font-bold mb-2 text-green-800">{testimonial.name}</h3>
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-2 text-green-800">{testimonial.name}</h3>
                   <div className="flex justify-center mb-3 sm:mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (
                       <Star key={i} className="text-yellow-400 w-4 h-4 sm:w-5 sm:h-5 fill-current" />
                     ))}
                   </div>
-                  <p className="text-gray-600 italic text-sm sm:text-lg">&ldquo;{testimonial.text}&rdquo;</p>
+                  <p className="text-gray-600 italic text-sm sm:text-base md:text-lg">&ldquo;{testimonial.text}&rdquo;</p>
                 </div>
               </CarouselItem>
             ))}

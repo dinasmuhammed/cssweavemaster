@@ -1,69 +1,44 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Youtube } from 'lucide-react';
+import { Instagram, Youtube, Linkedin, Facebook, MessageCircle } from 'lucide-react';
 
 const Footer = () => {
   return (
     <footer className="bg-green-900 text-white py-8">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div className="text-center sm:text-left">
-            <h3 className="text-lg font-bold mb-4">Contact</h3>
-            <p className="text-sm">Phone: <a href="tel:+918086647124" className="hover:underline transition-colors duration-300">+91 8086647124</a></p>
-            <p className="text-sm">Email: <a href="mailto:info@hennabyfathima.com" className="hover:underline transition-colors duration-300">info@hennabyfathima.com</a></p>
-            <address className="text-sm not-italic">
-              Henna by Fathima Mehendi Studio<br />
-              South Koduvally<br />
-              Koduvally, Kozhikode<br />
-              Kerala - 673572
-            </address>
+        <div className="flex flex-col md:flex-row justify-between items-center">
+          <div className="mb-4 md:mb-0">
+            <img src="/logo.png" alt="Henna by Fathima Logo" className="h-16" />
           </div>
-          <nav className="text-center sm:text-left">
-            <h3 className="text-lg font-bold mb-4">Quick Links</h3>
-            <ul className="space-y-2">
-              <li><Link to="/" className="hover:underline text-sm transition-colors duration-300">Home</Link></li>
-              <li><Link to="/shop" className="hover:underline text-sm transition-colors duration-300">Shop</Link></li>
-              <li><Link to="/services" className="hover:underline text-sm transition-colors duration-300">Services</Link></li>
-              <li><Link to="/workshop" className="hover:underline text-sm transition-colors duration-300">Workshop</Link></li>
-              <li><Link to="/contact" className="hover:underline text-sm transition-colors duration-300">Contact Us</Link></li>
+          <div className="flex space-x-4 mb-4 md:mb-0">
+            <a href="https://www.facebook.com/FathimaShamsudheen001" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <Facebook className="w-6 h-6" />
+            </a>
+            <a href="https://www.instagram.com/hennabyfathima__/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <Instagram className="w-6 h-6" />
+            </a>
+            <a href="https://youtu.be/qUKTRihRkkc?si=AlTdujs-lKPpIqbx" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+              <Youtube className="w-6 h-6" />
+            </a>
+            <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <Linkedin className="w-6 h-6" />
+            </a>
+            <a href="https://wa.me/your-whatsapp-number" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+              <MessageCircle className="w-6 h-6" />
+            </a>
+          </div>
+          <nav>
+            <ul className="flex flex-wrap justify-center md:justify-end space-x-4">
+              <li><Link to="/" className="hover:underline">Home</Link></li>
+              <li><Link to="/shop" className="hover:underline">Shop</Link></li>
+              <li><Link to="/services" className="hover:underline">Services</Link></li>
+              <li><Link to="/workshop" className="hover:underline">Workshop</Link></li>
+              <li><Link to="/contact" className="hover:underline">Contact</Link></li>
             </ul>
           </nav>
-          <nav className="text-center sm:text-left">
-            <h3 className="text-lg font-bold mb-4">Legal</h3>
-            <ul className="space-y-2">
-              <li><Link to="/terms-and-conditions" className="hover:underline text-sm transition-colors duration-300">Terms and Conditions</Link></li>
-              <li><Link to="/cancellation-and-refund" className="hover:underline text-sm transition-colors duration-300">Cancellation and Refund</Link></li>
-              <li><Link to="/shipping-and-privacy" className="hover:underline text-sm transition-colors duration-300">Shipping & Privacy Policy</Link></li>
-            </ul>
-          </nav>
-          <div className="text-center sm:text-left">
-            <h3 className="text-lg font-bold mb-4">Follow Us</h3>
-            <div className="flex justify-center sm:justify-start space-x-4">
-              <a href="https://www.facebook.com/FathimaShamsudheen001" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="hover:text-cream-100 transition-colors duration-300">
-                <Facebook className="w-6 h-6" />
-              </a>
-              <a href="https://www.instagram.com/hennabyfathima__/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="hover:text-cream-100 transition-colors duration-300">
-                <Instagram className="w-6 h-6" />
-              </a>
-              <a href="https://youtu.be/qUKTRihRkkc?si=AlTdujs-lKPpIqbx" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="hover:text-cream-100 transition-colors duration-300">
-                <Youtube className="w-6 h-6" />
-              </a>
-            </div>
-          </div>
         </div>
         <div className="mt-8 text-center">
-          <p className="text-sm">&copy; 2024 Henna by Fathima. All rights reserved.</p>
-          <p className="text-sm mt-2">
-            Developed and maintained by{' '}
-            <a
-              href="https://adwebcomicagency.vercel.app/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-cream-100 transition-colors duration-300"
-            >
-              AD Web Comic Agency
-            </a>
-          </p>
+          <p>&copy; 2024 Henna by Fathima. All rights reserved.</p>
         </div>
       </div>
     </footer>

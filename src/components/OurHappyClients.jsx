@@ -1,69 +1,57 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { Star, Quote } from 'lucide-react';
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Card, CardContent } from "@/components/ui/card";
+import { Quote } from 'lucide-react';
 
 const testimonials = [
   {
-    name: 'Aisha M.',
+    name: 'Sona K',
     image: 'https://i.ibb.co/4jVpvqQ/image.png',
-    text: 'I was amazed by the intricate designs Fathima created for my wedding henna. Her attention to detail and creativity made my special day even more beautiful. Highly recommended!',
-    rating: 5,
+    text: 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs.',
   },
   {
-    name: 'Priya S.',
+    name: 'Aisha M',
     image: 'https://i.ibb.co/4jVpvqQ/image.png',
-    text: 'The henna products I ordered from Henna by Fathima were of exceptional quality. The colors were vibrant, and the designs lasted much longer than expected. Will definitely order again!',
-    rating: 5,
+    text: 'The attention to detail in Fathima\'s henna designs is truly remarkable. My wedding day was made even more special.',
   },
   {
-    name: 'Zara K.',
+    name: 'Priya S',
     image: 'https://i.ibb.co/4jVpvqQ/image.png',
-    text: 'Attending Fathima\'s henna workshop was an enlightening experience. Her teaching style is patient and thorough. I learned so much and can\'t wait to practice my new skills!',
-    rating: 5,
+    text: 'I love the quality of Henna by Fathima products. The designs are vibrant and long-lasting. Highly recommended!',
   },
   {
-    name: 'Rahul D.',
+    name: 'Zara K',
     image: 'https://i.ibb.co/4jVpvqQ/image.png',
-    text: 'I surprised my wife with a henna kit from Henna by Fathima, and she was overjoyed. The quality of the products and the beautiful designs have made her a loyal customer.',
-    rating: 5,
+    text: 'Attending Fathima\'s workshop was an amazing experience. Her teaching style is patient and informative.',
   },
 ];
 
 const OurHappyClients = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
-    }, 5000); // Change testimonial every 5 seconds
-
-    return () => clearInterval(interval);
-  }, []);
-
   return (
-    <section className="py-8 sm:py-16 bg-cream-100">
+    <section className="py-12 bg-cream-100">
       <div className="container mx-auto px-4">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-green-800 mb-8 sm:mb-12">Our Happy Clients</h2>
-        <Carousel className="w-full max-w-4xl mx-auto" selectedIndex={activeIndex} setSelectedIndex={setActiveIndex}>
-          <CarouselContent>
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-green-800 mb-8">Our Happy Clients</h2>
+        <Carousel className="w-full max-w-5xl mx-auto">
+          <CarouselContent className="-ml-2 md:-ml-4">
             {testimonials.map((testimonial, index) => (
-              <CarouselItem key={index} className="p-2 sm:p-4">
-                <div className="bg-white p-6 sm:p-8 rounded-lg shadow-lg text-center relative">
-                  <Quote className="absolute top-2 sm:top-4 left-2 sm:left-4 text-green-800 opacity-20 w-8 sm:w-12 h-8 sm:h-12" />
-                  <img src={testimonial.image} alt={testimonial.name} className="w-16 h-16 sm:w-24 sm:h-24 rounded-full mx-auto mb-4 sm:mb-6 object-cover border-2 sm:border-4 border-green-800" />
-                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-2 text-green-800">{testimonial.name}</h3>
-                  <div className="flex justify-center mb-3 sm:mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="text-yellow-400 w-4 h-4 sm:w-5 sm:h-5 fill-current" />
-                    ))}
-                  </div>
-                  <p className="text-gray-600 italic text-sm sm:text-base md:text-lg">&ldquo;{testimonial.text}&rdquo;</p>
-                </div>
+              <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
+                <Card className="bg-white p-6 h-full flex flex-col shadow-lg relative">
+                  <Quote className="absolute top-4 left-4 text-green-800 opacity-20 w-8 h-8" />
+                  <CardContent className="flex flex-col items-center text-center">
+                    <Avatar className="w-20 h-20 mb-4 border-4 border-green-800">
+                      <AvatarImage src={testimonial.image} alt={testimonial.name} />
+                      <AvatarFallback>{testimonial.name[0]}</AvatarFallback>
+                    </Avatar>
+                    <h3 className="font-semibold text-lg mb-2 text-green-800">{testimonial.name}</h3>
+                    <p className="text-sm text-gray-600 italic">"{testimonial.text}"</p>
+                  </CardContent>
+                </Card>
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 hidden sm:flex" />
-          <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 hidden sm:flex" />
+          <CarouselPrevious className="absolute -left-12 top-1/2 -translate-y-1/2" />
+          <CarouselNext className="absolute -right-12 top-1/2 -translate-y-1/2" />
         </Carousel>
       </div>
     </section>

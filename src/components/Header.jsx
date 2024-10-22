@@ -32,6 +32,14 @@ const Header = () => {
     return () => document.removeEventListener('click', closeMenu);
   }, [isMenuOpen]);
 
+  const navItems = [
+    { to: "/", label: "Home" },
+    { to: "/shop", label: "Shop" },
+    { to: "/services", label: "Services" },
+    { to: "/workshop", label: "Workshop" },
+    { to: "/contact", label: "Contact" },
+  ];
+
   return (
     <header className="bg-cream-100 sticky top-0 z-50 shadow-md">
       <div className="container mx-auto px-4">
@@ -63,11 +71,16 @@ const Header = () => {
             </div>
           </div>
           <div id="mobile-menu" className={`mobile-menu w-full sm:flex sm:w-auto flex-col sm:flex-row items-start sm:items-center ${isMenuOpen ? 'block' : 'hidden'} sm:block mt-4 sm:mt-0`}>
-            <Link to="/" className="block text-green-800 hover:text-green-700 py-2 sm:py-0 sm:mr-6 transition-colors duration-300" onClick={() => setIsMenuOpen(false)}>Home</Link>
-            <Link to="/shop" className="block text-green-800 hover:text-green-700 py-2 sm:py-0 sm:mr-6 transition-colors duration-300" onClick={() => setIsMenuOpen(false)}>Shop</Link>
-            <Link to="/services" className="block text-green-800 hover:text-green-700 py-2 sm:py-0 sm:mr-6 transition-colors duration-300" onClick={() => setIsMenuOpen(false)}>Services</Link>
-            <Link to="/workshop" className="block text-green-800 hover:text-green-700 py-2 sm:py-0 sm:mr-6 transition-colors duration-300" onClick={() => setIsMenuOpen(false)}>Workshop</Link>
-            <Link to="/contact" className="block text-green-800 hover:text-green-700 py-2 sm:py-0 sm:mr-6 transition-colors duration-300" onClick={() => setIsMenuOpen(false)}>Contact us</Link>
+            {navItems.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                className="block text-green-800 hover:text-green-700 py-2 sm:py-0 sm:mr-6 transition-colors duration-300"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {item.label}
+              </Link>
+            ))}
           </div>
           <div className="hidden sm:flex items-center mt-4 sm:mt-0">
             <form onSubmit={handleSearch} className="relative mr-4">

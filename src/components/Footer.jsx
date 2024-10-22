@@ -3,6 +3,14 @@ import { Link } from 'react-router-dom';
 import { Instagram, Youtube, Linkedin, Facebook } from 'lucide-react';
 
 const Footer = () => {
+  const navItems = [
+    { to: "/", label: "Home" },
+    { to: "/shop", label: "Shop" },
+    { to: "/services", label: "Services" },
+    { to: "/workshop", label: "Workshop" },
+    { to: "/contact", label: "Contact" },
+  ];
+
   return (
     <footer className="bg-green-900 text-white py-8">
       <div className="container mx-auto px-4">
@@ -30,11 +38,13 @@ const Footer = () => {
           <nav className="mb-6 md:mb-0">
             <h3 className="text-lg font-semibold mb-4 text-center md:text-right">Navigation</h3>
             <ul className="flex flex-col items-center md:items-end space-y-2">
-              <li><Link to="/" className="hover:underline">Home</Link></li>
-              <li><Link to="/workshop" className="hover:underline">Workshop</Link></li>
-              <li><Link to="/shop" className="hover:underline">Shop</Link></li>
-              <li><Link to="/contact" className="hover:underline">Contact Us</Link></li>
-              <li><Link to="/services" className="hover:underline">Services</Link></li>
+              {navItems.map((item) => (
+                <li key={item.to}>
+                  <Link to={item.to} className="hover:underline">
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </nav>
         </div>

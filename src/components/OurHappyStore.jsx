@@ -22,6 +22,7 @@ const OurHappyStore = () => {
             <iframe
               src="https://www.youtube.com/embed/qUKTRihRkkc?autoplay=1&mute=1&loop=1&playlist=qUKTRihRkkc"
               className="w-full h-full rounded-lg shadow-md"
+              style={{ aspectRatio: '725 / 526.91' }}
               allow="autoplay; encrypted-media"
               allowFullScreen
             ></iframe>

@@ -3,11 +3,11 @@ import { Button } from "@/components/ui/button";
 import { motion } from 'framer-motion';
 
 const workshopImages = [
-  "https://i.ibb.co/0Xx1wxn/ba19277a-ac85-4a52-9127-09a7740bd8ed.jpg",
-  "https://i.ibb.co/WzCCtNC/7afa2c62-e1cb-4250-9c81-597cafc6a977.jpg",
-  "https://i.ibb.co/SNhC0ts/6c4e8a57-276d-4b27-8bcb-61b720c781e9.jpg",
-  "https://i.ibb.co/r3SqJdP/072a2867-34cf-4288-aeac-4adb7509b17e.jpg",
-  "https://i.ibb.co/dWn0vvS/image.png",
+  "https://example.com/workshop-image-1.jpg",
+  "https://example.com/workshop-image-2.jpg",
+  "https://example.com/workshop-image-3.jpg",
+  "https://example.com/workshop-image-4.jpg",
+  "https://example.com/workshop-image-5.jpg",
 ];
 
 const Workshop = () => {

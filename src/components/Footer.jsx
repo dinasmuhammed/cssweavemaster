@@ -51,7 +51,7 @@ const Footer = () => {
         <div className="border-t border-green-800 pt-4 text-center">
           <p>&copy; 2024 copyright - Henna by Fathima</p>
           <p className="mt-2 text-sm">
-            Developed and maintained by <a href="https://www.linkedin.com/in/muhammed-shahin-mhd-b9b2b7212/" target="_blank" rel="noopener noreferrer" className="underline hover:text-green-300">Muhammed Shahin</a>
+            Developed and maintained by <a href="https://adwebcomicagency.vercel.app/" target="_blank" rel="noopener noreferrer" className="underline hover:text-green-300">AD Web Comic Agency</a>
           </p>
         </div>
       </div>

@@ -18,11 +18,11 @@ const OurHappyStore = () => {
               <p className="font-semibold mt-2">Phone: <a href="tel:+918086647124" className="text-green-800 hover:underline">+91 8086647124</a></p>
             </address>
           </div>
-          <div className="w-full max-w-[725px] h-[526.91px] mx-auto">
+          <div className="w-full max-w-[595px] h-[337px] mx-auto">
             <iframe
               src="https://www.youtube.com/embed/qUKTRihRkkc?autoplay=1&mute=1&loop=1&playlist=qUKTRihRkkc"
               className="w-full h-full rounded-lg shadow-md"
-              style={{ aspectRatio: '725 / 526.91' }}
+              style={{ aspectRatio: '595 / 337' }}
               allow="autoplay; encrypted-media"
               allowFullScreen
             ></iframe>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Instagram, Youtube, Linkedin, Facebook, MessageCircle } from 'lucide-react';
+import { Instagram, Youtube, Linkedin, Facebook } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -21,9 +21,6 @@ const Footer = () => {
               </a>
               <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
                 <Linkedin className="w-6 h-6" />
-              </a>
-              <a href="https://wa.me/your-whatsapp-number" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
-                <MessageCircle className="w-6 h-6" />
               </a>
               <a href="https://www.facebook.com/FathimaShamsudheen001" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
                 <Facebook className="w-6 h-6" />

@@ -7,9 +7,9 @@ const HeroSection = () => {
   const [isHovering, setIsHovering] = useState(false);
   const carouselRef = useRef(null);
   const images = [
-    "https://i.ibb.co/7j9LYMb/de63f2db-8f22-4eae-a1ef-46b35d650281.jpg",
-    "https://i.ibb.co/3cjTGVn/8c42239e-0621-47c4-a44e-83c65d184231.jpg",
-    "https://i.ibb.co/7CX7vg6/5bc5421c-e0e5-4f18-93ba-7f984c576832.jpg",
+    "https://i.postimg.cc/14x50HJf/image.png",
+    "https://i.postimg.cc/WbSYckSB/Screenshot-2024-10-08-095057.png",
+    "https://i.postimg.cc/y8dQ18bk/Screenshot-2024-10-08-095107.png",
   ];
 
   useEffect(() => {

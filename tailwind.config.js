@@ -61,7 +61,6 @@ module.exports = {
         },
         green: {
           800: '#0F4C3A',
-          900: '#00332B', // Added this darker green for the footer background
         },
       },
       borderRadius: {

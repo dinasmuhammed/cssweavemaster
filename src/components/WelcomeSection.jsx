@@ -8,7 +8,7 @@ const WelcomeSection = () => {
     <section className="py-8 sm:py-12 md:py-16 bg-cream-100 relative overflow-hidden">
       <div className="container mx-auto px-4 text-center relative z-10">
         <motion.h2 
-          className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-green-800 mb-4 font-heading"
+          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-green-800 mb-4 font-heading"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -16,7 +16,7 @@ const WelcomeSection = () => {
           Welcome to Henna by Fathima!
         </motion.h2>
         <motion.p 
-          className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-green-800 mb-6 sm:mb-8 max-w-3xl mx-auto font-sans"
+          className="text-base sm:text-lg md:text-xl lg:text-2xl text-green-800 mb-6 sm:mb-8 max-w-3xl mx-auto font-sans"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
@@ -28,7 +28,7 @@ const WelcomeSection = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          <Button asChild className="bg-green-800 hover:bg-green-700 text-white text-xs sm:text-sm md:text-base lg:text-lg px-4 sm:px-6 md:px-8 py-2 sm:py-3 transition-all duration-300 hover:scale-105">
+          <Button asChild className="bg-green-800 hover:bg-green-700 text-white text-sm sm:text-base md:text-lg px-6 sm:px-8 py-2 sm:py-3 transition-all duration-300 hover:scale-105">
             <Link to="/services">View Packages</Link>
           </Button>
         </motion.div>

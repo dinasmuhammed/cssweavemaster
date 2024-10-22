@@ -1,57 +1,68 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Instagram, Youtube, Linkedin, Facebook } from 'lucide-react';
+import { Facebook, Instagram, Youtube } from 'lucide-react';
 
 const Footer = () => {
-  const navItems = [
-    { to: "/", label: "Home" },
-    { to: "/shop", label: "Shop" },
-    { to: "/services", label: "Services" },
-    { to: "/workshop", label: "Workshop" },
-    { to: "/contact", label: "Contact" },
-  ];
-
   return (
     <footer className="bg-green-900 text-white py-8">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8">
-          <div className="mb-6 md:mb-0">
-            <img src="/logo.png" alt="Henna by Fathima Logo" className="h-12" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="text-center sm:text-left">
+            <h3 className="text-lg font-bold mb-4">Contact</h3>
+            <p className="text-sm">Phone: <a href="tel:+918086647124" className="hover:underline transition-colors duration-300">+91 8086647124</a></p>
+            <p className="text-sm">Email: <a href="mailto:info@hennabyfathima.com" className="hover:underline transition-colors duration-300">info@hennabyfathima.com</a></p>
+            <address className="text-sm not-italic">
+              Henna by Fathima Mehendi Studio<br />
+              South Koduvally<br />
+              Koduvally, Kozhikode<br />
+              Kerala - 673572
+            </address>
           </div>
-          <div className="mb-6 md:mb-0">
-            <h3 className="text-lg font-semibold mb-4 text-center">Follow Us</h3>
-            <div className="flex justify-center space-x-4">
-              <a href="https://www.instagram.com/hennabyfathima__/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <nav className="text-center sm:text-left">
+            <h3 className="text-lg font-bold mb-4">Quick Links</h3>
+            <ul className="space-y-2">
+              <li><Link to="/" className="hover:underline text-sm transition-colors duration-300">Home</Link></li>
+              <li><Link to="/shop" className="hover:underline text-sm transition-colors duration-300">Shop</Link></li>
+              <li><Link to="/services" className="hover:underline text-sm transition-colors duration-300">Services</Link></li>
+              <li><Link to="/workshop" className="hover:underline text-sm transition-colors duration-300">Workshop</Link></li>
+              <li><Link to="/contact" className="hover:underline text-sm transition-colors duration-300">Contact Us</Link></li>
+            </ul>
+          </nav>
+          <nav className="text-center sm:text-left">
+            <h3 className="text-lg font-bold mb-4">Legal</h3>
+            <ul className="space-y-2">
+              <li><Link to="/terms-and-conditions" className="hover:underline text-sm transition-colors duration-300">Terms and Conditions</Link></li>
+              <li><Link to="/cancellation-and-refund" className="hover:underline text-sm transition-colors duration-300">Cancellation and Refund</Link></li>
+              <li><Link to="/shipping-and-privacy" className="hover:underline text-sm transition-colors duration-300">Shipping & Privacy Policy</Link></li>
+            </ul>
+          </nav>
+          <div className="text-center sm:text-left">
+            <h3 className="text-lg font-bold mb-4">Follow Us</h3>
+            <div className="flex justify-center sm:justify-start space-x-4">
+              <a href="https://www.facebook.com/FathimaShamsudheen001" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="hover:text-cream-100 transition-colors duration-300">
+                <Facebook className="w-6 h-6" />
+              </a>
+              <a href="https://www.instagram.com/hennabyfathima__/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="hover:text-cream-100 transition-colors duration-300">
                 <Instagram className="w-6 h-6" />
               </a>
-              <a href="https://youtu.be/qUKTRihRkkc?si=AlTdujs-lKPpIqbx" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+              <a href="https://youtu.be/qUKTRihRkkc?si=AlTdujs-lKPpIqbx" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="hover:text-cream-100 transition-colors duration-300">
                 <Youtube className="w-6 h-6" />
-              </a>
-              <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                <Linkedin className="w-6 h-6" />
-              </a>
-              <a href="https://www.facebook.com/FathimaShamsudheen001" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                <Facebook className="w-6 h-6" />
               </a>
             </div>
           </div>
-          <nav className="mb-6 md:mb-0">
-            <h3 className="text-lg font-semibold mb-4 text-center md:text-right">Navigation</h3>
-            <ul className="flex flex-col items-center md:items-end space-y-2">
-              {navItems.map((item) => (
-                <li key={item.to}>
-                  <Link to={item.to} className="hover:underline">
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
         </div>
-        <div className="border-t border-green-800 pt-4 text-center">
-          <p>&copy; 2024 copyright - Henna by Fathima</p>
-          <p className="mt-2 text-sm">
-            Developed and maintained by <a href="https://www.linkedin.com/in/muhammed-shahin-mhd-b9b2b7212/" target="_blank" rel="noopener noreferrer" className="underline hover:text-green-300">Muhammed Shahin</a>
+        <div className="mt-8 text-center">
+          <p className="text-sm">&copy; 2024 Henna by Fathima. All rights reserved.</p>
+          <p className="text-sm mt-2">
+            Developed and maintained by{' '}
+            <a
+              href="https://adwebcomicagency.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-cream-100 transition-colors duration-300"
+            >
+              AD Web Comic Agency
+            </a>
           </p>
         </div>
       </div>

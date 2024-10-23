@@ -35,11 +35,11 @@ const Header = () => {
   ];
 
   return (
-    <header className={`sticky top-0 z-50 bg-cream-100 transition-shadow duration-300 ${
+    <header className={`sticky top-0 z-50 bg-white transition-shadow duration-300 ${
       isScrolled ? 'shadow-md' : ''
     }`}>
       <div className="container mx-auto px-4">
-        <div className="py-2 text-center text-xs sm:text-sm bg-cream-200">
+        <div className="py-2 text-center text-xs sm:text-sm bg-white border-b">
           <span className="font-bold">WE ARE DELIVERING ACROSS INDIA AND INTERNATIONALLY!</span>
         </div>
         

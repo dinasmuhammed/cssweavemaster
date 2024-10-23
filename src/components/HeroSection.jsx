@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 
@@ -28,16 +27,16 @@ const HeroSection = () => {
 
   return (
     <section 
-      className="relative w-full overflow-hidden bg-cream-100"
+      className="relative w-full h-screen overflow-hidden bg-cream-100 -mt-[64px]"
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
-      <div className="embla" ref={emblaRef}>
-        <div className="embla__container">
+      <div className="embla absolute inset-0" ref={emblaRef}>
+        <div className="embla__container h-full">
           {images.map((image, index) => (
-            <div key={index} className="embla__slide w-full">
+            <div key={index} className="embla__slide w-full h-full">
               <motion.div
-                className="relative w-full h-[100vh]"
+                className="relative w-full h-full"
                 variants={hoverVariants}
                 whileHover="hover"
               >
@@ -54,7 +53,7 @@ const HeroSection = () => {
           ))}
         </div>
       </div>
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
         {images.map((_, index) => (
           <button
             key={index}

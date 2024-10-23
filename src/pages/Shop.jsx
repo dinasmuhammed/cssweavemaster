@@ -85,19 +85,22 @@ const Shop = () => {
 
   return (
     <div className="bg-cream-100">
-      <div className="relative h-[300px] sm:h-[400px] overflow-hidden">
-        <div className="absolute inset-0">
-          <img 
-            src="https://i.postimg.cc/Kj3LYHX1/basic-mehendi.jpg" 
-            alt="Shop Hero" 
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-black/40" />
+      <div className="relative">
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-2 h-[300px] sm:h-[400px]">
+          <img src="https://i.postimg.cc/CKbjSySR/image.png" alt="Henna Product" className="w-full h-full object-cover" />
+          <img src="https://i.postimg.cc/hjrTQ9Jg/image.png" alt="Henna Design" className="w-full h-full object-cover" />
+          <img src="https://i.postimg.cc/44WpJQkQ/image.png" alt="Henna Application" className="w-full h-full object-cover" />
+          <img src="https://i.postimg.cc/13qFrxgv/image.png" alt="Natural Henna" className="hidden md:block w-full h-full object-cover" />
+          <img src="https://i.postimg.cc/9MJwQCSQ/image.png" alt="Henna Cones" className="hidden md:block w-full h-full object-cover" />
+          <img src="https://i.postimg.cc/HsfcxSSX/image.png" alt="Bridal Henna" className="hidden md:block w-full h-full object-cover" />
         </div>
-        <div className="relative container mx-auto px-4 h-full flex flex-col justify-center text-white">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">Shop Our Collections</h1>
-          <p className="text-sm sm:text-base md:text-lg max-w-2xl">
-            Explore our premium range of organic henna products, carefully crafted with natural ingredients for the perfect henna experience.
+        <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-center px-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 font-heading">
+            Our Premium Collection
+          </h1>
+          <p className="text-sm sm:text-base md:text-lg text-white max-w-2xl mx-auto font-sans">
+            Explore our premium range of organic henna products, crafted with 100% natural ingredients. 
+            Each product is designed to give vibrant, long-lasting results, free from chemicals and additives.
           </p>
         </div>
       </div>

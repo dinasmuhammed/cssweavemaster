@@ -35,10 +35,9 @@ const Services = () => {
             "1-2 Hours with Natural Application"
           ]}
           images={[
-            "https://example.com/bridal-henna-1.jpg",
-            "https://example.com/bridal-henna-2.jpg",
-            "https://example.com/bridal-henna-3.jpg",
-            "https://example.com/bridal-henna-4.jpg",
+            "https://i.postimg.cc/2SGPxtQr/Screenshot-2024-10-13-173602.png",
+            "https://i.postimg.cc/sDddf7fd/Screenshot-2024-10-13-173328.png",
+            "https://i.postimg.cc/MGXrmpZm/Screenshot-2024-10-13-173745.png"
           ]}
           buttonText="Request to Book"
           isReversed={false}
@@ -53,10 +52,9 @@ const Services = () => {
             "2-3 Hours with Natural Application"
           ]}
           images={[
-            "https://example.com/bridal-henna-5.jpg",
-            "https://example.com/bridal-henna-6.jpg",
-            "https://example.com/bridal-henna-7.jpg",
-            "https://example.com/bridal-henna-8.jpg",
+            "https://i.postimg.cc/bNxXZrdG/Screenshot-2024-10-13-173523.png",
+            "https://i.postimg.cc/2SGPxtQr/Screenshot-2024-10-13-173602.png",
+            "https://i.postimg.cc/sDddf7fd/Screenshot-2024-10-13-173328.png"
           ]}
           buttonText="Request to Book"
           isReversed={true}
@@ -71,10 +69,9 @@ const Services = () => {
             "4-5 Hours with Natural Application"
           ]}
           images={[
-            "https://example.com/bridal-henna-9.jpg",
-            "https://example.com/bridal-henna-10.jpg",
-            "https://example.com/bridal-henna-11.jpg",
-            "https://example.com/bridal-henna-12.jpg",
+            "https://i.postimg.cc/MGXrmpZm/Screenshot-2024-10-13-173745.png",
+            "https://i.postimg.cc/bNxXZrdG/Screenshot-2024-10-13-173523.png",
+            "https://i.postimg.cc/2SGPxtQr/Screenshot-2024-10-13-173602.png"
           ]}
           buttonText="Request to Book"
           isReversed={false}
@@ -98,10 +95,9 @@ const Services = () => {
             "15-20 Minutes with Natural Application"
           ]}
           images={[
-            "https://example.com/party-henna-1.jpg",
-            "https://example.com/party-henna-2.jpg",
-            "https://example.com/party-henna-3.jpg",
-            "https://example.com/party-henna-4.jpg",
+            "https://i.postimg.cc/sDddf7fd/Screenshot-2024-10-13-173328.png",
+            "https://i.postimg.cc/MGXrmpZm/Screenshot-2024-10-13-173745.png",
+            "https://i.postimg.cc/bNxXZrdG/Screenshot-2024-10-13-173523.png"
           ]}
           buttonText="Request to Book"
           isReversed={true}

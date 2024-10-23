@@ -39,7 +39,7 @@ const Header = () => {
       isScrolled ? 'shadow-md' : ''
     }`}>
       <div className="container mx-auto px-4">
-        <div className="py-2 text-center text-xs sm:text-sm bg-white border-b">
+        <div className="py-2 text-center text-xs sm:text-sm" style={{ backgroundColor: '#F5E1C6' }}>
           <span className="font-bold">WE ARE DELIVERING ACROSS INDIA AND INTERNATIONALLY!</span>
         </div>
         

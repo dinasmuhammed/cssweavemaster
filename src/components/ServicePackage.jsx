@@ -84,7 +84,7 @@ const ServicePackage = ({ title, details, images, buttonText, isReversed }) => {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="lg:w-1/2 flex justify-between gap-4">
+      <div className="lg:w-1/2 flex justify-between space-x-4">
         {images.map((src, index) => (
           <motion.img 
             key={index} 

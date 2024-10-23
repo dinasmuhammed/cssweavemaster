@@ -1,4 +1,4 @@
-const RAZORPAY_KEY_ID = "rzp_live_lhUJoR9PnyhX0q";
+const RAZORPAY_KEY_ID = "rzp_test_C7n5IDWG8K5kGf";  // Updated test key
 const RAZORPAY_SECRET = process.env.RAZORPAY_SECRET;
 
 const Razorpay = require('razorpay');
@@ -14,6 +14,7 @@ export const createOrder = async (amount, currency = 'INR') => {
       amount: Math.round(amount * 100), // Convert to paise
       currency,
       receipt: `order_${Date.now()}`,
+      payment_capture: 1
     });
     return order;
   } catch (error) {

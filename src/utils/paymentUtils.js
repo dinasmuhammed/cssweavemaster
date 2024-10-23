@@ -1,17 +1,21 @@
+import { toast } from "sonner";
+
 export const initializeRazorpayPayment = (orderData, totalAmount, formData, onSuccess, onError) => {
   if (!window.Razorpay) {
+    toast.error('Payment gateway not initialized');
     onError(new Error('Razorpay SDK not loaded'));
     return;
   }
 
   const options = {
-    key: "rzp_live_lhUJoR9PnyhX0q", // Live Razorpay API Key
-    amount: totalAmount * 100, // Amount in paise
+    key: "rzp_live_lhUJoR9PnyhX0q",
+    amount: totalAmount * 100,
     currency: "INR",
     name: "Henna by Fathima",
     description: `Order Payment: ${orderData.orderId}`,
     order_id: orderData.orderId,
     handler: function (response) {
+      toast.success("Payment successful!");
       onSuccess(response);
     },
     prefill: {
@@ -24,55 +28,11 @@ export const initializeRazorpayPayment = (orderData, totalAmount, formData, onSu
     },
     modal: {
       ondismiss: function() {
+        toast.error('Payment cancelled');
         onError(new Error('Payment cancelled by user'));
       },
       confirm_close: true,
       escape: false
-    },
-    retry: {
-      enabled: true,
-      max_count: 3
-    },
-    notes: {
-      address: formData.address
-    },
-    config: {
-      display: {
-        blocks: {
-          utib: {
-            name: "Pay using Axis Bank",
-            instruments: [
-              {
-                method: "card",
-                issuers: ["UTIB"]
-              },
-              {
-                method: "netbanking",
-                banks: ["UTIB"]
-              },
-            ]
-          },
-          other: {
-            name: "Other payment methods",
-            instruments: [
-              {
-                method: "card",
-                issuers: ["ICIC"]
-              },
-              {
-                method: "netbanking"
-              },
-              {
-                method: "upi"
-              }
-            ]
-          }
-        },
-        sequence: ["block.utib", "block.other"],
-        preferences: {
-          show_default_blocks: false
-        }
-      }
     }
   };
 
@@ -80,11 +40,13 @@ export const initializeRazorpayPayment = (orderData, totalAmount, formData, onSu
     const rzp = new window.Razorpay(options);
     
     rzp.on('payment.failed', function (response) {
+      toast.error(response.error.description || 'Payment failed');
       onError(new Error(response.error.description));
     });
 
     rzp.open();
   } catch (error) {
+    toast.error('Failed to initialize payment');
     onError(new Error('Failed to initialize payment: ' + error.message));
   }
 };
@@ -94,7 +56,9 @@ export const validatePaymentForm = (formData) => {
   
   if (!formData.name?.trim()) errors.name = "Name is required";
   if (!formData.mobile?.trim()) errors.mobile = "Mobile number is required";
+  else if (!/^[6-9]\d{9}$/.test(formData.mobile)) errors.mobile = "Invalid mobile number";
   if (!formData.email?.trim()) errors.email = "Email is required";
+  else if (!/\S+@\S+\.\S+/.test(formData.email)) errors.email = "Invalid email format";
   if (!formData.address?.trim()) errors.address = "Address is required";
   
   return {

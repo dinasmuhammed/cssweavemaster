@@ -5,6 +5,7 @@ import { initializeRazorpayPayment } from '../utils/paymentUtils';
 import OrderSummary from '../components/checkout/OrderSummary';
 import DeliveryForm from '../components/checkout/DeliveryForm';
 import { useNavigate } from 'react-router-dom';
+import { Button } from "@/components/ui/button";
 
 const Checkout = () => {
   const { cartItems, updateQuantity, clearCart } = useCart();
@@ -34,7 +35,7 @@ const Checkout = () => {
   };
 
   const handlePaymentSuccess = (response) => {
-    toast.success("Payment successful!");
+    toast.success("Payment successful! Thank you for your order.");
     clearCart();
     navigate('/');
   };

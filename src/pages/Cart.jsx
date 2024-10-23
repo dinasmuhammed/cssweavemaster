@@ -47,14 +47,14 @@ const Cart = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-full">
-        <div className="bg-white p-6 rounded-lg shadow-sm h-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 min-h-[600px]">
+        <div className="bg-white p-6 rounded-lg shadow-sm h-full flex flex-col">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-semibold">Order Summary</h2>
-            <p className="text-sm text-gray-600">Total Amount Payable: ₹{totalPrice + shippingCharge}</p>
+            <h2 className="text-xl font-semibold text-green-800">Order Summary</h2>
+            <p className="text-sm text-gray-600">Total Amount: ₹{totalAmount}</p>
           </div>
           
-          <div className="divide-y border-y border-gray-100">
+          <div className="divide-y border-y border-gray-100 flex-grow">
             {cartItems.map((item) => (
               <CartItem 
                 key={item.id} 
@@ -66,17 +66,17 @@ const Cart = () => {
           </div>
 
           <div className="mt-6">
-            <p className="text-sm font-medium mb-3">Have any Coupon Code?</p>
+            <p className="text-sm font-medium mb-3">Have a Coupon Code?</p>
             <div className="flex gap-2">
               <Input 
-                placeholder="Enter the coupon code"
+                placeholder="Enter coupon code"
                 className="bg-white"
               />
               <Button 
                 variant="secondary"
                 className="bg-[#f8f3ed] hover:bg-[#f0e9e1] px-6"
               >
-                APPLY
+                Apply
               </Button>
             </div>
           </div>
@@ -92,20 +92,22 @@ const Cart = () => {
             </div>
             <div className="flex justify-between font-medium pt-3 border-t">
               <span>Grand Total</span>
-              <span className="text-rose-600">₹{totalPrice + shippingCharge}</span>
+              <span className="text-rose-600">₹{totalAmount}</span>
             </div>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-sm h-full">
-          <h2 className="text-xl font-semibold mb-6">Delivery Address</h2>
-          <DeliveryForm 
-            formData={formData}
-            onChange={handleInputChange}
-            onSubmit={handleCheckout}
-            cartItems={cartItems}
-            totalAmount={totalAmount}
-          />
+        <div className="bg-white p-6 rounded-lg shadow-sm h-full flex flex-col">
+          <h2 className="text-xl font-semibold mb-6 text-green-800">Delivery Address</h2>
+          <div className="flex-grow">
+            <DeliveryForm 
+              formData={formData}
+              onChange={handleInputChange}
+              onSubmit={handleCheckout}
+              cartItems={cartItems}
+              totalAmount={totalAmount}
+            />
+          </div>
         </div>
       </div>
     </div>

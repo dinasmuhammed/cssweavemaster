@@ -16,7 +16,7 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center mb-8">
           <div className="mb-6 md:mb-0">
-            <img src="/logo.png" alt="Henna by Fathima Logo" className="h-12" />
+            <img src="https://i.ibb.co/sVtqVMp/Logo-White.png" alt="Henna by Fathima Logo" className="h-12" />
           </div>
           <div className="mb-6 md:mb-0">
             <h3 className="text-lg font-semibold mb-4 text-center">Follow Us</h3>

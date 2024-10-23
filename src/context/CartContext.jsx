@@ -42,6 +42,15 @@ export const CartProvider = ({ children }) => {
     });
   };
 
+  const moveToCart = (item) => {
+    addToCart(item);
+    setSavedItems((prevItems) => prevItems.filter((i) => i.id !== item.id));
+  };
+
+  const removeSavedItem = (itemId) => {
+    setSavedItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+  };
+
   const clearCart = () => {
     setCartItems([]);
   };
@@ -53,6 +62,8 @@ export const CartProvider = ({ children }) => {
       removeFromCart, 
       updateQuantity, 
       saveForLater,
+      moveToCart,
+      removeSavedItem,
       savedItems,
       clearCart
     }}>

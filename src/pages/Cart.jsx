@@ -48,10 +48,10 @@ const Cart = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 min-h-[600px]">
-        <div className="bg-white p-6 rounded-lg shadow-sm h-full flex flex-col">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-semibold text-green-800">Order Summary</h2>
-            <p className="text-sm text-gray-600">Total Amount: ₹{totalAmount}</p>
+        <div className="bg-white p-8 rounded-lg shadow-sm h-full flex flex-col">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-2xl font-medium">Order Summary</h2>
+            <p className="text-gray-600">Total Amount Payable: ₹{totalAmount}</p>
           </div>
           
           <div className="divide-y border-y border-gray-100 flex-grow">
@@ -65,40 +65,40 @@ const Cart = () => {
             ))}
           </div>
 
-          <div className="mt-6">
-            <p className="text-sm font-medium mb-3">Have a Coupon Code?</p>
+          <div className="mt-8">
+            <p className="text-lg font-medium mb-4">Have any Coupon Code?</p>
             <div className="flex gap-2">
               <Input 
-                placeholder="Enter coupon code"
+                placeholder="Enter the coupon code"
                 className="bg-white"
               />
               <Button 
                 variant="secondary"
-                className="bg-[#f8f3ed] hover:bg-[#f0e9e1] px-6"
+                className="bg-[#607973] hover:bg-[#4c615c] text-white px-8"
               >
-                Apply
+                APPLY
               </Button>
             </div>
           </div>
 
-          <div className="space-y-3 mt-6">
-            <div className="flex justify-between text-sm">
+          <div className="space-y-4 mt-8">
+            <div className="flex justify-between text-lg">
               <span className="text-gray-600">Total Price</span>
-              <span className="text-rose-600">₹{totalPrice}</span>
+              <span>₹{totalPrice}</span>
             </div>
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between text-lg">
               <span className="text-gray-600">Shipping Charge</span>
-              <span className="text-rose-600">₹{shippingCharge}</span>
+              <span>₹{shippingCharge}</span>
             </div>
-            <div className="flex justify-between font-medium pt-3 border-t">
+            <div className="flex justify-between text-xl font-medium pt-4 border-t">
               <span>Grand Total</span>
-              <span className="text-rose-600">₹{totalAmount}</span>
+              <span>₹{totalAmount}</span>
             </div>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-sm h-full flex flex-col">
-          <h2 className="text-xl font-semibold mb-6 text-green-800">Delivery Address</h2>
+        <div className="bg-white p-8 rounded-lg shadow-sm h-full flex flex-col">
+          <h2 className="text-2xl font-medium mb-8">Delivery Address</h2>
           <div className="flex-grow">
             <DeliveryForm 
               formData={formData}

@@ -1,4 +1,9 @@
 export const initializeRazorpayPayment = (orderData, totalAmount, formData, onSuccess, onError) => {
+  if (!window.Razorpay) {
+    onError(new Error('Razorpay SDK not loaded'));
+    return;
+  }
+
   const options = {
     key: "rzp_live_lhUJoR9PnyhX0q", // Live Razorpay API Key
     amount: totalAmount * 100, // Amount in paise
@@ -20,7 +25,9 @@ export const initializeRazorpayPayment = (orderData, totalAmount, formData, onSu
     modal: {
       ondismiss: function() {
         onError(new Error('Payment cancelled by user'));
-      }
+      },
+      confirm_close: true,
+      escape: false
     },
     retry: {
       enabled: true,
@@ -69,11 +76,29 @@ export const initializeRazorpayPayment = (orderData, totalAmount, formData, onSu
     }
   };
 
-  const rzp = new window.Razorpay(options);
-  
-  rzp.on('payment.failed', function (response) {
-    onError(new Error(response.error.description));
-  });
+  try {
+    const rzp = new window.Razorpay(options);
+    
+    rzp.on('payment.failed', function (response) {
+      onError(new Error(response.error.description));
+    });
 
-  rzp.open();
+    rzp.open();
+  } catch (error) {
+    onError(new Error('Failed to initialize payment: ' + error.message));
+  }
+};
+
+export const validatePaymentForm = (formData) => {
+  const errors = {};
+  
+  if (!formData.name?.trim()) errors.name = "Name is required";
+  if (!formData.mobile?.trim()) errors.mobile = "Mobile number is required";
+  if (!formData.email?.trim()) errors.email = "Email is required";
+  if (!formData.address?.trim()) errors.address = "Address is required";
+  
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors
+  };
 };

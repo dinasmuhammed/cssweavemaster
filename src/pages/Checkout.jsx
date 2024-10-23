@@ -3,20 +3,18 @@ import { useCart } from '../context/CartContext';
 import { toast } from "sonner";
 import { initializeRazorpayPayment } from '../utils/paymentUtils';
 import OrderSummary from '../components/checkout/OrderSummary';
-import DeliveryAddressForm from '../components/checkout/DeliveryAddressForm';
+import DeliveryForm from '../components/checkout/DeliveryForm';
+import { useNavigate } from 'react-router-dom';
 
 const Checkout = () => {
-  const { cartItems, updateQuantity } = useCart();
-  const [couponCode, setCouponCode] = useState('');
+  const { cartItems, updateQuantity, clearCart } = useCart();
+  const navigate = useNavigate();
+  const [isProcessing, setIsProcessing] = useState(false);
   const [formData, setFormData] = useState({
-    address: '',
-    area: '',
-    country: '',
-    state: '',
-    district: '',
+    name: '',
     mobile: '',
     email: '',
-    pincode: ''
+    address: ''
   });
 
   const totalPrice = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -35,37 +33,45 @@ const Checkout = () => {
     }
   };
 
-  const handleApplyCoupon = () => {
-    toast.error("Invalid coupon code");
-    setCouponCode('');
+  const handlePaymentSuccess = (response) => {
+    toast.success("Payment successful!");
+    clearCart();
+    navigate('/');
+  };
+
+  const handlePaymentError = (error) => {
+    toast.error(error.message || "Payment failed. Please try again.");
+    setIsProcessing(false);
   };
 
   const handleCheckout = async () => {
-    if (!validateForm()) return;
+    setIsProcessing(true);
     
     try {
       await initializeRazorpayPayment(
-        { ...formData, items: cartItems },
+        {
+          orderId: `ORDER_${Date.now()}`,
+          items: cartItems,
+          customerDetails: formData
+        },
         totalPrice + shippingCharge,
         formData,
-        () => toast.success("Payment successful"),
-        (error) => toast.error(error.message)
+        handlePaymentSuccess,
+        handlePaymentError
       );
     } catch (error) {
-      toast.error("Payment failed. Please try again.");
+      handlePaymentError(error);
     }
   };
 
-  const validateForm = () => {
-    const requiredFields = ['address', 'area', 'country', 'state', 'district', 'mobile', 'email', 'pincode'];
-    for (const field of requiredFields) {
-      if (!formData[field]) {
-        toast.error(`Please fill in ${field.charAt(0).toUpperCase() + field.slice(1)}`);
-        return false;
-      }
-    }
-    return true;
-  };
+  if (cartItems.length === 0) {
+    return (
+      <div className="container mx-auto px-4 py-8 text-center">
+        <h1 className="text-2xl font-semibold mb-4">Your Cart is Empty</h1>
+        <Button onClick={() => navigate('/shop')}>Continue Shopping</Button>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -74,18 +80,16 @@ const Checkout = () => {
           <OrderSummary 
             cartItems={cartItems}
             onQuantityChange={handleQuantityChange}
-            couponCode={couponCode}
-            onCouponChange={(e) => setCouponCode(e.target.value)}
-            onApplyCoupon={handleApplyCoupon}
             totalPrice={totalPrice}
             shippingCharge={shippingCharge}
           />
         </div>
         <div className="bg-white p-6 rounded-lg shadow-md">
-          <DeliveryAddressForm 
+          <DeliveryForm 
             formData={formData}
             onChange={handleInputChange}
             onSubmit={handleCheckout}
+            isProcessing={isProcessing}
           />
         </div>
       </div>

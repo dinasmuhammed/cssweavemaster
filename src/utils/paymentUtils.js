@@ -8,16 +8,14 @@ export const initializeRazorpayPayment = async (orderData, totalAmount, formData
   }
 
   try {
-    // Create order on your backend
     const response = await fetch('/api/create-order', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        amount: totalAmount * 100, // Razorpay expects amount in paise
+        amount: totalAmount,
         currency: 'INR',
-        receipt: `order_${Date.now()}`,
       }),
     });
 
@@ -28,7 +26,7 @@ export const initializeRazorpayPayment = async (orderData, totalAmount, formData
     const order = await response.json();
 
     const options = {
-      key: "rzp_live_lhUJoR9PnyhX0q", // Your Razorpay key
+      key: "rzp_live_lhUJoR9PnyhX0q",
       amount: totalAmount * 100,
       currency: "INR",
       name: "Henna by Fathima",
@@ -70,7 +68,6 @@ export const initializeRazorpayPayment = async (orderData, totalAmount, formData
 
 const handlePaymentSuccess = async (response, orderData, onSuccess) => {
   try {
-    // Verify payment on backend
     const verifyResponse = await fetch('/api/verify-payment', {
       method: 'POST',
       headers: {

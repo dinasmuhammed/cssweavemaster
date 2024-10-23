@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { validatePaymentForm } from '@/utils/paymentUtils';
+import { validatePaymentForm, initializeRazorpayPayment } from '@/utils/paymentUtils';
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
-const DeliveryForm = ({ formData, onChange, onSubmit, isProcessing }) => {
+const DeliveryForm = ({ formData, onChange, onSubmit, isProcessing, cartItems, totalAmount }) => {
   const [errors, setErrors] = useState({});
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const validation = validatePaymentForm(formData);
     setErrors(validation.errors);
 
@@ -18,7 +18,26 @@ const DeliveryForm = ({ formData, onChange, onSubmit, isProcessing }) => {
       return;
     }
 
-    onSubmit();
+    const orderData = {
+      orderId: `ORDER_${Date.now()}`,
+      amount: totalAmount,
+      customerDetails: formData,
+      items: cartItems
+    };
+
+    try {
+      await initializeRazorpayPayment(
+        orderData,
+        totalAmount,
+        formData,
+        onSubmit,
+        (error) => {
+          toast.error(error.message || "Payment failed. Please try again.");
+        }
+      );
+    } catch (error) {
+      toast.error("Failed to initialize payment. Please try again.");
+    }
   };
 
   return (

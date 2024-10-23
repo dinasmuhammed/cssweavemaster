@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Heart } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useCart } from '../context/CartContext';
 import { toast } from "sonner";
@@ -115,13 +115,21 @@ const Shop = () => {
                   <span className="text-green-800 font-bold">₹{product.price}</span>
                 </div>
                 <p className="text-gray-600 text-sm mb-4">{product.description}</p>
-                <Button 
-                  onClick={() => handleAddToCart(product)}
-                  className="w-full bg-green-800 hover:bg-green-700 text-white flex items-center justify-center gap-2"
-                >
-                  <ShoppingCart className="w-4 h-4" />
-                  Add to Cart
-                </Button>
+                <div className="flex gap-2">
+                  <Button 
+                    variant="outline"
+                    className="w-12 h-12 rounded-lg border-2 border-green-800 bg-white hover:bg-green-50"
+                  >
+                    <Heart className="w-5 h-5 text-green-800" />
+                  </Button>
+                  <Button 
+                    onClick={() => handleAddToCart(product)}
+                    className="flex-1 bg-green-800 hover:bg-green-700 text-white rounded-lg h-12 flex items-center justify-between px-4"
+                  >
+                    <span className="text-base font-medium">Add to Bag</span>
+                    <ShoppingCart className="w-5 h-5" />
+                  </Button>
+                </div>
               </div>
             </div>
           ))}

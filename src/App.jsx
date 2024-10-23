@@ -54,7 +54,7 @@ const App = () => {
 
   if (isCheckingNetwork) {
     return (
-      <div className="flex items-center justify-center h-screen bg-cream-100">
+      <div className="flex items-center justify-center h-screen bg-white">
         <p className="text-green-800 text-xl">Checking network speed...</p>
       </div>
     );
@@ -62,7 +62,7 @@ const App = () => {
 
   if (isSlowNetwork) {
     return (
-      <div className="flex items-center justify-center h-screen bg-cream-100">
+      <div className="flex items-center justify-center h-screen bg-white">
         <div className="text-center px-4">
           <h1 className="text-2xl font-bold text-green-800 mb-4">Network Issue Detected</h1>
           <p className="text-green-700 mb-4">Your network connection is slow. The website may not function properly.</p>
@@ -83,7 +83,7 @@ const App = () => {
         <CartProvider>
           <Toaster />
           <Router>
-            <div className="flex flex-col min-h-screen bg-cream-100">
+            <div className="flex flex-col min-h-screen bg-white">
               <Header />
               <main className="flex-grow container mx-auto px-4 py-8 w-full max-w-7xl">
                 <Routes>

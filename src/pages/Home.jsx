@@ -10,7 +10,7 @@ import OurHappyStore from '../components/OurHappyStore';
 
 const Home = () => {
   return (
-    <div className="space-y-8 sm:space-y-16 bg-cream-100">
+    <div className="space-y-8 sm:space-y-16 bg-white">
       <HeroSection />
       <main className="px-4 sm:px-6 lg:px-8">
         <WelcomeSection />

@@ -84,13 +84,13 @@ const ServicePackage = ({ title, details, images, buttonText, isReversed }) => {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="lg:w-1/2 flex gap-4 overflow-x-auto pb-4">
+      <div className="lg:w-1/2 flex justify-between gap-4">
         {images.map((src, index) => (
           <motion.img 
             key={index} 
             src={src} 
             alt={`${title} - Image ${index + 1}`} 
-            className="w-1/3 h-48 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 flex-shrink-0"
+            className="w-1/3 h-48 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
           />

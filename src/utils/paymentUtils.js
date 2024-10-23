@@ -3,7 +3,7 @@ import { toast } from "sonner";
 export const validatePaymentForm = (formData) => {
   const errors = {};
   
-  if (!formData.flatNumber?.trim()) errors.flatNumber = "Flat/House number is required";
+  if (!formData.address?.trim()) errors.address = "Address is required";
   if (!formData.area?.trim()) errors.area = "Area is required";
   if (!formData.country?.trim()) errors.country = "Country is required";
   if (!formData.state?.trim()) errors.state = "State is required";
@@ -41,7 +41,7 @@ export const initializeRazorpayPayment = async (orderData, totalAmount, formData
         email: formData.email
       },
       notes: {
-        address: `${formData.flatNumber}, ${formData.area}, ${formData.district}, ${formData.state}, ${formData.pincode}`
+        address: `${formData.address}, ${formData.area}, ${formData.district}, ${formData.state}, ${formData.pincode}`
       },
       theme: {
         color: "#607973"

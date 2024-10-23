@@ -51,7 +51,7 @@ const products = [
 ];
 
 const Shop = () => {
-  const { addToCart } = useCart();
+  const { addToCart, saveForLater, savedItems } = useCart();
   const [filteredProducts, setFilteredProducts] = useState(products);
   const location = useLocation();
 
@@ -74,9 +74,13 @@ const Shop = () => {
     toast.success(`${product.name} added to cart`);
   };
 
+  const handleSaveForLater = (product) => {
+    saveForLater(product);
+    toast.success(`${product.name} saved for later`);
+  };
+
   return (
     <div className="bg-cream-100">
-      {/* Hero Section */}
       <div className="relative h-[300px] sm:h-[400px] overflow-hidden">
         <div className="absolute inset-0">
           <img 
@@ -118,9 +122,20 @@ const Shop = () => {
                 <div className="flex gap-2">
                   <Button 
                     variant="outline"
-                    className="w-12 h-12 rounded-lg border-2 border-green-800 bg-white hover:bg-green-50"
+                    onClick={() => handleSaveForLater(product)}
+                    className={`w-12 h-12 rounded-lg border-2 border-green-800 ${
+                      savedItems.some(item => item.id === product.id) 
+                        ? 'bg-green-50' 
+                        : 'bg-white hover:bg-green-50'
+                    }`}
                   >
-                    <Heart className="w-5 h-5 text-green-800" />
+                    <Heart 
+                      className={`w-5 h-5 ${
+                        savedItems.some(item => item.id === product.id)
+                          ? 'text-green-600 fill-green-600'
+                          : 'text-green-800'
+                      }`} 
+                    />
                   </Button>
                   <Button 
                     onClick={() => handleAddToCart(product)}

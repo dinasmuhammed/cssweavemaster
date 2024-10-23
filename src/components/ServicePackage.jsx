@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
 const ServicePackage = ({ title, details, images, buttonText, isReversed }) => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [formData, setFormData] = useState({
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const [formData, setFormData] = React.useState({
     name: '',
     number: '',
     address: '',
@@ -84,13 +84,13 @@ const ServicePackage = ({ title, details, images, buttonText, isReversed }) => {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="lg:w-1/2 grid grid-cols-2 gap-4">
+      <div className="lg:w-1/2 flex gap-4 overflow-x-auto pb-4">
         {images.map((src, index) => (
           <motion.img 
             key={index} 
             src={src} 
             alt={`${title} - Image ${index + 1}`} 
-            className="w-full aspect-square object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+            className="w-1/3 h-48 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 flex-shrink-0"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
           />

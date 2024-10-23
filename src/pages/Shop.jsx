@@ -79,6 +79,10 @@ const Shop = () => {
     toast.success(`${product.name} saved for later`);
   };
 
+  const isItemSaved = (productId) => {
+    return savedItems.some(item => item.id === productId);
+  };
+
   return (
     <div className="bg-cream-100">
       <div className="relative h-[300px] sm:h-[400px] overflow-hidden">
@@ -98,7 +102,6 @@ const Shop = () => {
         </div>
       </div>
 
-      {/* Products Grid */}
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProducts.map((product) => (
@@ -124,14 +127,14 @@ const Shop = () => {
                     variant="outline"
                     onClick={() => handleSaveForLater(product)}
                     className={`w-12 h-12 rounded-lg border-2 border-green-800 ${
-                      savedItems.some(item => item.id === product.id) 
+                      isItemSaved(product.id) 
                         ? 'bg-green-50' 
                         : 'bg-white hover:bg-green-50'
                     }`}
                   >
                     <Heart 
                       className={`w-5 h-5 ${
-                        savedItems.some(item => item.id === product.id)
+                        isItemSaved(product.id)
                           ? 'text-green-600 fill-green-600'
                           : 'text-green-800'
                       }`} 

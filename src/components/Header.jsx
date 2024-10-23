@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Heart, ShoppingCart, Menu, X } from 'lucide-react';
+import { Search, Heart, ShoppingCart, Menu } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import { useCart } from '../context/CartContext';
 import { Button } from "@/components/ui/button";
@@ -35,15 +35,15 @@ const Header = () => {
   ];
 
   return (
-    <header className={`sticky top-0 z-50 bg-white transition-shadow duration-300 ${
+    <header className={`sticky top-0 z-50 bg-white transition-shadow duration-300 w-full ${
       isScrolled ? 'shadow-md' : ''
     }`}>
-      <div className="container mx-auto px-4">
-        <div className="py-2 text-center text-xs sm:text-sm" style={{ backgroundColor: '#F5E1C6' }}>
+      <div className="w-full">
+        <div className="w-full py-2 text-center text-xs sm:text-sm" style={{ backgroundColor: '#F5E1C6' }}>
           <span className="font-bold">WE ARE DELIVERING ACROSS INDIA AND INTERNATIONALLY!</span>
         </div>
         
-        <nav className="flex items-center justify-between py-4" aria-label="Main navigation">
+        <nav className="container mx-auto px-4 flex items-center justify-between py-4" aria-label="Main navigation">
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="lg:hidden">

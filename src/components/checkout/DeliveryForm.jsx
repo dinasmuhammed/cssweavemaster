@@ -11,34 +11,34 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
   const [errors, setErrors] = useState({});
 
   const handleSubmit = async () => {
-    const validation = validatePaymentForm(formData);
-    setErrors(validation.errors);
-
-    if (!validation.isValid) {
-      toast.error("Please fill all required fields correctly");
-      return;
-    }
-
-    if (cartItems.length === 0) {
-      toast.error("Your cart is empty");
-      return;
-    }
-
-    setIsProcessing(true);
-
-    const orderData = {
-      orderId: `ORDER_${Date.now()}`,
-      amount: totalAmount,
-      customerDetails: formData,
-      items: cartItems.map(item => ({
-        id: item.id,
-        name: item.name,
-        quantity: item.quantity,
-        price: item.price
-      }))
-    };
-
     try {
+      const validation = validatePaymentForm(formData);
+      setErrors(validation.errors);
+
+      if (!validation.isValid) {
+        toast.error("Please fill all required fields correctly");
+        return;
+      }
+
+      if (!cartItems?.length) {
+        toast.error("Your cart is empty");
+        return;
+      }
+
+      setIsProcessing(true);
+
+      const orderData = {
+        orderId: `ORDER_${Date.now()}`,
+        amount: totalAmount,
+        customerDetails: formData,
+        items: cartItems.map(item => ({
+          id: item.id,
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price
+        }))
+      };
+
       await initializeRazorpayPayment(
         orderData,
         totalAmount,
@@ -53,7 +53,8 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
       );
     } catch (error) {
       setIsProcessing(false);
-      toast.error("Failed to initialize payment. Please try again.");
+      toast.error("An unexpected error occurred. Please try again.");
+      console.error('Payment initialization error:', error);
     }
   };
 

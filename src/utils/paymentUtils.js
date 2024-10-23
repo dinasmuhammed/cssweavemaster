@@ -25,14 +25,11 @@ export const validatePaymentForm = (formData) => {
 };
 
 export const initializeRazorpayPayment = async (orderData, totalAmount, formData, onSuccess, onError) => {
-  if (!window.Razorpay) {
-    const error = new Error('Razorpay SDK not loaded');
-    toast.error('Payment gateway not initialized');
-    onError(error);
-    return;
-  }
-
   try {
+    if (typeof window === 'undefined' || !window.Razorpay) {
+      throw new Error('Razorpay SDK not loaded');
+    }
+
     const options = {
       key: RAZORPAY_KEY_ID,
       amount: Math.round(totalAmount * 100), // Convert to paise and ensure it's an integer
@@ -56,11 +53,11 @@ export const initializeRazorpayPayment = async (orderData, totalAmount, formData
       },
       modal: {
         ondismiss: function() {
-          toast.error('Payment cancelled');
           onError(new Error('Payment cancelled by user'));
+          toast.error('Payment cancelled');
         },
         confirm_close: true,
-        escape: false
+        escape: true
       }
     };
 
@@ -71,14 +68,13 @@ export const initializeRazorpayPayment = async (orderData, totalAmount, formData
 
     rzp.open();
   } catch (error) {
-    toast.error('Failed to initialize payment');
+    toast.error(error.message || 'Failed to initialize payment');
     onError(error);
   }
 };
 
 const handlePaymentSuccess = async (response, orderData, onSuccess) => {
   try {
-    // Send order confirmation email
     const emailSent = await sendOrderConfirmationEmail({
       orderId: orderData.orderId,
       customerName: orderData.customerDetails.name,
@@ -100,7 +96,7 @@ const handlePaymentSuccess = async (response, orderData, onSuccess) => {
     console.error('Error processing successful payment:', error);
     toast.success("Payment successful!");
     toast.warning("Could not send order confirmation.");
-    onSuccess(response); // Still consider it successful as payment went through
+    onSuccess(response);
   }
 };
 

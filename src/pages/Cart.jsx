@@ -31,7 +31,6 @@ const Cart = () => {
   };
 
   const handleCheckout = (paymentResponse) => {
-    // Handle successful payment
     clearCart();
     toast.success("Order placed successfully!");
     navigate('/');
@@ -48,8 +47,8 @@ const Cart = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="bg-white p-6 rounded-lg shadow-sm">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-full">
+        <div className="bg-white p-6 rounded-lg shadow-sm h-full">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-semibold">Order Summary</h2>
             <p className="text-sm text-gray-600">Total Amount Payable: ₹{totalPrice + shippingCharge}</p>
@@ -98,7 +97,7 @@ const Cart = () => {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-sm">
+        <div className="bg-white p-6 rounded-lg shadow-sm h-full">
           <h2 className="text-xl font-semibold mb-6">Delivery Address</h2>
           <DeliveryForm 
             formData={formData}

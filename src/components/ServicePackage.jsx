@@ -36,12 +36,12 @@ const ServicePackage = ({ title, details, images, buttonText, isReversed }) => {
 
   return (
     <motion.div 
-      className={`mb-8 sm:mb-12 flex flex-col ${isReversed ? 'md:flex-row-reverse' : 'md:flex-row'}`}
+      className={`mb-8 flex flex-col ${isReversed ? 'lg:flex-row-reverse' : 'lg:flex-row'}`}
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className={`md:w-1/2 ${isReversed ? 'md:pl-4 sm:pl-8' : 'md:pr-4 sm:pr-8'}`}>
+      <div className={`lg:w-1/2 ${isReversed ? 'lg:pl-6' : 'lg:pr-6'} mb-6 lg:mb-0`}>
         <h3 className="text-xl sm:text-2xl font-semibold mb-4 text-green-800">{title}</h3>
         <ul className="list-disc list-inside mb-6 space-y-2">
           {details.map((detail, index) => (
@@ -50,7 +50,7 @@ const ServicePackage = ({ title, details, images, buttonText, isReversed }) => {
         </ul>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="w-full sm:w-auto bg-green-800 hover:bg-green-700 text-white transition-all duration-300 transform hover:scale-105">
+            <Button className="w-full sm:w-auto bg-green-800 hover:bg-green-700 text-white">
               {buttonText}
             </Button>
           </DialogTrigger>
@@ -84,13 +84,13 @@ const ServicePackage = ({ title, details, images, buttonText, isReversed }) => {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="md:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 md:mt-0">
+      <div className="lg:w-1/2 grid grid-cols-2 gap-4">
         {images.map((src, index) => (
           <motion.img 
             key={index} 
             src={src} 
             alt={`${title} - Image ${index + 1}`} 
-            className="w-full h-40 sm:h-48 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+            className="w-full aspect-square object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
           />

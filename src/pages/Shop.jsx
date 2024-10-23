@@ -4,6 +4,14 @@ import { ShoppingCart, Heart } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useCart } from '../context/CartContext';
 import { toast } from "sonner";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import Autoplay from 'embla-carousel-autoplay';
 
 const products = [
   {
@@ -54,6 +62,18 @@ const Shop = () => {
   const { addToCart, saveForLater, savedItems } = useCart();
   const [filteredProducts, setFilteredProducts] = useState(products);
   const location = useLocation();
+  const plugin = React.useRef(
+    Autoplay({ delay: 4000, stopOnInteraction: false })
+  );
+
+  const headerImages = [
+    "https://i.postimg.cc/CKbjSySR/image.png",
+    "https://i.postimg.cc/hjrTQ9Jg/image.png",
+    "https://i.postimg.cc/44WpJQkQ/image.png",
+    "https://i.postimg.cc/13qFrxgv/image.png",
+    "https://i.postimg.cc/9MJwQCSQ/image.png",
+    "https://i.postimg.cc/HsfcxSSX/image.png"
+  ];
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -89,15 +109,31 @@ const Shop = () => {
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-green-800 mb-4">Shop Our Collections</h1>
       </div>
 
-      <div className="relative">
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-2 h-[300px] sm:h-[400px]">
-          <img src="https://i.postimg.cc/CKbjSySR/image.png" alt="Henna Product" className="w-full h-full object-cover" />
-          <img src="https://i.postimg.cc/hjrTQ9Jg/image.png" alt="Henna Design" className="w-full h-full object-cover" />
-          <img src="https://i.postimg.cc/44WpJQkQ/image.png" alt="Henna Application" className="w-full h-full object-cover" />
-          <img src="https://i.postimg.cc/13qFrxgv/image.png" alt="Natural Henna" className="hidden md:block w-full h-full object-cover" />
-          <img src="https://i.postimg.cc/9MJwQCSQ/image.png" alt="Henna Cones" className="hidden md:block w-full h-full object-cover" />
-          <img src="https://i.postimg.cc/HsfcxSSX/image.png" alt="Bridal Henna" className="hidden md:block w-full h-full object-cover" />
-        </div>
+      <div className="relative mb-12">
+        <Carousel
+          plugins={[plugin.current]}
+          className="w-full"
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+        >
+          <CarouselContent>
+            {headerImages.map((image, index) => (
+              <CarouselItem key={index} className="basis-full md:basis-1/2 lg:basis-1/3">
+                <div className="h-[300px] sm:h-[400px]">
+                  <img 
+                    src={image} 
+                    alt={`Shop Collection ${index + 1}`} 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
       </div>
 
       <div className="container mx-auto px-4 py-12 text-center">

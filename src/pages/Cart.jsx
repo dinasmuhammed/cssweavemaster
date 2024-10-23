@@ -1,25 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import CartItem from '../components/CartItem';
 import { useNavigate } from 'react-router-dom';
+import DeliveryForm from '../components/checkout/DeliveryForm';
 import { toast } from "sonner";
 
 const Cart = () => {
   const { cartItems, removeFromCart, updateQuantity, clearCart } = useCart();
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    address: '',
+    area: '',
+    country: '',
+    state: '',
+    district: '',
+    mobile: '',
+    email: '',
+    pincode: ''
+  });
 
   const totalPrice = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const shippingCharge = 0;
   const totalAmount = totalPrice + shippingCharge;
 
-  const handleProceedToCheckout = () => {
-    if (cartItems.length === 0) {
-      toast.error("Your cart is empty!");
-      return;
-    }
-    navigate('/checkout');
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleCheckout = (paymentResponse) => {
+    clearCart();
+    toast.success("Order placed successfully!");
+    navigate('/');
   };
 
   if (cartItems.length === 0) {
@@ -33,14 +47,14 @@ const Cart = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="max-w-3xl mx-auto">
-        <div className="bg-white p-8 rounded-lg shadow-sm">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 min-h-[600px]">
+        <div className="bg-white p-8 rounded-lg shadow-sm h-full flex flex-col">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-2xl font-medium">Order Summary</h2>
             <p className="text-gray-600">Total Amount Payable: ₹{totalAmount}</p>
           </div>
           
-          <div className="divide-y border-y border-gray-100">
+          <div className="divide-y border-y border-gray-100 flex-grow">
             {cartItems.map((item) => (
               <CartItem 
                 key={item.id} 
@@ -81,13 +95,19 @@ const Cart = () => {
               <span>₹{totalAmount}</span>
             </div>
           </div>
+        </div>
 
-          <Button 
-            onClick={handleProceedToCheckout}
-            className="w-full mt-8 bg-[#607973] hover:bg-[#4c615c] text-white"
-          >
-            Proceed to Checkout
-          </Button>
+        <div className="bg-white p-8 rounded-lg shadow-sm h-full flex flex-col">
+          <h2 className="text-2xl font-medium mb-8">Delivery Address</h2>
+          <div className="flex-grow">
+            <DeliveryForm 
+              formData={formData}
+              onChange={handleInputChange}
+              onSubmit={handleCheckout}
+              cartItems={cartItems}
+              totalAmount={totalAmount}
+            />
+          </div>
         </div>
       </div>
     </div>

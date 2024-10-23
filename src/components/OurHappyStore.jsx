@@ -18,7 +18,7 @@ const OurHappyStore = () => {
               <p className="font-semibold mt-2">Phone: <a href="tel:+918086647124" className="text-green-800 hover:underline">+91 8086647124</a></p>
             </address>
           </div>
-          <div className="w-full max-w-[595px] h-[337px] mx-auto">
+          <div className="w-full max-w-[595px] h-[337px] mx-auto flex-shrink-0">
             <iframe
               src="https://www.youtube.com/embed/qUKTRihRkkc?autoplay=1&mute=1&loop=1&playlist=qUKTRihRkkc"
               className="w-full h-full rounded-lg shadow-md"

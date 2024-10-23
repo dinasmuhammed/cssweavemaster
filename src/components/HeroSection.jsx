@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
@@ -27,14 +27,14 @@ const HeroSection = () => {
 
   return (
     <section 
-      className="relative w-full h-screen overflow-hidden bg-cream-100 -mt-[64px]"
+      className="relative w-full h-[100vh] overflow-hidden bg-cream-100"
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
       <div className="embla absolute inset-0" ref={emblaRef}>
-        <div className="embla__container h-full">
+        <div className="embla__container h-full flex">
           {images.map((image, index) => (
-            <div key={index} className="embla__slide w-full h-full">
+            <div key={index} className="embla__slide relative w-full h-full flex-[0_0_100%]">
               <motion.div
                 className="relative w-full h-full"
                 variants={hoverVariants}
@@ -43,22 +43,23 @@ const HeroSection = () => {
                 <motion.img 
                   src={image} 
                   alt={`Hero ${index + 1}`} 
-                  className="w-full h-full object-cover object-center transition-transform duration-300 ease-out"
+                  className="w-full h-full object-cover object-center"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 1 }}
                 />
+                <div className="absolute inset-0 bg-black/30" />
               </motion.div>
             </div>
           ))}
         </div>
       </div>
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-3 z-10">
         {images.map((_, index) => (
           <button
             key={index}
-            className={`w-2 h-2 md:w-3 md:h-3 rounded-full ${
-              index === currentIndex ? 'bg-white' : 'bg-white bg-opacity-50'
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              index === currentIndex ? 'bg-white scale-125' : 'bg-white/50 hover:bg-white/75'
             }`}
             onClick={() => {
               setCurrentIndex(index);

@@ -6,7 +6,8 @@ import { validatePaymentForm, initializeRazorpayPayment } from '@/utils/paymentU
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
-const DeliveryForm = ({ formData, onChange, onSubmit, isProcessing, cartItems, totalAmount }) => {
+const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
+  const [isProcessing, setIsProcessing] = useState(false);
   const [errors, setErrors] = useState({});
 
   const handleSubmit = async () => {
@@ -18,11 +19,18 @@ const DeliveryForm = ({ formData, onChange, onSubmit, isProcessing, cartItems, t
       return;
     }
 
+    setIsProcessing(true);
+
     const orderData = {
       orderId: `ORDER_${Date.now()}`,
       amount: totalAmount,
       customerDetails: formData,
-      items: cartItems
+      items: cartItems.map(item => ({
+        id: item.id,
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price
+      }))
     };
 
     try {
@@ -30,12 +38,17 @@ const DeliveryForm = ({ formData, onChange, onSubmit, isProcessing, cartItems, t
         orderData,
         totalAmount,
         formData,
-        onSubmit,
+        () => {
+          setIsProcessing(false);
+          // Clear cart and redirect will be handled by the success callback
+        },
         (error) => {
+          setIsProcessing(false);
           toast.error(error.message || "Payment failed. Please try again.");
         }
       );
     } catch (error) {
+      setIsProcessing(false);
       toast.error("Failed to initialize payment. Please try again.");
     }
   };
@@ -45,19 +58,31 @@ const DeliveryForm = ({ formData, onChange, onSubmit, isProcessing, cartItems, t
       <h2 className="text-xl font-semibold">Delivery Address</h2>
       <div className="space-y-4">
         <div>
-          <Label htmlFor="flatNumber" className="text-gray-600">Flat/House no/Building/Company/Apartment*</Label>
+          <Label htmlFor="name" className="text-gray-600">Full Name*</Label>
           <Input
-            id="flatNumber"
-            name="flatNumber"
-            value={formData.flatNumber}
+            id="name"
+            name="name"
+            value={formData.name}
             onChange={onChange}
-            className={`mt-1 ${errors.flatNumber ? 'border-red-500' : ''}`}
+            className={`mt-1 ${errors.name ? 'border-red-500' : ''}`}
           />
-          {errors.flatNumber && <p className="text-red-500 text-sm mt-1">{errors.flatNumber}</p>}
+          {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
         </div>
 
         <div>
-          <Label htmlFor="area" className="text-gray-600">Area, Street, Sector, Village*</Label>
+          <Label htmlFor="address" className="text-gray-600">Address Line*</Label>
+          <Input
+            id="address"
+            name="address"
+            value={formData.address}
+            onChange={onChange}
+            className={`mt-1 ${errors.address ? 'border-red-500' : ''}`}
+          />
+          {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
+        </div>
+
+        <div>
+          <Label htmlFor="area" className="text-gray-600">Area/Street*</Label>
           <Input
             id="area"
             name="area"
@@ -70,15 +95,15 @@ const DeliveryForm = ({ formData, onChange, onSubmit, isProcessing, cartItems, t
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="country" className="text-gray-600">Country*</Label>
+            <Label htmlFor="district" className="text-gray-600">District*</Label>
             <Input
-              id="country"
-              name="country"
-              value={formData.country}
+              id="district"
+              name="district"
+              value={formData.district}
               onChange={onChange}
-              className={`mt-1 ${errors.country ? 'border-red-500' : ''}`}
+              className={`mt-1 ${errors.district ? 'border-red-500' : ''}`}
             />
-            {errors.country && <p className="text-red-500 text-sm mt-1">{errors.country}</p>}
+            {errors.district && <p className="text-red-500 text-sm mt-1">{errors.district}</p>}
           </div>
           <div>
             <Label htmlFor="state" className="text-gray-600">State*</Label>
@@ -95,15 +120,15 @@ const DeliveryForm = ({ formData, onChange, onSubmit, isProcessing, cartItems, t
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="district" className="text-gray-600">District*</Label>
+            <Label htmlFor="pincode" className="text-gray-600">Pincode*</Label>
             <Input
-              id="district"
-              name="district"
-              value={formData.district}
+              id="pincode"
+              name="pincode"
+              value={formData.pincode}
               onChange={onChange}
-              className={`mt-1 ${errors.district ? 'border-red-500' : ''}`}
+              className={`mt-1 ${errors.pincode ? 'border-red-500' : ''}`}
             />
-            {errors.district && <p className="text-red-500 text-sm mt-1">{errors.district}</p>}
+            {errors.pincode && <p className="text-red-500 text-sm mt-1">{errors.pincode}</p>}
           </div>
           <div>
             <Label htmlFor="mobile" className="text-gray-600">Mobile Number*</Label>
@@ -123,30 +148,17 @@ const DeliveryForm = ({ formData, onChange, onSubmit, isProcessing, cartItems, t
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="email" className="text-gray-600">Email*</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={onChange}
-              className={`mt-1 ${errors.email ? 'border-red-500' : ''}`}
-            />
-            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-          </div>
-          <div>
-            <Label htmlFor="pincode" className="text-gray-600">Pincode*</Label>
-            <Input
-              id="pincode"
-              name="pincode"
-              value={formData.pincode}
-              onChange={onChange}
-              className={`mt-1 ${errors.pincode ? 'border-red-500' : ''}`}
-            />
-            {errors.pincode && <p className="text-red-500 text-sm mt-1">{errors.pincode}</p>}
-          </div>
+        <div>
+          <Label htmlFor="email" className="text-gray-600">Email*</Label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={onChange}
+            className={`mt-1 ${errors.email ? 'border-red-500' : ''}`}
+          />
+          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
         </div>
         
         <Button 

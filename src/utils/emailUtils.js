@@ -1,34 +1,22 @@
-const nodemailer = require('nodemailer');
-
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
-
-export const sendOrderEmail = async (orderDetails) => {
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: 'hennabyfathima.in@gmail.com',
-    subject: `New Order: ${orderDetails.orderId}`,
-    text: `
-      New order received:
-      
-      Order ID: ${orderDetails.orderId}
-      Customer Name: ${orderDetails.customerName}
-      Total Amount: ₹${orderDetails.totalPrice}
-      
-      Order Details:
-      ${JSON.stringify(orderDetails, null, 2)}
-    `
-  };
-
+const sendOrderConfirmationEmail = async (orderDetails) => {
   try {
-    await transporter.sendMail(mailOptions);
-    console.log('Order email sent successfully');
+    const response = await fetch('/api/send-order-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(orderDetails),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to send order confirmation email');
+    }
+
+    return true;
   } catch (error) {
-    console.error('Error sending order email:', error);
+    console.error('Error sending order confirmation email:', error);
+    return false;
   }
 };
+
+export { sendOrderConfirmationEmail };

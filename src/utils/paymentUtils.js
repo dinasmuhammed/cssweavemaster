@@ -21,6 +21,8 @@ export const validatePaymentForm = (formData) => {
   };
 };
 
+const RAZORPAY_KEY_ID = "rzp_live_lhUJoR9PnyhX0q";
+
 export const initializeRazorpayPayment = async (orderData, totalAmount, formData, onSuccess, onError) => {
   if (!window.Razorpay) {
     toast.error('Payment gateway not initialized');
@@ -30,18 +32,19 @@ export const initializeRazorpayPayment = async (orderData, totalAmount, formData
 
   try {
     const options = {
-      key: "rzp_live_lhUJoR9PnyhX0q",
-      amount: totalAmount * 100, // Convert to paise
+      key: RAZORPAY_KEY_ID,
+      amount: totalAmount * 100,
       currency: "INR",
       name: "Henna by Fathima",
       description: `Order Payment: ${orderData.orderId}`,
+      image: "/logo.png",
       prefill: {
         name: formData.name,
         contact: formData.mobile,
         email: formData.email
       },
       notes: {
-        address: `${formData.address}, ${formData.area}, ${formData.district}, ${formData.state}, ${formData.pincode}`
+        shipping_address: `${formData.address}, ${formData.area}, ${formData.district}, ${formData.state}, ${formData.pincode}`
       },
       theme: {
         color: "#607973"
@@ -60,7 +63,6 @@ export const initializeRazorpayPayment = async (orderData, totalAmount, formData
     };
 
     const rzp = new window.Razorpay(options);
-    
     rzp.on('payment.failed', function (response) {
       handlePaymentFailure(response, onError);
     });
@@ -85,15 +87,17 @@ const handlePaymentSuccess = async (response, orderData, onSuccess) => {
         customerName: orderData.customerDetails.name,
         totalPrice: orderData.amount,
         items: orderData.items,
-        shippingAddress: orderData.customerDetails.address
+        shippingAddress: orderData.customerDetails.address,
+        paymentId: response.razorpay_payment_id
       }),
     });
 
-    toast.success("Payment successful! Thank you for your order.");
+    toast.success("Payment successful! Order confirmation sent to your email.");
     onSuccess(response);
   } catch (error) {
     console.error('Error processing successful payment:', error);
-    toast.error('Error processing payment confirmation');
+    toast.error('Payment successful but failed to send confirmation email');
+    onSuccess(response); // Still consider it successful as payment went through
   }
 };
 

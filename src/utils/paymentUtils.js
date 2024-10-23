@@ -26,7 +26,7 @@ export const initializeRazorpayPayment = async (orderData, totalAmount, formData
     const order = await response.json();
 
     const options = {
-      key: "rzp_test_C7n5IDWG8K5kGf", // Updated test key
+      key: "rzp_live_lhUJoR9PnyhX0q",
       amount: totalAmount * 100,
       currency: "INR",
       name: "Henna by Fathima",

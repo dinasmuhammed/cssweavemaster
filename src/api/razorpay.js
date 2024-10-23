@@ -1,5 +1,5 @@
-const RAZORPAY_KEY_ID = "rzp_test_C7n5IDWG8K5kGf";  // Updated test key
-const RAZORPAY_SECRET = process.env.RAZORPAY_SECRET;
+const RAZORPAY_KEY_ID = "rzp_live_lhUJoR9PnyhX0q";
+const RAZORPAY_SECRET = "vmfoRGD7O162U98luOgz38Dv";
 
 const Razorpay = require('razorpay');
 

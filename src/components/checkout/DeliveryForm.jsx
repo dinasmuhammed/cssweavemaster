@@ -3,12 +3,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { validateDeliveryForm } from '@/utils/formValidation';
+import { initializeRazorpayPayment } from '@/utils/paymentUtils';
 import { toast } from "sonner";
 
-const DeliveryForm = ({ formData, onChange, onSubmit }) => {
+const DeliveryForm = ({ formData, onChange, onSubmit, cartItems, totalAmount }) => {
   const [errors, setErrors] = useState({});
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const { isValid, errors } = validateDeliveryForm(formData);
     setErrors(errors);
 
@@ -17,7 +19,29 @@ const DeliveryForm = ({ formData, onChange, onSubmit }) => {
       return;
     }
 
-    onSubmit();
+    setIsProcessing(true);
+    try {
+      await initializeRazorpayPayment(
+        {
+          orderId: `ORDER_${Date.now()}`,
+          items: cartItems,
+          customerDetails: formData
+        },
+        totalAmount,
+        formData,
+        (response) => {
+          toast.success("Payment successful!");
+          onSubmit(response);
+        },
+        (error) => {
+          toast.error(error.message || "Payment failed. Please try again.");
+        }
+      );
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (
@@ -129,9 +153,10 @@ const DeliveryForm = ({ formData, onChange, onSubmit }) => {
 
       <Button 
         onClick={handleSubmit}
+        disabled={isProcessing}
         className="w-full bg-[#607973] hover:bg-[#4c615c] text-white mt-6"
       >
-        Proceed to Checkout
+        {isProcessing ? "Processing..." : "Proceed to Checkout"}
       </Button>
     </div>
   );

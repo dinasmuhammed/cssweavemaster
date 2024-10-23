@@ -95,14 +95,16 @@ const Shop = () => {
           <img src="https://i.postimg.cc/HsfcxSSX/image.png" alt="Bridal Henna" className="hidden md:block w-full h-full object-cover" />
         </div>
         <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-center px-4">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 font-heading">
-            Our Premium Collection
-          </h1>
-          <p className="text-sm sm:text-base md:text-lg text-white max-w-2xl mx-auto font-sans">
-            Explore our premium range of organic henna products, crafted with 100% natural ingredients. 
-            Each product is designed to give vibrant, long-lasting results, free from chemicals and additives.
-          </p>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 font-heading">Shop Our Collections</h1>
         </div>
+      </div>
+
+      <div className="container mx-auto px-4 py-12 text-center">
+        <h2 className="text-2xl sm:text-3xl font-bold text-green-800 mb-4">Our Premium Collection</h2>
+        <p className="text-gray-600 max-w-2xl mx-auto mb-12">
+          Explore our premium range of organic henna products, crafted with 100% natural ingredients. 
+          Each product is designed to give vibrant, long-lasting results, free from chemicals and additives.
+        </p>
       </div>
 
       <div className="container mx-auto px-4 py-12">

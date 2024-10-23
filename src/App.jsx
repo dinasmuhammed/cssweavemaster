@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Toaster, toast } from "sonner";
+import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CartProvider } from './context/CartContext';
@@ -12,6 +12,7 @@ import Services from './pages/Services';
 import Workshop from './pages/Workshop';
 import Contact from './pages/Contact';
 import Cart from './pages/Cart';
+import About from './pages/About';
 import SavedItems from './pages/SavedItems';
 import SearchResults from './pages/SearchResults';
 import TermsAndConditions from './pages/TermsAndConditions';
@@ -87,6 +88,7 @@ const App = () => {
               <main className="flex-grow container mx-auto px-4 py-8 w-full max-w-7xl">
                 <Routes>
                   <Route path="/" element={<Home />} />
+                  <Route path="/about" element={<About />} />
                   <Route path="/shop" element={<Shop />} />
                   <Route path="/services" element={<Services />} />
                   <Route path="/workshop" element={<Workshop />} />

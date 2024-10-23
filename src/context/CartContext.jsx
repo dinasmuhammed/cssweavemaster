@@ -32,20 +32,14 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  const saveForLater = (itemId) => {
-    const item = cartItems.find((item) => item.id === itemId);
-    if (item) {
-      setSavedItems((prevSaved) => [...prevSaved, item]);
-      removeFromCart(itemId);
-    }
-  };
-
-  const moveToCart = (itemId) => {
-    const item = savedItems.find((item) => item.id === itemId);
-    if (item) {
-      addToCart(item);
-      setSavedItems((prevSaved) => prevSaved.filter((i) => i.id !== itemId));
-    }
+  const saveForLater = (item) => {
+    setSavedItems((prevItems) => {
+      const isItemSaved = prevItems.some((i) => i.id === item.id);
+      if (isItemSaved) {
+        return prevItems.filter((i) => i.id !== item.id);
+      }
+      return [...prevItems, item];
+    });
   };
 
   const clearCart = () => {
@@ -58,8 +52,7 @@ export const CartProvider = ({ children }) => {
       addToCart, 
       removeFromCart, 
       updateQuantity, 
-      saveForLater, 
-      moveToCart,
+      saveForLater,
       savedItems,
       clearCart
     }}>

@@ -2,15 +2,20 @@ import React from 'react';
 import { ShoppingCart, Heart } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useCart } from '../../context/CartContext';
 
-const ProductCard = ({ product, onAddToCart, onSaveForLater, isSaved }) => {
+const ProductCard = ({ product }) => {
+  const { addToCart, savedItems, saveForLater } = useCart();
+
+  const isSaved = savedItems.some(item => item.id === product.id);
+
   const handleSaveForLater = () => {
-    onSaveForLater(product);
+    saveForLater(product);
     toast.success(`${product.name} ${isSaved ? 'removed from' : 'added to'} favorites`);
   };
 
   const handleAddToCart = () => {
-    onAddToCart(product);
+    addToCart(product);
     toast.success(`${product.name} added to cart`);
   };
 
@@ -41,6 +46,7 @@ const ProductCard = ({ product, onAddToCart, onSaveForLater, isSaved }) => {
               className={`w-5 h-5 ${
                 isSaved ? 'text-green-600 fill-green-600' : 'text-green-800'
               }`} 
+              fill={isSaved ? "currentColor" : "none"}
             />
           </Button>
           <Button 

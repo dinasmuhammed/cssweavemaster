@@ -98,16 +98,13 @@ const Cart = () => {
         </div>
 
         <div className="bg-white p-8 rounded-lg shadow-sm h-full flex flex-col">
-          <h2 className="text-2xl font-medium mb-8">Delivery Address</h2>
-          <div className="flex-grow">
-            <DeliveryForm 
-              formData={formData}
-              onChange={handleInputChange}
-              onSubmit={handleCheckout}
-              cartItems={cartItems}
-              totalAmount={totalAmount}
-            />
-          </div>
+          <DeliveryForm 
+            formData={formData}
+            onChange={handleInputChange}
+            onSubmit={handleCheckout}
+            cartItems={cartItems}
+            totalAmount={totalAmount}
+          />
         </div>
       </div>
     </div>

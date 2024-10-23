@@ -13,10 +13,12 @@ const OrderSummary = ({
   shippingCharge 
 }) => (
   <div className="space-y-6">
-    <h2 className="text-xl font-semibold">Order Summary</h2>
-    <p className="text-sm text-gray-600">Total Amount Payable: ₹{totalPrice + shippingCharge}</p>
+    <div className="flex justify-between items-center">
+      <h2 className="text-xl font-semibold">Order Summary</h2>
+      <p className="text-sm text-gray-600">Total Amount Payable: ₹{totalPrice + shippingCharge}</p>
+    </div>
     
-    <div className="divide-y">
+    <div className="divide-y border-y">
       {cartItems.map((item) => (
         <OrderSummaryItem 
           key={item.id} 
@@ -26,8 +28,8 @@ const OrderSummary = ({
       ))}
     </div>
 
-    <div className="pt-4">
-      <p className="text-sm font-medium mb-2">Have any Coupon Code?</p>
+    <div>
+      <p className="text-sm font-medium mb-3">Have any Coupon Code?</p>
       <div className="flex gap-2">
         <Input 
           value={couponCode}
@@ -38,25 +40,25 @@ const OrderSummary = ({
         <Button 
           onClick={onApplyCoupon}
           variant="secondary"
-          className="bg-[#f8f3ed] hover:bg-[#f0e9e1]"
+          className="bg-[#f8f3ed] hover:bg-[#f0e9e1] px-6"
         >
           APPLY
         </Button>
       </div>
     </div>
 
-    <div className="space-y-2 pt-4">
+    <div className="space-y-3">
       <div className="flex justify-between text-sm">
-        <span>Total Price</span>
-        <span>₹{totalPrice}</span>
+        <span className="text-gray-600">Total Price</span>
+        <span className="text-rose-600">₹{totalPrice}</span>
       </div>
       <div className="flex justify-between text-sm">
-        <span>Shipping Charge</span>
-        <span>₹{shippingCharge}</span>
+        <span className="text-gray-600">Shipping Charge</span>
+        <span className="text-rose-600">₹{shippingCharge}</span>
       </div>
-      <div className="flex justify-between font-medium pt-2 border-t">
+      <div className="flex justify-between font-medium pt-3 border-t">
         <span>Grand Total</span>
-        <span>₹{totalPrice + shippingCharge}</span>
+        <span className="text-rose-600">₹{totalPrice + shippingCharge}</span>
       </div>
     </div>
   </div>

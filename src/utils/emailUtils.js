@@ -1,4 +1,4 @@
-const sendOrderConfirmationEmail = async (orderDetails) => {
+export const sendOrderConfirmationEmail = async (orderDetails) => {
   try {
     const response = await fetch('/api/send-order-email', {
       method: 'POST',
@@ -18,5 +18,3 @@ const sendOrderConfirmationEmail = async (orderDetails) => {
     return false;
   }
 };
-
-export { sendOrderConfirmationEmail };

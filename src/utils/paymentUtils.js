@@ -1,11 +1,14 @@
 import { toast } from "sonner";
+import { sendOrderConfirmationEmail } from './emailUtils';
+
+const RAZORPAY_KEY_ID = "rzp_live_lhUJoR9PnyhX0q";
 
 export const validatePaymentForm = (formData) => {
   const errors = {};
   
+  if (!formData.name?.trim()) errors.name = "Name is required";
   if (!formData.address?.trim()) errors.address = "Address is required";
   if (!formData.area?.trim()) errors.area = "Area is required";
-  if (!formData.country?.trim()) errors.country = "Country is required";
   if (!formData.state?.trim()) errors.state = "State is required";
   if (!formData.district?.trim()) errors.district = "District is required";
   if (!formData.mobile?.trim()) errors.mobile = "Mobile number is required";
@@ -21,19 +24,18 @@ export const validatePaymentForm = (formData) => {
   };
 };
 
-const RAZORPAY_KEY_ID = "rzp_live_lhUJoR9PnyhX0q";
-
 export const initializeRazorpayPayment = async (orderData, totalAmount, formData, onSuccess, onError) => {
   if (!window.Razorpay) {
+    const error = new Error('Razorpay SDK not loaded');
     toast.error('Payment gateway not initialized');
-    onError(new Error('Razorpay SDK not loaded'));
+    onError(error);
     return;
   }
 
   try {
     const options = {
       key: RAZORPAY_KEY_ID,
-      amount: totalAmount * 100,
+      amount: Math.round(totalAmount * 100), // Convert to paise and ensure it's an integer
       currency: "INR",
       name: "Henna by Fathima",
       description: `Order Payment: ${orderData.orderId}`,
@@ -77,26 +79,27 @@ export const initializeRazorpayPayment = async (orderData, totalAmount, formData
 const handlePaymentSuccess = async (response, orderData, onSuccess) => {
   try {
     // Send order confirmation email
-    await fetch('/api/send-order-email', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        orderId: orderData.orderId,
-        customerName: orderData.customerDetails.name,
-        totalPrice: orderData.amount,
-        items: orderData.items,
-        shippingAddress: orderData.customerDetails.address,
-        paymentId: response.razorpay_payment_id
-      }),
+    const emailSent = await sendOrderConfirmationEmail({
+      orderId: orderData.orderId,
+      customerName: orderData.customerDetails.name,
+      totalAmount: orderData.amount,
+      items: orderData.items,
+      shippingAddress: orderData.customerDetails.address,
+      paymentId: response.razorpay_payment_id
     });
 
-    toast.success("Payment successful! Order confirmation sent to your email.");
+    if (emailSent) {
+      toast.success("Payment successful! Order confirmation sent to your email.");
+    } else {
+      toast.success("Payment successful!");
+      toast.warning("Order confirmation email could not be sent.");
+    }
+    
     onSuccess(response);
   } catch (error) {
     console.error('Error processing successful payment:', error);
-    toast.error('Payment successful but failed to send confirmation email');
+    toast.success("Payment successful!");
+    toast.warning("Could not send order confirmation.");
     onSuccess(response); // Still consider it successful as payment went through
   }
 };

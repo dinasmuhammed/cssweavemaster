@@ -19,6 +19,11 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
       return;
     }
 
+    if (cartItems.length === 0) {
+      toast.error("Your cart is empty");
+      return;
+    }
+
     setIsProcessing(true);
 
     const orderData = {
@@ -40,7 +45,6 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
         formData,
         () => {
           setIsProcessing(false);
-          // Clear cart and redirect will be handled by the success callback
         },
         (error) => {
           setIsProcessing(false);
@@ -65,6 +69,7 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
             value={formData.name}
             onChange={onChange}
             className={`mt-1 ${errors.name ? 'border-red-500' : ''}`}
+            disabled={isProcessing}
           />
           {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
         </div>
@@ -77,6 +82,7 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
             value={formData.address}
             onChange={onChange}
             className={`mt-1 ${errors.address ? 'border-red-500' : ''}`}
+            disabled={isProcessing}
           />
           {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
         </div>
@@ -89,6 +95,7 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
             value={formData.area}
             onChange={onChange}
             className={`mt-1 ${errors.area ? 'border-red-500' : ''}`}
+            disabled={isProcessing}
           />
           {errors.area && <p className="text-red-500 text-sm mt-1">{errors.area}</p>}
         </div>
@@ -102,6 +109,7 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
               value={formData.district}
               onChange={onChange}
               className={`mt-1 ${errors.district ? 'border-red-500' : ''}`}
+              disabled={isProcessing}
             />
             {errors.district && <p className="text-red-500 text-sm mt-1">{errors.district}</p>}
           </div>
@@ -113,6 +121,7 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
               value={formData.state}
               onChange={onChange}
               className={`mt-1 ${errors.state ? 'border-red-500' : ''}`}
+              disabled={isProcessing}
             />
             {errors.state && <p className="text-red-500 text-sm mt-1">{errors.state}</p>}
           </div>
@@ -127,6 +136,7 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
               value={formData.pincode}
               onChange={onChange}
               className={`mt-1 ${errors.pincode ? 'border-red-500' : ''}`}
+              disabled={isProcessing}
             />
             {errors.pincode && <p className="text-red-500 text-sm mt-1">{errors.pincode}</p>}
           </div>
@@ -142,6 +152,7 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
                 value={formData.mobile}
                 onChange={onChange}
                 className={`rounded-l-none ${errors.mobile ? 'border-red-500' : ''}`}
+                disabled={isProcessing}
               />
             </div>
             {errors.mobile && <p className="text-red-500 text-sm mt-1">{errors.mobile}</p>}
@@ -157,6 +168,7 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
             value={formData.email}
             onChange={onChange}
             className={`mt-1 ${errors.email ? 'border-red-500' : ''}`}
+            disabled={isProcessing}
           />
           {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
         </div>

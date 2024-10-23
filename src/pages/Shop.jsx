@@ -85,6 +85,10 @@ const Shop = () => {
 
   return (
     <div className="bg-cream-100">
+      <div className="container mx-auto px-4 py-12 text-center">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-green-800 mb-4">Shop Our Collections</h1>
+      </div>
+
       <div className="relative">
         <div className="grid grid-cols-3 md:grid-cols-6 gap-2 h-[300px] sm:h-[400px]">
           <img src="https://i.postimg.cc/CKbjSySR/image.png" alt="Henna Product" className="w-full h-full object-cover" />
@@ -93,9 +97,6 @@ const Shop = () => {
           <img src="https://i.postimg.cc/13qFrxgv/image.png" alt="Natural Henna" className="hidden md:block w-full h-full object-cover" />
           <img src="https://i.postimg.cc/9MJwQCSQ/image.png" alt="Henna Cones" className="hidden md:block w-full h-full object-cover" />
           <img src="https://i.postimg.cc/HsfcxSSX/image.png" alt="Bridal Henna" className="hidden md:block w-full h-full object-cover" />
-        </div>
-        <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-center px-4">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 font-heading">Shop Our Collections</h1>
         </div>
       </div>
 

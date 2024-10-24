@@ -27,21 +27,21 @@ const HeroSection = () => {
 
   return (
     <section 
-      className="relative w-full max-w-[1280px] mx-auto overflow-hidden bg-cream-100"
+      className="relative w-full h-screen max-w-[1280px] mx-auto overflow-hidden bg-cream-100"
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
-      <div className="embla h-[570px]" ref={emblaRef}>
+      <div className="embla absolute inset-0" ref={emblaRef}>
         <div className="embla__container h-full flex">
           {images.map((image, index) => (
             <div key={index} className="embla__slide relative w-full h-full flex-[0_0_100%]">
               <motion.div
-                className="relative w-full h-full"
+                className="absolute inset-0"
                 variants={hoverVariants}
                 whileHover="hover"
               >
                 <div 
-                  className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-300"
+                  className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                   style={{ backgroundImage: `url(${image})` }}
                 />
                 <div className="absolute inset-0 bg-black/40" />

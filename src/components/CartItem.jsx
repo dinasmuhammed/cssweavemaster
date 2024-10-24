@@ -11,7 +11,11 @@ const CartItem = ({ item, removeFromCart, updateQuantity }) => {
 
   return (
     <div className="flex items-start gap-6 py-6">
-      <img src={item.image} alt={item.name} className="w-20 h-20 object-cover rounded" />
+      <img 
+        src={item.image} 
+        alt={item.name} 
+        className="w-[93px] h-[95px] flex-shrink-0 object-cover rounded" 
+      />
       <div className="flex-grow">
         <div className="flex justify-between items-start">
           <div>

@@ -27,14 +27,15 @@ const HeroSection = () => {
 
   return (
     <section 
-      className="relative w-full h-screen max-w-[1280px] mx-auto overflow-hidden bg-cream-100"
+      className="relative mx-auto overflow-hidden"
+      style={{ width: '1280px', height: '570px' }}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
       <div className="embla absolute inset-0" ref={emblaRef}>
-        <div className="embla__container h-full flex">
+        <div className="embla__container h-full flex justify-end items-start gap-[51px]">
           {images.map((image, index) => (
-            <div key={index} className="embla__slide relative w-full h-full flex-[0_0_100%]">
+            <div key={index} className="embla__slide relative flex-shrink-0" style={{ width: '100%', height: '570px' }}>
               <motion.div
                 className="absolute inset-0"
                 variants={hoverVariants}

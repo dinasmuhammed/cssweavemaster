@@ -39,7 +39,7 @@ const Header = () => {
       isScrolled ? 'shadow-md' : ''
     }`}>
       <div className="w-full">
-        <div className="w-full py-2 text-center text-xs sm:text-sm" style={{ backgroundColor: '#F5E1C6' }}>
+        <div className="w-full py-2 text-center text-xs sm:text-sm" style={{ backgroundColor: '#FCEBD0' }}>
           <span className="font-bold">WE ARE DELIVERING ACROSS INDIA AND INTERNATIONALLY!</span>
         </div>
         

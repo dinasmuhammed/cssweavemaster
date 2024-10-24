@@ -40,13 +40,9 @@ const HeroSection = () => {
                 variants={hoverVariants}
                 whileHover="hover"
               >
-                <motion.img 
-                  src={image} 
-                  alt={`Hero ${index + 1}`} 
-                  className="w-full h-full object-cover object-center"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 1 }}
+                <div 
+                  className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-300"
+                  style={{ backgroundImage: `url(${image})` }}
                 />
                 <div className="absolute inset-0 bg-black/40" />
               </motion.div>

@@ -36,12 +36,12 @@ const ServicePackage = ({ title, details, images, buttonText, isReversed }) => {
 
   return (
     <motion.div 
-      className={`mb-8 flex flex-col ${isReversed ? 'lg:flex-row-reverse' : 'lg:flex-row'}`}
+      className={`mb-8 flex flex-col ${isReversed ? 'lg:flex-row-reverse' : 'lg:flex-row'} gap-6`}
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className={`lg:w-1/2 ${isReversed ? 'lg:pl-6' : 'lg:pr-6'} mb-6 lg:mb-0`}>
+      <div className={`w-full lg:w-1/2 ${isReversed ? 'lg:pl-6' : 'lg:pr-6'}`}>
         <h3 className="text-xl sm:text-2xl font-semibold mb-4 text-green-800">{title}</h3>
         <ul className="list-disc list-inside mb-6 space-y-2">
           {details.map((detail, index) => (
@@ -54,7 +54,7 @@ const ServicePackage = ({ title, details, images, buttonText, isReversed }) => {
               {buttonText}
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="sm:max-w-[425px] w-[95vw] sm:w-full">
             <DialogHeader>
               <DialogTitle>Request to Book - {title}</DialogTitle>
             </DialogHeader>
@@ -84,13 +84,13 @@ const ServicePackage = ({ title, details, images, buttonText, isReversed }) => {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="lg:w-1/2 flex justify-between space-x-4">
+      <div className="w-full lg:w-1/2 grid grid-cols-3 gap-4">
         {images.map((src, index) => (
           <motion.img 
             key={index} 
             src={src} 
             alt={`${title} - Image ${index + 1}`} 
-            className="w-1/3 h-48 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+            className="w-full h-32 sm:h-48 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
           />

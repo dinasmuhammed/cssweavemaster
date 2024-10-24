@@ -15,7 +15,16 @@ const HennaMoments = () => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const intervalRef = useRef(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const startAutoSlide = () => {
     intervalRef.current = setInterval(() => {
@@ -44,7 +53,7 @@ const HennaMoments = () => {
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-green-800 mb-4">Henna Moments</h2>
         <p className="text-center mb-8 text-sm sm:text-base">Follow our instagram page for more @hennabyfathima</p>
         <div 
-          className="relative h-0 pb-[60%] sm:pb-[40%] md:pb-[30%] lg:pb-[20%] overflow-hidden"
+          className="relative h-[200px] sm:h-[300px] md:h-[400px] overflow-hidden rounded-lg"
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >
@@ -57,25 +66,27 @@ const HennaMoments = () => {
               exit={{ opacity: 0, x: -300 }}
               transition={{ duration: 0.5 }}
             >
-              {[...Array(6)].map((_, index) => (
+              {[...Array(isMobile ? 3 : 6)].map((_, index) => (
                 <img
                   key={index}
                   src={imageUrls[(currentIndex + index) % imageUrls.length]}
                   alt={`Henna Moment ${currentIndex + index + 1}`}
-                  className="h-full w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/6 object-cover"
+                  className={`h-full ${isMobile ? 'w-1/3' : 'w-1/6'} object-cover`}
                 />
               ))}
             </motion.div>
           </AnimatePresence>
           <button
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-full p-2 transition-opacity duration-300 opacity-0 hover:opacity-100"
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/50 rounded-full p-2 transition-opacity duration-300 opacity-0 hover:opacity-100 focus:opacity-100 z-10"
             onClick={handlePrev}
+            aria-label="Previous image"
           >
             <ChevronLeft className="w-6 h-6 text-green-800" />
           </button>
           <button
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-full p-2 transition-opacity duration-300 opacity-0 hover:opacity-100"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/50 rounded-full p-2 transition-opacity duration-300 opacity-0 hover:opacity-100 focus:opacity-100 z-10"
             onClick={handleNext}
+            aria-label="Next image"
           >
             <ChevronRight className="w-6 h-6 text-green-800" />
           </button>

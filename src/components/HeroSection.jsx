@@ -35,15 +35,28 @@ const HeroSection = () => {
       <div className="embla absolute inset-0" ref={emblaRef}>
         <div className="embla__container h-full flex justify-end items-start gap-[51px]">
           {images.map((image, index) => (
-            <div key={index} className="embla__slide relative flex-shrink-0" style={{ width: '100%', height: '570px' }}>
+            <div 
+              key={index} 
+              className="embla__slide relative flex-shrink-0" 
+              style={{ width: '100%', height: '570px' }}
+            >
               <motion.div
                 className="absolute inset-0"
                 variants={hoverVariants}
                 whileHover="hover"
               >
                 <div 
-                  className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                  style={{ backgroundImage: `url(${image})` }}
+                  className="absolute inset-0 flex justify-end items-start"
+                  style={{
+                    width: '1280px',
+                    height: '570px',
+                    gap: '51px',
+                    flexShrink: 0,
+                    backgroundImage: `url(${image})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat'
+                  }}
                 />
                 <div className="absolute inset-0 bg-black/40" />
               </motion.div>

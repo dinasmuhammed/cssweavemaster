@@ -28,7 +28,7 @@ const HeroSection = () => {
   return (
     <section 
       className="relative mx-auto overflow-hidden"
-      style={{ width: '1280px', height: '570px' }}
+      style={{ maxWidth: '100%', height: '570px' }}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
@@ -48,7 +48,7 @@ const HeroSection = () => {
                 <div 
                   className="absolute inset-0 flex justify-end items-start"
                   style={{
-                    width: '1280px',
+                    maxWidth: '100%',
                     height: '570px',
                     gap: '51px',
                     flexShrink: 0,

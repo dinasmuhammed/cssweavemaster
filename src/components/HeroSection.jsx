@@ -33,30 +33,21 @@ const HeroSection = () => {
       onMouseLeave={() => setIsHovering(false)}
     >
       <div className="embla absolute inset-0" ref={emblaRef}>
-        <div className="embla__container h-full flex justify-end items-start gap-[51px]">
+        <div className="embla__container h-full flex">
           {images.map((image, index) => (
             <div 
               key={index} 
-              className="embla__slide relative flex-shrink-0" 
-              style={{ width: '100%', height: '570px' }}
+              className="embla__slide relative flex-[0_0_100%]"
             >
               <motion.div
                 className="absolute inset-0"
                 variants={hoverVariants}
                 whileHover="hover"
               >
-                <div 
-                  className="absolute inset-0 flex justify-end items-start"
-                  style={{
-                    maxWidth: '100%',
-                    height: '570px',
-                    gap: '51px',
-                    flexShrink: 0,
-                    backgroundImage: `url(${image})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat'
-                  }}
+                <img 
+                  src={image}
+                  alt={`Hero slide ${index + 1}`}
+                  className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-black/40" />
               </motion.div>

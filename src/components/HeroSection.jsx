@@ -52,13 +52,6 @@ const HeroSection = () => {
             ))}
           </div>
         </div>
-        <div className="absolute inset-0 bg-black bg-opacity-30" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center text-white max-w-screen">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4">Henna by Fathima</h1>
-            <p className="text-lg sm:text-xl md:text-2xl">Creating beautiful memories with elegant henna designs</p>
-          </div>
-        </div>
       </section>
     </div>
   );

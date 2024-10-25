@@ -39,17 +39,17 @@ const HeroSection = () => {
             {images.map((image, index) => (
               <div 
                 key={index} 
-                className="embla__slide relative w-full flex-[0_0_100%]"
+                className="embla__slide relative w-full flex-[0_0_100%] h-full"
               >
                 <motion.div
-                  className="absolute inset-0"
+                  className="absolute inset-0 w-full h-full"
                   variants={hoverVariants}
                   whileHover="hover"
                 >
                   <img 
                     src={image}
                     alt={`Hero slide ${index + 1}`}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-center"
                   />
                   <div className="absolute inset-0 bg-black/40" />
                 </motion.div>

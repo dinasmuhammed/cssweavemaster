@@ -27,7 +27,7 @@ const HeroSection = () => {
   return (
     <div className="w-full">
       <section 
-        className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[570px] overflow-hidden"
+        className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[570px] overflow-hidden bg-cover bg-center"
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
       >
@@ -43,14 +43,20 @@ const HeroSection = () => {
                   variants={hoverVariants}
                   whileHover="hover"
                 >
-                  <img 
-                    src={image}
-                    alt={`Hero slide ${index + 1}`}
-                    className="w-full h-full object-cover object-center"
+                  <div 
+                    className="w-full h-full bg-cover bg-center bg-no-repeat"
+                    style={{ backgroundImage: `url(${image})` }}
                   />
                 </motion.div>
               </div>
             ))}
+          </div>
+        </div>
+        <div className="absolute inset-0 bg-black bg-opacity-30" /> {/* Optional overlay */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center text-white px-4">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4">Henna by Fathima</h1>
+            <p className="text-lg sm:text-xl md:text-2xl">Creating beautiful memories with elegant henna designs</p>
           </div>
         </div>
       </section>

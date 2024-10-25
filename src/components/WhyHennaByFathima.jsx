@@ -4,22 +4,22 @@ import { motion } from 'framer-motion';
 
 const reasons = [
   {
-    icon: <Leaf className="w-8 sm:w-12 h-8 sm:h-12 text-green-800" />,
+    icon: <Leaf className="w-6 sm:w-8 md:w-12 h-6 sm:h-8 md:h-12 text-green-800" />,
     title: '100% Organic Products',
     description: 'Handmade, chemical-free henna cones and products.',
   },
   {
-    icon: <Hand className="w-8 sm:w-12 h-8 sm:h-12 text-green-800" />,
+    icon: <Hand className="w-6 sm:w-8 md:w-12 h-6 sm:h-8 md:h-12 text-green-800" />,
     title: 'Expert Henna Artist',
     description: 'Unique, personalized designs for brides and special occasions.',
   },
   {
-    icon: <GraduationCap className="w-8 sm:w-12 h-8 sm:h-12 text-green-800" />,
+    icon: <GraduationCap className="w-6 sm:w-8 md:w-12 h-6 sm:h-8 md:h-12 text-green-800" />,
     title: 'Henna Workshops',
     description: 'Tips, tutorials, and care guides to ensure the best henna experience.',
   },
   {
-    icon: <ShoppingBag className="w-8 sm:w-12 h-8 sm:h-12 text-green-800" />,
+    icon: <ShoppingBag className="w-6 sm:w-8 md:w-12 h-6 sm:h-8 md:h-12 text-green-800" />,
     title: 'Easy Online Shopping',
     description: 'Convenient purchase of organic products through online and offline.',
   },
@@ -27,10 +27,10 @@ const reasons = [
 
 const WhyHennaByFathima = () => {
   return (
-    <section className="py-8 sm:py-12 md:py-16 bg-white">
+    <section className="py-6 sm:py-8 md:py-12 lg:py-16 bg-white">
       <div className="container mx-auto px-4">
         <motion.h2 
-          className="text-xl sm:text-2xl md:text-3xl font-bold text-center text-green-800 mb-6 sm:mb-8 md:mb-12"
+          className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-center text-green-800 mb-6 sm:mb-8 md:mb-12"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -48,8 +48,8 @@ const WhyHennaByFathima = () => {
               whileHover={{ scale: 1.02 }}
             >
               <div className="flex justify-center mb-3 sm:mb-4">{reason.icon}</div>
-              <h3 className="text-base sm:text-lg md:text-xl font-semibold mb-2">{reason.title}</h3>
-              <p className="text-sm sm:text-base text-gray-600">{reason.description}</p>
+              <h3 className="text-sm sm:text-base md:text-lg font-semibold mb-2">{reason.title}</h3>
+              <p className="text-xs sm:text-sm md:text-base text-gray-600">{reason.description}</p>
             </motion.div>
           ))}
         </div>

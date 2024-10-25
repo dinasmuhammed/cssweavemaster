@@ -41,7 +41,7 @@ const HeroSection = () => {
             {images.map((image, index) => (
               <div 
                 key={index} 
-                className="embla__slide relative flex-[0_0_100vw] h-full"
+                className="embla__slide relative flex-[0_0_100%] h-full"
               >
                 <motion.div
                   className="absolute inset-0"

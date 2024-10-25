@@ -16,14 +16,26 @@ const OurServices = () => {
         <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-center text-green-800 mb-6 sm:mb-8 md:mb-10">Our Services</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
           {services.map((service, index) => (
-            <div key={index} className="text-center bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
-              <img src={service.image} alt={service.name} className="w-full h-40 sm:h-48 md:h-56 object-cover" />
+            <div 
+              key={index} 
+              className="text-center bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105"
+            >
+              <div className="aspect-square overflow-hidden">
+                <img 
+                  src={service.image} 
+                  alt={service.name} 
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <h3 className="text-base sm:text-lg md:text-xl font-semibold p-4">{service.name}</h3>
             </div>
           ))}
         </div>
         <div className="text-center mt-8 sm:mt-10 md:mt-12">
-          <Button asChild className="bg-green-800 hover:bg-green-700 text-white text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-8 py-2 sm:py-3 transition-all duration-300 hover:scale-105">
+          <Button 
+            asChild 
+            className="bg-green-800 hover:bg-green-700 text-white text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-8 py-2 sm:py-3 transition-all duration-300 hover:scale-105"
+          >
             <Link to="/services">View Packages</Link>
           </Button>
         </div>

@@ -1,11 +1,11 @@
-import { getCLS, getFID, getLCP } from 'web-vitals';
+import { onCLS, onFID, onLCP } from 'web-vitals';
 
 // Track Core Web Vitals
 export const reportWebVitals = (onPerfEntry) => {
   if (onPerfEntry && onPerfEntry instanceof Function) {
-    getCLS(onPerfEntry);
-    getFID(onPerfEntry);
-    getLCP(onPerfEntry);
+    onCLS(onPerfEntry);
+    onFID(onPerfEntry);
+    onLCP(onPerfEntry);
   }
 };
 

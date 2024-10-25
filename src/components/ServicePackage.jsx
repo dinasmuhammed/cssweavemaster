@@ -41,7 +41,7 @@ const ServicePackage = ({ title, details, images, buttonText, isReversed }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className={`w-full lg:w-1/2 ${isReversed ? 'lg:pl-6' : 'lg:pr-6'}`}>
+      <div className={`w-full lg:w-1/2 ${isReversed ? 'lg:pl-[117px]' : 'lg:pr-[117px]'}`}>
         <h3 className="text-xl sm:text-2xl font-semibold mb-4 text-green-800">{title}</h3>
         <ul className="list-disc list-inside mb-6 space-y-2">
           {details.map((detail, index) => (

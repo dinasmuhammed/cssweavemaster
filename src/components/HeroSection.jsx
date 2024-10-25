@@ -52,7 +52,7 @@ const HeroSection = () => {
             ))}
           </div>
         </div>
-        <div className="absolute inset-0 bg-black bg-opacity-30" /> {/* Optional overlay */}
+        <div className="absolute inset-0 bg-black bg-opacity-30" />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center text-white px-4">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4">Henna by Fathima</h1>

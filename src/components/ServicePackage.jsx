@@ -84,7 +84,7 @@ const ServicePackage = ({ title, details, images, buttonText, isReversed }) => {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="w-full lg:w-1/2 grid grid-cols-3 gap-4">
+      <div className="w-full lg:w-1/2 grid grid-cols-3 gap-10">
         {images.map((src, index) => (
           <motion.div 
             key={index}

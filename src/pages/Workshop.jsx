@@ -1,6 +1,8 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { motion } from 'framer-motion';
+import { Download } from 'lucide-react';
+import { toast } from "sonner";
 
 const workshopImages = [
   "https://i.ibb.co/0Xx1wxn/ba19277a-ac85-4a52-9127-09a7740bd8ed.jpg",
@@ -11,6 +13,34 @@ const workshopImages = [
 ];
 
 const Workshop = () => {
+  const handleDownload = () => {
+    // Replace this URL with your actual brochure PDF URL
+    const brochureUrl = '/workshop-brochure.pdf';
+    
+    fetch(brochureUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.blob();
+      })
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'workshop-brochure.pdf';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        toast.success("Brochure downloaded successfully!");
+      })
+      .catch(error => {
+        console.error('Error downloading the brochure:', error);
+        toast.error("Failed to download brochure. Please try again later.");
+      });
+  };
+
   return (
     <div className="container mx-auto px-4 py-12 bg-cream-100">
       <motion.h1 
@@ -63,8 +93,10 @@ const Workshop = () => {
         <Button 
           variant="outline" 
           size="lg"
-          className="border-green-800 text-green-800 hover:bg-green-800 hover:text-white"
+          className="border-green-800 text-green-800 hover:bg-green-800 hover:text-white flex items-center gap-2"
+          onClick={handleDownload}
         >
+          <Download className="w-4 h-4" />
           Download
         </Button>
       </div>

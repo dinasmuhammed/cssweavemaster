@@ -18,6 +18,7 @@ import SearchResults from './pages/SearchResults';
 import TermsAndConditions from './pages/TermsAndConditions';
 import CancellationAndRefund from './pages/CancellationAndRefund';
 import ShippingAndPrivacy from './pages/ShippingAndPrivacy';
+import SEOMonitor from './components/SEOMonitor';
 import { checkNetworkSpeed } from './utils/networkUtils';
 
 const queryClient = new QueryClient();
@@ -25,6 +26,7 @@ const queryClient = new QueryClient();
 const App = () => {
   const [isSlowNetwork, setIsSlowNetwork] = useState(false);
   const [isCheckingNetwork, setIsCheckingNetwork] = useState(true);
+  const [isAdmin] = useState(() => window.location.search.includes('admin=true'));
 
   useEffect(() => {
     const checkSpeed = async () => {
@@ -86,6 +88,7 @@ const App = () => {
             <div className="flex flex-col min-h-screen bg-white">
               <Header />
               <main className="flex-grow container mx-auto px-4 py-8 w-full max-w-7xl">
+                {isAdmin && <SEOMonitor />}
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/about" element={<About />} />

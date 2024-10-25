@@ -12,10 +12,12 @@ const Header = () => {
   const { cartItems, savedItems } = useCart();
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
 
   const handleSearch = (e) => {
     e.preventDefault();
     navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
+    setIsMobileSearchOpen(false);
   };
 
   useEffect(() => {
@@ -43,7 +45,7 @@ const Header = () => {
           <span className="font-bold">WE ARE DELIVERING ACROSS INDIA AND INTERNATIONALLY!</span>
         </div>
         
-        <nav className="container mx-auto px-4 flex items-center justify-between py-4" aria-label="Main navigation">
+        <nav className="container mx-auto px-4 flex items-center justify-between py-2 sm:py-4" aria-label="Main navigation">
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="lg:hidden">
@@ -70,7 +72,7 @@ const Header = () => {
             <img 
               src="https://i.postimg.cc/T3N2Cfkz/image.png" 
               alt="Henna by Fathima" 
-              className="h-10 sm:h-12 md:h-16 object-contain"
+              className="h-8 sm:h-10 md:h-12 lg:h-16 object-contain"
             />
           </Link>
 
@@ -86,8 +88,41 @@ const Header = () => {
             ))}
           </div>
 
-          <div className="flex items-center gap-4">
-            <form onSubmit={handleSearch} className="hidden md:flex relative">
+          <div className="flex items-center gap-2 sm:gap-4">
+            {isMobileSearchOpen ? (
+              <form onSubmit={handleSearch} className="fixed inset-x-0 top-0 bg-white p-4 z-50 lg:hidden">
+                <div className="relative">
+                  <Input
+                    type="text"
+                    placeholder="Search..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pr-10"
+                    autoFocus
+                  />
+                  <Button 
+                    type="button" 
+                    variant="ghost" 
+                    size="icon" 
+                    className="absolute right-0 top-0"
+                    onClick={() => setIsMobileSearchOpen(false)}
+                  >
+                    ×
+                  </Button>
+                </div>
+              </form>
+            ) : (
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="lg:hidden"
+                onClick={() => setIsMobileSearchOpen(true)}
+              >
+                <Search className="h-4 w-4" />
+              </Button>
+            )}
+
+            <form onSubmit={handleSearch} className="hidden lg:flex relative">
               <Input
                 type="text"
                 placeholder="Search..."
@@ -101,7 +136,7 @@ const Header = () => {
             </form>
 
             <Link to="/saved" className="relative group">
-              <Heart className="h-6 w-6 text-green-800 transition-colors group-hover:text-green-600" />
+              <Heart className="h-5 w-5 sm:h-6 sm:w-6 text-green-800 transition-colors group-hover:text-green-600" />
               {savedItems.length > 0 && (
                 <Badge className="absolute -top-2 -right-2 bg-green-800 group-hover:bg-green-600">
                   {savedItems.length}
@@ -110,7 +145,7 @@ const Header = () => {
             </Link>
 
             <Link to="/cart" className="relative group">
-              <ShoppingCart className="h-6 w-6 text-green-800 transition-colors group-hover:text-green-600" />
+              <ShoppingCart className="h-5 w-5 sm:h-6 sm:w-6 text-green-800 transition-colors group-hover:text-green-600" />
               {cartItems.length > 0 && (
                 <Badge className="absolute -top-2 -right-2 bg-green-800 group-hover:bg-green-600">
                   {cartItems.length}

@@ -30,7 +30,7 @@ const HeroSection = () => {
   return (
     <div className="w-full">
       <section 
-        className="relative w-full h-[570px] overflow-hidden"
+        className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[570px] overflow-hidden"
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
       >
@@ -57,7 +57,7 @@ const HeroSection = () => {
                   <div className="max-w-[1280px] mx-auto w-full px-4">
                     <div className="flex flex-col items-center text-center">
                       <motion.h1 
-                        className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
+                        className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-4 sm:mb-6"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.2 }}
@@ -65,7 +65,7 @@ const HeroSection = () => {
                         Welcome to Henna by Fathima
                       </motion.h1>
                       <motion.p 
-                        className="text-lg md:text-xl lg:text-2xl text-white mb-8 max-w-2xl"
+                        className="text-base sm:text-lg md:text-xl lg:text-2xl text-white mb-6 sm:mb-8 max-w-2xl px-4"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.4 }}
@@ -76,8 +76,9 @@ const HeroSection = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.6 }}
+                        className="w-full sm:w-auto px-4"
                       >
-                        <Button asChild className="bg-green-800 hover:bg-green-700 text-white">
+                        <Button asChild className="w-full sm:w-auto bg-green-800 hover:bg-green-700 text-white px-6 py-3">
                           <Link to="/services">Explore Our Services</Link>
                         </Button>
                       </motion.div>
@@ -88,11 +89,11 @@ const HeroSection = () => {
             ))}
           </div>
         </div>
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-3 z-10">
+        <div className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 sm:space-x-3 z-10">
           {images.map((_, index) => (
             <button
               key={index}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${
                 index === currentIndex ? 'bg-white scale-125' : 'bg-white/50 hover:bg-white/75'
               }`}
               onClick={() => {

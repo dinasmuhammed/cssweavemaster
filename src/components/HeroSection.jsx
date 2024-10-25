@@ -27,7 +27,7 @@ const HeroSection = () => {
   return (
     <div className="w-full">
       <section 
-        className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[570px] overflow-hidden bg-cover bg-center"
+        className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[570px] overflow-hidden"
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
       >
@@ -39,7 +39,7 @@ const HeroSection = () => {
                 className="embla__slide relative w-full flex-[0_0_100%] h-full"
               >
                 <motion.div
-                  className="absolute inset-0 w-full h-full"
+                  className="absolute inset-0"
                   variants={hoverVariants}
                   whileHover="hover"
                 >
@@ -54,7 +54,7 @@ const HeroSection = () => {
         </div>
         <div className="absolute inset-0 bg-black bg-opacity-30" />
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center text-white px-4">
+          <div className="text-center text-white">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4">Henna by Fathima</h1>
             <p className="text-lg sm:text-xl md:text-2xl">Creating beautiful memories with elegant henna designs</p>
           </div>

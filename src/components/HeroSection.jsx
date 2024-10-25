@@ -29,7 +29,7 @@ const HeroSection = () => {
 
   return (
     <section 
-      className="relative w-full h-screen overflow-hidden"
+      className="relative mx-auto w-full max-w-[1280px] h-[570px] overflow-hidden"
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >

@@ -86,14 +86,18 @@ const ServicePackage = ({ title, details, images, buttonText, isReversed }) => {
       </div>
       <div className="w-full lg:w-1/2 grid grid-cols-3 gap-4">
         {images.map((src, index) => (
-          <motion.img 
-            key={index} 
-            src={src} 
-            alt={`${title} - Image ${index + 1}`} 
-            className="w-full h-32 sm:h-48 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+          <motion.div 
+            key={index}
+            className="w-[213px] h-[293px]"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
-          />
+          >
+            <img 
+              src={src} 
+              alt={`${title} - Image ${index + 1}`} 
+              className="w-full h-full object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+            />
+          </motion.div>
         ))}
       </div>
     </motion.div>

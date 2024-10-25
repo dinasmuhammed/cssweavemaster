@@ -42,7 +42,7 @@ const Header = () => {
     }`}>
       <div className="w-full">
         <div className="w-full py-2 text-center text-xs sm:text-sm" style={{ backgroundColor: '#FCEBD0' }}>
-          <span className="font-bold">WE ARE DELIVERING ACROSS INDIA AND INTERNATIONALLY!</span>
+          <span className="font-bold px-4">WE ARE DELIVERING ACROSS INDIA AND INTERNATIONALLY!</span>
         </div>
         
         <nav className="container mx-auto px-4 flex items-center justify-between py-2 sm:py-4" aria-label="Main navigation">
@@ -54,7 +54,7 @@ const Header = () => {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-[300px] sm:w-[400px]">
-              <nav className="flex flex-col gap-4">
+              <nav className="flex flex-col gap-4 mt-8">
                 {navItems.map((item) => (
                   <Link
                     key={item.to}

@@ -41,7 +41,7 @@ const ServicePackage = ({ title, details, images, buttonText, isReversed }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className={`w-full lg:w-1/2 ${isReversed ? 'lg:pl-[117px]' : 'lg:pr-[117px]'}`}>
+      <div className={`w-full lg:w-1/2 ${isReversed ? 'lg:pl-4 xl:pl-8' : 'lg:pr-4 xl:pr-8'}`}>
         <h3 className="text-xl sm:text-2xl font-semibold mb-4 text-green-800">{title}</h3>
         <ul className="list-disc list-inside mb-6 space-y-2">
           {details.map((detail, index) => (
@@ -59,36 +59,38 @@ const ServicePackage = ({ title, details, images, buttonText, isReversed }) => {
               <DialogTitle>Request to Book - {title}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <Label htmlFor="name">Name</Label>
-                <Input id="name" name="name" value={formData.name} onChange={handleInputChange} required />
-              </div>
-              <div>
-                <Label htmlFor="number">Phone Number</Label>
-                <Input id="number" name="number" value={formData.number} onChange={handleInputChange} required />
-              </div>
-              <div>
-                <Label htmlFor="address">Address</Label>
-                <Input id="address" name="address" value={formData.address} onChange={handleInputChange} required />
-              </div>
-              <div>
-                <Label htmlFor="date">Preferred Date</Label>
-                <Input id="date" name="date" type="date" value={formData.date} onChange={handleInputChange} required />
-              </div>
-              <div>
-                <Label htmlFor="budget">Budget</Label>
-                <Input id="budget" name="budget" value={formData.budget} onChange={handleInputChange} required />
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="name">Name</Label>
+                  <Input id="name" name="name" value={formData.name} onChange={handleInputChange} required />
+                </div>
+                <div>
+                  <Label htmlFor="number">Phone Number</Label>
+                  <Input id="number" name="number" value={formData.number} onChange={handleInputChange} required />
+                </div>
+                <div>
+                  <Label htmlFor="address">Address</Label>
+                  <Input id="address" name="address" value={formData.address} onChange={handleInputChange} required />
+                </div>
+                <div>
+                  <Label htmlFor="date">Preferred Date</Label>
+                  <Input id="date" name="date" type="date" value={formData.date} onChange={handleInputChange} required />
+                </div>
+                <div>
+                  <Label htmlFor="budget">Budget</Label>
+                  <Input id="budget" name="budget" value={formData.budget} onChange={handleInputChange} required />
+                </div>
               </div>
               <Button type="submit" className="w-full">Submit Request</Button>
             </form>
           </DialogContent>
         </Dialog>
       </div>
-      <div className="w-full lg:w-1/2 grid grid-cols-3 gap-10">
+      <div className="w-full lg:w-1/2 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
         {images.map((src, index) => (
           <motion.div 
             key={index}
-            className="w-[213px] h-[293px]"
+            className="aspect-square w-full"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
           >

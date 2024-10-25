@@ -10,20 +10,20 @@ const CartItem = ({ item, removeFromCart, updateQuantity }) => {
   };
 
   return (
-    <div className="flex items-start gap-6 py-6">
+    <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 py-6 border-b">
       <img 
         src={item.image} 
         alt={item.name} 
-        className="w-[93px] h-[95px] flex-shrink-0 object-cover rounded" 
+        className="w-full sm:w-24 h-24 object-cover rounded" 
       />
-      <div className="flex-grow">
-        <div className="flex justify-between items-start">
+      <div className="flex-grow w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row justify-between items-start gap-2 sm:gap-4">
           <div>
             <h3 className="text-lg font-medium text-gray-800">{item.name}</h3>
-            {item?.weight && <span className="text-gray-500">{item.weight}g</span>}
+            {item?.weight && <span className="text-sm text-gray-500">{item.weight}g</span>}
           </div>
-          <div className="flex items-center gap-4">
-            <span className="text-lg">₹{item.price * item.quantity}</span>
+          <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
+            <span className="text-lg font-medium">₹{item.price * item.quantity}</span>
             <Button
               variant="ghost"
               size="icon"

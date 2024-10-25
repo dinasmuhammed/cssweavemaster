@@ -28,7 +28,7 @@ const HeroSection = () => {
   };
 
   return (
-    <div className="w-full bg-black">
+    <div className="w-full">
       <section 
         className="relative w-full h-[570px] overflow-hidden"
         onMouseEnter={() => setIsHovering(true)}
@@ -53,33 +53,35 @@ const HeroSection = () => {
                   />
                   <div className="absolute inset-0 bg-black/40" />
                 </motion.div>
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-white px-4">
-                  <div className="max-w-[1280px] mx-auto w-full flex flex-col items-center">
-                    <motion.h1 
-                      className="text-3xl md:text-5xl lg:text-6xl font-bold text-center mb-6"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.2 }}
-                    >
-                      Welcome to Henna by Fathima
-                    </motion.h1>
-                    <motion.p 
-                      className="text-lg md:text-xl lg:text-2xl text-center mb-8 max-w-2xl"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.4 }}
-                    >
-                      Experience the art of traditional and modern henna designs
-                    </motion.p>
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.6 }}
-                    >
-                      <Button asChild className="bg-green-800 hover:bg-green-700 text-white">
-                        <Link to="/services">Explore Our Services</Link>
-                      </Button>
-                    </motion.div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="max-w-[1280px] mx-auto w-full px-4">
+                    <div className="flex flex-col items-center text-center">
+                      <motion.h1 
+                        className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                      >
+                        Welcome to Henna by Fathima
+                      </motion.h1>
+                      <motion.p 
+                        className="text-lg md:text-xl lg:text-2xl text-white mb-8 max-w-2xl"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.4 }}
+                      >
+                        Experience the art of traditional and modern henna designs
+                      </motion.p>
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.6 }}
+                      >
+                        <Button asChild className="bg-green-800 hover:bg-green-700 text-white">
+                          <Link to="/services">Explore Our Services</Link>
+                        </Button>
+                      </motion.div>
+                    </div>
                   </div>
                 </div>
               </div>

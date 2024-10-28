@@ -11,14 +11,14 @@ const services = [
 
 const OurServices = () => {
   return (
-    <section className="py-8 sm:py-12 md:py-16 bg-cream-100">
+    <section className="py-8 sm:py-12 md:py-16">
       <div className="container mx-auto px-4">
         <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-center text-green-800 mb-6 sm:mb-8 md:mb-10">Our Services</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
           {services.map((service, index) => (
             <div 
               key={index} 
-              className="text-center bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105"
+              className="text-center rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105"
             >
               <div className="aspect-square overflow-hidden">
                 <img 

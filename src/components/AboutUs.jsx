@@ -17,14 +17,6 @@ const AboutUs = () => {
             </div>
           </div>
           <div className="w-full md:w-1/2 md:pl-8 relative">
-            <motion.img
-              src="https://i.ibb.co/cxDksWj/Group-6.png"
-              alt="Decorative leaf"
-              className="absolute -right-4 top-0 w-24 h-auto opacity-60"
-              initial={{ opacity: 0, rotate: -45 }}
-              animate={{ opacity: 0.6, rotate: 0 }}
-              transition={{ duration: 1, ease: "easeOut" }}
-            />
             <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-green-800">Meet the Artist</h3>
             <h4 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3 text-green-800">Fathima Shamsudheen - Owner, Founder & Lead Artist</h4>
             <div className="space-y-4 text-sm sm:text-base text-gray-600">

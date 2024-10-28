@@ -2,7 +2,7 @@ import React from 'react';
 
 const AboutUs = () => {
   return (
-    <section className="py-8 sm:py-12 md:py-16 bg-white w-screen relative" style={{ marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}>
+    <section className="py-8 sm:py-12 md:py-16 bg-white">
       <div className="container mx-auto px-4">
         <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center text-green-800 mb-6 sm:mb-8 md:mb-12">About Us</h2>
         <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8">

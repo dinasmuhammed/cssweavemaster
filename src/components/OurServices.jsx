@@ -11,10 +11,10 @@ const services = [
 
 const OurServices = () => {
   return (
-    <section className="py-16">
-      <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center text-green-800 mb-12">Our Services</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    <section className="py-12 sm:py-16">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-green-800 mb-8 sm:mb-12">Our Services</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
           {services.map((service, index) => (
             <div 
               key={index} 
@@ -27,14 +27,14 @@ const OurServices = () => {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <h3 className="text-xl font-semibold p-4 text-green-800">{service.name}</h3>
+              <h3 className="text-lg sm:text-xl font-semibold p-4 text-green-800">{service.name}</h3>
             </div>
           ))}
         </div>
-        <div className="text-center mt-12">
+        <div className="text-center mt-8 sm:mt-12">
           <Button 
             asChild 
-            className="bg-green-800 hover:bg-green-700 text-white px-8 py-3 text-lg"
+            className="bg-green-800 hover:bg-green-700 text-white px-6 sm:px-8 py-2 sm:py-3 text-base sm:text-lg"
           >
             <Link to="/services">View Packages</Link>
           </Button>

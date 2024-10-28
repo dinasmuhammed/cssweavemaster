@@ -2,10 +2,10 @@ import React from 'react';
 
 const AboutUs = () => {
   return (
-    <section className="py-16 bg-cream-100">
-      <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center text-green-800 mb-12">About Us</h2>
-        <div className="flex flex-col md:flex-row items-center gap-8">
+    <section className="py-12 sm:py-16 bg-cream-100">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-green-800 mb-8 sm:mb-12">About Us</h2>
+        <div className="flex flex-col md:flex-row items-center gap-6 sm:gap-8">
           <div className="w-full md:w-1/2">
             <div className="aspect-square md:aspect-auto md:h-[500px] relative rounded-lg overflow-hidden shadow-lg">
               <img 
@@ -16,9 +16,9 @@ const AboutUs = () => {
             </div>
           </div>
           <div className="w-full md:w-1/2 md:pl-8">
-            <h3 className="text-2xl font-bold mb-4 text-green-800">Meet the Artist</h3>
-            <h4 className="text-xl font-semibold mb-3 text-green-800">Fathima Shamsudheen - Owner, Founder & Lead Artist</h4>
-            <div className="space-y-4 text-base text-gray-600">
+            <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-green-800">Meet the Artist</h3>
+            <h4 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3 text-green-800">Fathima Shamsudheen - Owner, Founder & Lead Artist</h4>
+            <div className="space-y-4 text-sm sm:text-base text-gray-600">
               <p>
                 At Henna by Fathima, we believe that just as everyone deserves a diamond, henna is an essential part of joy and celebration. Our passion lies in adorning hands with rich, deep red designs, symbolizing companionship, new beginnings, and the simple pleasure of henna art.
               </p>

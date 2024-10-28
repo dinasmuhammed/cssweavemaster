@@ -5,10 +5,10 @@ import { motion } from 'framer-motion';
 
 const WelcomeSection = () => {
   return (
-    <section className="py-16 md:py-24 bg-cream-100">
-      <div className="container mx-auto px-4 text-center">
+    <section className="py-12 sm:py-16 md:py-24 bg-cream-100">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.h2 
-          className="text-3xl md:text-5xl lg:text-6xl font-bold text-green-800 mb-6"
+          className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-green-800 mb-4 sm:mb-6"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -16,7 +16,7 @@ const WelcomeSection = () => {
           Welcome to Henna by Fathima
         </motion.h2>
         <motion.p 
-          className="text-lg md:text-xl lg:text-2xl text-green-800/80 mb-8 max-w-3xl mx-auto"
+          className="text-base sm:text-lg md:text-xl lg:text-2xl text-green-800/80 mb-6 sm:mb-8 max-w-3xl mx-auto"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
@@ -30,7 +30,7 @@ const WelcomeSection = () => {
         >
           <Button 
             asChild 
-            className="bg-green-800 hover:bg-green-700 text-white px-8 py-3 text-lg"
+            className="bg-green-800 hover:bg-green-700 text-white px-6 sm:px-8 py-2 sm:py-3 text-base sm:text-lg"
           >
             <Link to="/services">View Packages</Link>
           </Button>

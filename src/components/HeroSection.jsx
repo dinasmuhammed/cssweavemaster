@@ -25,7 +25,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative h-[570px] overflow-hidden">
+    <section className="relative h-[300px] sm:h-[400px] md:h-[500px] lg:h-[570px] overflow-hidden">
       <div 
         className="relative h-full"
         onMouseEnter={() => setIsHovering(true)}

@@ -48,12 +48,12 @@ const HennaMoments = () => {
   };
 
   return (
-    <section className="py-16">
-      <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center text-green-800 mb-4">Henna Moments</h2>
-        <p className="text-center mb-12 text-base text-gray-600">Follow our instagram page for more @hennabyfathima</p>
+    <section className="py-12 sm:py-16">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-green-800 mb-4">Henna Moments</h2>
+        <p className="text-center mb-8 sm:mb-12 text-sm sm:text-base text-gray-600">Follow our instagram page for more @hennabyfathima</p>
         <div 
-          className="relative h-[400px] overflow-hidden rounded-lg"
+          className="relative h-[250px] sm:h-[300px] md:h-[400px] overflow-hidden rounded-lg"
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >

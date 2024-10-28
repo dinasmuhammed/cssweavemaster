@@ -1,8 +1,6 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { motion } from 'framer-motion';
-import { Sparkle } from 'lucide-react';
 
 const WelcomeSection = () => {
   return (
@@ -14,15 +12,6 @@ const WelcomeSection = () => {
           transition={{ duration: 0.6 }}
           className="max-w-4xl mx-auto"
         >
-          <motion.div
-            initial={{ scale: 0.95 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="inline-block mb-6"
-          >
-            <Sparkle className="w-12 h-12 text-green-800 mx-auto" />
-          </motion.div>
-          
           <motion.h2 
             className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-green-800 mb-4 sm:mb-6"
             initial={{ opacity: 0, y: -20 }}

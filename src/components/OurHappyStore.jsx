@@ -8,7 +8,7 @@ const OurHappyStore = () => {
         <p className="text-center text-sm md:text-base mb-8 sm:mb-12 max-w-2xl mx-auto">
           Visit us in-store to experience beautiful henna art on your hands and shop our range of organic henna products.
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 items-start">
           <div className="space-y-4 order-2 md:order-1">
             <h3 className="text-lg sm:text-xl font-bold text-green-800">Henna by Fathima Mehendi Studio</h3>
             <address className="not-italic space-y-2 text-sm md:text-base">
@@ -18,7 +18,7 @@ const OurHappyStore = () => {
               <p className="font-semibold mt-4">Phone: <a href="tel:+918086647124" className="text-green-800 hover:underline">+91 8086647124</a></p>
             </address>
           </div>
-          <div className="w-full aspect-video max-w-[595px] mx-auto order-1 md:order-2 flex-shrink-0">
+          <div className="w-full order-1 md:order-2 flex-shrink-0" style={{ width: '721px', height: '524px', position: 'absolute', top: '3477px', left: '479px', opacity: 0 }}>
             <iframe
               src="https://www.youtube.com/embed/qUKTRihRkkc?autoplay=1&mute=1&loop=1&playlist=qUKTRihRkkc"
               className="w-full h-full rounded-lg shadow-md"

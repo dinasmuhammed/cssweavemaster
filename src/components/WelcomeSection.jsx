@@ -39,9 +39,9 @@ const WelcomeSection = () => {
           >
             <Button 
               asChild 
-              className="bg-green-800 hover:bg-green-700 text-white px-8 sm:px-10 py-3 sm:py-4 text-base sm:text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+              className="bg-[#00332B] hover:bg-[#004D40] text-white text-xl sm:text-2xl px-12 py-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 font-medium tracking-wide"
             >
-              <Link to="/services">View Our Packages</Link>
+              <Link to="/services">View Packages</Link>
             </Button>
           </motion.div>
         </motion.div>

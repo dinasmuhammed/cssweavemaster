@@ -1,22 +1,34 @@
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { motion } from 'framer-motion';
+import { Sparkles } from 'lucide-react';
 
 const WelcomeSection = () => {
   return (
-    <section className="py-12 sm:py-16 md:py-24 bg-gradient-to-b from-cream-100 to-white">
+    <section className="py-12 sm:py-16 md:py-24 bg-gradient-to-b from-cream-100 via-cream-200 to-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           className="max-w-4xl mx-auto"
         >
+          <motion.div 
+            className="flex items-center justify-center gap-2 mb-2"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <Sparkles className="w-6 h-6 text-green-800 animate-pulse" />
+            <span className="text-green-800 font-medium">Premium Henna Services</span>
+            <Sparkles className="w-6 h-6 text-green-800 animate-pulse" />
+          </motion.div>
+          
           <motion.h2 
-            className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-green-800 mb-4 sm:mb-6"
+            className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-green-800 mb-4 sm:mb-6 tracking-tight"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
           >
             Welcome to Henna by Fathima
           </motion.h2>
@@ -25,7 +37,7 @@ const WelcomeSection = () => {
             className="text-base sm:text-lg md:text-xl lg:text-2xl text-green-800/80 mb-8 sm:mb-10 max-w-3xl mx-auto leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
           >
             Let us adorn you with beautiful bridal henna that makes your special moments unforgettable.
           </motion.p>
@@ -39,9 +51,17 @@ const WelcomeSection = () => {
           >
             <Button 
               asChild 
-              className="bg-[#00332B] hover:bg-[#004D40] text-white w-[169px] h-[46px] rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 font-medium"
+              className="bg-[#00332B] hover:bg-[#004D40] text-white w-[169px] h-[46px] rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 font-medium group"
             >
-              <Link to="/services">View Packages</Link>
+              <Link to="/services" className="flex items-center justify-center gap-2">
+                View Packages
+                <motion.span
+                  animate={{ x: [0, 5, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  →
+                </motion.span>
+              </Link>
             </Button>
           </motion.div>
         </motion.div>

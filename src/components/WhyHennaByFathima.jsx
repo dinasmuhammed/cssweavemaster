@@ -27,7 +27,7 @@ const reasons = [
 
 const WhyHennaByFathima = () => {
   return (
-    <section className="py-6 sm:py-8 md:py-12 lg:py-16 bg-white">
+    <section className="py-6 sm:py-8 md:py-12 lg:py-16 bg-gradient-to-b from-white to-cream-100">
       <div className="container mx-auto px-4">
         <motion.h2 
           className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-center text-green-800 mb-6 sm:mb-8 md:mb-12"
@@ -41,14 +41,25 @@ const WhyHennaByFathima = () => {
           {reasons.map((reason, index) => (
             <motion.div 
               key={index} 
-              className="text-center p-4 sm:p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+              className="text-center p-6 sm:p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 bg-white/80 backdrop-blur-sm border border-cream-200"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ 
+                scale: 1.02,
+                transition: { duration: 0.2 }
+              }}
             >
-              <div className="flex justify-center mb-3 sm:mb-4">{reason.icon}</div>
-              <h3 className="text-sm sm:text-base md:text-lg font-semibold mb-2">{reason.title}</h3>
+              <motion.div 
+                className="flex justify-center mb-4 sm:mb-6"
+                whileHover={{ 
+                  rotate: 360,
+                  transition: { duration: 0.5 }
+                }}
+              >
+                {reason.icon}
+              </motion.div>
+              <h3 className="text-sm sm:text-base md:text-lg font-semibold mb-2 text-green-800">{reason.title}</h3>
               <p className="text-xs sm:text-sm md:text-base text-gray-600">{reason.description}</p>
             </motion.div>
           ))}

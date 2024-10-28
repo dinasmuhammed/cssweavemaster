@@ -39,7 +39,7 @@ const WelcomeSection = () => {
           >
             <Button 
               asChild 
-              className="bg-[#00332B] hover:bg-[#004D40] text-white text-xl sm:text-2xl px-12 py-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 font-medium tracking-wide"
+              className="bg-[#00332B] hover:bg-[#004D40] text-white w-[169px] h-[46px] rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 font-medium"
             >
               <Link to="/services">View Packages</Link>
             </Button>

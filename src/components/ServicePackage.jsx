@@ -90,7 +90,7 @@ const ServicePackage = ({ title, details, images, buttonText, isReversed }) => {
         {images.map((src, index) => (
           <motion.div 
             key={index}
-            className="aspect-square w-full"
+            className="w-[213px] h-[293px] flex-shrink-0"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
           >

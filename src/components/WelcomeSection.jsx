@@ -5,7 +5,16 @@ import { motion } from 'framer-motion';
 
 const WelcomeSection = () => {
   return (
-    <section className="py-8 sm:py-12 md:py-16 bg-cream-100 relative overflow-hidden">
+    <section 
+      className="relative overflow-hidden mx-auto"
+      style={{
+        width: '1280px',
+        height: '265px',
+        marginTop: '723px',
+        opacity: 0,
+        background: '#FCEBD033'
+      }}
+    >
       <div className="container mx-auto px-4 text-center relative z-10">
         <motion.h2 
           className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-green-800 mb-4 font-heading"

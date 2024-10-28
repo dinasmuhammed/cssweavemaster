@@ -5,18 +5,18 @@ import { motion } from 'framer-motion';
 
 const WelcomeSection = () => {
   return (
-    <section className="py-8 sm:py-12 md:py-16 bg-cream-100 relative overflow-hidden">
+    <section className="relative py-16 md:py-24 bg-secondary overflow-hidden">
       <div className="container mx-auto px-4 text-center relative z-10">
         <motion.h2 
-          className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-green-800 mb-4 font-heading"
+          className="text-3xl md:text-5xl lg:text-6xl font-bold text-primary mb-6"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          Welcome to Henna by Fathima!
+          Welcome to Henna by Fathima
         </motion.h2>
         <motion.p 
-          className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-green-800 mb-6 sm:mb-8 max-w-3xl mx-auto font-sans"
+          className="text-lg md:text-xl lg:text-2xl text-primary/80 mb-8 max-w-3xl mx-auto"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
@@ -28,53 +28,41 @@ const WelcomeSection = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          <Button asChild className="bg-green-800 hover:bg-green-700 text-white text-xs sm:text-sm md:text-base lg:text-lg px-4 sm:px-6 md:px-8 py-2 sm:py-3 transition-all duration-300 hover:scale-105">
+          <Button asChild className="btn-primary">
             <Link to="/services">View Packages</Link>
           </Button>
         </motion.div>
       </div>
-      <motion.div 
-        className="absolute top-0 left-0 w-1/4 h-full"
-        initial={{ x: -100, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.6 }}
-      >
+      <div className="absolute inset-0 pointer-events-none">
         <motion.img 
-          src="https://i.postimg.cc/vBr7WJnv/leaf10-removebg-preview.png" 
-          alt="Henna leaves" 
-          className="w-full h-full object-contain object-left-top"
+          src="/images/pattern-left.png" 
+          alt="Decorative pattern" 
+          className="absolute -left-16 top-0 w-64 opacity-10"
           animate={{
-            y: [0, -10, 0],
+            y: [0, -20, 0],
             rotate: [0, 5, 0],
           }}
           transition={{
-            duration: 5,
+            duration: 6,
             repeat: Infinity,
             ease: "easeInOut"
           }}
         />
-      </motion.div>
-      <motion.div 
-        className="absolute bottom-0 right-0 w-1/4 h-full transform rotate-180"
-        initial={{ x: 100, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.8 }}
-      >
         <motion.img 
-          src="https://i.postimg.cc/vBr7WJnv/leaf10-removebg-preview.png" 
-          alt="Henna leaves" 
-          className="w-full h-full object-contain object-left-top"
+          src="/images/pattern-right.png" 
+          alt="Decorative pattern" 
+          className="absolute -right-16 bottom-0 w-64 opacity-10"
           animate={{
-            y: [0, 10, 0],
+            y: [0, 20, 0],
             rotate: [0, -5, 0],
           }}
           transition={{
-            duration: 5,
+            duration: 6,
             repeat: Infinity,
             ease: "easeInOut"
           }}
         />
-      </motion.div>
+      </div>
     </section>
   );
 };

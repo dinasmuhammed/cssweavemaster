@@ -28,41 +28,33 @@ module.exports = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "#0F4C3A",
+          foreground: "#FFFFFF",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: "#FFF9F3",
+          foreground: "#0F4C3A",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: "#FCEBD0",
+          foreground: "#0F4C3A",
         },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+        muted: {
+          DEFAULT: "#F4F4F4",
+          foreground: "#666666",
         },
         cream: {
           100: '#FFF9F3',
-          200: '#FFF5E6',
+          200: '#FCEBD0',
         },
         green: {
           800: '#0F4C3A',
-          900: '#00332B', // Added this darker green for the footer background
+          900: '#00332B',
         },
+      },
+      fontFamily: {
+        sans: ['Axiforma', 'system-ui', 'sans-serif'],
+        heading: ['"Jacques Francois"', 'serif'],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -82,10 +74,6 @@ module.exports = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-      },
-      fontFamily: {
-        sans: ['Axiforma', 'system-ui', 'sans-serif'],
-        heading: ['"Jacques Francois"', 'serif'],
       },
     },
   },

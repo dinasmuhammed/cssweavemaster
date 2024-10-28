@@ -7,6 +7,7 @@ const AboutUs = () => {
       style={{
         marginTop: '1899px',
         opacity: 0,
+        background: '#FCEBD033'
       }}
     >
       <div className="container mx-auto px-4">

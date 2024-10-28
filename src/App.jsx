@@ -6,6 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CartProvider } from './context/CartContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import ErrorBoundary from './components/ErrorBoundary';
+import LoadingSpinner from './components/LoadingSpinner';
 
 // Lazy load all pages
 const Home = lazy(() => import('./pages/Home'));
@@ -29,12 +31,6 @@ const queryClient = new QueryClient({
     },
   },
 });
-
-const LoadingSpinner = () => (
-  <div className="flex items-center justify-center min-h-[60vh]">
-    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-800"></div>
-  </div>
-);
 
 const App = () => {
   const [isSlowNetwork, setIsSlowNetwork] = useState(false);
@@ -96,32 +92,48 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <CartProvider>
-          <Toaster />
-          <Router>
-            <div className="flex flex-col min-h-screen bg-white">
-              <Header />
-              <main className="flex-grow container mx-auto px-4 py-8 w-full max-w-7xl">
-                {isAdmin && <SEOMonitor />}
-                <Suspense fallback={<LoadingSpinner />}>
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/shop" element={<Shop />} />
-                    <Route path="/services" element={<Services />} />
-                    <Route path="/workshop" element={<Workshop />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="/cart" element={<Cart />} />
-                    <Route path="/saved" element={<SavedItems />} />
-                    <Route path="/search" element={<SearchResults />} />
-                    <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
-                    <Route path="/cancellation-and-refund" element={<CancellationAndRefund />} />
-                    <Route path="/shipping-and-privacy" element={<ShippingAndPrivacy />} />
-                  </Routes>
-                </Suspense>
-              </main>
-              <Footer />
-            </div>
-          </Router>
+          <ErrorBoundary>
+            <Toaster 
+              position="top-center"
+              toastOptions={{
+                style: {
+                  background: 'white',
+                  color: '#0F4C3A',
+                  border: '1px solid #E2E8F0',
+                },
+                duration: 3000,
+              }}
+            />
+            <Router>
+              <div className="flex flex-col min-h-screen bg-white">
+                <Header />
+                <main className="flex-grow container mx-auto px-4 py-8 w-full max-w-7xl">
+                  {isAdmin && <SEOMonitor />}
+                  <Suspense fallback={
+                    <div className="flex items-center justify-center min-h-[60vh]">
+                      <LoadingSpinner size="large" />
+                    </div>
+                  }>
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/about" element={<About />} />
+                      <Route path="/shop" element={<Shop />} />
+                      <Route path="/services" element={<Services />} />
+                      <Route path="/workshop" element={<Workshop />} />
+                      <Route path="/contact" element={<Contact />} />
+                      <Route path="/cart" element={<Cart />} />
+                      <Route path="/saved" element={<SavedItems />} />
+                      <Route path="/search" element={<SearchResults />} />
+                      <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+                      <Route path="/cancellation-and-refund" element={<CancellationAndRefund />} />
+                      <Route path="/shipping-and-privacy" element={<ShippingAndPrivacy />} />
+                    </Routes>
+                  </Suspense>
+                </main>
+                <Footer />
+              </div>
+            </Router>
+          </ErrorBoundary>
         </CartProvider>
       </TooltipProvider>
     </QueryClientProvider>

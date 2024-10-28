@@ -1,8 +1,9 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
-import { Quote } from 'lucide-react';
+import { Quote, Sparkles } from 'lucide-react';
 
 const testimonials = [
   {
@@ -29,24 +30,52 @@ const testimonials = [
 
 const OurHappyClients = () => {
   return (
-    <section className="py-8 sm:py-12 md:py-16 bg-cream-100">
+    <motion.section 
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
+      className="py-8 sm:py-12 md:py-16 bg-gradient-to-b from-cream-100 via-white to-cream-100"
+    >
       <div className="container mx-auto px-4">
-        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center text-green-800 mb-6 sm:mb-8 md:mb-12">Our Happy Clients</h2>
+        <motion.div
+          initial={{ y: -20 }}
+          whileInView={{ y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-8"
+        >
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <Sparkles className="w-5 h-5 text-green-800 animate-pulse" />
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-green-800 tracking-tight">Our Happy Clients</h2>
+            <Sparkles className="w-5 h-5 text-green-800 animate-pulse" />
+          </div>
+        </motion.div>
+
         <Carousel className="w-full max-w-5xl mx-auto">
           <CarouselContent className="-ml-2 md:-ml-4">
             {testimonials.map((testimonial, index) => (
               <CarouselItem key={index} className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
-                <Card className="bg-white p-4 sm:p-6 h-full flex flex-col shadow-lg relative">
-                  <Quote className="absolute top-4 left-4 text-green-800 opacity-20 w-6 h-6 sm:w-8 sm:h-8" />
-                  <CardContent className="flex flex-col items-center text-center pt-4">
-                    <Avatar className="w-16 h-16 sm:w-20 sm:h-20 mb-3 sm:mb-4 border-4 border-green-800">
-                      <AvatarImage src={testimonial.image} alt={testimonial.name} />
-                      <AvatarFallback>{testimonial.name[0]}</AvatarFallback>
-                    </Avatar>
-                    <h3 className="font-semibold text-base sm:text-lg mb-2 text-green-800">{testimonial.name}</h3>
-                    <p className="text-sm sm:text-base text-gray-600 italic">"{testimonial.text}"</p>
-                  </CardContent>
-                </Card>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <Card className="bg-white/80 backdrop-blur-sm p-4 sm:p-6 h-full flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 relative">
+                    <Quote className="absolute top-4 left-4 text-green-800 opacity-20 w-6 h-6 sm:w-8 sm:h-8" />
+                    <CardContent className="flex flex-col items-center text-center pt-4">
+                      <motion.div
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <Avatar className="w-16 h-16 sm:w-20 sm:h-20 mb-3 sm:mb-4 border-4 border-green-800 ring-2 ring-cream-200 ring-offset-2">
+                          <AvatarImage src={testimonial.image} alt={testimonial.name} />
+                          <AvatarFallback>{testimonial.name[0]}</AvatarFallback>
+                        </Avatar>
+                      </motion.div>
+                      <h3 className="font-semibold text-base sm:text-lg mb-2 text-green-800 tracking-wide">{testimonial.name}</h3>
+                      <p className="text-sm sm:text-base text-gray-600/90 italic leading-relaxed">"{testimonial.text}"</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
               </CarouselItem>
             ))}
           </CarouselContent>
@@ -56,7 +85,7 @@ const OurHappyClients = () => {
           </div>
         </Carousel>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

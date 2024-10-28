@@ -2,12 +2,29 @@ import React from 'react';
 
 const AboutUs = () => {
   return (
-    <section className="py-8 sm:py-12 md:py-16 bg-white">
+    <section 
+      className="relative overflow-hidden mx-auto"
+      style={{
+        marginTop: '1899px',
+        opacity: 0,
+      }}
+    >
       <div className="container mx-auto px-4">
         <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center text-green-800 mb-6 sm:mb-8 md:mb-12">About Us</h2>
-        <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8">
-          <div className="w-full md:w-1/2">
-            <div className="aspect-square md:aspect-auto md:h-[500px] relative rounded-lg overflow-hidden shadow-lg">
+        <div className="flex flex-col md:flex-row items-center gap-0">
+          <div 
+            className="w-full md:w-1/2"
+            style={{
+              marginLeft: '80px'
+            }}
+          >
+            <div 
+              className="relative rounded-lg overflow-hidden shadow-lg"
+              style={{
+                width: '443px',
+                height: '463px'
+              }}
+            >
               <img 
                 src="https://i.postimg.cc/wBxJsq1n/image.png" 
                 alt="Fathima Shamsudheen" 

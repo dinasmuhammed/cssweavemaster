@@ -26,7 +26,7 @@ const Footer = () => {
           </div>
           
           <div className="text-center sm:text-left">
-            <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
+            <h3 className="text-lg font-semibold mb-4 text-white">Follow Us</h3>
             <div className="flex justify-center sm:justify-start space-x-6">
               <a 
                 href="https://www.instagram.com/hennabyfathima__/" 
@@ -72,7 +72,7 @@ const Footer = () => {
           </div>
 
           <div className="text-center lg:text-right">
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <h3 className="text-lg font-semibold mb-4 text-white">Quick Links</h3>
             <nav>
               <ul className="space-y-2">
                 {navItems.map((item) => (

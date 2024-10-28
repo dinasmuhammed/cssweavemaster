@@ -6,6 +6,7 @@ import { useCart } from '../../context/CartContext';
 
 const ProductCard = ({ product }) => {
   const { addToCart, savedItems, saveForLater } = useCart();
+
   const isSaved = savedItems.some(item => item.id === product.id);
 
   const handleSaveForLater = () => {
@@ -27,12 +28,12 @@ const ProductCard = ({ product }) => {
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
         />
       </div>
-      <div className="p-4 sm:p-6">
+      <div className="p-6">
         <div className="flex justify-between items-start mb-2">
-          <h3 className="text-base sm:text-lg font-semibold line-clamp-2">{product.name}</h3>
-          <span className="text-green-800 font-bold whitespace-nowrap ml-2">₹{product.price}</span>
+          <h3 className="text-lg font-semibold">{product.name}</h3>
+          <span className="text-green-800 font-bold">₹{product.price}</span>
         </div>
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">{product.description}</p>
+        <p className="text-gray-600 text-sm mb-4">{product.description}</p>
         <div className="flex gap-2">
           <Button 
             variant="outline"

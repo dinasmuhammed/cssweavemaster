@@ -36,14 +36,14 @@ const ServicePackage = ({ title, details, images, buttonText, isReversed }) => {
 
   return (
     <motion.div 
-      className={`mb-8 flex flex-col ${isReversed ? 'lg:flex-row-reverse' : 'lg:flex-row'}`}
+      className={`mb-8 flex flex-col ${isReversed ? 'lg:flex-row-reverse' : 'lg:flex-row'} gap-6`}
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
       <div className={`w-full lg:w-1/2 ${isReversed ? 'lg:pl-4 xl:pl-8' : 'lg:pr-4 xl:pr-8'}`}>
         <h3 className="text-xl sm:text-2xl font-semibold mb-4 text-green-800">{title}</h3>
-        <ul className="list-disc list-inside mb-6">
+        <ul className="list-disc list-inside mb-6 space-y-2">
           {details.map((detail, index) => (
             <li key={index} className="text-sm sm:text-base text-gray-700">{detail}</li>
           ))}
@@ -58,8 +58,8 @@ const ServicePackage = ({ title, details, images, buttonText, isReversed }) => {
             <DialogHeader>
               <DialogTitle>Request to Book - {title}</DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleSubmit}>
-              <div>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-4">
                 <div>
                   <Label htmlFor="name">Name</Label>
                   <Input id="name" name="name" value={formData.name} onChange={handleInputChange} required />
@@ -86,7 +86,7 @@ const ServicePackage = ({ title, details, images, buttonText, isReversed }) => {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="w-full lg:w-1/2 grid grid-cols-1 sm:grid-cols-3">
+      <div className="w-full lg:w-1/2 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
         {images.map((src, index) => (
           <motion.div 
             key={index}
@@ -97,8 +97,7 @@ const ServicePackage = ({ title, details, images, buttonText, isReversed }) => {
             <img 
               src={src} 
               alt={`${title} - Image ${index + 1}`} 
-              className="w-[213px] h-[293px] object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
-              style={{ flexShrink: 0 }}
+              className="w-full h-full object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
             />
           </motion.div>
         ))}

@@ -27,13 +27,7 @@ const reasons = [
 
 const WhyHennaByFathima = () => {
   return (
-    <section 
-      className="relative overflow-hidden mx-auto"
-      style={{
-        marginTop: '1134px',
-        opacity: 0,
-      }}
-    >
+    <section className="py-6 sm:py-8 md:py-12 lg:py-16 bg-white">
       <div className="container mx-auto px-4">
         <motion.h2 
           className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-center text-green-800 mb-6 sm:mb-8 md:mb-12"
@@ -43,10 +37,7 @@ const WhyHennaByFathima = () => {
         >
           Why Henna by Fathima?
         </motion.h2>
-        <div 
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
-          style={{ marginLeft: '80px' }}
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
           {reasons.map((reason, index) => (
             <motion.div 
               key={index} 
@@ -55,10 +46,6 @@ const WhyHennaByFathima = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               whileHover={{ scale: 1.02 }}
-              style={{
-                width: '191px',
-                height: '194px',
-              }}
             >
               <div className="flex justify-center mb-3 sm:mb-4">{reason.icon}</div>
               <h3 className="text-sm sm:text-base md:text-lg font-semibold mb-2">{reason.title}</h3>

@@ -97,7 +97,8 @@ const ServicePackage = ({ title, details, images, buttonText, isReversed }) => {
             <img 
               src={src} 
               alt={`${title} - Image ${index + 1}`} 
-              className="w-full h-full object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+              className="w-[213px] h-[293px] object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+              style={{ flexShrink: 0 }}
             />
           </motion.div>
         ))}

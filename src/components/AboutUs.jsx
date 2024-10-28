@@ -18,7 +18,7 @@ const AboutUs = () => {
           </div>
           <div className="w-full md:w-1/2 md:pl-8 relative">
             <motion.img
-              src="https://i.ibb.co/VvLNYZZ/leaf.png"
+              src="https://i.ibb.co/cxDksWj/Group-6.png"
               alt="Decorative leaf"
               className="absolute -right-4 top-0 w-24 h-auto opacity-60"
               initial={{ opacity: 0, rotate: -45 }}

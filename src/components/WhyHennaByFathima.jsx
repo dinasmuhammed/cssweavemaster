@@ -41,7 +41,7 @@ const WhyHennaByFathima = () => {
           {reasons.map((reason, index) => (
             <motion.div 
               key={index} 
-              className="text-center p-4 sm:p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 bg-cream-100"
+              className="text-center p-4 sm:p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}

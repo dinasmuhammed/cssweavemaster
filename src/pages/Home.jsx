@@ -16,9 +16,9 @@ const Home = () => {
         <WelcomeSection />
         <WhyHennaByFathima />
         <OurServices />
-        <OurHappyClients />
-        <HennaMoments />
         <AboutUs />
+        <HennaMoments />
+        <OurHappyClients />
         <OurHappyStore />
       </main>
     </div>

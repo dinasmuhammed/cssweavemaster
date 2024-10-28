@@ -35,11 +35,27 @@ const AboutUs = () => {
           <div className="w-full md:w-1/2 md:pl-4 lg:pl-8">
             <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4">Meet the Artist</h3>
             <h4 className="text-base sm:text-lg md:text-xl font-semibold mb-2 sm:mb-3">Fathima Shamsudheen - Owner, Founder & Lead Artist</h4>
-            <div className="space-y-4 text-sm sm:text-base text-gray-600">
-              <p>
+            <div className="space-y-4">
+              <p
+                style={{
+                  fontFamily: 'Axiforma',
+                  fontSize: '16px',
+                  fontWeight: 400,
+                  lineHeight: '25.34px',
+                  textAlign: 'left'
+                }}
+              >
                 At Henna by Fathima, we believe that just as everyone deserves a diamond, henna is an essential part of joy and celebration. Our passion lies in adorning hands with rich, deep red designs, symbolizing companionship, new beginnings, and the simple pleasure of henna art.
               </p>
-              <p>
+              <p
+                style={{
+                  fontFamily: 'Axiforma',
+                  fontSize: '16px',
+                  fontWeight: 400,
+                  lineHeight: '25.34px',
+                  textAlign: 'left'
+                }}
+              >
                 We are dedicated to providing a personalized experience tailored to each of our clients. From high-quality products and exceptional services to hands-on workshops, Henna by Fathima adds a touch of beauty and sweetness to every occasion, ensuring that your special moments are truly unforgettable.
               </p>
             </div>

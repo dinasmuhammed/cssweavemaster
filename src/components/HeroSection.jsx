@@ -25,16 +25,14 @@ const HeroSection = () => {
   };
 
   return (
-    <div className="w-full relative overflow-hidden">
-      <section 
+    <section 
+      className="w-screen relative overflow-hidden"
+      style={{ marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}
+    >
+      <div 
         className="relative h-[300px] sm:h-[400px] md:h-[500px] lg:h-[570px]"
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
-        style={{
-          width: '100vw',
-          marginLeft: 'calc(-50vw + 50%)',
-          marginRight: 'calc(-50vw + 50%)'
-        }}
       >
         <div className="embla absolute inset-0" ref={emblaRef}>
           <div className="embla__container h-full flex">
@@ -60,8 +58,8 @@ const HeroSection = () => {
             ))}
           </div>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   );
 };
 

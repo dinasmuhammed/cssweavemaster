@@ -34,12 +34,12 @@ const HeroSection = () => {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1 }}
               >
-                <div 
-                  className="w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-105"
-                  style={{ 
-                    backgroundImage: `url(${image})`,
-                    boxShadow: 'inset 0 0 100px rgba(0,0,0,0.3)'
-                  }}
+                <img 
+                  src={image} 
+                  alt={`Slide ${index + 1}`}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  loading={index === 0 ? "eager" : "lazy"}
+                  decoding="async"
                 />
               </motion.div>
             ))}

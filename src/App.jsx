@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,22 +6,35 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CartProvider } from './context/CartContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import Home from './pages/Home';
-import Shop from './pages/Shop';
-import Services from './pages/Services';
-import Workshop from './pages/Workshop';
-import Contact from './pages/Contact';
-import Cart from './pages/Cart';
-import About from './pages/About';
-import SavedItems from './pages/SavedItems';
-import SearchResults from './pages/SearchResults';
-import TermsAndConditions from './pages/TermsAndConditions';
-import CancellationAndRefund from './pages/CancellationAndRefund';
-import ShippingAndPrivacy from './pages/ShippingAndPrivacy';
-import SEOMonitor from './components/SEOMonitor';
-import { checkNetworkSpeed } from './utils/networkUtils';
 
-const queryClient = new QueryClient();
+// Lazy load all pages
+const Home = lazy(() => import('./pages/Home'));
+const Shop = lazy(() => import('./pages/Shop'));
+const Services = lazy(() => import('./pages/Services'));
+const Workshop = lazy(() => import('./pages/Workshop'));
+const Contact = lazy(() => import('./pages/Contact'));
+const Cart = lazy(() => import('./pages/Cart'));
+const About = lazy(() => import('./pages/About'));
+const SavedItems = lazy(() => import('./pages/SavedItems'));
+const SearchResults = lazy(() => import('./pages/SearchResults'));
+const TermsAndConditions = lazy(() => import('./pages/TermsAndConditions'));
+const CancellationAndRefund = lazy(() => import('./pages/CancellationAndRefund'));
+const ShippingAndPrivacy = lazy(() => import('./pages/ShippingAndPrivacy'));
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      cacheTime: 1000 * 60 * 30, // 30 minutes
+    },
+  },
+});
+
+const LoadingSpinner = () => (
+  <div className="flex items-center justify-center min-h-[60vh]">
+    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-800"></div>
+  </div>
+);
 
 const App = () => {
   const [isSlowNetwork, setIsSlowNetwork] = useState(false);
@@ -89,20 +102,22 @@ const App = () => {
               <Header />
               <main className="flex-grow container mx-auto px-4 py-8 w-full max-w-7xl">
                 {isAdmin && <SEOMonitor />}
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/shop" element={<Shop />} />
-                  <Route path="/services" element={<Services />} />
-                  <Route path="/workshop" element={<Workshop />} />
-                  <Route path="/contact" element={<Contact />} />
-                  <Route path="/cart" element={<Cart />} />
-                  <Route path="/saved" element={<SavedItems />} />
-                  <Route path="/search" element={<SearchResults />} />
-                  <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
-                  <Route path="/cancellation-and-refund" element={<CancellationAndRefund />} />
-                  <Route path="/shipping-and-privacy" element={<ShippingAndPrivacy />} />
-                </Routes>
+                <Suspense fallback={<LoadingSpinner />}>
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/shop" element={<Shop />} />
+                    <Route path="/services" element={<Services />} />
+                    <Route path="/workshop" element={<Workshop />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/cart" element={<Cart />} />
+                    <Route path="/saved" element={<SavedItems />} />
+                    <Route path="/search" element={<SearchResults />} />
+                    <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+                    <Route path="/cancellation-and-refund" element={<CancellationAndRefund />} />
+                    <Route path="/shipping-and-privacy" element={<ShippingAndPrivacy />} />
+                  </Routes>
+                </Suspense>
               </main>
               <Footer />
             </div>

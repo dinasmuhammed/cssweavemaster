@@ -1,8 +1,9 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 const AboutUs = () => {
   return (
-    <section className="py-12 sm:py-16 bg-cream-100">
+    <section className="py-12 sm:py-16 bg-cream-100 relative overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-green-800 mb-8 sm:mb-12">About Us</h2>
         <div className="flex flex-col md:flex-row items-center gap-6 sm:gap-8">
@@ -15,7 +16,15 @@ const AboutUs = () => {
               />
             </div>
           </div>
-          <div className="w-full md:w-1/2 md:pl-8">
+          <div className="w-full md:w-1/2 md:pl-8 relative">
+            <motion.img
+              src="https://i.ibb.co/VvLNYZZ/leaf.png"
+              alt="Decorative leaf"
+              className="absolute -right-4 top-0 w-24 h-auto opacity-60"
+              initial={{ opacity: 0, rotate: -45 }}
+              animate={{ opacity: 0.6, rotate: 0 }}
+              transition={{ duration: 1, ease: "easeOut" }}
+            />
             <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-green-800">Meet the Artist</h3>
             <h4 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3 text-green-800">Fathima Shamsudheen - Owner, Founder & Lead Artist</h4>
             <div className="space-y-4 text-sm sm:text-base text-gray-600">

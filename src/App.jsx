@@ -4,10 +4,12 @@ import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CartProvider } from './context/CartContext';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import ErrorBoundary from './components/ErrorBoundary';
 import LoadingSpinner from './components/LoadingSpinner';
+
+// Lazy load header and footer for better initial load time
+const Header = lazy(() => import('./components/Header'));
+const Footer = lazy(() => import('./components/Footer'));
+const ErrorBoundary = lazy(() => import('./components/ErrorBoundary'));
 
 // Lazy load all pages
 const Home = lazy(() => import('./pages/Home'));
@@ -23,67 +25,54 @@ const TermsAndConditions = lazy(() => import('./pages/TermsAndConditions'));
 const CancellationAndRefund = lazy(() => import('./pages/CancellationAndRefund'));
 const ShippingAndPrivacy = lazy(() => import('./pages/ShippingAndPrivacy'));
 
+// Configure React Query for better caching and performance
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60 * 5, // 5 minutes
       cacheTime: 1000 * 60 * 30, // 30 minutes
+      retry: 1,
+      refetchOnWindowFocus: false,
     },
   },
 });
 
 const App = () => {
-  const [isSlowNetwork, setIsSlowNetwork] = useState(false);
-  const [isCheckingNetwork, setIsCheckingNetwork] = useState(true);
-  const [isAdmin] = useState(() => window.location.search.includes('admin=true'));
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const checkSpeed = async () => {
-      try {
-        const speed = await checkNetworkSpeed();
-        if (speed < 1) {
-          setIsSlowNetwork(true);
-          toast.error("Your network is slow. The website may not function optimally.", {
-            duration: Infinity,
+    // Preload critical resources
+    const preloadResources = async () => {
+      const imagesToPreload = [
+        'https://i.postimg.cc/T3N2Cfkz/image.png', // Logo
+      ];
+
+      await Promise.all([
+        ...imagesToPreload.map(src => {
+          const img = new Image();
+          return new Promise((resolve) => {
+            img.onload = img.onerror = resolve;
+            img.src = src;
           });
-        }
-      } catch (error) {
-        console.error("Error checking network speed:", error);
-      } finally {
-        setIsCheckingNetwork(false);
-      }
+        })
+      ]);
+
+      setIsLoading(false);
     };
 
-    checkSpeed();
+    preloadResources();
 
     // Add viewport meta tag for better responsiveness
     const viewportMeta = document.createElement('meta');
     viewportMeta.name = "viewport";
-    viewportMeta.content = "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no";
+    viewportMeta.content = "width=device-width, initial-scale=1, maximum-scale=1";
     document.getElementsByTagName('head')[0].appendChild(viewportMeta);
   }, []);
 
-  if (isCheckingNetwork) {
+  if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-white">
-        <p className="text-green-800 text-xl">Checking network speed...</p>
-      </div>
-    );
-  }
-
-  if (isSlowNetwork) {
-    return (
-      <div className="flex items-center justify-center h-screen bg-white">
-        <div className="text-center px-4">
-          <h1 className="text-2xl font-bold text-green-800 mb-4">Network Issue Detected</h1>
-          <p className="text-green-700 mb-4">Your network connection is slow. The website may not function properly.</p>
-          <button
-            className="bg-green-800 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors"
-            onClick={() => window.location.reload()}
-          >
-            Retry
-          </button>
-        </div>
+      <div className="flex items-center justify-center h-screen">
+        <LoadingSpinner size="large" />
       </div>
     );
   }
@@ -106,9 +95,10 @@ const App = () => {
             />
             <Router>
               <div className="flex flex-col min-h-screen bg-white">
-                <Header />
+                <Suspense fallback={<LoadingSpinner />}>
+                  <Header />
+                </Suspense>
                 <main className="flex-grow container mx-auto px-4 py-8 w-full max-w-7xl">
-                  {isAdmin && <SEOMonitor />}
                   <Suspense fallback={
                     <div className="flex items-center justify-center min-h-[60vh]">
                       <LoadingSpinner size="large" />
@@ -130,7 +120,9 @@ const App = () => {
                     </Routes>
                   </Suspense>
                 </main>
-                <Footer />
+                <Suspense fallback={<LoadingSpinner />}>
+                  <Footer />
+                </Suspense>
               </div>
             </Router>
           </ErrorBoundary>

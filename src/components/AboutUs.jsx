@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 const AboutUs = () => {
   return (
-    <section className="py-8 sm:py-12 md:py-16 bg-cream-100 relative overflow-hidden">
+    <section className="py-8 sm:py-12 md:py-16 relative overflow-hidden" style={{ backgroundColor: '#FCEBD033' }}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.h2 
           className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-green-800 mb-6 sm:mb-8 md:mb-12"

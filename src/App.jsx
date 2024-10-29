@@ -5,7 +5,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CartProvider } from './context/CartContext';
 import LoadingSpinner from './components/LoadingSpinner';
-import LoadingFallback from './components/LoadingFallback';
 import ErrorBoundary from './components/ErrorBoundary';
 
 // Lazy load components with retry mechanism
@@ -53,6 +52,7 @@ const App = () => {
   const [loadingError, setLoadingError] = useState(null);
 
   useEffect(() => {
+    // Preload critical resources
     const preloadResources = async () => {
       try {
         const criticalImages = [
@@ -61,13 +61,14 @@ const App = () => {
 
         await Promise.all([
           ...criticalImages.map(src => {
+            const img = new Image();
             return new Promise((resolve, reject) => {
-              const img = new Image();
               img.onload = resolve;
               img.onerror = reject;
               img.src = src;
             });
-          })
+          }),
+          // Add other critical resources here
         ]);
 
         setIsLoading(false);
@@ -79,10 +80,20 @@ const App = () => {
     };
 
     preloadResources();
+
+    // Add viewport meta tag for better responsiveness
+    const viewportMeta = document.createElement('meta');
+    viewportMeta.name = "viewport";
+    viewportMeta.content = "width=device-width, initial-scale=1, maximum-scale=1";
+    document.getElementsByTagName('head')[0].appendChild(viewportMeta);
   }, []);
 
   if (isLoading) {
-    return <LoadingSpinner fullScreen size="large" text="Initializing application..." />;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <LoadingSpinner size="large" />
+      </div>
+    );
   }
 
   if (loadingError) {
@@ -119,11 +130,17 @@ const App = () => {
             />
             <Router>
               <div className="flex flex-col min-h-screen bg-white">
-                <Suspense fallback={<LoadingSpinner fullScreen />}>
+                <Suspense fallback={<LoadingSpinner />}>
                   <Header />
                 </Suspense>
                 <main className="flex-grow container mx-auto px-4 py-8 w-full max-w-7xl">
-                  <Suspense fallback={<LoadingFallback />}>
+                  <Suspense 
+                    fallback={
+                      <div className="flex items-center justify-center min-h-[60vh]">
+                        <LoadingSpinner size="large" />
+                      </div>
+                    }
+                  >
                     <Routes>
                       <Route path="/" element={<Home />} />
                       <Route path="/about" element={<About />} />

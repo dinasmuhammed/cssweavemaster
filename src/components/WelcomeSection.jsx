@@ -5,7 +5,7 @@ import { Sparkles } from 'lucide-react';
 
 const WelcomeSection = () => {
   return (
-    <section className="py-12 sm:py-16 md:py-24 bg-gradient-to-b from-cream-100 via-cream-200 to-white">
+    <section className="py-8 sm:py-12 md:py-16 lg:py-24 bg-gradient-to-b from-cream-100 via-cream-200 to-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -14,18 +14,18 @@ const WelcomeSection = () => {
           className="max-w-4xl mx-auto"
         >
           <motion.div 
-            className="flex items-center justify-center gap-2 mb-2"
+            className="flex items-center justify-center gap-1 sm:gap-2 mb-2"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <Sparkles className="w-6 h-6 text-green-800 animate-pulse" />
-            <span className="text-green-800 font-medium">Premium Henna Services</span>
-            <Sparkles className="w-6 h-6 text-green-800 animate-pulse" />
+            <Sparkles className="w-4 h-4 sm:w-6 sm:h-6 text-green-800 animate-pulse" />
+            <span className="text-green-800 font-medium text-sm sm:text-base">Premium Henna Services</span>
+            <Sparkles className="w-4 h-4 sm:w-6 sm:h-6 text-green-800 animate-pulse" />
           </motion.div>
           
           <motion.h2 
-            className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-green-800 mb-4 sm:mb-6 tracking-tight"
+            className="text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-green-800 mb-3 sm:mb-4 md:mb-6 tracking-tight"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
@@ -34,7 +34,7 @@ const WelcomeSection = () => {
           </motion.h2>
           
           <motion.p 
-            className="text-base sm:text-lg md:text-xl lg:text-2xl text-green-800/80 mb-8 sm:mb-10 max-w-3xl mx-auto leading-relaxed"
+            className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-green-800/80 mb-6 sm:mb-8 md:mb-10 max-w-3xl mx-auto leading-relaxed px-2"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
@@ -51,7 +51,7 @@ const WelcomeSection = () => {
           >
             <Button 
               asChild 
-              className="bg-[#00332B] hover:bg-[#004D40] text-white w-[169px] h-[46px] rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 font-medium group"
+              className="bg-[#00332B] hover:bg-[#004D40] text-white w-[140px] sm:w-[169px] h-[40px] sm:h-[46px] rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 font-medium text-sm sm:text-base group"
             >
               <Link to="/services" className="flex items-center justify-center gap-2">
                 View Packages

@@ -92,9 +92,9 @@ const Header = () => {
               <Link
                 key={item.to}
                 to={item.to}
-                className={`transition-colors relative ${
+                className={`transition-colors ${
                   isActive(item.to)
-                    ? 'text-green-600 font-bold after:content-[""] after:absolute after:bottom-[-4px] after:left-0 after:w-full after:h-0.5 after:bg-green-600'
+                    ? 'text-green-600 font-bold'
                     : 'text-green-800 hover:text-green-700'
                 }`}
               >

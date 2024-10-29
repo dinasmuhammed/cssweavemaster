@@ -5,13 +5,13 @@ import { Sparkles } from 'lucide-react';
 
 const WelcomeSection = () => {
   return (
-    <section className="py-8 sm:py-12 md:py-16 lg:py-24" style={{ backgroundColor: '#FCEBD033' }}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <section className="flex justify-center items-center py-8 sm:py-12 md:py-16 lg:py-24" style={{ backgroundColor: '#FCEBD033' }}>
+      <div className="w-[1280px] h-[265px] flex-shrink-0 flex items-center justify-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="max-w-4xl mx-auto"
+          className="max-w-4xl mx-auto text-center"
         >
           <motion.div 
             className="flex items-center justify-center gap-1 sm:gap-2 mb-2"

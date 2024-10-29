@@ -5,59 +5,78 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CartProvider } from './context/CartContext';
 import LoadingSpinner from './components/LoadingSpinner';
+import ErrorBoundary from './components/ErrorBoundary';
 
-// Lazy load header and footer for better initial load time
-const Header = lazy(() => import('./components/Header'));
-const Footer = lazy(() => import('./components/Footer'));
-const ErrorBoundary = lazy(() => import('./components/ErrorBoundary'));
+// Lazy load components with retry mechanism
+const lazyLoadWithRetry = (importFn) => {
+  return lazy(() => importFn().catch((err) => {
+    console.error('Error loading component:', err);
+    return importFn(); // Retry once
+  }));
+};
 
-// Lazy load all pages
-const Home = lazy(() => import('./pages/Home'));
-const Shop = lazy(() => import('./pages/Shop'));
-const Services = lazy(() => import('./pages/Services'));
-const Workshop = lazy(() => import('./pages/Workshop'));
-const Contact = lazy(() => import('./pages/Contact'));
-const Cart = lazy(() => import('./pages/Cart'));
-const About = lazy(() => import('./pages/About'));
-const SavedItems = lazy(() => import('./pages/SavedItems'));
-const SearchResults = lazy(() => import('./pages/SearchResults'));
-const TermsAndConditions = lazy(() => import('./pages/TermsAndConditions'));
-const CancellationAndRefund = lazy(() => import('./pages/CancellationAndRefund'));
-const ShippingAndPrivacy = lazy(() => import('./pages/ShippingAndPrivacy'));
+// Lazy load components
+const Header = lazyLoadWithRetry(() => import('./components/Header'));
+const Footer = lazyLoadWithRetry(() => import('./components/Footer'));
 
-// Configure React Query for better caching and performance
+// Lazy load all pages with retry
+const Home = lazyLoadWithRetry(() => import('./pages/Home'));
+const Shop = lazyLoadWithRetry(() => import('./pages/Shop'));
+const Services = lazyLoadWithRetry(() => import('./pages/Services'));
+const Workshop = lazyLoadWithRetry(() => import('./pages/Workshop'));
+const Contact = lazyLoadWithRetry(() => import('./pages/Contact'));
+const Cart = lazyLoadWithRetry(() => import('./pages/Cart'));
+const About = lazyLoadWithRetry(() => import('./pages/About'));
+const SavedItems = lazyLoadWithRetry(() => import('./pages/SavedItems'));
+const SearchResults = lazyLoadWithRetry(() => import('./pages/SearchResults'));
+const TermsAndConditions = lazyLoadWithRetry(() => import('./pages/TermsAndConditions'));
+const CancellationAndRefund = lazyLoadWithRetry(() => import('./pages/CancellationAndRefund'));
+const ShippingAndPrivacy = lazyLoadWithRetry(() => import('./pages/ShippingAndPrivacy'));
+
+// Configure React Query with optimized settings
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60 * 5, // 5 minutes
       cacheTime: 1000 * 60 * 30, // 30 minutes
-      retry: 1,
+      retry: 2,
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
       refetchOnWindowFocus: false,
+      refetchOnReconnect: 'always',
     },
   },
 });
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [loadingError, setLoadingError] = useState(null);
 
   useEffect(() => {
     // Preload critical resources
     const preloadResources = async () => {
-      const imagesToPreload = [
-        'https://i.postimg.cc/T3N2Cfkz/image.png', // Logo
-      ];
+      try {
+        const criticalImages = [
+          'https://i.postimg.cc/T3N2Cfkz/image.png', // Logo
+        ];
 
-      await Promise.all([
-        ...imagesToPreload.map(src => {
-          const img = new Image();
-          return new Promise((resolve) => {
-            img.onload = img.onerror = resolve;
-            img.src = src;
-          });
-        })
-      ]);
+        await Promise.all([
+          ...criticalImages.map(src => {
+            const img = new Image();
+            return new Promise((resolve, reject) => {
+              img.onload = resolve;
+              img.onerror = reject;
+              img.src = src;
+            });
+          }),
+          // Add other critical resources here
+        ]);
 
-      setIsLoading(false);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error preloading resources:', error);
+        setLoadingError('Failed to load critical resources. Please refresh the page.');
+        setIsLoading(false);
+      }
     };
 
     preloadResources();
@@ -73,6 +92,22 @@ const App = () => {
     return (
       <div className="flex items-center justify-center h-screen">
         <LoadingSpinner size="large" />
+      </div>
+    );
+  }
+
+  if (loadingError) {
+    return (
+      <div className="flex items-center justify-center h-screen p-4 text-center">
+        <div>
+          <h1 className="text-xl font-semibold text-red-600 mb-4">{loadingError}</h1>
+          <button 
+            onClick={() => window.location.reload()}
+            className="bg-green-800 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors"
+          >
+            Retry Loading
+          </button>
+        </div>
       </div>
     );
   }
@@ -99,11 +134,13 @@ const App = () => {
                   <Header />
                 </Suspense>
                 <main className="flex-grow container mx-auto px-4 py-8 w-full max-w-7xl">
-                  <Suspense fallback={
-                    <div className="flex items-center justify-center min-h-[60vh]">
-                      <LoadingSpinner size="large" />
-                    </div>
-                  }>
+                  <Suspense 
+                    fallback={
+                      <div className="flex items-center justify-center min-h-[60vh]">
+                        <LoadingSpinner size="large" />
+                      </div>
+                    }
+                  >
                     <Routes>
                       <Route path="/" element={<Home />} />
                       <Route path="/about" element={<About />} />

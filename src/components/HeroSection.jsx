@@ -1,18 +1,30 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const HeroSection = () => {
   const [isHovering, setIsHovering] = useState(false);
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ delay: 5000, stopOnInteraction: false })]);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { loop: true }, 
+    [Autoplay({ delay: 5000, stopOnInteraction: false })]
+  );
   
   const images = [
     "https://i.ibb.co/7j9LYMb/de63f2db-8f22-4eae-a1ef-46b35d650281.jpg",
-    "https://i.ibb.co/3cjTGVn/8c42239e-0621-47c4-a44e-83c65d184231.jpg",
+    "https://i.ibb.co/3cjTGVn/8c42239e-0621-47c4-a44e-83c65d650281.jpg",
     "https://i.ibb.co/7CX7vg6/5bc5421c-e0e5-4f18-93ba-7f984c576832.jpg",
   ];
+
+  React.useEffect(() => {
+    if (emblaApi) {
+      emblaApi.on('select', () => {
+        setSelectedIndex(emblaApi.selectedScrollSnap());
+      });
+    }
+  }, [emblaApi]);
 
   const scrollPrev = () => emblaApi && emblaApi.scrollPrev();
   const scrollNext = () => emblaApi && emblaApi.scrollNext();
@@ -26,23 +38,32 @@ const HeroSection = () => {
       >
         <div className="embla h-full" ref={emblaRef}>
           <div className="embla__container h-full flex">
-            {images.map((image, index) => (
-              <motion.div 
-                key={index} 
-                className="embla__slide relative flex-[0_0_100%] h-full"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1 }}
-              >
-                <img 
-                  src={image} 
-                  alt={`Slide ${index + 1}`}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading={index === 0 ? "eager" : "lazy"}
-                  decoding="async"
-                />
-              </motion.div>
-            ))}
+            <AnimatePresence mode="wait">
+              {images.map((image, index) => (
+                <motion.div 
+                  key={index} 
+                  className="embla__slide relative flex-[0_0_100%] h-full"
+                  initial={{ opacity: 0, scale: 1.1 }}
+                  animate={{ 
+                    opacity: selectedIndex === index ? 1 : 0,
+                    scale: selectedIndex === index ? 1 : 1.1,
+                  }}
+                  exit={{ opacity: 0, scale: 1.1 }}
+                  transition={{ 
+                    duration: 0.8,
+                    ease: "easeOut"
+                  }}
+                >
+                  <img 
+                    src={image} 
+                    alt={`Slide ${index + 1}`}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading={index === 0 ? "eager" : "lazy"}
+                    decoding="async"
+                  />
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
         </div>
 

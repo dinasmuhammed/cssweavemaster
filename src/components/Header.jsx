@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Search, Heart, ShoppingCart, Menu } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import { useCart } from '../context/CartContext';
@@ -13,6 +13,7 @@ const Header = () => {
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const location = useLocation();
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -35,6 +36,12 @@ const Header = () => {
     { to: "/workshop", label: "Workshop" },
     { to: "/contact", label: "Contact" },
   ];
+
+  const isActive = (path) => {
+    if (path === '/' && location.pathname === '/') return true;
+    if (path !== '/' && location.pathname.startsWith(path)) return true;
+    return false;
+  };
 
   return (
     <header className={`sticky top-0 z-50 bg-white transition-shadow duration-300 w-full ${
@@ -59,7 +66,11 @@ const Header = () => {
                   <Link
                     key={item.to}
                     to={item.to}
-                    className="block text-lg font-medium text-green-800 hover:text-green-700 py-2 transition-colors"
+                    className={`block text-lg font-medium transition-colors ${
+                      isActive(item.to)
+                        ? 'text-green-600 font-bold'
+                        : 'text-green-800 hover:text-green-700'
+                    }`}
                   >
                     {item.label}
                   </Link>
@@ -81,7 +92,11 @@ const Header = () => {
               <Link
                 key={item.to}
                 to={item.to}
-                className="text-green-800 hover:text-green-700 transition-colors"
+                className={`transition-colors relative ${
+                  isActive(item.to)
+                    ? 'text-green-600 font-bold after:content-[""] after:absolute after:bottom-[-4px] after:left-0 after:w-full after:h-0.5 after:bg-green-600'
+                    : 'text-green-800 hover:text-green-700'
+                }`}
               >
                 {item.label}
               </Link>

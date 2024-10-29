@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
+import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { motion } from "framer-motion";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -21,80 +23,135 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    toast({
-      title: "Message Sent",
-      description: "Thank you for your message. We'll get back to you soon!",
-    });
+    toast.success("Message sent successfully! We'll get back to you soon.");
     setFormData({ name: '', email: '', message: '' });
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl sm:text-3xl font-bold text-green-800 mb-6">Contact Us</h1>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="space-y-8">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
-              <Input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="mt-1 w-full"
-              />
-            </div>
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-              <Input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="mt-1 w-full"
-              />
-            </div>
-            <div>
-              <label htmlFor="message"className="block text-sm font-medium text-gray-700">Message</label>
-              <Textarea
-                id="message"
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                required
-                className="mt-1 w-full"
-                rows={4}
-              />
-            </div>
-            <Button type="submit" className="w-full">Send Message</Button>
-          </form>
-          <div>
-            <h2 className="text-xl font-semibold mb-2">Contact Information</h2>
-            <p>Email: hennabyfathima.in@gmail.com</p>
-            <p>Phone: +91 8086647124</p>
-            <p>Address: Henna by Fathima Mehndi Studio, South Koduvally, Koduvally, Kozhikode, Kerala - 673572</p>
-          </div>
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="container mx-auto px-4 py-12"
+    >
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-12">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-green-800 mb-4">Get in Touch</h1>
+          <p className="text-gray-600 max-w-2xl mx-auto">We'd love to hear from you. Whether you have a question about our services, pricing, or anything else, our team is ready to answer all your questions.</p>
         </div>
-        <div className="w-full h-[300px] lg:h-full">
-          <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3911.804472477242!2d75.9017245!3d11.3489877!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba64371e0cd4cd9%3A0x6bc7783ba1876049!2sHenna%20by%20Fathima%20Mehndi%20Studio!5e0!3m2!1sen!2sin!4v1728914176105!5m2!1sen!2sin" 
-            width="100%" 
-            height="100%" 
-            style={{border:0}} 
-            allowFullScreen="" 
-            loading="lazy" 
-            referrerPolicy="no-referrer-when-downgrade"
-            title="Henna by Fathima Mehndi Studio Location"
-            className="rounded-lg"
-          ></iframe>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            className="bg-white rounded-2xl shadow-lg p-8"
+          >
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                <Input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  className="w-full border-gray-200 focus:border-green-500 focus:ring-green-500"
+                  placeholder="John Doe"
+                />
+              </div>
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                <Input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="w-full border-gray-200 focus:border-green-500 focus:ring-green-500"
+                  placeholder="john@example.com"
+                />
+              </div>
+              <div>
+                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">Your Message</label>
+                <Textarea
+                  id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                  className="w-full border-gray-200 focus:border-green-500 focus:ring-green-500 min-h-[150px]"
+                  placeholder="Tell us how we can help you..."
+                />
+              </div>
+              <Button 
+                type="submit" 
+                className="w-full bg-green-800 hover:bg-green-700 text-white py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
+              >
+                Send Message
+                <Send className="w-4 h-4" />
+              </Button>
+            </form>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4 }}
+            className="lg:sticky lg:top-8 space-y-8"
+          >
+            <div className="bg-white rounded-2xl shadow-lg p-8">
+              <h2 className="text-2xl font-semibold text-green-800 mb-6">Contact Information</h2>
+              <div className="space-y-6">
+                <div className="flex items-start gap-4">
+                  <div className="bg-cream-100 p-3 rounded-lg">
+                    <Mail className="w-6 h-6 text-green-800" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-gray-900">Email</h3>
+                    <p className="text-gray-600">hennabyfathima.in@gmail.com</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="bg-cream-100 p-3 rounded-lg">
+                    <Phone className="w-6 h-6 text-green-800" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-gray-900">Phone</h3>
+                    <p className="text-gray-600">+91 8086647124</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="bg-cream-100 p-3 rounded-lg">
+                    <MapPin className="w-6 h-6 text-green-800" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-gray-900">Location</h3>
+                    <p className="text-gray-600">Henna by Fathima Mehndi Studio, South Koduvally, Koduvally, Kozhikode, Kerala - 673572</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+              <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3911.804472477242!2d75.9017245!3d11.3489877!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba64371e0cd4cd9%3A0x6bc7783ba1876049!2sHenna%20by%20Fathima%20Mehndi%20Studio!5e0!3m2!1sen!2sin!4v1728914176105!5m2!1sen!2sin" 
+                width="100%" 
+                height="300" 
+                style={{border:0}} 
+                allowFullScreen="" 
+                loading="lazy" 
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Henna by Fathima Mehndi Studio Location"
+                className="w-full"
+              />
+            </div>
+          </motion.div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { motion } from 'framer-motion';
-import { Sparkles } from 'lucide-react';
 
 const WelcomeSection = () => {
   return (
@@ -21,9 +20,7 @@ const WelcomeSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <Sparkles className="w-4 h-4 sm:w-6 sm:h-6 text-green-800" />
             <span className="text-green-800 font-medium text-sm sm:text-base">Premium Henna Services</span>
-            <Sparkles className="w-4 h-4 sm:w-6 sm:h-6 text-green-800" />
           </motion.div>
           
           <motion.h2 

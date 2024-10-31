@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 const services = [
   { name: 'Bridal Henna Package', image: 'https://i.postimg.cc/2SGPxtQr/Screenshot-2024-10-13-173602.png' },
@@ -26,11 +26,7 @@ const OurServices = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-8"
         >
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <Sparkles className="w-5 h-5 text-green-800 animate-pulse" />
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-green-800 tracking-tight">Our Services</h2>
-            <Sparkles className="w-5 h-5 text-green-800 animate-pulse" />
-          </div>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-green-800 tracking-tight">Our Services</h2>
         </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">

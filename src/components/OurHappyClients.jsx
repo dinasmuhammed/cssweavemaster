@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
-import { Quote, Sparkles } from 'lucide-react';
+import { Quote } from 'lucide-react';
 
 const testimonials = [
   {
@@ -43,11 +43,7 @@ const OurHappyClients = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-8"
         >
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <Sparkles className="w-5 h-5 text-green-800 animate-pulse" />
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-green-800 tracking-tight">Our Happy Clients</h2>
-            <Sparkles className="w-5 h-5 text-green-800 animate-pulse" />
-          </div>
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-green-800 tracking-tight">Our Happy Clients</h2>
         </motion.div>
 
         <Carousel className="w-full max-w-5xl mx-auto">

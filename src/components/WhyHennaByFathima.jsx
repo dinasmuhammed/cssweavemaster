@@ -4,22 +4,22 @@ import { motion } from 'framer-motion';
 
 const reasons = [
   {
-    icon: <Leaf className="w-6 sm:w-8 md:w-12 h-6 sm:h-8 md:h-12 text-green-800" />,
+    icon: <Leaf className="w-12 h-12 text-[#1B4B40]" />,
     title: '100% Organic Products',
     description: 'Handmade, chemical-free henna cones and products.',
   },
   {
-    icon: <Hand className="w-6 sm:w-8 md:w-12 h-6 sm:h-8 md:h-12 text-green-800" />,
+    icon: <Hand className="w-12 h-12 text-[#1B4B40]" />,
     title: 'Expert Henna Artist',
     description: 'Unique, personalized designs for brides and special occasions.',
   },
   {
-    icon: <GraduationCap className="w-6 sm:w-8 md:w-12 h-6 sm:h-8 md:h-12 text-green-800" />,
+    icon: <GraduationCap className="w-12 h-12 text-[#1B4B40]" />,
     title: 'Henna Workshops',
     description: 'Tips, tutorials, and care guides to ensure the best henna experience.',
   },
   {
-    icon: <ShoppingBag className="w-6 sm:w-8 md:w-12 h-6 sm:h-8 md:h-12 text-green-800" />,
+    icon: <ShoppingBag className="w-12 h-12 text-[#1B4B40]" />,
     title: 'Easy Online Shopping',
     description: 'Convenient purchase of organic products through online and offline.',
   },
@@ -27,34 +27,31 @@ const reasons = [
 
 const WhyHennaByFathima = () => {
   return (
-    <section className="py-6 sm:py-8 md:py-12 lg:py-16 bg-gradient-to-b from-white to-cream-100">
+    <section className="py-16 sm:py-24 bg-white">
       <div className="container mx-auto px-4">
         <motion.h2 
-          className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-center text-green-800 mb-6 sm:mb-8 md:mb-12"
+          className="text-2xl sm:text-3xl font-serif text-center text-[#1B4B40] mb-16"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
           Why Henna by Fathima?
         </motion.h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {reasons.map((reason, index) => (
             <motion.div 
               key={index} 
-              className="text-center p-6 sm:p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 bg-white/80 backdrop-blur-sm border border-cream-200"
+              className="text-center"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ 
-                scale: 1.02,
-                transition: { duration: 0.2 }
-              }}
             >
-              <div className="flex justify-center mb-4 sm:mb-6">
+              <div className="flex justify-center mb-6">
                 {reason.icon}
               </div>
-              <h3 className="text-sm sm:text-base md:text-lg font-semibold mb-2 text-green-800">{reason.title}</h3>
-              <p className="text-xs sm:text-sm md:text-base text-gray-600">{reason.description}</p>
+              <h3 className="text-lg font-serif text-[#1B4B40] mb-2">{reason.title}</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">{reason.description}</p>
             </motion.div>
           ))}
         </div>

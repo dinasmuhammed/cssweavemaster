@@ -9,10 +9,13 @@ const LoadingSpinner = ({ size = "default", className = "" }) => {
 
   return (
     <div className={`flex justify-center items-center p-4 ${className}`}>
-      <Loader2 
-        className={`${sizeClasses[size]} animate-spin text-green-800`}
-        aria-label="Loading"
-      />
+      <div className="relative">
+        <Loader2 
+          className={`${sizeClasses[size]} animate-spin text-green-800`}
+          aria-label="Loading"
+        />
+        <span className="sr-only">Loading...</span>
+      </div>
     </div>
   );
 };

@@ -50,15 +50,9 @@ const WhyHennaByFathima = () => {
                 transition: { duration: 0.2 }
               }}
             >
-              <motion.div 
-                className="flex justify-center mb-4 sm:mb-6"
-                whileHover={{ 
-                  rotate: 360,
-                  transition: { duration: 0.5 }
-                }}
-              >
+              <div className="flex justify-center mb-4 sm:mb-6">
                 {reason.icon}
-              </motion.div>
+              </div>
               <h3 className="text-sm sm:text-base md:text-lg font-semibold mb-2 text-green-800">{reason.title}</h3>
               <p className="text-xs sm:text-sm md:text-base text-gray-600">{reason.description}</p>
             </motion.div>

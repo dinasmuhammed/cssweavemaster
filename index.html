@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" oncontextmenu="return false">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -144,6 +144,33 @@
     }
     </script>
     
+    <script>
+      // Disable keyboard shortcuts
+      document.addEventListener('keydown', function(e) {
+        // Prevent F12
+        if(e.keyCode == 123) {
+          e.preventDefault();
+          return false;
+        }
+        // Prevent Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+        if(e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 85)) {
+          e.preventDefault();
+          return false;
+        }
+        // Prevent Ctrl+S
+        if(e.ctrlKey && (e.keyCode === 83)) {
+          e.preventDefault();
+          return false;
+        }
+      });
+
+      // Disable right click
+      document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        return false;
+      });
+    </script>
+
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   </head>
   <body>

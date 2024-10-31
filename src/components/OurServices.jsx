@@ -42,7 +42,7 @@ const OurServices = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="group text-center"
             >
-              <div className="aspect-square mb-4 overflow-hidden">
+              <div className="mb-4 overflow-hidden w-[213px] h-[293px] mx-auto">
                 <motion.img 
                   src={service.image} 
                   alt={service.name}

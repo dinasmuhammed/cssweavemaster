@@ -42,11 +42,11 @@ const OurServices = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="group text-center"
             >
-              <div className="mb-4 overflow-hidden w-[213px] h-[293px] mx-auto">
+              <div className="mb-4 overflow-hidden mx-auto">
                 <motion.img 
                   src={service.image} 
                   alt={service.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-auto object-cover"
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.3 }}
                 />

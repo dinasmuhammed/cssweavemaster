@@ -16,58 +16,81 @@ const queryClient = new QueryClient({
       retry: 1,
       suspense: true,
       useErrorBoundary: true,
+      refetchOnWindowFocus: false, // Prevent unnecessary refetches
+      refetchOnReconnect: false,
     },
   },
 });
 
-// Lazy load components with retry mechanism and loading indicator
-const lazyLoadWithRetry = (importFn, fallback = <LoadingSpinner size="large" />) => {
-  const LazyComponent = lazy(() => 
-    importFn().catch((err) => {
-      console.error('Error loading component:', err);
+// Enhanced lazy loading with preload hint
+const lazyLoadWithRetry = (importFn, componentName) => {
+  const LazyComponent = lazy(() => {
+    // Add preload hint
+    const preloadLink = document.createElement('link');
+    preloadLink.rel = 'preload';
+    preloadLink.as = 'script';
+    preloadLink.href = `/${componentName}.js`;
+    document.head.appendChild(preloadLink);
+
+    return importFn().catch((err) => {
+      console.error(`Error loading ${componentName}:`, err);
       return importFn(); // Retry once
-    })
-  );
+    });
+  });
 
   return (props) => (
-    <Suspense fallback={fallback}>
-      <LazyComponent {...props} />
+    <Suspense fallback={<LoadingSpinner size="large" />}>
+      <ErrorBoundary>
+        <LazyComponent {...props} />
+      </ErrorBoundary>
     </Suspense>
   );
 };
 
-// Lazy load all components
-const Header = lazyLoadWithRetry(() => import('./components/Header'));
-const Footer = lazyLoadWithRetry(() => import('./components/Footer'));
-const Home = lazyLoadWithRetry(() => import('./pages/Home'));
-const Shop = lazyLoadWithRetry(() => import('./pages/Shop'));
-const Services = lazyLoadWithRetry(() => import('./pages/Services'));
-const Workshop = lazyLoadWithRetry(() => import('./pages/Workshop'));
-const Contact = lazyLoadWithRetry(() => import('./pages/Contact'));
-const Cart = lazyLoadWithRetry(() => import('./pages/Cart'));
-const About = lazyLoadWithRetry(() => import('./pages/About'));
-const SavedItems = lazyLoadWithRetry(() => import('./pages/SavedItems'));
-const SearchResults = lazyLoadWithRetry(() => import('./pages/SearchResults'));
-const TermsAndConditions = lazyLoadWithRetry(() => import('./pages/TermsAndConditions'));
-const CancellationAndRefund = lazyLoadWithRetry(() => import('./pages/CancellationAndRefund'));
-const ShippingAndPrivacy = lazyLoadWithRetry(() => import('./pages/ShippingAndPrivacy'));
+// Lazy load components with descriptive names
+const Header = lazyLoadWithRetry(() => import('./components/Header'), 'Header');
+const Footer = lazyLoadWithRetry(() => import('./components/Footer'), 'Footer');
+const Home = lazyLoadWithRetry(() => import('./pages/Home'), 'Home');
+const Shop = lazyLoadWithRetry(() => import('./pages/Shop'), 'Shop');
+const Services = lazyLoadWithRetry(() => import('./pages/Services'), 'Services');
+const Workshop = lazyLoadWithRetry(() => import('./pages/Workshop'), 'Workshop');
+const Contact = lazyLoadWithRetry(() => import('./pages/Contact'), 'Contact');
+const Cart = lazyLoadWithRetry(() => import('./pages/Cart'), 'Cart');
+const About = lazyLoadWithRetry(() => import('./pages/About'), 'About');
+const SavedItems = lazyLoadWithRetry(() => import('./pages/SavedItems'), 'SavedItems');
+const SearchResults = lazyLoadWithRetry(() => import('./pages/SearchResults'), 'SearchResults');
+const TermsAndConditions = lazyLoadWithRetry(() => import('./pages/TermsAndConditions'), 'TermsAndConditions');
+const CancellationAndRefund = lazyLoadWithRetry(() => import('./pages/CancellationAndRefund'), 'CancellationAndRefund');
+const ShippingAndPrivacy = lazyLoadWithRetry(() => import('./pages/ShippingAndPrivacy'), 'ShippingAndPrivacy');
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Preload critical resources
-    Promise.all([
-      // Add any critical resources that need to be preloaded
-      new Promise(resolve => setTimeout(resolve, 500)) // Minimum loading time to prevent flash
-    ]).finally(() => {
-      setIsLoading(false);
-    });
+    // Preload critical resources and components
+    const preloadCriticalResources = async () => {
+      try {
+        // Preload critical components
+        const criticalComponents = [Header, Footer, Home];
+        await Promise.all(
+          criticalComponents.map(component => 
+            typeof component === 'function' ? component.preload?.() : null
+          )
+        );
+      } catch (error) {
+        console.error('Error preloading resources:', error);
+      } finally {
+        // Ensure minimum loading time to prevent flash
+        setTimeout(() => setIsLoading(false), 300);
+      }
+    };
+
+    preloadCriticalResources();
   }, []);
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex items-center justify-center h-screen bg-white">
         <LoadingSpinner size="large" />
       </div>
     );

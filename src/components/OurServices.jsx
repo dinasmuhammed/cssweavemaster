@@ -29,11 +29,11 @@ const services = [
 
 const OurServices = () => {
   return (
-    <section className="py-16 sm:py-24">
+    <section className="py-8 sm:py-16 md:py-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-2xl sm:text-3xl font-serif text-center text-[#1B4B40] mb-16">Our Services</h2>
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-serif text-center text-[#1B4B40] mb-8 sm:mb-12 md:mb-16">Our Services</h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
           {services.map((service, index) => (
             <motion.div 
               key={index}
@@ -42,7 +42,7 @@ const OurServices = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="group text-center"
             >
-              <div className="mb-4 overflow-hidden mx-auto" style={{ width: '213px', height: '293px' }}>
+              <div className="relative mb-4 overflow-hidden mx-auto aspect-[213/293] max-w-[213px]" style={{ width: '213px', height: '293px' }}>
                 <motion.img 
                   src={service.image} 
                   alt={service.name}
@@ -51,23 +51,23 @@ const OurServices = () => {
                   transition={{ duration: 0.3 }}
                 />
               </div>
-              <h3 className="text-lg font-serif text-[#1B4B40] mb-2">{service.name}</h3>
+              <h3 className="text-base sm:text-lg font-serif text-[#1B4B40] mb-2">{service.name}</h3>
             </motion.div>
           ))}
         </div>
 
         <motion.div 
-          className="text-center mt-12"
+          className="text-center mt-8 sm:mt-12"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
           <Button 
             asChild 
-            className="bg-[#1B4B40] hover:bg-[#143830] text-white px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group"
+            className="bg-[#1B4B40] hover:bg-[#143830] text-white px-6 sm:px-8 py-2 sm:py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group w-full sm:w-auto"
           >
-            <Link to="/services" className="flex items-center gap-2">
-              View Packages
+            <Link to="/services" className="flex items-center justify-center gap-2">
+              <span className="text-sm sm:text-base">View Packages</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </Button>

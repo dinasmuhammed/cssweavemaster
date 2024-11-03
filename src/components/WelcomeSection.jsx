@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 const WelcomeSection = () => {
   return (
     <section className="flex justify-center items-center py-8 sm:py-12 md:py-16 lg:py-24" style={{ backgroundColor: '#FCEBD033' }}>
-      <div className="w-[1280px] h-[265px] flex-shrink-0 flex items-center justify-center">
+      <div className="w-full max-w-[1280px] min-h-[200px] sm:min-h-[265px] flex items-center justify-center px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -20,11 +20,11 @@ const WelcomeSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <span className="text-green-800 font-medium text-sm sm:text-base">Premium Henna Services</span>
+            <span className="text-green-800 font-medium text-xs sm:text-sm md:text-base">Premium Henna Services</span>
           </motion.div>
           
           <motion.h2 
-            className="text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-green-800 mb-3 sm:mb-4 md:mb-6 tracking-tight"
+            className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-green-800 mb-2 sm:mb-3 md:mb-6 tracking-tight px-2"
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -34,7 +34,7 @@ const WelcomeSection = () => {
           </motion.h2>
           
           <motion.p 
-            className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-green-800/80 mb-6 sm:mb-8 md:mb-10 max-w-3xl mx-auto leading-relaxed px-2"
+            className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-green-800/80 mb-4 sm:mb-6 md:mb-8 max-w-3xl mx-auto leading-relaxed px-2"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

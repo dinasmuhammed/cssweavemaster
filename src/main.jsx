@@ -7,6 +7,19 @@ import { preloadCriticalImages } from './utils/imageOptimization';
 // Preload critical images
 preloadCriticalImages();
 
+// Register Service Worker
+if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(registration => {
+        console.log('SW registered:', registration);
+      })
+      .catch(registrationError => {
+        console.log('SW registration failed:', registrationError);
+      });
+  });
+}
+
 // Add performance monitoring
 if (process.env.NODE_ENV === 'production') {
   const reportWebVitals = onPerfEntry => {

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - Henna by Fathima</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            background-color: #f8f9fa;
+            color: #00332B;
+        }
+        h1 {
+            margin-bottom: 1rem;
+        }
+        p {
+            margin-bottom: 2rem;
+            color: #666;
+        }
+        button {
+            background-color: #00332B;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #004d40;
+        }
+    </style>
+</head>
+<body>
+    <h1>You're currently offline</h1>
+    <p>Please check your internet connection and try again.</p>
+    <button onclick="window.location.reload()">Retry</button>
+</body>
+</html>

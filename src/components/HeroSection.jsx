@@ -6,8 +6,17 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 const HeroSection = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [emblaRef, emblaApi] = useEmblaCarousel(
-    { loop: true }, 
-    [Autoplay({ delay: 5000, stopOnInteraction: false })]
+    { 
+      loop: true,  // Ensure looping is explicitly set
+      skipSnaps: false  // Ensure all slides are considered
+    }, 
+    [
+      Autoplay({ 
+        delay: 3000,  // Slide every 3 seconds
+        stopOnInteraction: false,  // Continue auto-scrolling even after user interaction
+        playOnInit: true  // Start autoplay immediately
+      })
+    ]
   );
   
   const images = [

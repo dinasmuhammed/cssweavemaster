@@ -5,78 +5,30 @@ const { sendOrderEmail } = require('./src/utils/emailUtils');
 
 const app = express();
 
-// Enhanced CORS configuration
+// Enable CORS
 app.use(cors({
-  allowedOrigins: ['http://localhost:3000', 'https://hennabyfathima.com'],
-  allowedMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  maxAge: 86400 // 24 hours
+  allowedOrigins: ['http://localhost:3000', 'https://hennabyfathima.com']
 }));
 
 app.use(express.json());
 
-// Health check endpoint with detailed status
+// Health check endpoint
 app.get('/api/health', (req, res) => {
-  const healthCheck = {
-    status: 'ok',
-    timestamp: new Date(),
-    uptime: process.uptime(),
-    environment: process.env.NODE_ENV
-  };
-  res.status(200).json(healthCheck);
+  res.status(200).json({ status: 'ok' });
 });
 
-// Enhanced error handling for order email endpoint
 app.post('/api/send-order-email', async (req, res) => {
   try {
-    const { email, orderDetails } = req.body;
-    
-    if (!email) {
-      return res.status(400).json({ 
-        error: 'Missing required field: email',
-        details: 'Please provide a valid email address'
-      });
-    }
-
-    if (!orderDetails) {
-      return res.status(400).json({ 
-        error: 'Missing required field: orderDetails',
-        details: 'Please provide order details'
-      });
+    if (!req.body || !req.body.email) {
+      return res.status(400).json({ error: 'Missing required fields' });
     }
     
     await sendOrderEmail(req.body);
-    res.status(200).json({ 
-      message: 'Order email sent successfully',
-      timestamp: new Date()
-    });
+    res.status(200).json({ message: 'Order email sent successfully' });
   } catch (error) {
     console.error('Error sending order email:', error);
-    res.status(500).json({ 
-      error: 'Failed to send order email',
-      message: error.message,
-      timestamp: new Date()
-    });
+    res.status(500).json({ error: 'Failed to send order email' });
   }
-});
-
-// Global error handler
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({
-    error: 'Internal Server Error',
-    message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong',
-    timestamp: new Date()
-  });
-});
-
-// Handle 404 errors
-app.use((req, res) => {
-  res.status(404).json({
-    error: 'Not Found',
-    message: 'The requested resource was not found',
-    timestamp: new Date()
-  });
 });
 
 const PORT = process.env.PORT || 3001;

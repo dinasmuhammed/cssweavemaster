@@ -4,37 +4,22 @@ import App from './App';
 import './index.css';
 import { preloadCriticalImages } from './utils/imageOptimization';
 
-// Enhanced error handling for image preloading
-const initializeApp = async () => {
-  try {
-    await preloadCriticalImages();
-    console.log('Critical images preloaded successfully');
-  } catch (error) {
-    console.error('Error preloading critical images:', error);
-    // Continue loading the app even if image preloading fails
-  }
-};
+// Preload critical images
+preloadCriticalImages().catch(console.error);
 
-// Initialize the app
-initializeApp().catch(console.error);
-
-// Enhanced Service Worker registration with better error handling
+// Register Service Worker with better error handling
 if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js')
       .then(registration => {
         console.log('SW registered:', registration);
         
-        // Handle SW updates
         registration.addEventListener('updatefound', () => {
           const newWorker = registration.installing;
           newWorker.addEventListener('statechange', () => {
             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              // New content is available
-              const shouldRefresh = window.confirm(
-                'New content is available! Would you like to refresh to see the latest version?'
-              );
-              if (shouldRefresh) {
+              // New content is available, show refresh prompt to user
+              if (window.confirm('New content is available! Would you like to refresh?')) {
                 window.location.reload();
               }
             }
@@ -47,7 +32,7 @@ if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
   });
 }
 
-// Enhanced performance monitoring
+// Add performance monitoring with error boundaries
 if (process.env.NODE_ENV === 'production') {
   const reportWebVitals = onPerfEntry => {
     if (onPerfEntry && onPerfEntry instanceof Function) {
@@ -59,30 +44,14 @@ if (process.env.NODE_ENV === 'production') {
           getLCP(onPerfEntry);
           getTTFB(onPerfEntry);
         })
-        .catch(error => {
-          console.error('Error loading web-vitals:', error);
-        });
+        .catch(console.error);
     }
   };
   
-  // Report performance metrics
-  reportWebVitals(metric => {
-    // Log performance metrics
-    console.log(metric);
-    
-    // You can also send these metrics to your analytics service
-    if (window.gtag) {
-      window.gtag('event', metric.name, {
-        value: Math.round(metric.value),
-        metric_id: metric.id,
-        metric_value: metric.value,
-        metric_delta: metric.delta,
-      });
-    }
-  });
+  reportWebVitals(console.log);
 }
 
-// Create root with error boundary
+// Create root with error handling
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

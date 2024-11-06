@@ -7,32 +7,38 @@ import { CartProvider } from './context/CartContext';
 import LoadingSpinner from './components/LoadingSpinner';
 import ErrorBoundary from './components/ErrorBoundary';
 
+// Configure QueryClient with better error handling and caching
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60 * 5, // 5 minutes
       cacheTime: 1000 * 60 * 30, // 30 minutes
-      retry: 1,
+      retry: 2,
+      retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
       suspense: true,
       useErrorBoundary: true,
       refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
+      refetchOnReconnect: true,
     },
   },
 });
 
-// Optimized lazy loading with prefetch
+// Optimized lazy loading with prefetch and error handling
 const lazyLoadWithPrefetch = (importFn, displayName) => {
   const Component = lazy(() => {
-    const componentPromise = importFn();
-    // Prefetch nested routes and components
+    const componentPromise = importFn().catch(error => {
+      console.error(`Error loading component ${displayName}:`, error);
+      throw error;
+    });
+    
     componentPromise.then((module) => {
       Object.values(module).forEach((exported) => {
         if (typeof exported === 'function' && 'preload' in exported) {
-          exported.preload();
+          exported.preload().catch(console.error);
         }
       });
     });
+    
     return componentPromise;
   });
   Component.displayName = displayName;
@@ -79,7 +85,9 @@ const App = () => {
             }>
               <Router>
                 <div className="flex flex-col min-h-screen bg-white">
-                  <Header />
+                  <ErrorBoundary>
+                    <Header />
+                  </ErrorBoundary>
                   <main className="flex-grow container mx-auto px-4 py-8 w-full max-w-7xl">
                     <Routes>
                       <Route path="/" element={<Home />} />
@@ -96,7 +104,9 @@ const App = () => {
                       <Route path="/shipping-and-privacy" element={<ShippingAndPrivacy />} />
                     </Routes>
                   </main>
-                  <Footer />
+                  <ErrorBoundary>
+                    <Footer />
+                  </ErrorBoundary>
                 </div>
               </Router>
             </Suspense>

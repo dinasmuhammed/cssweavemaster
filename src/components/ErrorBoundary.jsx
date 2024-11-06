@@ -16,8 +16,6 @@ class ErrorBoundary extends React.Component {
   componentDidCatch(error, errorInfo) {
     console.error('Error caught by boundary:', error, errorInfo);
     this.setState({ errorInfo });
-    
-    // Notify user about the error
     toast.error("An error occurred. Please try refreshing the page.");
   }
 
@@ -26,7 +24,6 @@ class ErrorBoundary extends React.Component {
   };
 
   handleReportError = () => {
-    // Here you could implement error reporting to your backend
     toast.success("Error reported. Thank you for your feedback!");
   };
 
@@ -42,14 +39,14 @@ class ErrorBoundary extends React.Component {
           <div className="flex gap-4">
             <Button 
               onClick={this.handleRefresh}
-              className="bg-green-800 hover:bg-green-700"
+              className="bg-[#023634] text-white hover:bg-[#023634]/90"
             >
               Refresh Page
             </Button>
             <Button 
               variant="outline" 
               onClick={this.handleReportError}
-              className="border-green-800 text-green-800 hover:bg-green-50"
+              className="border-[#023634] text-[#023634] hover:bg-[#023634]/10"
             >
               Report Issue
             </Button>

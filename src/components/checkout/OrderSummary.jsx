@@ -8,12 +8,26 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 const OrderSummary = ({ 
   cartItems, 
   onQuantityChange,
-  totalPrice,
-  shippingCharge 
+  totalPrice
 }) => {
   const [couponCode, setCouponCode] = useState('');
   const [discount, setDiscount] = useState(0);
   const [showCouponInput, setShowCouponInput] = useState(false);
+
+  const calculateShippingCharge = () => {
+    const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    
+    if (totalItems >= 6) {
+      return 80; // Fixed charge for 6 or more items
+    } else {
+      // Base charge for items less than 6
+      const baseCharge = 25;
+      const additionalCharge = 35;
+      return baseCharge + (Math.floor(totalItems / 2) * additionalCharge);
+    }
+  };
+
+  const shippingCharge = calculateShippingCharge();
 
   const handleCouponApply = () => {
     if (couponCode.trim() === 'HF609') {

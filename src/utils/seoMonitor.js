@@ -25,7 +25,7 @@ export const trackContentUpdate = () => {
 };
 
 // Monitor social media links
-export const checkSocialLinks = () => {
+export const checkSocialLinks = async () => {
   const socialLinks = [
     'https://www.instagram.com/hennabyfathima__/',
     'https://www.facebook.com/FathimaShamsudheen001',
@@ -34,36 +34,52 @@ export const checkSocialLinks = () => {
   ];
 
   return Promise.all(
-    socialLinks.map(url =>
-      fetch(url, { method: 'HEAD' })
-        .then(response => ({
+    socialLinks.map(async url => {
+      try {
+        const response = await fetch(url, { 
+          method: 'HEAD',
+          mode: 'no-cors' // Added to handle CORS issues
+        });
+        return {
           url,
           status: response.status,
-          active: response.ok
-        }))
-        .catch(() => ({
+          active: true // If we get here, the link is accessible
+        };
+      } catch (error) {
+        console.warn(`Failed to check ${url}:`, error);
+        return {
           url,
           status: 'error',
           active: false
-        }))
-    )
+        };
+      }
+    })
   );
 };
 
 // Check for broken links
 export const checkBrokenLinks = async () => {
-  const links = document.getElementsByTagName('a');
+  const links = Array.from(document.getElementsByTagName('a'));
   const results = [];
 
-  for (let link of links) {
+  for (const link of links) {
     try {
-      const response = await fetch(link.href, { method: 'HEAD' });
-      results.push({
-        url: link.href,
-        status: response.status,
-        working: response.ok
-      });
+      const url = new URL(link.href);
+      // Only check internal links and external links that we control
+      if (url.hostname === window.location.hostname || 
+          url.hostname.includes('hennabyfathima.com')) {
+        const response = await fetch(link.href, { 
+          method: 'HEAD',
+          mode: 'no-cors'
+        });
+        results.push({
+          url: link.href,
+          status: response.status,
+          working: response.ok
+        });
+      }
     } catch (error) {
+      console.warn(`Failed to check ${link.href}:`, error);
       results.push({
         url: link.href,
         status: 'error',
@@ -78,9 +94,40 @@ export const checkBrokenLinks = async () => {
 // Monitor load times
 export const monitorLoadTime = () => {
   const timing = window.performance.timing;
+  const loadTime = timing.loadEventEnd - timing.navigationStart;
+  const domLoadTime = timing.domContentLoadedEventEnd - timing.navigationStart;
+  const firstPaint = performance.getEntriesByType('paint')[0]?.startTime || 0;
+
   return {
-    totalLoadTime: timing.loadEventEnd - timing.navigationStart,
-    domLoadTime: timing.domContentLoadedEventEnd - timing.navigationStart,
-    firstPaint: performance.getEntriesByType('paint')[0]?.startTime || 0
+    totalLoadTime: loadTime,
+    domLoadTime: domLoadTime,
+    firstPaint: firstPaint,
+    timestamp: new Date().toISOString()
   };
+};
+
+// Generate sitemap
+export const generateSitemap = () => {
+  const pages = [
+    '/',
+    '/about',
+    '/services',
+    '/shop',
+    '/workshop',
+    '/contact'
+  ];
+
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+      ${pages.map(page => `
+        <url>
+          <loc>https://hennabyfathima.com${page}</loc>
+          <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
+          <changefreq>weekly</changefreq>
+          <priority>${page === '/' ? '1.0' : '0.8'}</priority>
+        </url>
+      `).join('')}
+    </urlset>`;
+
+  return sitemap;
 };

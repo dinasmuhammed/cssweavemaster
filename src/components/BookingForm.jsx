@@ -29,9 +29,21 @@ const BookingForm = ({ isOpen, onClose, packageTitle }) => {
       message: formData.get('message')
     };
 
-    // Here you would typically send this data to your backend
-    console.log('Booking request:', data);
-    toast.success("Booking request sent successfully!");
+    // Create WhatsApp message
+    const whatsappMessage = `*New Booking Request*%0A
+Package: ${data.package}%0A
+Name: ${data.name}%0A
+Phone: ${data.phone}%0A
+Email: ${data.email}%0A
+Address: ${data.address}%0A
+Budget: ₹${data.budget}%0A
+Date: ${data.date ? data.date.toLocaleDateString() : 'Not specified'}%0A
+Message: ${data.message || 'No additional message'}`;
+
+    // Redirect to WhatsApp
+    window.open(`https://wa.me/918086647124?text=${whatsappMessage}`, '_blank');
+    
+    toast.success("Redirecting to WhatsApp...");
     onClose();
   };
 

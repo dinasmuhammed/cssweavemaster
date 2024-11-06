@@ -13,6 +13,13 @@ const workshopImages = [
 ];
 
 const Workshop = () => {
+  const handleEnquiry = () => {
+    const phoneNumber = "918086647124";
+    const message = encodeURIComponent("Hey, can you please explain about the workshop? I have seen the work from your website.");
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
   const handleDownload = () => {
     // Replace this URL with your actual brochure PDF URL
     const brochureUrl = '/workshop-brochure.pdf';
@@ -67,6 +74,7 @@ const Workshop = () => {
           variant="default" 
           size="lg"
           className="bg-green-800 hover:bg-green-700 text-white"
+          onClick={handleEnquiry}
         >
           Enquire Now
         </Button>

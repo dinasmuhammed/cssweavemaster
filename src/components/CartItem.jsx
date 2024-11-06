@@ -11,12 +11,14 @@ const CartItem = ({ item, removeFromCart, updateQuantity }) => {
 
   return (
     <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 py-6 border-b">
-      <img 
-        src={item.image} 
-        alt={item.name} 
-        className="w-full sm:w-24 h-24 object-cover rounded" 
-      />
-      <div className="flex-grow w-full sm:w-auto">
+      <div className="w-full sm:w-24 h-24 relative">
+        <img 
+          src={item.image} 
+          alt={item.name} 
+          className="w-full sm:w-24 h-24 object-cover rounded" 
+        />
+      </div>
+      <div className="flex-grow w-full">
         <div className="flex flex-col sm:flex-row justify-between items-start gap-2 sm:gap-4">
           <div>
             <h3 className="text-lg font-medium text-gray-800">{item.name}</h3>
@@ -37,14 +39,14 @@ const CartItem = ({ item, removeFromCart, updateQuantity }) => {
         <div className="flex items-center gap-4 mt-4">
           <button 
             onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
-            className="w-8 h-8 flex items-center justify-center border-2 border-gray-300 rounded-full text-gray-600 hover:bg-gray-50"
+            className="w-8 h-8 flex items-center justify-center border-2 border-gray-300 rounded-full text-gray-600 hover:bg-gray-50 touch-manipulation"
           >
             -
           </button>
           <span className="text-lg w-6 text-center">{item.quantity}</span>
           <button 
             onClick={() => updateQuantity(item.id, item.quantity + 1)}
-            className="w-8 h-8 flex items-center justify-center border-2 border-gray-300 rounded-full text-gray-600 hover:bg-gray-50"
+            className="w-8 h-8 flex items-center justify-center border-2 border-gray-300 rounded-full text-gray-600 hover:bg-gray-50 touch-manipulation"
           >
             +
           </button>

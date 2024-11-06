@@ -30,9 +30,9 @@ const HeroSection = () => {
   const scrollNext = () => emblaApi && emblaApi.scrollNext();
 
   return (
-    <section className="relative h-[250px] sm:h-[400px] md:h-[500px] lg:h-[570px] overflow-hidden">
+    <section className="relative h-[250px] sm:h-[400px] md:h-[500px] lg:h-[570px] w-full overflow-hidden">
       <div 
-        className="relative h-full group"
+        className="relative h-full group touch-pan-y"
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
       >
@@ -69,7 +69,7 @@ const HeroSection = () => {
 
         <button
           onClick={scrollPrev}
-          className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 sm:p-3 shadow-lg transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 z-10"
+          className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 sm:p-3 shadow-lg transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 z-10 touch-manipulation"
           aria-label="Previous slide"
         >
           <ChevronLeft className="w-4 h-4 sm:w-6 sm:h-6 text-green-800" />
@@ -77,7 +77,7 @@ const HeroSection = () => {
         
         <button
           onClick={scrollNext}
-          className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 sm:p-3 shadow-lg transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 z-10"
+          className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 sm:p-3 shadow-lg transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 z-10 touch-manipulation"
           aria-label="Next slide"
         >
           <ChevronRight className="w-4 h-4 sm:w-6 sm:h-6 text-green-800" />

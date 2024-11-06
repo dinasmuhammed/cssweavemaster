@@ -2,9 +2,7 @@ import React from 'react';
 import { ShoppingCart, Heart } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { useCart } from '../../context/CartContext';
-import { motion } from 'framer-motion';
-import Tooltip from './Tooltip';
+import { useCart } from '../context/CartContext';
 
 const ProductCard = ({ product }) => {
   const { addToCart, savedItems, saveForLater } = useCart();
@@ -21,20 +19,14 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      whileHover={{ y: -5 }}
-      className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
-    >
+    <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
       <div className="aspect-square overflow-hidden">
-        <motion.img 
+        <img 
           src={product.image} 
           alt={product.name} 
           className="w-full h-full object-cover"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.3 }}
+          loading="lazy"
+          decoding="async"
         />
       </div>
       <div className="p-6">
@@ -44,34 +36,30 @@ const ProductCard = ({ product }) => {
         </div>
         <p className="text-gray-600 text-sm mb-4">{product.description}</p>
         <div className="flex gap-2">
-          <Tooltip content={isSaved ? "Remove from favorites" : "Add to favorites"}>
-            <Button 
-              variant="outline"
-              onClick={handleSaveForLater}
-              className={`w-12 h-12 rounded-lg border-2 border-green-800 ${
-                isSaved ? 'bg-green-50' : 'bg-white hover:bg-green-50'
-              }`}
-            >
-              <Heart 
-                className={`w-5 h-5 ${
-                  isSaved ? 'text-green-600 fill-green-600' : 'text-green-800'
-                }`} 
-                fill={isSaved ? "currentColor" : "none"}
-              />
-            </Button>
-          </Tooltip>
-          <Tooltip content="Add to shopping cart">
-            <Button 
-              onClick={handleAddToCart}
-              className="flex-1 bg-green-800 hover:bg-green-700 text-white rounded-lg h-12 flex items-center justify-between px-4"
-            >
-              <span className="text-base font-medium">Add to Bag</span>
-              <ShoppingCart className="w-5 h-5" />
-            </Button>
-          </Tooltip>
+          <Button 
+            variant="outline"
+            onClick={handleSaveForLater}
+            className={`w-12 h-12 rounded-lg border-2 border-green-800 ${
+              isSaved ? 'bg-green-50' : 'bg-white hover:bg-green-50'
+            }`}
+          >
+            <Heart 
+              className={`w-5 h-5 ${
+                isSaved ? 'text-green-600 fill-green-600' : 'text-green-800'
+              }`} 
+              fill={isSaved ? "currentColor" : "none"}
+            />
+          </Button>
+          <Button 
+            onClick={handleAddToCart}
+            className="flex-1 bg-green-800 hover:bg-green-700 text-white rounded-lg h-12 flex items-center justify-between px-4"
+          >
+            <span className="text-base font-medium">Add to Bag</span>
+            <ShoppingCart className="w-5 h-5" />
+          </Button>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

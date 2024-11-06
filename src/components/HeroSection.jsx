@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { getOptimizedImageUrl, preloadImage } from '../utils/imageOptimization';
 
 const HeroSection = () => {
-  const [isHovering, setIsHovering] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true }, 
@@ -20,9 +17,6 @@ const HeroSection = () => {
   ];
 
   useEffect(() => {
-    // Preload all hero images
-    images.forEach(preloadImage);
-    
     if (emblaApi) {
       emblaApi.on('select', () => {
         setSelectedIndex(emblaApi.selectedScrollSnap());
@@ -35,39 +29,23 @@ const HeroSection = () => {
 
   return (
     <section className="relative h-[250px] sm:h-[400px] md:h-[500px] lg:h-[570px] w-full overflow-hidden">
-      <div 
-        className="relative h-full group touch-pan-y"
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => setIsHovering(false)}
-      >
+      <div className="relative h-full group touch-pan-y">
         <div className="embla h-full" ref={emblaRef}>
           <div className="embla__container h-full flex">
-            <AnimatePresence mode="wait">
-              {images.map((image, index) => (
-                <motion.div 
-                  key={index} 
-                  className="embla__slide relative flex-[0_0_100%] h-full"
-                  initial={{ opacity: 0, scale: 1.1 }}
-                  animate={{ 
-                    opacity: selectedIndex === index ? 1 : 0,
-                    scale: selectedIndex === index ? 1 : 1.1,
-                  }}
-                  exit={{ opacity: 0, scale: 1.1 }}
-                  transition={{ 
-                    duration: 0.8,
-                    ease: "easeOut"
-                  }}
-                >
-                  <img 
-                    src={getOptimizedImageUrl(image)} 
-                    alt={`Slide ${index + 1}`}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    loading={index === 0 ? "eager" : "lazy"}
-                    decoding="async"
-                  />
-                </motion.div>
-              ))}
-            </AnimatePresence>
+            {images.map((image, index) => (
+              <div 
+                key={index} 
+                className="embla__slide relative flex-[0_0_100%] h-full"
+              >
+                <img 
+                  src={image} 
+                  alt={`Slide ${index + 1}`}
+                  className="w-full h-full object-cover"
+                  loading={index === 0 ? "eager" : "lazy"}
+                  decoding="async"
+                />
+              </div>
+            ))}
           </div>
         </div>
 

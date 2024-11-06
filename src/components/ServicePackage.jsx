@@ -19,9 +19,14 @@ const ServicePackage = ({ title, details, images, buttonText, isReversed }) => {
             {images.map((image, index) => (
               <motion.div
                 key={index}
-                className="aspect-square overflow-hidden rounded-lg"
+                className="overflow-hidden rounded-lg"
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.3 }}
+                style={{
+                  width: '213px',
+                  height: '293px',
+                  flexShrink: 0
+                }}
               >
                 <img
                   src={image}

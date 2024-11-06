@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { getOptimizedImageUrl, preloadImage } from '../utils/imageOptimization';
 
 const HeroSection = () => {
   const [isHovering, setIsHovering] = useState(false);
@@ -18,7 +19,10 @@ const HeroSection = () => {
     "https://i.ibb.co/7CX7vg6/5bc5421c-e0e5-4f18-93ba-7f984c576832.jpg",
   ];
 
-  React.useEffect(() => {
+  useEffect(() => {
+    // Preload all hero images
+    images.forEach(preloadImage);
+    
     if (emblaApi) {
       emblaApi.on('select', () => {
         setSelectedIndex(emblaApi.selectedScrollSnap());
@@ -55,7 +59,7 @@ const HeroSection = () => {
                   }}
                 >
                   <img 
-                    src={image} 
+                    src={getOptimizedImageUrl(image)} 
                     alt={`Slide ${index + 1}`}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading={index === 0 ? "eager" : "lazy"}

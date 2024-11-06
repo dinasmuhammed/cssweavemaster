@@ -1,4 +1,4 @@
-import React, { useEffect, useState, lazy, Suspense } from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -22,37 +22,39 @@ const queryClient = new QueryClient({
   },
 });
 
-// Simplified lazy loading with single loading state
-const lazyLoadWithRetry = (importFn) => {
-  const LazyComponent = lazy(() => 
-    importFn().catch((err) => {
-      console.error('Error loading component:', err);
-      return importFn(); // Retry once
-    })
-  );
-
-  return (props) => (
-    <ErrorBoundary>
-      <LazyComponent {...props} />
-    </ErrorBoundary>
-  );
+// Optimized lazy loading with prefetch
+const lazyLoadWithPrefetch = (importFn, displayName) => {
+  const Component = lazy(() => {
+    const componentPromise = importFn();
+    // Prefetch nested routes and components
+    componentPromise.then((module) => {
+      Object.values(module).forEach((exported) => {
+        if (typeof exported === 'function' && 'preload' in exported) {
+          exported.preload();
+        }
+      });
+    });
+    return componentPromise;
+  });
+  Component.displayName = displayName;
+  return Component;
 };
 
-// Lazy load components
-const Header = lazyLoadWithRetry(() => import('./components/Header'));
-const Footer = lazyLoadWithRetry(() => import('./components/Footer'));
-const Home = lazyLoadWithRetry(() => import('./pages/Home'));
-const Shop = lazyLoadWithRetry(() => import('./pages/Shop'));
-const Services = lazyLoadWithRetry(() => import('./pages/Services'));
-const Workshop = lazyLoadWithRetry(() => import('./pages/Workshop'));
-const Contact = lazyLoadWithRetry(() => import('./pages/Contact'));
-const Cart = lazyLoadWithRetry(() => import('./pages/Cart'));
-const About = lazyLoadWithRetry(() => import('./pages/About'));
-const SavedItems = lazyLoadWithRetry(() => import('./pages/SavedItems'));
-const SearchResults = lazyLoadWithRetry(() => import('./pages/SearchResults'));
-const TermsAndConditions = lazyLoadWithRetry(() => import('./pages/TermsAndConditions'));
-const CancellationAndRefund = lazyLoadWithRetry(() => import('./pages/CancellationAndRefund'));
-const ShippingAndPrivacy = lazyLoadWithRetry(() => import('./pages/ShippingAndPrivacy'));
+// Lazy load components with prefetching
+const Header = lazyLoadWithPrefetch(() => import('./components/Header'), 'Header');
+const Footer = lazyLoadWithPrefetch(() => import('./components/Footer'), 'Footer');
+const Home = lazyLoadWithPrefetch(() => import('./pages/Home'), 'Home');
+const Shop = lazyLoadWithPrefetch(() => import('./pages/Shop'), 'Shop');
+const Services = lazyLoadWithPrefetch(() => import('./pages/Services'), 'Services');
+const Workshop = lazyLoadWithPrefetch(() => import('./pages/Workshop'), 'Workshop');
+const Contact = lazyLoadWithPrefetch(() => import('./pages/Contact'), 'Contact');
+const Cart = lazyLoadWithPrefetch(() => import('./pages/Cart'), 'Cart');
+const About = lazyLoadWithPrefetch(() => import('./pages/About'), 'About');
+const SavedItems = lazyLoadWithPrefetch(() => import('./pages/SavedItems'), 'SavedItems');
+const SearchResults = lazyLoadWithPrefetch(() => import('./pages/SearchResults'), 'SearchResults');
+const TermsAndConditions = lazyLoadWithPrefetch(() => import('./pages/TermsAndConditions'), 'TermsAndConditions');
+const CancellationAndRefund = lazyLoadWithPrefetch(() => import('./pages/CancellationAndRefund'), 'CancellationAndRefund');
+const ShippingAndPrivacy = lazyLoadWithPrefetch(() => import('./pages/ShippingAndPrivacy'), 'ShippingAndPrivacy');
 
 const App = () => {
   return (

@@ -1,61 +1,36 @@
 import React from 'react';
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Check } from 'lucide-react';
+import { motion } from 'framer-motion';
+import BookingRequestForm from './BookingRequestForm';
 
-const ServicePackage = ({ title, details, images, buttonText, isReversed }) => {
+const ServicePackage = ({ title, details, images, isReversed }) => {
   return (
-    <div className={`flex flex-col ${isReversed ? 'md:flex-row-reverse' : 'md:flex-row'} gap-8 mb-12 items-center`}>
-      <div className="w-full md:w-1/2">
-        <Card className="overflow-hidden shadow-lg">
-          <div className="grid grid-cols-3 gap-2 p-2">
-            {images.map((image, index) => (
-              <div
-                key={index}
-                className="overflow-hidden"
-                style={{
-                  width: '213px',
-                  height: '293px',
-                  flexShrink: 0
-                }}
-              >
-                <img
-                  src={image}
-                  alt={`${title} image ${index + 1}`}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ))}
-          </div>
-        </Card>
-      </div>
-
-      <div className="w-full md:w-1/2 space-y-6">
-        <h3 className="text-2xl sm:text-3xl font-bold text-green-800">
-          {title}
-        </h3>
-        
-        <ul className="space-y-3">
+    <motion.div 
+      className={`flex flex-col ${isReversed ? 'lg:flex-row-reverse' : 'lg:flex-row'} gap-8 mb-16 items-center`}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="w-full lg:w-1/2">
+        <h3 className="text-xl sm:text-2xl font-bold text-green-800 mb-4">{title}</h3>
+        <ul className="list-disc list-inside mb-6 space-y-2">
           {details.map((detail, index) => (
-            <li 
-              key={index}
-              className="flex items-center space-x-3 text-gray-700"
-            >
-              <Check className="w-5 h-5 text-green-800 flex-shrink-0" />
-              <span>{detail}</span>
-            </li>
+            <li key={index} className="text-gray-700">{detail}</li>
           ))}
         </ul>
-
-        <div>
-          <Button 
-            className="bg-[#023634] text-white hover:bg-[#023634]/90"
-          >
-            {buttonText}
-          </Button>
-        </div>
+        <BookingRequestForm />
       </div>
-    </div>
+      
+      <div className="w-full lg:w-1/2 grid grid-cols-2 gap-4">
+        {images.map((image, index) => (
+          <img
+            key={index}
+            src={image}
+            alt={`${title} design ${index + 1}`}
+            className="w-full h-auto rounded-lg shadow-md"
+          />
+        ))}
+      </div>
+    </motion.div>
   );
 };
 

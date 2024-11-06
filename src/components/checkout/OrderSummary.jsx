@@ -19,11 +19,13 @@ const OrderSummary = ({
     
     if (totalItems >= 6) {
       return 80; // Fixed charge for 6 or more items
+    } else if (totalItems === 1) {
+      return 35; // Fixed charge for single item
     } else {
-      // Base charge for items less than 6
+      // Base charge for 2-5 items
       const baseCharge = 25;
       const additionalCharge = 35;
-      return baseCharge + (Math.floor(totalItems / 2) * additionalCharge);
+      return baseCharge + (Math.floor((totalItems - 1) / 2) * additionalCharge);
     }
   };
 

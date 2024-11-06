@@ -20,8 +20,6 @@ const ServicePackage = ({ title, details, images, buttonText, isReversed }) => {
               <motion.div
                 key={index}
                 className="overflow-hidden"
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.3 }}
                 style={{
                   width: '213px',
                   height: '293px',

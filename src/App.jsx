@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useState, useEffect } from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,8 +6,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CartProvider } from './context/CartContext';
 import LoadingSpinner from './components/LoadingSpinner';
 import ErrorBoundary from './components/ErrorBoundary';
-import SlowConnectionMessage from './components/SlowConnectionMessage';
-import { checkNetworkSpeed } from './utils/networkUtils';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -58,17 +56,6 @@ const CancellationAndRefund = lazyLoadWithPrefetch(() => import('./pages/Cancell
 const ShippingAndPrivacy = lazyLoadWithPrefetch(() => import('./pages/ShippingAndPrivacy'), 'ShippingAndPrivacy');
 
 const App = () => {
-  const [isSlowConnection, setIsSlowConnection] = useState(false);
-
-  useEffect(() => {
-    const checkConnection = async () => {
-      const speed = await checkNetworkSpeed();
-      setIsSlowConnection(speed < 1); // Show warning if speed is less than 1 Mbps
-    };
-
-    checkConnection();
-  }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -85,7 +72,6 @@ const App = () => {
                 duration: 3000,
               }}
             />
-            {isSlowConnection && <SlowConnectionMessage />}
             <Suspense fallback={
               <div className="flex items-center justify-center h-screen bg-white">
                 <LoadingSpinner size="large" />

@@ -32,11 +32,11 @@
 
 @layer components {
   .btn-primary {
-    @apply w-[153px] h-[42px] flex-shrink-0 bg-[#023634] text-white rounded-[8px] flex items-center justify-center hover:bg-[#023634]/90 transition-colors touch-manipulation;
+    @apply bg-primary text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-primary/90 transition-colors touch-manipulation;
   }
 
   .btn-secondary {
-    @apply w-[153px] h-[42px] flex-shrink-0 bg-secondary text-[#023634] border-2 border-[#023634] rounded-[8px] flex items-center justify-center hover:bg-[#023634]/10 transition-colors touch-manipulation;
+    @apply bg-secondary text-primary border-2 border-primary px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-primary/10 transition-colors touch-manipulation;
   }
 
   .section-title {

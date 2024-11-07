@@ -16,16 +16,6 @@ const testimonials = [
     image: 'https://i.ibb.co/4jVpvqQ/image.png',
     text: "I recently discovered that Henna by Fathima is one of the few unique store with Mehndi products. Not only did they have the item I was looking for, but they also offer wide variety of products in this sector. I'm thrilled with the quality and will definitely shop at your store again in the future. Highly recommended!",
   },
-  {
-    name: 'Priya S',
-    image: 'https://i.ibb.co/4jVpvqQ/image.png',
-    text: 'I love the quality of Henna by Fathima products. The designs are vibrant and long-lasting. Highly recommended!',
-  },
-  {
-    name: 'Zara K',
-    image: 'https://i.ibb.co/4jVpvqQ/image.png',
-    text: "Attending Fathima's workshop was an amazing experience. Her teaching style is patient and informative.",
-  },
 ];
 
 const OurHappyClients = () => {
@@ -49,7 +39,7 @@ const OurHappyClients = () => {
         <Carousel className="w-full max-w-5xl mx-auto">
           <CarouselContent className="-ml-2 md:-ml-4">
             {testimonials.map((testimonial, index) => (
-              <CarouselItem key={index} className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
+              <CarouselItem key={index} className="pl-2 md:pl-4 basis-full sm:basis-1/2">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}

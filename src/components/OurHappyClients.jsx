@@ -7,14 +7,14 @@ import { Quote } from 'lucide-react';
 
 const testimonials = [
   {
-    name: 'Sona K',
+    name: 'Althaf Muhammad',
     image: 'https://i.ibb.co/4jVpvqQ/image.png',
-    text: 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs.',
+    text: "Henna by Fathima, and it's one of the few unique stores for Mehndi products. They had exactly what I needed and a great selection of other items too. I'm really happy with the quality and will definitely shop there again. Highly recommended",
   },
   {
-    name: 'Aisha M',
+    name: 'Hanan P',
     image: 'https://i.ibb.co/4jVpvqQ/image.png',
-    text: 'The attention to detail in Fathima\'s henna designs is truly remarkable. My wedding day was made even more special.',
+    text: "I recently discovered that Henna by Fathima is one of the few unique store with Mehndi products. Not only did they have the item I was looking for, but they also offer wide variety of products in this sector. I'm thrilled with the quality and will definitely shop at your store again in the future. Highly recommended!",
   },
   {
     name: 'Priya S',
@@ -24,7 +24,7 @@ const testimonials = [
   {
     name: 'Zara K',
     image: 'https://i.ibb.co/4jVpvqQ/image.png',
-    text: 'Attending Fathima\'s workshop was an amazing experience. Her teaching style is patient and informative.',
+    text: "Attending Fathima's workshop was an amazing experience. Her teaching style is patient and informative.",
   },
 ];
 

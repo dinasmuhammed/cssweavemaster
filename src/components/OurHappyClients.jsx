@@ -8,7 +8,7 @@ import { Quote } from 'lucide-react';
 const testimonials = [
   {
     name: 'Althaf Muhammad',
-    image: 'https://i.ibb.co/4jVpvqQ/image.png',
+    image: 'https://i.ibb.co/N7NKGgG/image.png',
     text: "Henna by Fathima, and it's one of the few unique stores for Mehndi products. They had exactly what I needed and a great selection of other items too. I'm really happy with the quality and will definitely shop there again. Highly recommended",
   },
   {

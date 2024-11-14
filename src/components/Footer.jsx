@@ -102,7 +102,7 @@ const Footer = () => {
               rel="noopener noreferrer" 
               className="underline hover:text-green-300 transition-colors"
             >
-              AD Web Comic Agency
+             ad web comic agency
             </a>
           </p>
         </div>

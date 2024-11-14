@@ -22,7 +22,7 @@ const Workshop = () => {
 
   const handleDownload = () => {
     // Replace this URL with your actual brochure PDF URL
-    const brochureUrl = 'https://pdf.ac/1WjKbw';
+    const brochureUrl = '/workshop-brochure.pdf';
     
     fetch(brochureUrl)
       .then(response => {

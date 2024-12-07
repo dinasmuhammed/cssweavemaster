@@ -6,6 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CartProvider } from './context/CartContext';
 import LoadingSpinner from './components/LoadingSpinner';
 import ErrorBoundary from './components/ErrorBoundary';
+import WhatsAppWidget from 'react-whatsapp-widget';
+import 'react-whatsapp-widget/dist/index.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -97,6 +99,11 @@ const App = () => {
                     </Routes>
                   </main>
                   <Footer />
+                  <WhatsAppWidget 
+                    phoneNumber="+918086647124"
+                    companyName="Henna by Fathima"
+                    message="Hello! How can we help you?"
+                  />
                 </div>
               </Router>
             </Suspense>

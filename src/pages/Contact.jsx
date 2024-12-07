@@ -10,6 +10,7 @@ const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     message: '',
   });
 
@@ -21,10 +22,26 @@ const Contact = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    toast.success("Message sent successfully! We'll get back to you soon.");
-    setFormData({ name: '', email: '', message: '' });
+    try {
+      const response = await fetch('https://formspree.io/f/mwpkjkdn', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        toast.success("Message sent successfully! We'll get back to you soon.");
+        setFormData({ name: '', email: '', phone: '', message: '' });
+      } else {
+        toast.error("Failed to send message. Please try again.");
+      }
+    } catch (error) {
+      toast.error("An error occurred. Please try again later.");
+    }
   };
 
   return (
@@ -49,7 +66,7 @@ const Contact = () => {
           >
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
                 <Input
                   type="text"
                   id="name"
@@ -62,20 +79,32 @@ const Contact = () => {
                 />
               </div>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">Phone Number *</label>
+                <Input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                  className="w-full border-gray-200 focus:border-green-500 focus:ring-green-500"
+                  placeholder="+91 12345 67890"
+                />
+              </div>
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">Email Address (Optional)</label>
                 <Input
                   type="email"
                   id="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  required
                   className="w-full border-gray-200 focus:border-green-500 focus:ring-green-500"
                   placeholder="john@example.com"
                 />
               </div>
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">Your Message</label>
+                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">Your Message *</label>
                 <Textarea
                   id="message"
                   name="message"

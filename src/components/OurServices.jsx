@@ -8,22 +8,26 @@ const services = [
   { 
     name: 'Bridal Henna Package', 
     image: 'https://i.postimg.cc/2SGPxtQr/Screenshot-2024-10-13-173602.png',
-    description: 'Exclusive bridal henna designs for your special day'
+    description: 'Exclusive bridal henna designs for your special day',
+    link: '/services'
   },
   { 
     name: 'Henna Products', 
     image: 'https://i.postimg.cc/sDddf7fd/Screenshot-2024-10-13-173328.png',
-    description: 'Premium quality organic henna products'
+    description: 'Premium quality organic henna products',
+    link: '/shop'
   },
   { 
     name: 'Party Henna', 
     image: 'https://i.postimg.cc/MGXrmpZm/Screenshot-2024-10-13-173745.png',
-    description: 'Beautiful designs for all occasions'
+    description: 'Beautiful designs for all occasions',
+    link: '/services'
   },
   { 
     name: 'Workshops', 
     image: 'https://i.postimg.cc/bNxXZrdG/Screenshot-2024-10-13-173523.png',
-    description: 'Learn the art of henna application'
+    description: 'Learn the art of henna application',
+    link: '/workshop'
   },
 ];
 
@@ -42,16 +46,18 @@ const OurServices = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="group text-center"
             >
-              <div className="relative mb-4 overflow-hidden mx-auto aspect-[213/293] max-w-[213px]" style={{ width: '213px', height: '293px' }}>
-                <motion.img 
-                  src={service.image} 
-                  alt={service.name}
-                  className="w-full h-full object-cover"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.3 }}
-                />
-              </div>
-              <h3 className="text-base sm:text-lg font-serif text-[#1B4B40] mb-2">{service.name}</h3>
+              <Link to={service.link} className="block">
+                <div className="relative mb-4 overflow-hidden mx-auto aspect-[213/293] max-w-[213px] cursor-pointer" style={{ width: '213px', height: '293px' }}>
+                  <motion.img 
+                    src={service.image} 
+                    alt={service.name}
+                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </div>
+                <h3 className="text-base sm:text-lg font-serif text-[#1B4B40] mb-2">{service.name}</h3>
+              </Link>
             </motion.div>
           ))}
         </div>

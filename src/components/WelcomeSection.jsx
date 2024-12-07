@@ -20,7 +20,7 @@ const WelcomeSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <span className="text-green-800 font-medium text-xs sm:text-sm md:text-base">Premium Henna Services</span>
+            <span className="text-green-800 font-medium text-xs sm:text-sm md:text-base">Your One-Stop Destination for All Things Henna</span>
           </motion.div>
           
           <motion.h2 
@@ -40,7 +40,7 @@ const WelcomeSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            Let us adorn you with beautiful bridal henna that makes your special moments unforgettable.
+            From premium bridal services to quality henna products and engaging workshops, we have everything to make your henna journey special
           </motion.p>
           
           <motion.div

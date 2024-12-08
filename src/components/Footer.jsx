@@ -21,7 +21,7 @@ const Footer = () => {
               className="h-12 mx-auto sm:mx-0 mb-4"
             />
             <p className="text-sm opacity-80 max-w-xs mx-auto sm:mx-0">
-              Creating beautiful henna designs for all your special occasions
+             Your One-Stop Destination for All Things Henna
             </p>
           </div>
           

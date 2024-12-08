@@ -6,10 +6,16 @@ const HennaMoments = () => {
   const imageUrls = [
     "https://i.ibb.co/C1cFHfH/Whats-App-Image-2024-12-07-at-23-45-16-d0897369.jpg",
     "https://i.ibb.co/ZhwWrbk/IMG-7475.jpg",
-    "https://i.ibb.co/CVwqgwf/IMG-7693.jpg"
+    "https://i.ibb.co/CVwqgwf/IMG-7693.jpg",
+    "https://i.ibb.co/rZbxbTq/Whats-App-Image-2024-12-07-at-23-00-46-3bf0a56b.jpg",
+    "https://i.ibb.co/svfHh06/90055-FAD-BEFB-4852-AAC5-D9-D07-C2-EC3-DB.jpg",
+    "https://i.ibb.co/5FRJHsf/81b8546f-49ce-45aa-9408-42486dfdcc9a.jpg",
+    "https://i.ibb.co/QXbLTZY/Whats-App-Image-2024-12-07-at-23-04-55-9d16470d.jpg",
+    "https://i.ibb.co/Gvqzfbf/Whats-App-Image-2024-12-07-at-23-03-23-1f1fc0e8.jpg",
+    "https://i.ibb.co/5KhyqgL/Whats-App-Image-2024-12-07-at-23-03-23-3cd1b34c.jpg"
     
   ];
-  const totalImages = 3;
+  const totalImages = 9;
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);

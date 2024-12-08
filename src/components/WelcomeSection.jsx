@@ -56,7 +56,7 @@ const WelcomeSection = () => {
               asChild 
               className="bg-[#00332B] hover:bg-[#004D40] text-white w-[140px] sm:w-[169px] h-[40px] sm:h-[46px] rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 font-medium text-sm sm:text-base group"
             >
-              <Link to="/services" className="flex items-center justify-center gap-2">
+              <Link to="/shop" className="flex items-center justify-center gap-2">
                 View Packages
                 <motion.span
                   animate={{ x: [0, 5, 0] }}

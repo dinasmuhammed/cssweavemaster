@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -10,21 +10,6 @@ const HennaMoments = () => {
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isHovering, setIsHovering] = useState(false);
-  const intervalRef = useRef(null);
-
-  const startAutoSlide = () => {
-    intervalRef.current = setInterval(() => {
-      if (!isHovering) {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % imageUrls.length);
-      }
-    }, 3000);
-  };
-
-  useEffect(() => {
-    startAutoSlide();
-    return () => clearInterval(intervalRef.current);
-  }, [isHovering]);
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + imageUrls.length) % imageUrls.length);
@@ -51,8 +36,6 @@ const HennaMoments = () => {
         </p>
         <div 
           className="relative w-full max-w-[1280px] h-[280px] mx-auto overflow-hidden rounded-lg"
-          onMouseEnter={() => setIsHovering(true)}
-          onMouseLeave={() => setIsHovering(false)}
         >
           <AnimatePresence initial={false}>
             <motion.div

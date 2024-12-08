@@ -13,13 +13,13 @@ const services = [
   },
   { 
     name: 'Henna Products', 
-    image: 'https://i.postimg.cc/sDddf7fd/Screenshot-2024-10-13-173328.png',
+    image: 'https://i.ibb.co/r2gjMxV/Whats-App-Image-2024-12-07-at-23-57-57-e16b4952.jpg',
     description: 'Premium quality organic henna products',
     link: '/shop'
   },
   { 
     name: 'Party Henna', 
-    image: 'https://i.postimg.cc/MGXrmpZm/Screenshot-2024-10-13-173745.png',
+    image: 'https://i.ibb.co/FBFVzHg/Whats-App-Image-2024-12-07-at-23-54-31-3f69a50b.jpg',
     description: 'Beautiful designs for all occasions',
     link: '/services'
   },

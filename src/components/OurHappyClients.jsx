@@ -16,6 +16,11 @@ const testimonials = [
     image: 'https://i.ibb.co/4jVpvqQ/image.png',
     text: "I recently discovered that Henna by Fathima is one of the few unique store with Mehndi products. Not only did they have the item I was looking for, but they also offer wide variety of products in this sector. I'm thrilled with the quality and will definitely shop at your store again in the future. Highly recommended!",
   },
+   {
+    name: 'malavika ts',
+    image: 'https://i.ibb.co/9T0vt18/unnamed-1.png',
+    text: "Recently visited the studio in Koduvally, Kerala, and I'm absolutely thrilled with the experience! The designer's expertise and attention to detail are truly exceptional. The elegant henna designs exceeded my expectations - intricate, beautiful, and perfectly applied. What impressed me most was the studio's commitment to customer satisfaction. The team listened attentively to my preferences, offered personalized suggestions, and ensured felt comfortable throughout the process. The positive attitude, warm hospitality, and professionalism displayed by the staff made the experience even more delightful.",
+  },
 ];
 
 const OurHappyClients = () => {

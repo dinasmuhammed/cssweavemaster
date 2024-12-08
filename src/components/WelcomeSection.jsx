@@ -41,7 +41,7 @@ const WelcomeSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            From premium bridal services to quality henna products and engaging workshops, we have everything to make your henna journey special
+            From premium bridal services to quality henna products and engaging workshops, we have everything to make your henna journey special.
           </motion.p>
           
           <motion.div

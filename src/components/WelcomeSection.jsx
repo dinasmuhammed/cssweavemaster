@@ -13,15 +13,7 @@ const WelcomeSection = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="max-w-4xl mx-auto text-center"
         >
-          <motion.div 
-            className="flex items-center justify-center gap-1 sm:gap-2 mb-2"
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          >
-            <span className="text-green-800 font-medium text-xs sm:text-sm md:text-base">Your One-Stop Destination for All Things Henna</span>
-          </motion.div>
+         
           
           <motion.h2 
             className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-green-800 mb-2 sm:mb-3 md:mb-6 tracking-tight px-2"
@@ -32,7 +24,16 @@ const WelcomeSection = () => {
           >
             Welcome to Henna by Fathima
           </motion.h2>
-          
+
+           <motion.div 
+            className="flex items-center justify-center gap-1 sm:gap-2 mb-2"
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <span className="text-green-800 font-medium text-xs sm:text-sm md:text-base">Your One-Stop Destination for All Things Henna</span>
+          </motion.div>
           <motion.p 
             className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-green-800/80 mb-4 sm:mb-6 md:mb-8 max-w-3xl mx-auto leading-relaxed px-2"
             initial={{ opacity: 0, y: 20 }}

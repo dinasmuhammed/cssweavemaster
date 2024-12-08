@@ -6,17 +6,18 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Quote } from 'lucide-react';
 
 const testimonials = [
-  {
-    name: 'Althaf Muhammad',
-    image: 'https://i.ibb.co/N7NKGgG/image.png',
-    text: "Henna by Fathima, and it's one of the few unique stores for Mehndi products. They had exactly what I needed and a great selection of other items too. I'm really happy with the quality and will definitely shop there again. Highly recommended",
-  },
+ 
    {
     name: 'Vajeeha Ibrahim',
     image: 'https://i.ibb.co/hmzjqYc/unnamed.png',
     text: "I have visited this studio multiple times and absolutely love it! The interior is beautifully designed, creating a relaxing and welcoming atmosphere. The products are top-notch and deliver amazing results every time. Highly recommend this place to anyone looking for quality mehandi services and a great experience!",
   },
   
+   {
+    name: 'Althaf Muhammad',
+    image: 'https://i.ibb.co/N7NKGgG/image.png',
+    text: "Henna by Fathima, and it's one of the few unique stores for Mehndi products. They had exactly what I needed and a great selection of other items too. I'm really happy with the quality and will definitely shop there again. Highly recommended",
+  },
  
    {
     name: 'malavika ts',

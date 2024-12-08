@@ -1,8 +1,3 @@
-import { toast } from "sonner";
-import { sendOrderConfirmationEmail } from './emailUtils';
-
-const RAZORPAY_KEY_ID = "rzp_live_lhUJoR9PnyhX0q";
-
 export const validatePaymentForm = (formData) => {
   const errors = {};
   
@@ -30,78 +25,64 @@ export const initializeRazorpayPayment = async (orderData, totalAmount, formData
       throw new Error('Razorpay SDK not loaded');
     }
 
+    const response = await fetch('/api/create-order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        amount: totalAmount,
+        currency: 'INR'
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to create order');
+    }
+
+    const order = await response.json();
+
     const options = {
-      key: RAZORPAY_KEY_ID,
-      amount: Math.round(totalAmount * 100), // Convert to paise and ensure it's an integer
+      key: "rzp_live_lhUJoR9PnyhX0q",
+      amount: Math.round(totalAmount * 100),
       currency: "INR",
       name: "Henna by Fathima",
       description: `Order Payment: ${orderData.orderId}`,
-      image: "/logo.png",
+      order_id: order.id,
       prefill: {
         name: formData.name,
         contact: formData.mobile,
         email: formData.email
       },
       notes: {
-        shipping_address: `${formData.address}, ${formData.area}, ${formData.district}, ${formData.state}, ${formData.pincode}`
+        shipping_address: JSON.stringify({
+          address: formData.address,
+          area: formData.area,
+          district: formData.district,
+          state: formData.state,
+          pincode: formData.pincode,
+          full_address: `${formData.address}, ${formData.area}, ${formData.district}, ${formData.state} - ${formData.pincode}`
+        })
       },
       theme: {
         color: "#607973"
       },
       handler: function (response) {
-        handlePaymentSuccess(response, orderData, onSuccess);
+        console.log('Payment successful:', response);
+        onSuccess(response);
       },
       modal: {
         ondismiss: function() {
+          console.log('Payment modal dismissed');
           onError(new Error('Payment cancelled by user'));
-          toast.error('Payment cancelled');
-        },
-        confirm_close: true,
-        escape: true
+        }
       }
     };
 
     const rzp = new window.Razorpay(options);
-    rzp.on('payment.failed', function (response) {
-      handlePaymentFailure(response, onError);
-    });
-
     rzp.open();
   } catch (error) {
-    toast.error(error.message || 'Failed to initialize payment');
+    console.error('Payment initialization error:', error);
     onError(error);
   }
-};
-
-const handlePaymentSuccess = async (response, orderData, onSuccess) => {
-  try {
-    const emailSent = await sendOrderConfirmationEmail({
-      orderId: orderData.orderId,
-      customerName: orderData.customerDetails.name,
-      totalAmount: orderData.amount,
-      items: orderData.items,
-      shippingAddress: orderData.customerDetails.address,
-      paymentId: response.razorpay_payment_id
-    });
-
-    if (emailSent) {
-      toast.success("Payment successful! Order confirmation sent to your email.");
-    } else {
-      toast.success("Payment successful!");
-      toast.warning("Order confirmation email could not be sent.");
-    }
-    
-    onSuccess(response);
-  } catch (error) {
-    console.error('Error processing successful payment:', error);
-    toast.success("Payment successful!");
-    toast.warning("Could not send order confirmation.");
-    onSuccess(response);
-  }
-};
-
-const handlePaymentFailure = (response, onError) => {
-  const errorMessage = response.error?.description || 'Payment failed';
-  toast.error(errorMessage);
-  onError(new Error(errorMessage));
 };

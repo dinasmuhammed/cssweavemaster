@@ -13,9 +13,7 @@ const HennaMoments = () => {
     "https://i.ibb.co/QXbLTZY/Whats-App-Image-2024-12-07-at-23-04-55-9d16470d.jpg",
     "https://i.ibb.co/Gvqzfbf/Whats-App-Image-2024-12-07-at-23-03-23-1f1fc0e8.jpg",
     "https://i.ibb.co/5KhyqgL/Whats-App-Image-2024-12-07-at-23-03-23-3cd1b34c.jpg"
-    
   ];
-  const totalImages = 9;
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
@@ -30,10 +28,15 @@ const HennaMoments = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const getRandomIndex = (currentIdx) => {
+    const newIndex = Math.floor(Math.random() * imageUrls.length);
+    return newIndex === currentIdx ? getRandomIndex(currentIdx) : newIndex;
+  };
+
   const startAutoSlide = () => {
     intervalRef.current = setInterval(() => {
       if (!isHovering) {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % totalImages);
+        setCurrentIndex(prevIndex => getRandomIndex(prevIndex));
       }
     }, 3000);
   };
@@ -44,11 +47,11 @@ const HennaMoments = () => {
   }, [isHovering]);
 
   const handlePrev = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + totalImages) % totalImages);
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + imageUrls.length) % imageUrls.length);
   };
 
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % totalImages);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % imageUrls.length);
   };
 
   return (
@@ -67,29 +70,40 @@ const HennaMoments = () => {
           </a>
         </p>
         <div 
-          className="relative h-[250px] sm:h-[300px] md:h-[400px] overflow-hidden rounded-lg"
+          className="relative overflow-hidden rounded-lg"
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >
           <AnimatePresence initial={false}>
             <motion.div
               key={currentIndex}
-              className="absolute top-0 left-0 w-full h-full flex"
+              className="flex gap-4"
               initial={{ opacity: 0, x: 300 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -300 }}
               transition={{ duration: 0.5 }}
             >
-              {[...Array(isMobile ? 3 : 6)].map((_, index) => (
-                <img
-                  key={index}
-                  src={imageUrls[(currentIndex + index) % imageUrls.length]}
-                  alt={`Henna Moment ${currentIndex + index + 1}`}
-                  className={`h-full ${isMobile ? 'w-1/3' : 'w-1/6'} object-cover`}
-                />
-              ))}
+              <div className="flex gap-4 w-full">
+                {[...Array(3)].map((_, index) => {
+                  const imageIndex = (currentIndex + index) % imageUrls.length;
+                  return (
+                    <div 
+                      key={index}
+                      className="flex-1 aspect-square overflow-hidden rounded-lg"
+                    >
+                      <img
+                        src={imageUrls[imageIndex]}
+                        alt={`Henna Moment ${imageIndex + 1}`}
+                        className="w-full h-full object-cover"
+                        loading={index === 0 ? "eager" : "lazy"}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
             </motion.div>
           </AnimatePresence>
+          
           <button
             className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/50 rounded-full p-2 transition-opacity duration-300 opacity-0 hover:opacity-100 focus:opacity-100 z-10"
             onClick={handlePrev}
@@ -97,6 +111,7 @@ const HennaMoments = () => {
           >
             <ChevronLeft className="w-6 h-6 text-green-800" />
           </button>
+          
           <button
             className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/50 rounded-full p-2 transition-opacity duration-300 opacity-0 hover:opacity-100 focus:opacity-100 z-10"
             onClick={handleNext}

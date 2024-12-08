@@ -8,6 +8,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
+import { toast } from "sonner";
 
 const BookingRequestForm = () => {
   const [formData, setFormData] = useState({
@@ -17,15 +18,41 @@ const BookingRequestForm = () => {
     date: new Date(),
   });
   const [isOpen, setIsOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    const message = `Hello! I would like to book a service.\n\nName: ${formData.name}\nAddress: ${formData.address}\nBudget: ${formData.budget}\nPreferred Date: ${format(formData.date, 'PPP')}`;
-    
-    const whatsappUrl = `https://wa.me/918086647124?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
-    setIsOpen(false);
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('https://formspree.io/f/mvgonojq', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ...formData,
+          date: format(formData.date, 'PPP')
+        })
+      });
+
+      if (response.ok) {
+        toast.success("Booking request submitted successfully!");
+        setFormData({
+          name: '',
+          address: '',
+          budget: '',
+          date: new Date(),
+        });
+        setIsOpen(false);
+      } else {
+        throw new Error('Failed to submit form');
+      }
+    } catch (error) {
+      toast.error("Failed to submit booking request. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -99,8 +126,8 @@ const BookingRequestForm = () => {
             </Popover>
           </div>
           
-          <Button type="submit" className="w-full">
-            Submit and Connect on WhatsApp
+          <Button type="submit" className="w-full" disabled={isSubmitting}>
+            {isSubmitting ? 'Submitting...' : 'Submit Booking Request'}
           </Button>
         </form>
       </DialogContent>

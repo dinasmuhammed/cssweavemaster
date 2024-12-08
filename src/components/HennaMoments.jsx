@@ -7,16 +7,27 @@ const HennaMoments = () => {
     "https://i.ibb.co/C1cFHfH/Whats-App-Image-2024-12-07-at-23-45-16-d0897369.jpg",
     "https://i.ibb.co/ZhwWrbk/IMG-7475.jpg",
     "https://i.ibb.co/CVwqgwf/IMG-7693.jpg"
+    
   ];
+  const totalImages = 450;
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const intervalRef = useRef(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const startAutoSlide = () => {
     intervalRef.current = setInterval(() => {
       if (!isHovering) {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % imageUrls.length);
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % totalImages);
       }
     }, 3000);
   };
@@ -27,11 +38,11 @@ const HennaMoments = () => {
   }, [isHovering]);
 
   const handlePrev = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + imageUrls.length) % imageUrls.length);
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + totalImages) % totalImages);
   };
 
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % imageUrls.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % totalImages);
   };
 
   return (
@@ -57,17 +68,20 @@ const HennaMoments = () => {
           <AnimatePresence initial={false}>
             <motion.div
               key={currentIndex}
-              className="absolute top-0 left-0 w-full h-full"
+              className="absolute top-0 left-0 w-full h-full flex"
               initial={{ opacity: 0, x: 300 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -300 }}
               transition={{ duration: 0.5 }}
             >
-              <img
-                src={imageUrls[currentIndex]}
-                alt={`Henna Moment ${currentIndex + 1}`}
-                className="w-full h-full object-cover"
-              />
+              {[...Array(isMobile ? 3 : 6)].map((_, index) => (
+                <img
+                  key={index}
+                  src={imageUrls[(currentIndex + index) % imageUrls.length]}
+                  alt={`Henna Moment ${currentIndex + index + 1}`}
+                  className={`h-full ${isMobile ? 'w-1/3' : 'w-1/6'} object-cover`}
+                />
+              ))}
             </motion.div>
           </AnimatePresence>
           <button

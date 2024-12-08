@@ -20,9 +20,9 @@ const HeroSection = () => {
   );
   
   const images = [
-    "https://i.ibb.co/7j9LYMb/de63f2db-8f22-4eae-a1ef-46b35d650281.jpg",
-    "https://i.ibb.co/3cjTGVn/8c42239e-0621-47c4-a44e-83c65d650281.jpg",
-    "https://i.ibb.co/7CX7vg6/5bc5421c-e0e5-4f18-93ba-7f984c576832.jpg",
+    "https://i.ibb.co/nRc8Y29/IMG-0528.jpg",
+    "https://i.ibb.co/C7FdMfY/Whats-App-Image-2024-12-07-at-22-53-32-95d14174.jpg",
+    "https://i.ibb.co/567J2tf/Whats-App-Image-2024-12-07-at-22-53-32-ad81d123.jpg",
   ];
 
   useEffect(() => {

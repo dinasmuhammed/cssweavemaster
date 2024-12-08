@@ -9,7 +9,7 @@ const HennaMoments = () => {
     "https://i.ibb.co/CVwqgwf/IMG-7693.jpg"
     
   ];
-  const totalImages = 450;
+  const totalImages = 3;
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);

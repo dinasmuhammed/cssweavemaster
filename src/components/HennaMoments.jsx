@@ -13,12 +13,16 @@ const HennaMoments = () => {
   const [isHovering, setIsHovering] = useState(false);
   const intervalRef = useRef(null);
 
-  useEffect(() => {
-    if (!isHovering) {
-      intervalRef.current = setInterval(() => {
+  const startAutoSlide = () => {
+    intervalRef.current = setInterval(() => {
+      if (!isHovering) {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % imageUrls.length);
-      }, 3000);
-    }
+      }
+    }, 3000);
+  };
+
+  useEffect(() => {
+    startAutoSlide();
     return () => clearInterval(intervalRef.current);
   }, [isHovering]);
 
@@ -50,17 +54,21 @@ const HennaMoments = () => {
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >
-          <AnimatePresence initial={false} mode="wait">
-            <motion.img
+          <AnimatePresence initial={false}>
+            <motion.div
               key={currentIndex}
-              src={imageUrls[currentIndex]}
-              alt={`Henna Moment ${currentIndex + 1}`}
-              className="absolute inset-0 w-full h-full object-cover"
+              className="absolute top-0 left-0 w-full h-full"
               initial={{ opacity: 0, x: 300 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -300 }}
               transition={{ duration: 0.5 }}
-            />
+            >
+              <img
+                src={imageUrls[currentIndex]}
+                alt={`Henna Moment ${currentIndex + 1}`}
+                className="w-full h-full object-cover"
+              />
+            </motion.div>
           </AnimatePresence>
           <button
             className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/50 rounded-full p-2 transition-opacity duration-300 opacity-0 hover:opacity-100 focus:opacity-100 z-10"

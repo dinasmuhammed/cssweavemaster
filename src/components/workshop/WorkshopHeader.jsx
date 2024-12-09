@@ -1,23 +1,34 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.5, staggerChildren: 0.2 } }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+};
+
 const WorkshopHeader = () => {
   return (
-    <div className="text-center py-12">
+    <motion.div 
+      className="text-center py-12"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
       <motion.h1 
         className="text-3xl md:text-4xl font-bold mb-6 text-green-800"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        variants={itemVariants}
       >
         Learn the Art of Henna Application – Join Our Workshop Today!
       </motion.h1>
 
       <motion.div 
         className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
+        variants={itemVariants}
       >
         <img 
           src="https://i.ibb.co/0Xx1wxn/ba19277a-ac85-4a52-9127-09a7740bd8ed.jpg"
@@ -38,14 +49,12 @@ const WorkshopHeader = () => {
 
       <motion.p 
         className="text-lg text-center mb-12 max-w-3xl mx-auto text-gray-700"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
+        variants={itemVariants}
       >
         Join us for an exciting Mehendi Workshop where you can learn the art of henna applications! 
         Whether you're a beginner or looking to refine your skills, this workshop is perfect for everyone.
       </motion.p>
-    </div>
+    </motion.div>
   );
 };
 

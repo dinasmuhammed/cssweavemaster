@@ -12,31 +12,40 @@ const HennaMoments = () => {
     "https://i.ibb.co/5FRJHsf/81b8546f-49ce-45aa-9408-42486dfdcc9a.jpg",
     "https://i.ibb.co/C1cFHfH/Whats-App-Image-2024-12-07-at-23-45-16-d0897369.jpg",
     "https://i.ibb.co/5KhyqgL/Whats-App-Image-2024-12-07-at-23-03-23-3cd1b34c.jpg"
-    
   ];
 
   useEffect(() => {
+    let isActive = true;
+
     const startAutoScroll = async () => {
       const container = scrollRef.current;
-      if (!container) return;
+      if (!container || !isActive) return;
 
       const scrollWidth = container.scrollWidth - container.clientWidth;
       
-      while (true) {
+      while (isActive) {
         await controls.start({
           x: -scrollWidth,
           transition: { duration: 20, ease: "linear" }
         });
         
-        await controls.start({
-          x: 0,
-          transition: { duration: 0 }
-        });
+        if (isActive) {
+          await controls.start({
+            x: 0,
+            transition: { duration: 0 }
+          });
+        }
       }
     };
 
     startAutoScroll();
-  }, [controls]);
+
+    // Cleanup function
+    return () => {
+      isActive = false;
+      controls.stop();
+    };
+  }, [controls]); // Only re-run if controls changes
 
   return (
     <section className="py-12 sm:py-16">

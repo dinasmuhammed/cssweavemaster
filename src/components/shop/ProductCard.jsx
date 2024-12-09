@@ -33,6 +33,7 @@ const ProductCard = ({ product }) => {
           src={product.image} 
           alt={product.name} 
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          loading="lazy"
         />
       </div>
       <div className="p-6">
@@ -47,6 +48,7 @@ const ProductCard = ({ product }) => {
               <Button 
                 variant="outline" 
                 className="flex items-center gap-2 text-green-800 border-green-800 hover:bg-green-50"
+                aria-label={`View additional information for ${product.name}`}
               >
                 <Info className="w-4 h-4" />
                 Additional Info
@@ -89,6 +91,8 @@ const ProductCard = ({ product }) => {
             className={`w-12 h-12 rounded-lg border-2 border-green-800 ${
               isSaved ? 'bg-green-50' : 'bg-white hover:bg-green-50'
             }`}
+            aria-label={`${isSaved ? 'Remove from' : 'Add to'} favorites`}
+            aria-pressed={isSaved}
           >
             <Heart 
               className={`w-5 h-5 ${
@@ -100,6 +104,7 @@ const ProductCard = ({ product }) => {
           <Button 
             onClick={handleAddToCart}
             className="flex-1 bg-green-800 hover:bg-green-700 text-white rounded-lg h-12 flex items-center justify-between px-4"
+            aria-label={`Add ${product.name} to cart`}
           >
             <span className="text-base font-medium">Add to Bag</span>
             <ShoppingCart className="w-5 h-5" />

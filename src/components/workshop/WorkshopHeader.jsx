@@ -9,7 +9,7 @@ const WorkshopHeader = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        Learn the Art of Henna Application – Join Our Workshop Today!
+        Learn the Art of Henna Application <br /> Join Our Workshop Today!
       </motion.h1>
 
       <motion.div 

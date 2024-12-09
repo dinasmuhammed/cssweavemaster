@@ -6,6 +6,7 @@ import { useCart } from '../../context/CartContext';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -56,6 +57,9 @@ const ProductCard = ({ product }) => {
                 <DialogTitle className="text-xl font-semibold text-green-800 mb-4">
                   {product.name} - Additional Information
                 </DialogTitle>
+                <DialogDescription className="text-gray-600">
+                  Detailed information about this product and its usage.
+                </DialogDescription>
               </DialogHeader>
               <div className="mt-4 space-y-4">
                 <p className="text-gray-700">

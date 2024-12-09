@@ -27,7 +27,6 @@ const queryClient = new QueryClient({
 const lazyLoadWithPrefetch = (importFn, displayName) => {
   const Component = lazy(() => {
     const componentPromise = importFn();
-    // Prefetch nested routes and components
     componentPromise.then((module) => {
       Object.values(module).forEach((exported) => {
         if (typeof exported === 'function' && 'preload' in exported) {
@@ -79,7 +78,7 @@ const App = () => {
                 <LoadingSpinner size="large" />
               </div>
             }>
-              <Router>
+              <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
                 <div className="flex flex-col min-h-screen bg-white">
                   <Header />
                   <main className="flex-grow container mx-auto px-4 py-8 w-full max-w-7xl">

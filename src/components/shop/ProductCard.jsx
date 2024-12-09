@@ -17,13 +17,17 @@ const ProductCard = ({ product }) => {
   const isSaved = savedItems.some(item => item.id === product.id);
 
   const handleSaveForLater = () => {
-    saveForLater(product);
-    toast.success(`${product.name} ${isSaved ? 'removed from' : 'added to'} favorites`);
+    if (saveForLater && typeof saveForLater === 'function') {
+      saveForLater(product);
+      toast.success(`${product.name} ${isSaved ? 'removed from' : 'added to'} favorites`);
+    }
   };
 
   const handleAddToCart = () => {
-    addToCart(product);
-    toast.success(`${product.name} added to cart`);
+    if (addToCart && typeof addToCart === 'function') {
+      addToCart(product);
+      toast.success(`${product.name} added to cart`);
+    }
   };
 
   return (

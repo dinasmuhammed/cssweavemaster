@@ -20,32 +20,26 @@ const Workshop = () => {
     window.open(whatsappUrl, '_blank');
   };
 
-  const handleDownload = () => {
-    // Replace this URL with your actual brochure PDF URL
-    const brochureUrl = '/workshop-brochure.pdf';
-    
-    fetch(brochureUrl)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.blob();
-      })
-      .then(blob => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'workshop-brochure.pdf';
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(a);
-        toast.success("Brochure downloaded successfully!");
-      })
-      .catch(error => {
-        console.error('Error downloading the brochure:', error);
-        toast.error("Failed to download brochure. Please try again later.");
-      });
+  const handleDownload = async () => {
+    try {
+      const response = await fetch('/index.pdf');
+      if (!response.ok) {
+        throw new Error('Failed to fetch PDF');
+      }
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'workshop-brochure.pdf';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      toast.success("Brochure downloaded successfully!");
+    } catch (error) {
+      console.error('Error downloading the brochure:', error);
+      toast.error("Failed to download brochure. Please try again later.");
+    }
   };
 
   return (

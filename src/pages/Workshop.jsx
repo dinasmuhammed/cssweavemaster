@@ -1,7 +1,10 @@
-import React from 'react';
-import { Button } from "@/components/ui/button";
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Download } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
 
 const workshopImages = [
@@ -13,32 +16,44 @@ const workshopImages = [
 ];
 
 const Workshop = () => {
-  const handleEnquiry = () => {
-    const phoneNumber = "918086647124";
-    const message = encodeURIComponent("Hey, can you please explain about the workshop? I have seen the work from your website.");
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
-    window.open(whatsappUrl, '_blank');
-  };
+  const [formData, setFormData] = useState({
+    name: '',
+    contact: '',
+    location: '',
+    workshopType: 'offline',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleDownload = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
     try {
-      const response = await fetch('/index.pdf');
-      if (!response.ok) {
-        throw new Error('Failed to fetch PDF');
+      const response = await fetch('https://formspree.io/f/mkgnanlb', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        toast.success("Workshop enquiry submitted successfully!");
+        setFormData({
+          name: '',
+          contact: '',
+          location: '',
+          workshopType: 'offline',
+          message: ''
+        });
+      } else {
+        throw new Error('Failed to submit form');
       }
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'workshop-brochure.pdf';
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-      toast.success("Brochure downloaded successfully!");
     } catch (error) {
-      console.error('Error downloading the brochure:', error);
-      toast.error("Failed to download brochure. Please try again later.");
+      toast.error("Failed to submit enquiry. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -50,58 +65,143 @@ const Workshop = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        One day Mehendi Workshop
+        Learn the Art of Henna Application – Join Our Workshop Today!
       </motion.h1>
 
-      <motion.p 
-        className="text-lg md:text-xl text-center mb-12 max-w-3xl mx-auto"
+      <motion.h2 
+        className="text-xl md:text-2xl text-center mb-12 text-green-800"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        Join us for an exciting Mehendi Workshop where you can learn the art of henna applications! Whether you're a beginner or looking to refine your skills, this workshop is perfect for everyone.
-      </motion.p>
+        Available Online and Offline | Perfect for Beginners and Advanced Learners
+      </motion.h2>
 
-      <div className="flex justify-center items-center mb-16">
-        <p className="text-xl mr-4">For more Details</p>
-        <Button 
-          variant="default" 
-          size="lg"
-          className="bg-green-800 hover:bg-green-700 text-white"
-          onClick={handleEnquiry}
-        >
-          Enquire Now
-        </Button>
-      </div>
-
-      <motion.div 
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-16"
-        initial={{ opacity: 0, y: 20 }}
+      <motion.p 
+        className="text-lg text-center mb-12 max-w-3xl mx-auto text-gray-700"
+        initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
       >
-        {workshopImages.map((image, index) => (
-          <img 
-            key={index} 
-            src={image} 
-            alt={`Workshop image ${index + 1}`} 
-            className="w-full h-64 object-cover rounded-lg shadow-md"
-          />
-        ))}
-      </motion.div>
+        Join us for an exciting Mehendi Workshop where you can learn the art of henna applications! 
+        Whether you're a beginner or looking to refine your skills, this workshop is perfect for everyone.
+      </motion.p>
 
-      <div className="flex justify-center items-center">
-        <p className="text-xl mr-4">Click here for detailed brochure</p>
-        <Button 
-          variant="outline" 
-          size="lg"
-          className="border-green-800 text-green-800 hover:bg-green-800 hover:text-white flex items-center gap-2"
-          onClick={handleDownload}
+      <div className="grid md:grid-cols-2 gap-8 mb-16">
+        <motion.div 
+          className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow"
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
         >
-          <Download className="w-4 h-4" />
-          Download
-        </Button>
+          <h3 className="text-2xl font-bold text-green-800 mb-4">Online Mehendi Workshop</h3>
+          <p className="text-gray-700">Learn from the comfort of your home with live interactive sessions and a DIY kit provided.</p>
+        </motion.div>
+
+        <motion.div 
+          className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow"
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.8 }}
+        >
+          <h3 className="text-2xl font-bold text-green-800 mb-4">One-Day Mehendi Workshop (Offline)</h3>
+          <p className="text-gray-700">Get hands-on training and create beautiful henna designs in just one day!</p>
+        </motion.div>
       </div>
+
+      <div className="grid grid-cols-5 gap-4 mb-16">
+        {workshopImages.map((image, index) => (
+          <motion.div
+            key={index}
+            className="relative group"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.3 }}
+          >
+            <img
+              src={image}
+              alt={`Workshop image ${index + 1}`}
+              className="w-full h-48 object-cover rounded-lg shadow-md"
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg" />
+          </motion.div>
+        ))}
+      </div>
+
+      <motion.div 
+        className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-lg"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 1 }}
+      >
+        <h3 className="text-2xl font-bold text-green-800 mb-6 text-center">Join Now</h3>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <Label htmlFor="name">Name</Label>
+            <Input
+              id="name"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              required
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="contact">Contact Number</Label>
+            <Input
+              id="contact"
+              value={formData.contact}
+              onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
+              required
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="location">Location</Label>
+            <Input
+              id="location"
+              value={formData.location}
+              onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+              required
+            />
+          </div>
+
+          <div>
+            <Label>Workshop Type</Label>
+            <RadioGroup
+              value={formData.workshopType}
+              onValueChange={(value) => setFormData({ ...formData, workshopType: value })}
+              className="flex space-x-4"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="offline" id="offline" />
+                <Label htmlFor="offline">Offline</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="online" id="online" />
+                <Label htmlFor="online">Online</Label>
+              </div>
+            </RadioGroup>
+          </div>
+
+          <div>
+            <Label htmlFor="message">Additional Message</Label>
+            <Textarea
+              id="message"
+              value={formData.message}
+              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+              className="min-h-[100px]"
+            />
+          </div>
+
+          <Button 
+            type="submit" 
+            className="w-full"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Submitting...' : 'Enquire Now'}
+          </Button>
+        </form>
+      </motion.div>
     </div>
   );
 };

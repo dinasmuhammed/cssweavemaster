@@ -12,14 +12,28 @@ const WorkshopHeader = () => {
         Learn the Art of Henna Application – Join Our Workshop Today!
       </motion.h1>
 
-      <motion.h2 
-        className="text-xl md:text-2xl text-center mb-12 text-green-800"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
+      <motion.div 
+        className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        Available Online and Offline | Perfect for Beginners and Advanced Learners
-      </motion.h2>
+        <img 
+          src="https://i.ibb.co/0Xx1wxn/ba19277a-ac85-4a52-9127-09a7740bd8ed.jpg"
+          alt="Workshop session 1"
+          className="w-full h-48 object-cover rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+        />
+        <img 
+          src="https://i.ibb.co/WzCCtNC/7afa2c62-e1cb-4250-9c81-597cafc6a977.jpg"
+          alt="Workshop session 2"
+          className="w-full h-48 object-cover rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+        />
+        <img 
+          src="https://i.ibb.co/SNhC0ts/6c4e8a57-276d-4b27-8bcb-61b720c781e9.jpg"
+          alt="Workshop session 3"
+          className="w-full h-48 object-cover rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+        />
+      </motion.div>
 
       <motion.p 
         className="text-lg text-center mb-12 max-w-3xl mx-auto text-gray-700"

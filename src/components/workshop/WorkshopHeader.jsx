@@ -47,6 +47,13 @@ const WorkshopHeader = () => {
       animate="visible"
       variants={containerVariants}
     >
+      <motion.p
+        className="text-lg md:text-xl text-green-800 mb-2"
+        variants={itemVariants}
+      >
+        Available Online and Offline | Perfect for Beginners and Advanced Learners
+      </motion.p>
+      
       <motion.h1 
         className="text-3xl md:text-4xl font-bold mb-6 text-green-800"
         variants={itemVariants}

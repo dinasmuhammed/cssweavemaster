@@ -6,6 +6,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 const TestimonialCarousel = () => {
   const videos = [
@@ -13,19 +14,24 @@ const TestimonialCarousel = () => {
     "https://www.youtube.com/embed/YOUR_SECOND_VIDEO_ID"
   ];
 
+  const plugin = React.useRef(
+    Autoplay({ delay: 4000, stopOnInteraction: true })
+  );
+
   return (
     <div className="max-w-4xl mx-auto px-4 mb-12">
       <h2 className="text-2xl font-bold text-center text-green-800 mb-6">What Our Students Say</h2>
       <Carousel
+        plugins={[plugin.current]}
+        className="w-full"
         opts={{
           align: "start",
           loop: true,
         }}
-        className="w-full"
       >
         <CarouselContent>
           {videos.map((videoUrl, index) => (
-            <CarouselItem key={index} className="md:basis-1/2">
+            <CarouselItem key={index} className="basis-full">
               <div className="aspect-video">
                 <iframe
                   width="100%"

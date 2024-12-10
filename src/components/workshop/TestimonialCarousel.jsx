@@ -27,6 +27,7 @@ const TestimonialCarousel = () => {
           loop: true,
         }}
         plugins={[plugin.current]}
+        className="relative"
       >
         <CarouselContent>
           {videos.map((videoUrl, index) => (
@@ -45,8 +46,8 @@ const TestimonialCarousel = () => {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
+        <CarouselPrevious className="hidden sm:flex" />
+        <CarouselNext className="hidden sm:flex" />
       </Carousel>
     </div>
   );

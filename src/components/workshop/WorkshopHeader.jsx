@@ -32,12 +32,12 @@ const itemVariants = {
 
 const WorkshopHeader = () => {
   const images = [
-    "https://i.ibb.co/0Xx1wxn/ba19277a-ac85-4a52-9127-09a7740bd8ed.jpg",
-    "https://i.ibb.co/WzCCtNC/7afa2c62-e1cb-4250-9c81-597cafc6a977.jpg",
-    "https://i.ibb.co/SNhC0ts/6c4e8a57-276d-4b27-8bcb-61b720c781e9.jpg",
-    "https://i.ibb.co/r3SqJdP/072a2867-34cf-4288-aeac-4adb7509b17e.jpg",
-    "https://i.ibb.co/dWn0vvS/image.png",
-    "https://i.ibb.co/0Xx1wxn/ba19277a-ac85-4a52-9127-09a7740bd8ed.jpg"
+    "https://i.ibb.co/NrscTxL/Whats-App-Image-2024-12-10-at-11-08-19-b0e5c368.jpg",
+    "https://i.ibb.co/txK3K1B/Whats-App-Image-2024-12-10-at-11-11-08-73f875f9.jpg",
+    "https://i.ibb.co/zSGCh4p/Whats-App-Image-2024-12-10-at-11-11-07-75eb6e21.jpg",
+    "https://i.ibb.co/XpdTN8t/Whats-App-Image-2024-12-10-at-11-11-08-ab70107e.jpg",
+    "https://i.ibb.co/svQrJVz/Whats-App-Image-2024-12-10-at-11-11-09-7321bedc.jpg",
+    "https://i.ibb.co/LYzqmt0/Whats-App-Image-2024-12-10-at-11-11-56-8d444683.jpg"
   ];
 
   return (

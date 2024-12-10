@@ -14,41 +14,50 @@ const TestimonialCarousel = () => {
     "https://www.youtube.com/embed/YOUR_SECOND_VIDEO_ID"
   ];
 
-  const plugin = React.useRef(
-    Autoplay({ delay: 4000, stopOnInteraction: true })
+  const autoplayPlugin = React.useRef(
+    Autoplay({
+      delay: 4000,
+      stopOnInteraction: true,
+      stopOnMouseEnter: true,
+    })
   );
 
   return (
     <div className="max-w-4xl mx-auto px-4 mb-12">
-      <h2 className="text-2xl font-bold text-center text-green-800 mb-6">What Our Students Say</h2>
-      <Carousel
-        opts={{
-          align: "start",
-          loop: true,
-        }}
-        plugins={[plugin.current]}
-        className="relative"
-      >
-        <CarouselContent>
-          {videos.map((videoUrl, index) => (
-            <CarouselItem key={index} className="basis-full">
-              <div className="aspect-video">
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src={videoUrl}
-                  title={`Testimonial video ${index + 1}`}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="rounded-lg shadow-lg"
-                ></iframe>
-              </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        <CarouselPrevious className="hidden sm:flex" />
-        <CarouselNext className="hidden sm:flex" />
-      </Carousel>
+      <h2 className="text-2xl font-bold text-center text-green-800 mb-6">
+        What Our Students Say
+      </h2>
+      <div className="relative">
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          plugins={[autoplayPlugin.current]}
+        >
+          <CarouselContent>
+            {videos.map((videoUrl, index) => (
+              <CarouselItem key={index} className="basis-full">
+                <div className="aspect-video">
+                  <iframe
+                    width="100%"
+                    height="100%"
+                    src={videoUrl}
+                    title={`Testimonial video ${index + 1}`}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="rounded-lg shadow-lg"
+                  ></iframe>
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <div className="hidden sm:block">
+            <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-full" />
+            <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-full" />
+          </div>
+        </Carousel>
+      </div>
     </div>
   );
 };

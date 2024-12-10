@@ -54,15 +54,7 @@ const WorkshopHeader = () => {
         Learn the Art of Henna Application – Join Our Workshop Today!
       </motion.h1>
 
-      <motion.p 
-        className="text-lg text-center mb-12 max-w-3xl mx-auto text-gray-700"
-        variants={itemVariants}
-      >
-        Join us for an exciting Mehendi Workshop where you can learn the art of henna applications! 
-        Whether you're a beginner or looking to refine your skills, this workshop is perfect for everyone.
-      </motion.p>
-
-      <div className="max-w-4xl mx-auto px-4">
+      <div className="max-w-4xl mx-auto px-4 mb-8">
         <Carousel
           opts={{
             align: "start",
@@ -87,6 +79,14 @@ const WorkshopHeader = () => {
           <CarouselNext />
         </Carousel>
       </div>
+
+      <motion.p 
+        className="text-lg text-center mt-8 max-w-3xl mx-auto text-gray-700"
+        variants={itemVariants}
+      >
+        Join us for an exciting Mehendi Workshop where you can learn the art of henna applications! 
+        Whether you're a beginner or looking to refine your skills, this workshop is perfect for everyone.
+      </motion.p>
     </motion.div>
   );
 };

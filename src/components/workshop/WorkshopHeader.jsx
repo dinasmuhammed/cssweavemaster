@@ -3,21 +3,44 @@ import { motion } from 'framer-motion';
 
 const containerVariants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.5, staggerChildren: 0.2 } }
+  visible: {
+    opacity: 1,
+    transition: {
+      delayChildren: 0.3,
+      staggerChildren: 0.2
+    }
+  }
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.5
+    }
+  }
+};
+
+const imageVariants = {
+  hidden: { scale: 0.8, opacity: 0 },
+  visible: {
+    scale: 1,
+    opacity: 1,
+    transition: {
+      duration: 0.5
+    }
+  }
 };
 
 const WorkshopHeader = () => {
   return (
     <motion.div 
       className="text-center py-12"
-      variants={containerVariants}
       initial="hidden"
       animate="visible"
+      variants={containerVariants}
     >
       <motion.h1 
         className="text-3xl md:text-4xl font-bold mb-6 text-green-800"
@@ -28,23 +51,29 @@ const WorkshopHeader = () => {
 
       <motion.div 
         className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"
-        variants={itemVariants}
+        variants={containerVariants}
       >
-        <img 
-          src="https://i.ibb.co/0Xx1wxn/ba19277a-ac85-4a52-9127-09a7740bd8ed.jpg"
-          alt="Workshop session 1"
-          className="w-full h-48 object-cover rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
-        />
-        <img 
-          src="https://i.ibb.co/WzCCtNC/7afa2c62-e1cb-4250-9c81-597cafc6a977.jpg"
-          alt="Workshop session 2"
-          className="w-full h-48 object-cover rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
-        />
-        <img 
-          src="https://i.ibb.co/SNhC0ts/6c4e8a57-276d-4b27-8bcb-61b720c781e9.jpg"
-          alt="Workshop session 3"
-          className="w-full h-48 object-cover rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
-        />
+        <motion.div variants={imageVariants}>
+          <img 
+            src="https://i.ibb.co/0Xx1wxn/ba19277a-ac85-4a52-9127-09a7740bd8ed.jpg"
+            alt="Workshop session 1"
+            className="w-full h-48 object-cover rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+          />
+        </motion.div>
+        <motion.div variants={imageVariants}>
+          <img 
+            src="https://i.ibb.co/WzCCtNC/7afa2c62-e1cb-4250-9c81-597cafc6a977.jpg"
+            alt="Workshop session 2"
+            className="w-full h-48 object-cover rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+          />
+        </motion.div>
+        <motion.div variants={imageVariants}>
+          <img 
+            src="https://i.ibb.co/SNhC0ts/6c4e8a57-276d-4b27-8bcb-61b720c781e9.jpg"
+            alt="Workshop session 3"
+            className="w-full h-48 object-cover rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+          />
+        </motion.div>
       </motion.div>
 
       <motion.p 

@@ -22,12 +22,11 @@ const TestimonialCarousel = () => {
     <div className="max-w-4xl mx-auto px-4 mb-12">
       <h2 className="text-2xl font-bold text-center text-green-800 mb-6">What Our Students Say</h2>
       <Carousel
-        plugins={[plugin.current]}
-        className="w-full"
         opts={{
           align: "start",
           loop: true,
         }}
+        plugins={[plugin.current]}
       >
         <CarouselContent>
           {videos.map((videoUrl, index) => (

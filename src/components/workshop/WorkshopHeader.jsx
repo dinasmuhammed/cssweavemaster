@@ -48,7 +48,7 @@ const WorkshopHeader = () => {
       variants={containerVariants}
     >
       <motion.p
-        className="text-lg md:text-xl text-green-800 mb-2"
+        className="text-green-800 font-medium text-xs sm:text-sm md:text-base mb-2"
         variants={itemVariants}
       >
         Available Online and Offline | Perfect for Beginners and Advanced Learners

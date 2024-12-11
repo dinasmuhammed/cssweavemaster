@@ -7,6 +7,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { Button } from "@/components/ui/button";
+import { Download } from "lucide-react";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -94,6 +96,21 @@ const WorkshopHeader = () => {
         Join us for an exciting Mehendi Workshop where you can learn the art of henna applications! 
         Whether you're a beginner or looking to refine your skills, this workshop is perfect for everyone.
       </motion.p>
+
+      <motion.div
+        className="mt-6"
+        variants={itemVariants}
+      >
+        <a
+          href="https://drive.google.com/file/d/1-GABqdAgeDW67-sfH25WVkFq6Dq_DLx9/view"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 text-green-800 hover:text-green-900 font-medium"
+        >
+          <Download className="w-4 h-4" />
+          Download Brochure
+        </a>
+      </motion.div>
     </motion.div>
   );
 };

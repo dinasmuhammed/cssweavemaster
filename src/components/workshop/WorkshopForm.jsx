@@ -51,6 +51,7 @@ const WorkshopForm = () => {
 
   return (
     <motion.div 
+      id="workshop-form"
       className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-lg"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}

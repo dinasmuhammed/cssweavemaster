@@ -14,13 +14,12 @@ const TestimonialCarousel = () => {
     "https://www.youtube.com/embed/YOUR_SECOND_VIDEO_ID"
   ];
 
-  const autoplayPlugin = React.useRef(
-    Autoplay({
-      delay: 4000,
-      stopOnInteraction: true,
-      stopOnMouseEnter: true,
-    })
-  );
+  // Initialize plugin without React.useRef
+  const plugin = Autoplay({
+    delay: 4000,
+    stopOnInteraction: true,
+    stopOnMouseEnter: true,
+  });
 
   return (
     <div className="max-w-4xl mx-auto px-4 mb-12">
@@ -33,7 +32,7 @@ const TestimonialCarousel = () => {
             align: "start",
             loop: true,
           }}
-          plugins={[autoplayPlugin.current]}
+          plugins={[plugin]}
         >
           <CarouselContent>
             {videos.map((videoUrl, index) => (

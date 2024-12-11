@@ -10,8 +10,8 @@ import Autoplay from "embla-carousel-autoplay";
 
 const TestimonialCarousel = () => {
   const videos = [
-    "https://www.youtube.com/embed/YOUR_FIRST_VIDEO_ID",
-    "https://www.youtube.com/embed/YOUR_SECOND_VIDEO_ID"
+    "https://www.youtube.com/embed/U0-jSFZs7QQ",
+    "https://www.youtube.com/embed/U0-jSFZs7QQ"
   ];
 
   // Initialize plugin without React.useRef

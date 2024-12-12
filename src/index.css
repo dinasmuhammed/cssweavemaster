@@ -14,18 +14,33 @@
  
   html {
     -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
   }
 
   body {
     @apply bg-secondary text-foreground font-sans text-base min-h-screen overflow-x-hidden touch-manipulation;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  img {
+    @apply max-w-full h-auto;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-heading text-primary;
+    @apply font-heading text-primary break-words;
   }
 
   button, a {
     @apply touch-manipulation;
+  }
+
+  /* Improve touch targets on mobile */
+  @media (max-width: 640px) {
+    button, a, input, select, textarea {
+      @apply min-h-[44px] min-w-[44px];
+    }
   }
 }
 
@@ -49,6 +64,16 @@
   .nav-link {
     @apply text-primary hover:text-primary/80 transition-colors px-3 py-2 touch-manipulation;
   }
+
+  /* Responsive container class */
+  .responsive-container {
+    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Responsive grid system */
+  .responsive-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8;
+  }
 }
 
 @layer utilities {
@@ -63,5 +88,27 @@
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+
+  /* Performance optimizations */
+  .gpu {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000;
+  }
+
+  /* Responsive padding utility */
+  .responsive-padding {
+    @apply px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12;
+  }
+}
+
+/* Loading optimization */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

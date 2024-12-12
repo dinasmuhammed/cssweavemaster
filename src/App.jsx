@@ -9,6 +9,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { WhatsAppWidget } from 'react-whatsapp-widget';
 import 'react-whatsapp-widget/dist/index.css';
 
+// Configure QueryClient with optimized settings
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -102,6 +103,7 @@ const App = () => {
                     phoneNumber="+918086647124"
                     companyName="Henna by Fathima"
                     message="Hello! How can we help you?"
+                    className="!bottom-20 sm:!bottom-4" // Make it responsive
                   />
                 </div>
               </Router>

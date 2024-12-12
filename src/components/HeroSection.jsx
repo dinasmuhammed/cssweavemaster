@@ -5,18 +5,20 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const HeroSection = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  
+  // Initialize autoplay plugin properly
+  const autoplayOptions = {
+    delay: 3000,
+    stopOnInteraction: false,
+    playOnInit: true
+  };
+  
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { 
-      loop: true,  // Ensure looping is explicitly set
-      skipSnaps: false  // Ensure all slides are considered
+      loop: true,
+      skipSnaps: false
     }, 
-    [
-      Autoplay({ 
-        delay: 3000,  // Slide every 3 seconds
-        stopOnInteraction: false,  // Continue auto-scrolling even after user interaction
-        playOnInit: true  // Start autoplay immediately
-      })
-    ]
+    [Autoplay(autoplayOptions)]
   );
   
   const images = [
@@ -26,15 +28,26 @@ const HeroSection = () => {
   ];
 
   useEffect(() => {
-    if (emblaApi) {
-      emblaApi.on('select', () => {
-        setSelectedIndex(emblaApi.selectedScrollSnap());
-      });
-    }
+    if (!emblaApi) return;
+
+    emblaApi.on('select', () => {
+      setSelectedIndex(emblaApi.selectedScrollSnap());
+    });
+
+    return () => {
+      if (emblaApi) {
+        emblaApi.off('select');
+      }
+    };
   }, [emblaApi]);
 
-  const scrollPrev = () => emblaApi && emblaApi.scrollPrev();
-  const scrollNext = () => emblaApi && emblaApi.scrollNext();
+  const scrollPrev = () => {
+    if (emblaApi) emblaApi.scrollPrev();
+  };
+
+  const scrollNext = () => {
+    if (emblaApi) emblaApi.scrollNext();
+  };
 
   return (
     <section className="relative h-[250px] sm:h-[400px] md:h-[500px] lg:h-[570px] w-full overflow-hidden">

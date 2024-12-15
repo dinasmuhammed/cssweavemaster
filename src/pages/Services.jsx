@@ -138,7 +138,7 @@ const Services = () => {
         <div className="text-center mt-6">
           <p className="text-gray-600 mb-2">See more of our work on Instagram!</p>
           <a 
-            href="https://instagram.com/hennabyfathima" 
+            href="https://www.instagram.com/hennabyfathima__/" 
             target="_blank" 
             rel="noopener noreferrer"
             className="inline-flex items-center text-green-800 hover:text-green-700 transition-colors"

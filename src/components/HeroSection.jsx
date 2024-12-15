@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
-import Autoplay from 'embla-carousel-autoplay';
+import AutoplayPlugin from 'embla-carousel-autoplay';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const HeroSection = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   
-  // Initialize autoplay plugin properly
-  const autoplayOptions = {
+  const autoplay = AutoplayPlugin({
     delay: 3000,
     stopOnInteraction: false,
     playOnInit: true
-  };
+  });
   
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { 
       loop: true,
       skipSnaps: false
     }, 
-    [Autoplay(autoplayOptions)]
+    [autoplay]
   );
   
   const images = [

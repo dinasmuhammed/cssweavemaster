@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import CartItem from '../components/CartItem';
 import { useNavigate } from 'react-router-dom';
 import DeliveryForm from '../components/checkout/DeliveryForm';
@@ -63,22 +62,6 @@ const Cart = () => {
                 updateQuantity={updateQuantity}
               />
             ))}
-          </div>
-
-          <div className="mt-8">
-            <p className="text-lg font-medium mb-4">Have any Coupon Code?</p>
-            <div className="flex gap-2">
-              <Input 
-                placeholder="Enter the coupon code"
-                className="bg-white"
-              />
-              <Button 
-                variant="secondary"
-                className="bg-[#607973] hover:bg-[#4c615c] text-white px-8"
-              >
-                APPLY
-              </Button>
-            </div>
           </div>
 
           <div className="space-y-4 mt-8">

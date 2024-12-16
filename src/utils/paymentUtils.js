@@ -1,3 +1,5 @@
+import { toast } from "sonner";
+
 export const validatePaymentForm = (formData) => {
   const errors = {};
   
@@ -21,10 +23,6 @@ export const validatePaymentForm = (formData) => {
 
 export const initializeRazorpayPayment = async (orderData, totalAmount, formData, onSuccess, onError) => {
   try {
-    if (typeof window === 'undefined' || !window.Razorpay) {
-      throw new Error('Razorpay SDK not loaded');
-    }
-
     const response = await fetch('/api/create-order', {
       method: 'POST',
       headers: {
@@ -37,15 +35,16 @@ export const initializeRazorpayPayment = async (orderData, totalAmount, formData
     });
 
     if (!response.ok) {
-      throw new Error('Failed to create order');
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to create order');
     }
 
     const order = await response.json();
 
     const options = {
       key: "rzp_live_lhUJoR9PnyhX0q",
-      amount: Math.round(totalAmount * 100),
-      currency: "INR",
+      amount: order.amount,
+      currency: order.currency,
       name: "Henna by Fathima",
       description: `Order Payment: ${orderData.orderId}`,
       order_id: order.id,
@@ -60,15 +59,12 @@ export const initializeRazorpayPayment = async (orderData, totalAmount, formData
           area: formData.area,
           district: formData.district,
           state: formData.state,
-          pincode: formData.pincode,
-          full_address: `${formData.address}, ${formData.area}, ${formData.district}, ${formData.state} - ${formData.pincode}`
+          pincode: formData.pincode
         })
-      },
-      theme: {
-        color: "#607973"
       },
       handler: function (response) {
         console.log('Payment successful:', response);
+        toast.success("Payment successful!");
         onSuccess(response);
       },
       modal: {
@@ -76,6 +72,9 @@ export const initializeRazorpayPayment = async (orderData, totalAmount, formData
           console.log('Payment modal dismissed');
           onError(new Error('Payment cancelled by user'));
         }
+      },
+      theme: {
+        color: "#607973"
       }
     };
 

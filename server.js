@@ -1,9 +1,21 @@
 require('dotenv').config();
 const express = require('express');
 const { sendOrderEmail } = require('./src/utils/emailUtils');
+const { createOrder } = require('./src/api/razorpay');
 
 const app = express();
 app.use(express.json());
+
+app.post('/api/create-order', async (req, res) => {
+  try {
+    const { amount, currency = 'INR' } = req.body;
+    const order = await createOrder(amount, currency);
+    res.status(200).json(order);
+  } catch (error) {
+    console.error('Error creating order:', error);
+    res.status(500).json({ error: 'Failed to create order', details: error.message });
+  }
+});
 
 app.post('/api/send-order-email', async (req, res) => {
   try {

@@ -4,6 +4,7 @@ import WelcomeSection from '../components/WelcomeSection';
 import OurServices from '../components/OurServices';
 import OurHappyClients from '../components/OurHappyClients';
 import HennaMoments from '../components/HennaMoments';
+import WhyHennaByFathima from '../components/WhyHennaByFathima';
 
 const Index = () => {
   return (
@@ -11,6 +12,7 @@ const Index = () => {
       <HeroSection />
       <WelcomeSection />
       <OurServices />
+      <WhyHennaByFathima />
       <OurHappyClients />
       <HennaMoments />
     </div>

@@ -1,28 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
 import OrderSummaryItem from './OrderSummaryItem';
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 const OrderSummary = ({ 
   cartItems, 
   onQuantityChange,
   totalPrice
 }) => {
+  const [couponCode, setCouponCode] = useState('');
+  const [discount, setDiscount] = useState(0);
+
   const calculateShippingCharge = () => {
     const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
     
     if (totalItems >= 6) {
-      return 80; // Fixed charge for 6 or more items
+      return 80;
     } else if (totalItems === 1) {
-      return 35; // Fixed charge for single item
+      return 35;
     } else {
-      // Base charge for 2-5 items
       const baseCharge = 25;
       const additionalCharge = 35;
       return baseCharge + (Math.floor((totalItems - 1) / 2) * additionalCharge);
     }
   };
 
+  const validateCoupon = () => {
+    // Example coupon codes
+    const validCoupons = {
+      'WELCOME10': 10,
+      'SPECIAL20': 20,
+      'HENNA25': 25
+    };
+
+    const discountPercentage = validCoupons[couponCode.toUpperCase()];
+    if (discountPercentage) {
+      const discountAmount = (totalPrice * discountPercentage) / 100;
+      setDiscount(discountAmount);
+      toast.success(`Coupon applied! ${discountPercentage}% discount`);
+    } else {
+      toast.error('Invalid coupon code');
+      setDiscount(0);
+    }
+  };
+
   const shippingCharge = calculateShippingCharge();
-  const finalTotal = totalPrice + shippingCharge;
+  const finalTotal = totalPrice + shippingCharge - discount;
 
   return (
     <div className="space-y-6">
@@ -41,18 +65,42 @@ const OrderSummary = ({
         ))}
       </div>
 
-      <div className="space-y-3">
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-600">Total Price</span>
-          <span className="text-rose-600">₹{totalPrice}</span>
+      <div className="space-y-4">
+        <div className="flex gap-2">
+          <Input
+            placeholder="Have a coupon code?"
+            value={couponCode}
+            onChange={(e) => setCouponCode(e.target.value)}
+            className="flex-1"
+          />
+          <Button 
+            onClick={validateCoupon}
+            variant="outline"
+            className="whitespace-nowrap"
+          >
+            Apply Coupon
+          </Button>
         </div>
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-600">Shipping Charge</span>
-          <span className="text-rose-600">₹{shippingCharge}</span>
-        </div>
-        <div className="flex justify-between font-medium pt-3 border-t">
-          <span>Grand Total</span>
-          <span className="text-rose-600">₹{finalTotal}</span>
+
+        <div className="space-y-3">
+          <div className="flex justify-between text-sm">
+            <span className="text-gray-600">Total Price</span>
+            <span className="text-rose-600">₹{totalPrice}</span>
+          </div>
+          {discount > 0 && (
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-600">Discount</span>
+              <span className="text-green-600">-₹{discount}</span>
+            </div>
+          )}
+          <div className="flex justify-between text-sm">
+            <span className="text-gray-600">Shipping Charge</span>
+            <span className="text-rose-600">₹{shippingCharge}</span>
+          </div>
+          <div className="flex justify-between font-medium pt-3 border-t">
+            <span>Grand Total</span>
+            <span className="text-rose-600">₹{finalTotal}</span>
+          </div>
         </div>
       </div>
     </div>

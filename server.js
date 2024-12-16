@@ -8,12 +8,31 @@ app.use(express.json());
 
 app.post('/api/create-order', async (req, res) => {
   try {
-    const { amount, currency = 'INR' } = req.body;
-    const order = await createOrder(amount, currency);
+    const { amount, currency = 'INR', couponCode } = req.body;
+    
+    // Apply coupon discount if valid
+    let finalAmount = amount;
+    if (couponCode) {
+      const validCoupons = {
+        'WELCOME10': 10,
+        'SPECIAL20': 20,
+        'HENNA25': 25
+      };
+      
+      const discountPercentage = validCoupons[couponCode.toUpperCase()];
+      if (discountPercentage) {
+        finalAmount = amount - (amount * discountPercentage / 100);
+      }
+    }
+
+    const order = await createOrder(finalAmount, currency);
     res.status(200).json(order);
   } catch (error) {
     console.error('Error creating order:', error);
-    res.status(500).json({ error: 'Failed to create order', details: error.message });
+    res.status(500).json({ 
+      error: 'Failed to create order', 
+      details: error.message 
+    });
   }
 });
 

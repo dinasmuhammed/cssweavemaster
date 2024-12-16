@@ -44,6 +44,7 @@ const lazyLoadWithPrefetch = (importFn, displayName) => {
 // Lazy load components with prefetching
 const Header = lazyLoadWithPrefetch(() => import('./components/Header'), 'Header');
 const Footer = lazyLoadWithPrefetch(() => import('./components/Footer'), 'Footer');
+const Index = lazyLoadWithPrefetch(() => import('./pages/Index'), 'Index');
 const Home = lazyLoadWithPrefetch(() => import('./pages/Home'), 'Home');
 const Shop = lazyLoadWithPrefetch(() => import('./pages/Shop'), 'Shop');
 const Services = lazyLoadWithPrefetch(() => import('./pages/Services'), 'Services');
@@ -84,7 +85,8 @@ const App = () => {
                   <Header />
                   <main className="flex-grow container mx-auto px-4 py-8 w-full max-w-7xl">
                     <Routes>
-                      <Route path="/" element={<Home />} />
+                      <Route path="/" element={<Index />} />
+                      <Route path="/home" element={<Home />} />
                       <Route path="/about" element={<About />} />
                       <Route path="/shop" element={<Shop />} />
                       <Route path="/services" element={<Services />} />

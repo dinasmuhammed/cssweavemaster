@@ -23,6 +23,8 @@ export const validatePaymentForm = (formData) => {
 
 export const initializeRazorpayPayment = async (orderData, totalAmount, formData, onSuccess, onError) => {
   try {
+    console.log('Initializing payment with amount:', totalAmount);
+    
     const response = await fetch('/api/create-order', {
       method: 'POST',
       headers: {
@@ -30,7 +32,8 @@ export const initializeRazorpayPayment = async (orderData, totalAmount, formData
       },
       body: JSON.stringify({
         amount: totalAmount,
-        currency: 'INR'
+        currency: 'INR',
+        couponCode: orderData.couponCode
       }),
     });
 
@@ -40,6 +43,7 @@ export const initializeRazorpayPayment = async (orderData, totalAmount, formData
     }
 
     const order = await response.json();
+    console.log('Order created:', order);
 
     const options = {
       key: "rzp_live_lhUJoR9PnyhX0q",
@@ -62,10 +66,30 @@ export const initializeRazorpayPayment = async (orderData, totalAmount, formData
           pincode: formData.pincode
         })
       },
-      handler: function (response) {
+      handler: async function (response) {
         console.log('Payment successful:', response);
-        toast.success("Payment successful!");
-        onSuccess(response);
+        try {
+          // Send order confirmation email
+          await fetch('/api/send-order-email', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              ...orderData,
+              paymentId: response.razorpay_payment_id,
+              orderId: response.razorpay_order_id
+            }),
+          });
+          
+          toast.success("Payment successful!");
+          onSuccess(response);
+        } catch (error) {
+          console.error('Error sending order email:', error);
+          // Still consider payment successful even if email fails
+          toast.success("Payment successful!");
+          onSuccess(response);
+        }
       },
       modal: {
         ondismiss: function() {
@@ -82,6 +106,7 @@ export const initializeRazorpayPayment = async (orderData, totalAmount, formData
     rzp.open();
   } catch (error) {
     console.error('Payment initialization error:', error);
+    toast.error(error.message || "Failed to initialize payment");
     onError(error);
   }
 };

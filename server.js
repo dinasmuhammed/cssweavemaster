@@ -10,6 +10,10 @@ app.post('/api/create-order', async (req, res) => {
   try {
     const { amount, currency = 'INR', couponCode } = req.body;
     
+    if (!amount || amount <= 0) {
+      return res.status(400).json({ error: 'Invalid amount' });
+    }
+
     // Apply coupon discount if valid
     let finalAmount = amount;
     if (couponCode) {
@@ -25,7 +29,9 @@ app.post('/api/create-order', async (req, res) => {
       }
     }
 
+    console.log('Creating order with amount:', finalAmount);
     const order = await createOrder(finalAmount, currency);
+    console.log('Order created successfully:', order);
     res.status(200).json(order);
   } catch (error) {
     console.error('Error creating order:', error);

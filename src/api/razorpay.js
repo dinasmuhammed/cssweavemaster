@@ -10,6 +10,10 @@ const razorpay = new Razorpay({
 
 const createOrder = async (amount, currency = 'INR') => {
   try {
+    if (!amount || amount <= 0) {
+      throw new Error('Invalid amount');
+    }
+
     const options = {
       amount: Math.round(amount * 100), // Convert to smallest currency unit (paise)
       currency,
@@ -18,6 +22,7 @@ const createOrder = async (amount, currency = 'INR') => {
     };
     
     const order = await razorpay.orders.create(options);
+    console.log('Razorpay order created:', order);
     return order;
   } catch (error) {
     console.error('Error creating Razorpay order:', error);
@@ -26,13 +31,18 @@ const createOrder = async (amount, currency = 'INR') => {
 };
 
 const verifyPayment = (razorpay_order_id, razorpay_payment_id, razorpay_signature) => {
-  const crypto = require('crypto');
-  const generated_signature = crypto
-    .createHmac('sha256', RAZORPAY_SECRET)
-    .update(`${razorpay_order_id}|${razorpay_payment_id}`)
-    .digest('hex');
-    
-  return generated_signature === razorpay_signature;
+  try {
+    const crypto = require('crypto');
+    const generated_signature = crypto
+      .createHmac('sha256', RAZORPAY_SECRET)
+      .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+      .digest('hex');
+      
+    return generated_signature === razorpay_signature;
+  } catch (error) {
+    console.error('Error verifying payment:', error);
+    return false;
+  }
 };
 
 module.exports = {

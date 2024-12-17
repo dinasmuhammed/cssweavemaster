@@ -42,7 +42,10 @@ export const initializeRazorpayPayment = async (orderData, totalAmount, formData
       throw new Error(errorData.error || 'Failed to create order');
     }
 
-    const order = await response.json();
+    const order = await response.json().catch(() => {
+      throw new Error('Invalid response from server');
+    });
+    
     console.log('Order created:', order);
 
     const options = {
@@ -69,7 +72,6 @@ export const initializeRazorpayPayment = async (orderData, totalAmount, formData
       handler: async function (response) {
         console.log('Payment successful:', response);
         try {
-          // Send order confirmation email
           await fetch('/api/send-order-email', {
             method: 'POST',
             headers: {
@@ -86,7 +88,6 @@ export const initializeRazorpayPayment = async (orderData, totalAmount, formData
           onSuccess(response);
         } catch (error) {
           console.error('Error sending order email:', error);
-          // Still consider payment successful even if email fails
           toast.success("Payment successful!");
           onSuccess(response);
         }

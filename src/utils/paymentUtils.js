@@ -22,6 +22,14 @@ export const validatePaymentForm = (formData) => {
 };
 
 export const initializeRazorpayPayment = async (orderData, totalAmount, formData, onSuccess, onError) => {
+  if (typeof onSuccess !== 'function') {
+    onSuccess = () => {}; // Provide default empty function if not provided
+  }
+  
+  if (typeof onError !== 'function') {
+    onError = () => {}; // Provide default empty function if not provided
+  }
+
   try {
     console.log('Initializing payment with amount:', totalAmount);
     
@@ -69,10 +77,10 @@ export const initializeRazorpayPayment = async (orderData, totalAmount, formData
           pincode: formData.pincode
         })
       },
-      handler: async function (response) {
+      handler: function (response) {
         console.log('Payment successful:', response);
         try {
-          await fetch('/api/send-order-email', {
+          fetch('/api/send-order-email', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -82,12 +90,16 @@ export const initializeRazorpayPayment = async (orderData, totalAmount, formData
               paymentId: response.razorpay_payment_id,
               orderId: response.razorpay_order_id
             }),
+          }).then(() => {
+            toast.success("Payment successful!");
+            onSuccess(response);
+          }).catch((error) => {
+            console.error('Error sending order email:', error);
+            toast.success("Payment successful!");
+            onSuccess(response);
           });
-          
-          toast.success("Payment successful!");
-          onSuccess(response);
         } catch (error) {
-          console.error('Error sending order email:', error);
+          console.error('Error in payment handler:', error);
           toast.success("Payment successful!");
           onSuccess(response);
         }

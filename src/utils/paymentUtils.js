@@ -62,9 +62,50 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       theme: {
         color: "#607973",
       },
-      handler: function(response) {
-        console.log('Payment successful:', response);
-        onSuccess(response);
+      handler: async function(response) {
+        try {
+          // Verify the payment
+          const verifyResponse = await fetch('/api/verify-payment', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              orderData: {
+                ...orderData,
+                paymentId: response.razorpay_payment_id,
+                orderId: response.razorpay_order_id
+              }
+            }),
+          });
+
+          if (!verifyResponse.ok) {
+            throw new Error('Payment verification failed');
+          }
+
+          // Send order email
+          await fetch('/api/send-order-email', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              ...orderData,
+              paymentId: response.razorpay_payment_id,
+              orderId: response.razorpay_order_id
+            }),
+          });
+
+          toast.success("Payment successful!");
+          onSuccess(response);
+        } catch (error) {
+          console.error('Error in payment verification or email:', error);
+          toast.error("Payment verification failed");
+          onError(error);
+        }
       },
       modal: {
         ondismiss: function() {

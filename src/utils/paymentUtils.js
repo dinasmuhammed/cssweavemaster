@@ -22,13 +22,9 @@ export const validatePaymentForm = (formData) => {
 };
 
 export const initializeRazorpayPayment = async (orderData, totalAmount, formData, onSuccess, onError) => {
-  if (typeof onSuccess !== 'function') {
-    onSuccess = () => {}; // Provide default empty function if not provided
-  }
-  
-  if (typeof onError !== 'function') {
-    onError = () => {}; // Provide default empty function if not provided
-  }
+  // Ensure callbacks are functions
+  onSuccess = typeof onSuccess === 'function' ? onSuccess : () => {};
+  onError = typeof onError === 'function' ? onError : () => {};
 
   try {
     console.log('Initializing payment with amount:', totalAmount);
@@ -50,11 +46,12 @@ export const initializeRazorpayPayment = async (orderData, totalAmount, formData
       throw new Error(errorData.error || 'Failed to create order');
     }
 
-    const order = await response.json().catch(() => {
-      throw new Error('Invalid response from server');
-    });
-    
+    const order = await response.json();
     console.log('Order created:', order);
+
+    if (!window.Razorpay) {
+      throw new Error('Razorpay SDK not loaded');
+    }
 
     const options = {
       key: "rzp_live_lhUJoR9PnyhX0q",
@@ -77,32 +74,30 @@ export const initializeRazorpayPayment = async (orderData, totalAmount, formData
           pincode: formData.pincode
         })
       },
-      handler: function (response) {
+      handler: function(response) {
         console.log('Payment successful:', response);
-        try {
-          fetch('/api/send-order-email', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              ...orderData,
-              paymentId: response.razorpay_payment_id,
-              orderId: response.razorpay_order_id
-            }),
-          }).then(() => {
-            toast.success("Payment successful!");
-            onSuccess(response);
-          }).catch((error) => {
-            console.error('Error sending order email:', error);
-            toast.success("Payment successful!");
-            onSuccess(response);
-          });
-        } catch (error) {
-          console.error('Error in payment handler:', error);
+        
+        fetch('/api/send-order-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ...orderData,
+            paymentId: response.razorpay_payment_id,
+            orderId: response.razorpay_order_id
+          }),
+        })
+        .then(() => {
           toast.success("Payment successful!");
           onSuccess(response);
-        }
+        })
+        .catch((error) => {
+          console.error('Error sending order email:', error);
+          // Still consider payment successful even if email fails
+          toast.success("Payment successful!");
+          onSuccess(response);
+        });
       },
       modal: {
         ondismiss: function() {

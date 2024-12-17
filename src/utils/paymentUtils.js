@@ -1,6 +1,27 @@
 import { toast } from "sonner";
 
-export const initializePayment = async (orderData, onSuccess = () => {}, onError = () => {}) => {
+export const validatePaymentForm = (formData) => {
+  const errors = {};
+  
+  if (!formData.name?.trim()) errors.name = "Name is required";
+  if (!formData.address?.trim()) errors.address = "Address is required";
+  if (!formData.area?.trim()) errors.area = "Area is required";
+  if (!formData.state?.trim()) errors.state = "State is required";
+  if (!formData.district?.trim()) errors.district = "District is required";
+  if (!formData.mobile?.trim()) errors.mobile = "Mobile number is required";
+  else if (!/^\d{10}$/.test(formData.mobile)) errors.mobile = "Invalid mobile number";
+  if (!formData.email?.trim()) errors.email = "Email is required";
+  else if (!/\S+@\S+\.\S+/.test(formData.email)) errors.email = "Invalid email format";
+  if (!formData.pincode?.trim()) errors.pincode = "Pincode is required";
+  else if (!/^\d{6}$/.test(formData.pincode)) errors.pincode = "Invalid pincode";
+
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors
+  };
+};
+
+export const initializeRazorpayPayment = async (orderData, amount, customerDetails, onSuccess, onError) => {
   try {
     const response = await fetch('/api/create-order', {
       method: 'POST',
@@ -8,8 +29,12 @@ export const initializePayment = async (orderData, onSuccess = () => {}, onError
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        amount: orderData.amount,
+        amount: amount * 100, // Convert to paise
         currency: 'INR',
+        receipt: orderData.orderId,
+        notes: {
+          orderDetails: JSON.stringify(orderData)
+        }
       }),
     });
 
@@ -27,62 +52,19 @@ export const initializePayment = async (orderData, onSuccess = () => {}, onError
       description: "Order Payment",
       order_id: order.id,
       prefill: {
-        name: orderData.name,
-        email: orderData.email,
-        contact: orderData.mobile,
+        name: customerDetails.name,
+        email: customerDetails.email,
+        contact: customerDetails.mobile,
       },
       notes: {
-        address: orderData.address,
+        address: customerDetails.address,
       },
       theme: {
         color: "#607973",
       },
       handler: function(response) {
         console.log('Payment successful:', response);
-        
-        // First verify the payment
-        fetch('/api/verify-payment', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_signature: response.razorpay_signature,
-            orderData: {
-              ...orderData,
-              paymentId: response.razorpay_payment_id,
-              orderId: response.razorpay_order_id
-            }
-          }),
-        })
-        .then(async (verifyResponse) => {
-          if (!verifyResponse.ok) {
-            throw new Error('Payment verification failed');
-          }
-          // After verification, send the order email
-          return fetch('/api/send-order-email', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              ...orderData,
-              paymentId: response.razorpay_payment_id,
-              orderId: response.razorpay_order_id
-            }),
-          });
-        })
-        .then(() => {
-          toast.success("Payment successful!");
-          onSuccess(response);
-        })
-        .catch((error) => {
-          console.error('Error in payment verification or email:', error);
-          toast.error("Payment verification failed");
-          onError(error);
-        });
+        onSuccess(response);
       },
       modal: {
         ondismiss: function() {

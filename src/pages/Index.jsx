@@ -5,6 +5,7 @@ import OurServices from '../components/OurServices';
 import OurHappyClients from '../components/OurHappyClients';
 import HennaMoments from '../components/HennaMoments';
 import WhyHennaByFathima from '../components/WhyHennaByFathima';
+import OurHappyStore from '../components/OurHappyStore';
 
 const Index = () => {
   return (
@@ -15,6 +16,7 @@ const Index = () => {
       <WhyHennaByFathima />
       <OurHappyClients />
       <HennaMoments />
+      <OurHappyStore />
     </div>
   );
 };

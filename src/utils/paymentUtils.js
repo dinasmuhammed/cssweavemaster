@@ -22,6 +22,12 @@ export const validatePaymentForm = (formData) => {
 };
 
 export const initializeRazorpayPayment = async (orderData, amount, customerDetails, onSuccess, onError) => {
+  if (!window.Razorpay) {
+    console.error('Razorpay SDK not loaded');
+    toast.error("Payment system unavailable. Please try again later.");
+    return;
+  }
+
   try {
     const response = await fetch('/api/create-order', {
       method: 'POST',
@@ -29,7 +35,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        amount: amount * 100, // Convert to paise
+        amount: Math.round(amount * 100), // Convert to smallest currency unit
         currency: 'INR',
         receipt: orderData.orderId,
         notes: {
@@ -45,7 +51,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     const { order } = await response.json();
     
     const options = {
-      key: process.env.RAZORPAY_KEY_ID,
+      key: process.env.RAZORPAY_KEY_ID || window.RAZORPAY_KEY_ID,
       amount: order.amount,
       currency: order.currency,
       name: "Henna by Fathima",
@@ -64,7 +70,6 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       },
       handler: async function(response) {
         try {
-          // Verify the payment
           const verifyResponse = await fetch('/api/verify-payment', {
             method: 'POST',
             headers: {
@@ -86,7 +91,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
             throw new Error('Payment verification failed');
           }
 
-          // Send order email
+          // Send order confirmation email
           await fetch('/api/send-order-email', {
             method: 'POST',
             headers: {
@@ -100,17 +105,17 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
           });
 
           toast.success("Payment successful!");
-          onSuccess(response);
+          if (onSuccess) onSuccess(response);
         } catch (error) {
           console.error('Error in payment verification or email:', error);
           toast.error("Payment verification failed");
-          onError(error);
+          if (onError) onError(error);
         }
       },
       modal: {
         ondismiss: function() {
           toast.error("Payment cancelled");
-          onError(new Error('Payment cancelled'));
+          if (onError) onError(new Error('Payment cancelled'));
         },
       },
     };
@@ -121,6 +126,6 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
   } catch (error) {
     console.error('Error initializing payment:', error);
     toast.error("Failed to initialize payment");
-    onError(error);
+    if (onError) onError(error);
   }
 };

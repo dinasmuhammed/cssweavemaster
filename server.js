@@ -33,6 +33,10 @@ app.post('/api/verify-payment', async (req, res) => {
       orderData 
     } = req.body;
 
+    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+      return res.status(400).json({ error: 'Missing required payment verification parameters' });
+    }
+
     const isValid = verifyPayment(
       razorpay_order_id,
       razorpay_payment_id,

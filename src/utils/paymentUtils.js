@@ -21,21 +21,36 @@ export const validatePaymentForm = (formData) => {
   };
 };
 
-export const initializeRazorpayPayment = async (orderData, amount, customerDetails, onSuccess, onError) => {
-  if (!window.Razorpay) {
-    console.error('Razorpay SDK not loaded');
-    toast.error("Payment system unavailable. Please try again later.");
-    return;
-  }
+const loadRazorpayScript = () => {
+  return new Promise((resolve) => {
+    if (window.Razorpay) {
+      resolve();
+      return;
+    }
 
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.async = true;
+    script.onload = () => resolve();
+    document.body.appendChild(script);
+  });
+};
+
+export const initializeRazorpayPayment = async (orderData, amount, customerDetails, onSuccess, onError) => {
   try {
+    await loadRazorpayScript();
+
+    if (!window.Razorpay) {
+      throw new Error('Razorpay SDK failed to load');
+    }
+
     const response = await fetch('/api/create-order', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        amount: Math.round(amount * 100), // Convert to smallest currency unit
+        amount: Math.round(amount * 100),
         currency: 'INR',
         receipt: orderData.orderId,
         notes: {
@@ -91,7 +106,6 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
             throw new Error('Payment verification failed');
           }
 
-          // Send order confirmation email
           await fetch('/api/send-order-email', {
             method: 'POST',
             headers: {

@@ -1,4 +1,16 @@
 import { toast } from "sonner";
+import { RAZORPAY_CONFIG, validatePaymentAmount } from './paymentConfig';
+
+const loadRazorpayScript = () => {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.async = true;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Failed to load Razorpay SDK'));
+    document.body.appendChild(script);
+  });
+};
 
 export const validatePaymentForm = (formData) => {
   const errors = {};
@@ -21,23 +33,12 @@ export const validatePaymentForm = (formData) => {
   };
 };
 
-const loadRazorpayScript = () => {
-  return new Promise((resolve) => {
-    if (window.Razorpay) {
-      resolve();
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-    script.async = true;
-    script.onload = () => resolve();
-    document.body.appendChild(script);
-  });
-};
-
 export const initializeRazorpayPayment = async (orderData, amount, customerDetails, onSuccess, onError) => {
   try {
+    if (!validatePaymentAmount(amount)) {
+      throw new Error('Invalid payment amount');
+    }
+
     await loadRazorpayScript();
 
     if (!window.Razorpay) {
@@ -51,7 +52,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       },
       body: JSON.stringify({
         amount: Math.round(amount * 100),
-        currency: 'INR',
+        currency: RAZORPAY_CONFIG.currency,
         receipt: orderData.orderId,
         notes: {
           orderDetails: JSON.stringify(orderData)
@@ -60,7 +61,8 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     });
 
     if (!response.ok) {
-      throw new Error('Failed to create order');
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to create order');
     }
 
     const { order } = await response.json();
@@ -69,8 +71,8 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       key: process.env.RAZORPAY_KEY_ID || window.RAZORPAY_KEY_ID,
       amount: order.amount,
       currency: order.currency,
-      name: "Henna by Fathima",
-      description: "Order Payment",
+      name: RAZORPAY_CONFIG.name,
+      description: RAZORPAY_CONFIG.description,
       order_id: order.id,
       prefill: {
         name: customerDetails.name,
@@ -80,9 +82,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       notes: {
         address: customerDetails.address,
       },
-      theme: {
-        color: "#607973",
-      },
+      theme: RAZORPAY_CONFIG.theme,
       handler: async function(response) {
         try {
           const verifyResponse = await fetch('/api/verify-payment', {
@@ -106,7 +106,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
             throw new Error('Payment verification failed');
           }
 
-          await fetch('/api/send-order-email', {
+          const emailResponse = await fetch('/api/send-order-email', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -118,11 +118,15 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
             }),
           });
 
+          if (!emailResponse.ok) {
+            console.error('Failed to send order email');
+          }
+
           toast.success("Payment successful!");
           if (onSuccess) onSuccess(response);
         } catch (error) {
           console.error('Error in payment verification or email:', error);
-          toast.error("Payment verification failed");
+          toast.error(error.message || "Payment verification failed");
           if (onError) onError(error);
         }
       },
@@ -131,15 +135,22 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
           toast.error("Payment cancelled");
           if (onError) onError(new Error('Payment cancelled'));
         },
+        escape: false,
+        backdropclose: false
       },
     };
 
     const rzp = new window.Razorpay(options);
+    rzp.on('payment.failed', function (response) {
+      toast.error(response.error.description || "Payment failed");
+      if (onError) onError(new Error(response.error.description));
+    });
+    
     rzp.open();
     
   } catch (error) {
     console.error('Error initializing payment:', error);
-    toast.error("Failed to initialize payment");
+    toast.error(error.message || "Failed to initialize payment");
     if (onError) onError(error);
   }
 };

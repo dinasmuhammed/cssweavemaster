@@ -5,7 +5,13 @@ const { createOrder, verifyPayment } = require('./src/api/razorpay');
 
 const app = express();
 
-app.use(cors());
+// Configure CORS to accept requests from your domain
+app.use(cors({
+  origin: process.env.FRONTEND_URL || '*',
+  methods: ['GET', 'POST'],
+  credentials: true
+}));
+
 app.use(express.json());
 
 app.post('/api/create-order', async (req, res) => {
@@ -47,20 +53,18 @@ app.post('/api/verify-payment', async (req, res) => {
       return res.status(400).json({ error: 'Invalid payment signature' });
     }
 
+    // Send order confirmation email
+    try {
+      await sendOrderEmail(orderData);
+    } catch (emailError) {
+      console.error('Error sending order email:', emailError);
+      // Continue with payment success even if email fails
+    }
+
     res.status(200).json({ message: 'Payment verified successfully' });
   } catch (error) {
     console.error('Error verifying payment:', error);
     res.status(500).json({ error: 'Payment verification failed' });
-  }
-});
-
-app.post('/api/send-order-email', async (req, res) => {
-  try {
-    await sendOrderEmail(req.body);
-    res.json({ message: 'Order email sent successfully' });
-  } catch (error) {
-    console.error('Error sending order email:', error);
-    res.status(500).json({ error: 'Failed to send order email' });
   }
 });
 

@@ -1,14 +1,22 @@
 const loadRazorpayScript = () => {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
+    // Check if Razorpay is already loaded
     if (window.Razorpay) {
       resolve(window.Razorpay);
       return;
     }
-    
+
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.async = true;
-    script.onload = () => resolve(window.Razorpay);
+    script.onload = () => {
+      if (window.Razorpay) {
+        resolve(window.Razorpay);
+      } else {
+        reject(new Error('Razorpay SDK failed to load'));
+      }
+    };
+    script.onerror = () => reject(new Error('Failed to load Razorpay SDK'));
     document.body.appendChild(script);
   });
 };
@@ -28,9 +36,10 @@ export const validatePaymentForm = (formData) => {
 
 export const initializeRazorpayPayment = async (orderData, amount, customerDetails, onSuccess, onError) => {
   try {
-    // Load Razorpay SDK
-    const Razorpay = await loadRazorpayScript();
-    
+    console.log('Initializing Razorpay payment...');
+    const RazorpayClass = await loadRazorpayScript();
+    console.log('Razorpay SDK loaded successfully');
+
     // Create order on server
     const response = await fetch('/api/create-order', {
       method: 'POST',
@@ -46,6 +55,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     }
 
     const { order } = await response.json();
+    console.log('Order created successfully:', order);
 
     // Initialize Razorpay options
     const options = {
@@ -62,6 +72,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       },
       handler: async function(response) {
         try {
+          console.log('Payment successful, verifying...');
           // Verify payment on server
           const verifyResponse = await fetch('/api/verify-payment', {
             method: 'POST',
@@ -79,20 +90,24 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
           }
 
           const data = await verifyResponse.json();
+          console.log('Payment verified successfully');
           if (onSuccess) onSuccess(data);
         } catch (error) {
+          console.error('Payment verification error:', error);
           if (onError) onError(error);
         }
       },
       modal: {
         ondismiss: function() {
+          console.log('Payment modal dismissed');
           if (onError) onError(new Error('Payment cancelled'));
         }
       }
     };
 
     // Create Razorpay instance and open payment modal
-    const razorpayInstance = new Razorpay(options);
+    console.log('Creating Razorpay instance...');
+    const razorpayInstance = new RazorpayClass(options);
     razorpayInstance.open();
   } catch (error) {
     console.error('Payment initialization error:', error);

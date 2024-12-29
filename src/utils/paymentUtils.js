@@ -1,20 +1,17 @@
 const loadRazorpayScript = () => {
   return new Promise((resolve, reject) => {
-    if (window.Razorpay) {
-      resolve(window.Razorpay);
-      return;
-    }
-
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.async = true;
+    
     script.onload = () => {
-      if (window.Razorpay) {
+      if (typeof window.Razorpay === 'function') {
         resolve(window.Razorpay);
       } else {
-        reject(new Error('Razorpay SDK failed to load'));
+        reject(new Error('Razorpay SDK not available'));
       }
     };
+    
     script.onerror = () => reject(new Error('Failed to load Razorpay SDK'));
     document.body.appendChild(script);
   });
@@ -36,19 +33,18 @@ export const validatePaymentForm = (formData) => {
 export const initializeRazorpayPayment = async (orderData, amount, customerDetails, onSuccess, onError) => {
   try {
     console.log('Initializing Razorpay payment...');
-    const RazorpayClass = await loadRazorpayScript();
+    const Razorpay = await loadRazorpayScript();
     console.log('Razorpay SDK loaded successfully');
 
     const apiUrl = process.env.API_URL || 'https://cd184ac6-e88a-46fc-b24e-0c575231c18c.lovableproject.com';
     
-    // Create order on server
     const response = await fetch(`${apiUrl}/api/create-order`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        amount: Math.round(amount * 100), // Convert to smallest currency unit
+        amount: Math.round(amount * 100),
         currency: 'INR'
       })
     });
@@ -60,7 +56,6 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     const { order } = await response.json();
     console.log('Order created successfully:', order);
 
-    // Initialize Razorpay options
     const options = {
       key: process.env.RAZORPAY_KEY_ID,
       amount: order.amount,
@@ -110,9 +105,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       }
     };
 
-    // Create Razorpay instance and open payment modal
-    console.log('Creating Razorpay instance...');
-    const razorpayInstance = new RazorpayClass(options);
+    const razorpayInstance = new Razorpay(options);
     razorpayInstance.open();
   } catch (error) {
     console.error('Payment initialization error:', error);

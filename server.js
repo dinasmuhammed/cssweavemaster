@@ -5,14 +5,19 @@ const { createOrder, verifyPayment } = require('./src/api/razorpay');
 
 const app = express();
 
-// Configure CORS to accept requests from your domain
+// Configure CORS with specific origin
 app.use(cors({
-  origin: process.env.FRONTEND_URL || '*',
+  origin: process.env.FRONTEND_URL || 'https://cd184ac6-e88a-46fc-b24e-0c575231c18c.lovable.app',
   methods: ['GET', 'POST'],
   credentials: true
 }));
 
 app.use(express.json());
+
+// Health check endpoint
+app.get('/', (req, res) => {
+  res.json({ status: 'ok' });
+});
 
 app.post('/api/create-order', async (req, res) => {
   try {
@@ -23,6 +28,7 @@ app.post('/api/create-order', async (req, res) => {
     }
 
     const order = await createOrder(amount, currency);
+    console.log('Order created:', order);
     res.json({ order });
   } catch (error) {
     console.error('Error creating order:', error);

@@ -1,6 +1,5 @@
 const loadRazorpayScript = () => {
   return new Promise((resolve, reject) => {
-    // Check if Razorpay is already loaded
     if (window.Razorpay) {
       resolve(window.Razorpay);
       return;
@@ -40,10 +39,14 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     const RazorpayClass = await loadRazorpayScript();
     console.log('Razorpay SDK loaded successfully');
 
+    const apiUrl = process.env.API_URL || 'https://cd184ac6-e88a-46fc-b24e-0c575231c18c.lovableproject.com';
+    
     // Create order on server
-    const response = await fetch('/api/create-order', {
+    const response = await fetch(`${apiUrl}/api/create-order`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         amount: Math.round(amount * 100), // Convert to smallest currency unit
         currency: 'INR'
@@ -73,8 +76,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       handler: async function(response) {
         try {
           console.log('Payment successful, verifying...');
-          // Verify payment on server
-          const verifyResponse = await fetch('/api/verify-payment', {
+          const verifyResponse = await fetch(`${apiUrl}/api/verify-payment`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -102,6 +104,9 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
           console.log('Payment modal dismissed');
           if (onError) onError(new Error('Payment cancelled'));
         }
+      },
+      theme: {
+        color: "#607973"
       }
     };
 

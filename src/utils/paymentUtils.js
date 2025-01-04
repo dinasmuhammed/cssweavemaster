@@ -1,11 +1,27 @@
 const loadRazorpayScript = () => {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
+    if (window.Razorpay) {
+      resolve(window.Razorpay);
+      return;
+    }
+
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.async = true;
+    
     script.onload = () => {
-      resolve(true);
+      if (window.Razorpay) {
+        console.log('Razorpay SDK loaded successfully');
+        resolve(window.Razorpay);
+      } else {
+        reject(new Error('Razorpay SDK failed to initialize'));
+      }
     };
+    
+    script.onerror = () => {
+      reject(new Error('Failed to load Razorpay SDK'));
+    };
+
     document.body.appendChild(script);
   });
 };
@@ -23,14 +39,12 @@ export const validatePaymentForm = (formData) => {
 
 export const initializeRazorpayPayment = async (orderData, amount, customerDetails, onSuccess, onError) => {
   try {
-    // Ensure Razorpay is loaded
-    await loadRazorpayScript();
+    console.log('Starting Razorpay payment initialization...');
     
-    if (!window.Razorpay) {
-      throw new Error('Razorpay SDK failed to load');
-    }
+    // Load Razorpay SDK and get the constructor
+    const RazorpayClass = await loadRazorpayScript();
+    console.log('Razorpay SDK loaded, creating order...');
 
-    console.log('Creating order...');
     const apiUrl = 'https://cd184ac6-e88a-46fc-b24e-0c575231c18c.lovableproject.com';
     
     const response = await fetch(`${apiUrl}/api/create-order`, {
@@ -52,7 +66,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     console.log('Order created:', order);
 
     const options = {
-      key: 'rzp_test_51Ix3QAGQEkJKDk', // Replace with your actual test key
+      key: 'rzp_test_51Ix3QAGQEkJKDk',
       amount: order.amount,
       currency: order.currency,
       name: "Henna by Fathima",
@@ -100,7 +114,8 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       }
     };
 
-    const razorpay = new window.Razorpay(options);
+    const razorpay = new RazorpayClass(options);
+    console.log('Opening Razorpay payment modal...');
     razorpay.open();
   } catch (error) {
     console.error('Payment initialization error:', error);

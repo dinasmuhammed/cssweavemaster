@@ -46,7 +46,7 @@
 
 @layer components {
   .btn-primary {
-    @apply w-[153px] h-[42px] flex-shrink-0 bg-[#023634] text-white rounded-lg hover:bg-[#023634]/90 transition-colors touch-manipulation flex items-center justify-center;
+    @apply w-[153px] h-[42px] flex-shrink-0 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors touch-manipulation flex items-center justify-center;
   }
 
   .btn-secondary {
@@ -101,6 +101,11 @@
   .responsive-padding {
     @apply px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12;
   }
+
+  /* Mobile-first touch target sizes */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
 }
 
 /* Loading optimization */
@@ -111,4 +116,17 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Preload critical fonts */
+@font-face {
+  font-family: 'Jacques Francois';
+  font-display: swap;
+  src: url('https://fonts.googleapis.com/css2?family=Jacques+Francois&display=swap');
+}
+
+@font-face {
+  font-family: 'Axiforma';
+  font-display: swap;
+  src: url('https://fonts.cdnfonts.com/css/axiforma');
 }

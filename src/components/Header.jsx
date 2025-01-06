@@ -48,8 +48,8 @@ const Header = () => {
       isScrolled ? 'shadow-md' : ''
     }`}>
       <div className="w-full">
-        <div className="w-full py-2 text-center text-xs sm:text-sm" style={{ backgroundColor: '#FCEBD0', fontFamily: 'Jacques Francois' }}>
-          <span className="px-2 sm:px-4">WE ARE DELIVERING ACROSS INDIA AND INTERNATIONALLY!</span>
+        <div className="w-full py-2 text-center text-xs sm:text-sm bg-accent">
+          <span className="px-2 sm:px-4 font-heading">WE ARE DELIVERING ACROSS INDIA AND INTERNATIONALLY!</span>
         </div>
         
         <nav className="container mx-auto px-2 sm:px-4 flex items-center justify-between py-2 sm:py-4" aria-label="Main navigation">
@@ -68,8 +68,8 @@ const Header = () => {
                     to={item.to}
                     className={`block text-base sm:text-lg font-medium transition-colors ${
                       isActive(item.to)
-                        ? 'text-green-600 font-bold'
-                        : 'text-green-800 hover:text-green-700'
+                        ? 'text-primary font-bold'
+                        : 'text-primary/80 hover:text-primary'
                     }`}
                   >
                     {item.label}
@@ -84,6 +84,7 @@ const Header = () => {
               src="https://i.postimg.cc/T3N2Cfkz/image.png" 
               alt="Henna by Fathima" 
               className="h-6 sm:h-8 md:h-10 lg:h-12 w-auto object-contain"
+              loading="lazy"
             />
           </Link>
 
@@ -94,8 +95,8 @@ const Header = () => {
                 to={item.to}
                 className={`transition-colors text-sm xl:text-base ${
                   isActive(item.to)
-                    ? 'text-green-600 font-bold'
-                    : 'text-green-800 hover:text-green-700'
+                    ? 'text-primary font-bold'
+                    : 'text-primary/80 hover:text-primary'
                 }`}
               >
                 {item.label}
@@ -151,18 +152,18 @@ const Header = () => {
             </form>
 
             <Link to="/saved" className="relative group p-1 sm:p-2">
-              <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-green-800 transition-colors group-hover:text-green-600" />
+              <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-primary transition-colors group-hover:text-primary/80" />
               {savedItems.length > 0 && (
-                <Badge className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 bg-green-800 group-hover:bg-green-600 text-[10px] sm:text-xs min-w-[16px] sm:min-w-[20px] h-4 sm:h-5 flex items-center justify-center">
+                <Badge className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 bg-primary group-hover:bg-primary/90 text-[10px] sm:text-xs min-w-[16px] sm:min-w-[20px] h-4 sm:h-5 flex items-center justify-center">
                   {savedItems.length}
                 </Badge>
               )}
             </Link>
 
             <Link to="/cart" className="relative group p-1 sm:p-2">
-              <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5 text-green-800 transition-colors group-hover:text-green-600" />
+              <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5 text-primary transition-colors group-hover:text-primary/80" />
               {cartItems.length > 0 && (
-                <Badge className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 bg-green-800 group-hover:bg-green-600 text-[10px] sm:text-xs min-w-[16px] sm:min-w-[20px] h-4 sm:h-5 flex items-center justify-center">
+                <Badge className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 bg-primary group-hover:bg-primary/90 text-[10px] sm:text-xs min-w-[16px] sm:min-w-[20px] h-4 sm:h-5 flex items-center justify-center">
                   {cartItems.length}
                 </Badge>
               )}

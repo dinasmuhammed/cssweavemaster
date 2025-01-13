@@ -5,16 +5,14 @@ const { createOrder, verifyPayment } = require('./src/api/razorpay');
 
 const app = express();
 
-// Configure CORS to accept requests from your frontend
 app.use(cors({
-  origin: '*', // During development, allow all origins
+  origin: '*',
   methods: ['GET', 'POST'],
   credentials: true
 }));
 
 app.use(express.json());
 
-// Health check endpoint
 app.get('/', (req, res) => {
   res.json({ status: 'ok' });
 });
@@ -29,10 +27,18 @@ app.post('/api/create-order', async (req, res) => {
 
     const order = await createOrder(amount, currency);
     console.log('Order created:', order);
+    
+    if (!order) {
+      return res.status(500).json({ error: 'Failed to create order' });
+    }
+    
     res.json({ order });
   } catch (error) {
     console.error('Error creating order:', error);
-    res.status(500).json({ error: 'Failed to create order', details: error.message });
+    res.status(500).json({ 
+      error: 'Failed to create order', 
+      details: error.message 
+    });
   }
 });
 

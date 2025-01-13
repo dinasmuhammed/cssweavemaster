@@ -1,5 +1,10 @@
 const loadRazorpayScript = () => {
   return new Promise((resolve, reject) => {
+    if (window.Razorpay) {
+      resolve();
+      return;
+    }
+
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.async = true;
@@ -7,7 +12,7 @@ const loadRazorpayScript = () => {
     script.onload = () => {
       if (window.Razorpay) {
         console.log('Razorpay SDK loaded successfully');
-        resolve(window.Razorpay);
+        resolve();
       } else {
         reject(new Error('Razorpay SDK not available'));
       }
@@ -36,10 +41,9 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
   try {
     console.log('Starting Razorpay payment initialization...');
     
-    // Ensure Razorpay is loaded
     await loadRazorpayScript();
+    console.log('Razorpay SDK loaded');
     
-    // Use the base URL from window.location for API calls
     const apiUrl = `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''}`;
     
     const response = await fetch(`${apiUrl}/api/create-order`, {
@@ -54,19 +58,24 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     });
 
     if (!response.ok) {
-      throw new Error('Failed to create order');
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to create order');
     }
 
-    const { order } = await response.json();
-    console.log('Order created:', order);
+    const data = await response.json();
+    if (!data.order || !data.order.id) {
+      throw new Error('Invalid order response');
+    }
+
+    console.log('Order created:', data.order);
 
     const options = {
       key: 'rzp_live_lhUJoR9PnyhX0q',
-      amount: order.amount,
-      currency: order.currency,
+      amount: data.order.amount,
+      currency: data.order.currency,
       name: "Henna by Fathima",
       description: "Order Payment",
-      order_id: order.id,
+      order_id: data.order.id,
       prefill: {
         name: customerDetails.name,
         email: customerDetails.email,
@@ -87,12 +96,13 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
           });
 
           if (!verifyResponse.ok) {
-            throw new Error('Payment verification failed');
+            const errorData = await verifyResponse.json();
+            throw new Error(errorData.error || 'Payment verification failed');
           }
 
-          const data = await verifyResponse.json();
+          const verifyData = await verifyResponse.json();
           console.log('Payment verified successfully');
-          if (onSuccess) onSuccess(data);
+          if (onSuccess) onSuccess(verifyData);
         } catch (error) {
           console.error('Payment verification error:', error);
           if (onError) onError(error);

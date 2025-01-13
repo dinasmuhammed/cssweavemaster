@@ -1,17 +1,18 @@
 const loadRazorpayScript = () => {
   return new Promise((resolve, reject) => {
-    const existingScript = document.getElementById('razorpay-script');
-    if (existingScript) {
-      document.body.removeChild(existingScript);
+    // Check if Razorpay is already loaded
+    if (window.Razorpay) {
+      resolve(window.Razorpay);
+      return;
     }
 
     const script = document.createElement('script');
-    script.id = 'razorpay-script';
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.async = true;
     
     script.onload = () => {
       if (window.Razorpay) {
+        console.log('Razorpay SDK loaded successfully');
         resolve(window.Razorpay);
       } else {
         reject(new Error('Razorpay SDK not available'));

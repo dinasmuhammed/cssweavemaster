@@ -1,7 +1,7 @@
 const loadRazorpayScript = () => {
   return new Promise((resolve, reject) => {
-    // Check if Razorpay is already loaded
-    if (window.Razorpay) {
+    // Check if Razorpay is already loaded and valid
+    if (window.Razorpay && typeof window.Razorpay === 'function') {
       resolve(window.Razorpay);
       return;
     }
@@ -11,15 +11,15 @@ const loadRazorpayScript = () => {
     script.async = true;
     
     script.onload = () => {
-      // Give browser time to process the script
+      // Give browser time to process the script and ensure Razorpay is properly initialized
       setTimeout(() => {
-        if (window.Razorpay) {
+        if (window.Razorpay && typeof window.Razorpay === 'function') {
           console.log('Razorpay SDK loaded successfully');
           resolve(window.Razorpay);
         } else {
-          reject(new Error('Razorpay SDK not available after loading'));
+          reject(new Error('Razorpay SDK not available or not properly initialized after loading'));
         }
-      }, 500); // Increased delay to ensure proper initialization
+      }, 1000); // Increased delay to ensure proper initialization
     };
     
     script.onerror = () => {
@@ -45,9 +45,14 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
   try {
     console.log('Starting Razorpay payment initialization...');
     
-    // Load Razorpay SDK
+    // Load and validate Razorpay SDK
     const RazorpayClass = await loadRazorpayScript();
-    console.log('Razorpay SDK loaded, creating order...');
+    
+    if (typeof RazorpayClass !== 'function') {
+      throw new Error('Razorpay SDK not properly initialized');
+    }
+    
+    console.log('Razorpay SDK loaded and validated, creating order...');
 
     const apiUrl = 'https://cd184ac6-e88a-46fc-b24e-0c575231c18c.lovableproject.com';
     

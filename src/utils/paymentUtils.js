@@ -1,23 +1,21 @@
 const loadRazorpayScript = () => {
   return new Promise((resolve, reject) => {
-    if (window.Razorpay && typeof window.Razorpay === 'function') {
-      resolve(window.Razorpay);
-      return;
+    const existingScript = document.getElementById('razorpay-script');
+    if (existingScript) {
+      document.body.removeChild(existingScript);
     }
 
     const script = document.createElement('script');
+    script.id = 'razorpay-script';
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.async = true;
     
     script.onload = () => {
-      setTimeout(() => {
-        if (window.Razorpay && typeof window.Razorpay === 'function') {
-          console.log('Razorpay SDK loaded successfully');
-          resolve(window.Razorpay);
-        } else {
-          reject(new Error('Razorpay SDK not available or not properly initialized after loading'));
-        }
-      }, 1000);
+      if (window.Razorpay) {
+        resolve(window.Razorpay);
+      } else {
+        reject(new Error('Razorpay SDK not available'));
+      }
     };
     
     script.onerror = () => {
@@ -43,13 +41,8 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
   try {
     console.log('Starting Razorpay payment initialization...');
     
-    const RazorpayClass = await loadRazorpayScript();
-    
-    if (typeof RazorpayClass !== 'function') {
-      throw new Error('Razorpay SDK not properly initialized');
-    }
-    
-    console.log('Razorpay SDK loaded and validated, creating order...');
+    const Razorpay = await loadRazorpayScript();
+    console.log('Razorpay SDK loaded successfully');
 
     const apiUrl = process.env.REACT_APP_API_URL || 'https://cd184ac6-e88a-46fc-b24e-0c575231c18c.lovableproject.com';
     
@@ -121,9 +114,8 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       }
     };
 
-    console.log('Creating Razorpay instance with options:', options);
-    const razorpay = new RazorpayClass(options);
-    razorpay.open();
+    const rzp = new Razorpay(options);
+    rzp.open();
 
   } catch (error) {
     console.error('Payment initialization error:', error);

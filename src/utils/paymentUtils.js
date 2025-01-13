@@ -1,10 +1,5 @@
 const loadRazorpayScript = () => {
   return new Promise((resolve, reject) => {
-    if (window.Razorpay) {
-      resolve(window.Razorpay);
-      return;
-    }
-
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.async = true;
@@ -41,9 +36,9 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
   try {
     console.log('Starting Razorpay payment initialization...');
     
-    const Razorpay = await loadRazorpayScript();
-    console.log('Razorpay SDK loaded successfully');
-
+    // Ensure Razorpay is loaded
+    await loadRazorpayScript();
+    
     // Use the base URL from window.location for API calls
     const apiUrl = `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''}`;
     
@@ -59,15 +54,14 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || 'Failed to create order');
+      throw new Error('Failed to create order');
     }
 
     const { order } = await response.json();
     console.log('Order created:', order);
 
     const options = {
-      key: 'rzp_live_lhUJoR9PnyhX0q', // Using the provided live key
+      key: 'rzp_live_lhUJoR9PnyhX0q',
       amount: order.amount,
       currency: order.currency,
       name: "Henna by Fathima",
@@ -115,7 +109,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       }
     };
 
-    const rzp = new Razorpay(options);
+    const rzp = new window.Razorpay(options);
     rzp.open();
 
   } catch (error) {

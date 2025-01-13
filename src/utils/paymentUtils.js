@@ -1,6 +1,5 @@
 const loadRazorpayScript = () => {
   return new Promise((resolve, reject) => {
-    // Check if Razorpay is already loaded and valid
     if (window.Razorpay && typeof window.Razorpay === 'function') {
       resolve(window.Razorpay);
       return;
@@ -11,7 +10,6 @@ const loadRazorpayScript = () => {
     script.async = true;
     
     script.onload = () => {
-      // Give browser time to process the script and ensure Razorpay is properly initialized
       setTimeout(() => {
         if (window.Razorpay && typeof window.Razorpay === 'function') {
           console.log('Razorpay SDK loaded successfully');
@@ -45,7 +43,6 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
   try {
     console.log('Starting Razorpay payment initialization...');
     
-    // Load and validate Razorpay SDK
     const RazorpayClass = await loadRazorpayScript();
     
     if (typeof RazorpayClass !== 'function') {
@@ -54,7 +51,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     
     console.log('Razorpay SDK loaded and validated, creating order...');
 
-    const apiUrl = 'https://cd184ac6-e88a-46fc-b24e-0c575231c18c.lovableproject.com';
+    const apiUrl = process.env.REACT_APP_API_URL || 'https://cd184ac6-e88a-46fc-b24e-0c575231c18c.lovableproject.com';
     
     const response = await fetch(`${apiUrl}/api/create-order`, {
       method: 'POST',
@@ -68,14 +65,15 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     });
 
     if (!response.ok) {
-      throw new Error('Failed to create order');
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to create order');
     }
 
     const { order } = await response.json();
     console.log('Order created:', order);
 
     const options = {
-      key: 'rzp_live_lhUJoR9PnyhX0q', // Using the live key
+      key: 'rzp_live_lhUJoR9PnyhX0q',
       amount: order.amount,
       currency: order.currency,
       name: "Henna by Fathima",

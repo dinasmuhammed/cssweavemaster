@@ -5,9 +5,9 @@ const { createOrder, verifyPayment } = require('./src/api/razorpay');
 
 const app = express();
 
-// Configure CORS with specific origin
+// Configure CORS to accept requests from your frontend
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'https://cd184ac6-e88a-46fc-b24e-0c575231c18c.lovable.app',
+  origin: '*', // During development, allow all origins
   methods: ['GET', 'POST'],
   credentials: true
 }));
@@ -32,7 +32,7 @@ app.post('/api/create-order', async (req, res) => {
     res.json({ order });
   } catch (error) {
     console.error('Error creating order:', error);
-    res.status(500).json({ error: 'Failed to create order' });
+    res.status(500).json({ error: 'Failed to create order', details: error.message });
   }
 });
 
@@ -70,7 +70,7 @@ app.post('/api/verify-payment', async (req, res) => {
     res.status(200).json({ message: 'Payment verified successfully' });
   } catch (error) {
     console.error('Error verifying payment:', error);
-    res.status(500).json({ error: 'Payment verification failed' });
+    res.status(500).json({ error: 'Payment verification failed', details: error.message });
   }
 });
 

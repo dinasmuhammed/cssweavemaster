@@ -1,6 +1,5 @@
 const loadRazorpayScript = () => {
   return new Promise((resolve, reject) => {
-    // Check if Razorpay is already loaded
     if (window.Razorpay) {
       resolve(window.Razorpay);
       return;
@@ -45,7 +44,8 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     const Razorpay = await loadRazorpayScript();
     console.log('Razorpay SDK loaded successfully');
 
-    const apiUrl = process.env.REACT_APP_API_URL || 'https://cd184ac6-e88a-46fc-b24e-0c575231c18c.lovableproject.com';
+    // Use the base URL from window.location for API calls
+    const apiUrl = `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''}`;
     
     const response = await fetch(`${apiUrl}/api/create-order`, {
       method: 'POST',
@@ -67,7 +67,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     console.log('Order created:', order);
 
     const options = {
-      key: 'rzp_live_lhUJoR9PnyhX0q',
+      key: 'rzp_live_lhUJoR9PnyhX0q', // Using the provided live key
       amount: order.amount,
       currency: order.currency,
       name: "Henna by Fathima",

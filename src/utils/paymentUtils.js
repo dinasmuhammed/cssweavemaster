@@ -19,7 +19,7 @@ const loadRazorpayScript = () => {
         } else {
           reject(new Error('Razorpay SDK not available or not properly initialized after loading'));
         }
-      }, 1000); // Increased delay to ensure proper initialization
+      }, 1000);
     };
     
     script.onerror = () => {
@@ -75,7 +75,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     console.log('Order created:', order);
 
     const options = {
-      key: 'rzp_test_51Ix3QAGQEkJKDk',
+      key: 'rzp_live_lhUJoR9PnyhX0q', // Using the live key
       amount: order.amount,
       currency: order.currency,
       name: "Henna by Fathima",
@@ -123,7 +123,6 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       }
     };
 
-    // Create and open Razorpay instance
     console.log('Creating Razorpay instance with options:', options);
     const razorpay = new RazorpayClass(options);
     razorpay.open();

@@ -4,7 +4,7 @@ const loadRazorpayScript = () => {
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.async = true;
     script.onload = () => {
-      if (window.Razorpay) {
+      if (typeof window.Razorpay === 'function') {
         console.log('Razorpay SDK loaded successfully');
         resolve();
       } else {
@@ -112,8 +112,14 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       }
     };
 
-    // Initialize Razorpay only after ensuring the SDK is loaded
+    // Wait for window.Razorpay to be definitely available
+    if (typeof window.Razorpay !== 'function') {
+      throw new Error('Razorpay SDK not initialized properly');
+    }
+
+    console.log('Creating Razorpay instance...');
     const rzp = new window.Razorpay(options);
+    console.log('Opening payment modal...');
     rzp.open();
 
   } catch (error) {

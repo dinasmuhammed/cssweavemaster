@@ -49,14 +49,8 @@ const WorkshopHeader = () => {
       animate="visible"
       variants={containerVariants}
     >
-      <motion.p
-        className="text-green-800 font-medium text-xs sm:text-sm md:text-base mb-2"
-        variants={itemVariants}
-      >
-        Available Online and Offline | Perfect for Beginners and Advanced Learners
-      </motion.p>
-      <br />
-      <br />
+      
+     
       <motion.h1 
         className="text-3xl md:text-4xl font-bold mb-6 text-green-800"
         variants={itemVariants}
@@ -65,6 +59,14 @@ const WorkshopHeader = () => {
       </motion.h1>
 <br />
       <br />
+      <motion.p
+        className="text-green-800 font-medium text-xs sm:text-sm md:text-base mb-2"
+        variants={itemVariants}
+      >
+        Available Online and Offline | Perfect for Beginners and Advanced Learners
+      </motion.p>
+      <br />
+      
       <br />
       <div className="max-w-4xl mx-auto px-4 mb-8">
         <Carousel

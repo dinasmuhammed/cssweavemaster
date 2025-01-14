@@ -22,14 +22,17 @@ app.post('/api/create-order', async (req, res) => {
     const { amount, currency } = req.body;
     
     if (!amount) {
+      console.error('Missing amount in request body:', req.body);
       return res.status(400).json({ error: 'Amount is required' });
     }
 
+    console.log('Creating order with amount:', amount, 'currency:', currency);
     const order = await createOrder(amount, currency);
-    console.log('Order created:', order);
+    console.log('Order created successfully:', order);
     
-    if (!order) {
-      return res.status(500).json({ error: 'Failed to create order' });
+    if (!order || !order.id) {
+      console.error('Invalid order response:', order);
+      return res.status(500).json({ error: 'Failed to create order: Invalid response' });
     }
     
     res.json({ order });
@@ -37,7 +40,8 @@ app.post('/api/create-order', async (req, res) => {
     console.error('Error creating order:', error);
     res.status(500).json({ 
       error: 'Failed to create order', 
-      details: error.message 
+      details: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
   }
 });
@@ -52,8 +56,14 @@ app.post('/api/verify-payment', async (req, res) => {
     } = req.body;
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+      console.error('Missing payment verification parameters:', req.body);
       return res.status(400).json({ error: 'Missing required payment verification parameters' });
     }
+
+    console.log('Verifying payment:', {
+      orderId: razorpay_order_id,
+      paymentId: razorpay_payment_id
+    });
 
     const isValid = verifyPayment(
       razorpay_order_id,
@@ -62,21 +72,28 @@ app.post('/api/verify-payment', async (req, res) => {
     );
 
     if (!isValid) {
+      console.error('Invalid payment signature');
       return res.status(400).json({ error: 'Invalid payment signature' });
     }
 
     // Send order confirmation email
     try {
       await sendOrderEmail(orderData);
+      console.log('Order confirmation email sent successfully');
     } catch (emailError) {
       console.error('Error sending order email:', emailError);
       // Continue with payment success even if email fails
     }
 
+    console.log('Payment verified successfully');
     res.status(200).json({ message: 'Payment verified successfully' });
   } catch (error) {
     console.error('Error verifying payment:', error);
-    res.status(500).json({ error: 'Payment verification failed', details: error.message });
+    res.status(500).json({ 
+      error: 'Payment verification failed', 
+      details: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 });
 

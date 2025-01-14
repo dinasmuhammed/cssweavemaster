@@ -13,7 +13,7 @@ const createOrder = async (amount, currency = 'INR') => {
     }
 
     const options = {
-      amount: Math.round(amount * 100),
+      amount: Math.round(amount * 100), // Convert to smallest currency unit (paise)
       currency,
       receipt: `receipt_${Date.now()}`,
     };
@@ -22,6 +22,7 @@ const createOrder = async (amount, currency = 'INR') => {
     const order = await razorpay.orders.create(options);
     
     if (!order || !order.id) {
+      console.error('Invalid order response from Razorpay:', order);
       throw new Error('Invalid order response from Razorpay');
     }
     
@@ -35,6 +36,7 @@ const createOrder = async (amount, currency = 'INR') => {
 
 const verifyPayment = (orderId, paymentId, signature) => {
   try {
+    console.log('Verifying payment:', { orderId, paymentId });
     const text = `${orderId}|${paymentId}`;
     const generated_signature = crypto
       .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET || 'lEV2FCzPMS4n7c23VfnUQd5W')

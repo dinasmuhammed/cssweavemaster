@@ -26,6 +26,7 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
       }
 
       setIsProcessing(true);
+      toast.info("Initializing payment...");
 
       const orderData = {
         orderId: `ORDER_${Date.now()}`,
@@ -45,6 +46,7 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
         formData,
         () => {
           setIsProcessing(false);
+          toast.success("Payment successful!");
         },
         (error) => {
           setIsProcessing(false);
@@ -67,7 +69,7 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
           <Input
             id="name"
             name="name"
-            value={formData.name}
+            value={formData.name || ''}
             onChange={onChange}
             className={`mt-1 ${errors.name ? 'border-red-500' : ''}`}
             disabled={isProcessing}
@@ -76,11 +78,43 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
         </div>
 
         <div>
+          <Label htmlFor="email" className="text-gray-600">Email*</Label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            value={formData.email || ''}
+            onChange={onChange}
+            className={`mt-1 ${errors.email ? 'border-red-500' : ''}`}
+            disabled={isProcessing}
+          />
+          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+        </div>
+
+        <div>
+          <Label htmlFor="mobile" className="text-gray-600">Mobile Number*</Label>
+          <div className="flex mt-1">
+            <span className="inline-flex items-center px-3 border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm rounded-l-md">
+              +91
+            </span>
+            <Input
+              id="mobile"
+              name="mobile"
+              value={formData.mobile || ''}
+              onChange={onChange}
+              className={`rounded-l-none ${errors.mobile ? 'border-red-500' : ''}`}
+              disabled={isProcessing}
+            />
+          </div>
+          {errors.mobile && <p className="text-red-500 text-sm mt-1">{errors.mobile}</p>}
+        </div>
+
+        <div>
           <Label htmlFor="address" className="text-gray-600">Address Line*</Label>
           <Input
             id="address"
             name="address"
-            value={formData.address}
+            value={formData.address || ''}
             onChange={onChange}
             className={`mt-1 ${errors.address ? 'border-red-500' : ''}`}
             disabled={isProcessing}
@@ -88,92 +122,6 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
           {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
         </div>
 
-        <div>
-          <Label htmlFor="area" className="text-gray-600">Area/Street*</Label>
-          <Input
-            id="area"
-            name="area"
-            value={formData.area}
-            onChange={onChange}
-            className={`mt-1 ${errors.area ? 'border-red-500' : ''}`}
-            disabled={isProcessing}
-          />
-          {errors.area && <p className="text-red-500 text-sm mt-1">{errors.area}</p>}
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="district" className="text-gray-600">District*</Label>
-            <Input
-              id="district"
-              name="district"
-              value={formData.district}
-              onChange={onChange}
-              className={`mt-1 ${errors.district ? 'border-red-500' : ''}`}
-              disabled={isProcessing}
-            />
-            {errors.district && <p className="text-red-500 text-sm mt-1">{errors.district}</p>}
-          </div>
-          <div>
-            <Label htmlFor="state" className="text-gray-600">State*</Label>
-            <Input
-              id="state"
-              name="state"
-              value={formData.state}
-              onChange={onChange}
-              className={`mt-1 ${errors.state ? 'border-red-500' : ''}`}
-              disabled={isProcessing}
-            />
-            {errors.state && <p className="text-red-500 text-sm mt-1">{errors.state}</p>}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="pincode" className="text-gray-600">Pincode*</Label>
-            <Input
-              id="pincode"
-              name="pincode"
-              value={formData.pincode}
-              onChange={onChange}
-              className={`mt-1 ${errors.pincode ? 'border-red-500' : ''}`}
-              disabled={isProcessing}
-            />
-            {errors.pincode && <p className="text-red-500 text-sm mt-1">{errors.pincode}</p>}
-          </div>
-          <div>
-            <Label htmlFor="mobile" className="text-gray-600">Mobile Number*</Label>
-            <div className="flex mt-1">
-              <span className="inline-flex items-center px-3 border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm rounded-l-md">
-                +91
-              </span>
-              <Input
-                id="mobile"
-                name="mobile"
-                value={formData.mobile}
-                onChange={onChange}
-                className={`rounded-l-none ${errors.mobile ? 'border-red-500' : ''}`}
-                disabled={isProcessing}
-              />
-            </div>
-            {errors.mobile && <p className="text-red-500 text-sm mt-1">{errors.mobile}</p>}
-          </div>
-        </div>
-
-        <div>
-          <Label htmlFor="email" className="text-gray-600">Email*</Label>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={onChange}
-            className={`mt-1 ${errors.email ? 'border-red-500' : ''}`}
-            disabled={isProcessing}
-          />
-          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-        </div>
-        
         <Button 
           onClick={handleSubmit}
           disabled={isProcessing}

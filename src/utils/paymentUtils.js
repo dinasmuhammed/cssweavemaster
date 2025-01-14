@@ -70,7 +70,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     console.log('Order created:', data.order);
 
     const options = {
-      key: 'rzp_live_lhUJoR9PnyhX0q',
+      key: 'rzp_live_VMhrs1uuU9TTJq',
       amount: data.order.amount,
       currency: data.order.currency,
       name: "Henna by Fathima",

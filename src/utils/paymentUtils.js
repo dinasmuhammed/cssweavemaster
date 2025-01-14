@@ -1,14 +1,8 @@
 const loadRazorpayScript = () => {
   return new Promise((resolve, reject) => {
-    if (window.Razorpay) {
-      resolve();
-      return;
-    }
-
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.async = true;
-    
     script.onload = () => {
       if (window.Razorpay) {
         console.log('Razorpay SDK loaded successfully');
@@ -17,11 +11,9 @@ const loadRazorpayScript = () => {
         reject(new Error('Razorpay SDK not available'));
       }
     };
-    
     script.onerror = () => {
       reject(new Error('Failed to load Razorpay SDK'));
     };
-
     document.body.appendChild(script);
   });
 };
@@ -41,6 +33,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
   try {
     console.log('Starting Razorpay payment initialization...');
     
+    // Ensure Razorpay SDK is loaded
     await loadRazorpayScript();
     console.log('Razorpay SDK loaded');
     

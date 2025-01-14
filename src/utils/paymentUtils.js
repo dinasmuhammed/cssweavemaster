@@ -112,6 +112,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       }
     };
 
+    // Initialize Razorpay only after ensuring the SDK is loaded
     const rzp = new window.Razorpay(options);
     rzp.open();
 

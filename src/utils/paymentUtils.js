@@ -41,6 +41,7 @@ export const validatePaymentForm = (formData) => {
   } else if (!/^\d{10}$/.test(formData.mobile)) {
     errors.mobile = "Invalid mobile number";
   }
+  if (!formData.address?.trim()) errors.address = "Address is required";
   
   return {
     isValid: Object.keys(errors).length === 0,
@@ -54,9 +55,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     
     const Razorpay = await loadRazorpayScript();
     
-    const apiUrl = `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''}`;
-    
-    const response = await fetch(`${apiUrl}/api/create-order`, {
+    const response = await fetch('/api/create-order', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -94,7 +93,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       handler: async function(response) {
         try {
           console.log('Payment successful, verifying...', response);
-          const verifyResponse = await fetch(`${apiUrl}/api/verify-payment`, {
+          const verifyResponse = await fetch('/api/verify-payment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

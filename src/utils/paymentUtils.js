@@ -1,19 +1,28 @@
 const loadRazorpayScript = () => {
   return new Promise((resolve, reject) => {
+    if (window.Razorpay) {
+      console.log('Razorpay SDK already loaded');
+      resolve(window.Razorpay);
+      return;
+    }
+
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.async = true;
+    
     script.onload = () => {
-      if (typeof window.Razorpay === 'function') {
+      if (window.Razorpay) {
         console.log('Razorpay SDK loaded successfully');
-        resolve();
+        resolve(window.Razorpay);
       } else {
-        reject(new Error('Razorpay SDK not available'));
+        reject(new Error('Razorpay SDK failed to load'));
       }
     };
+    
     script.onerror = () => {
       reject(new Error('Failed to load Razorpay SDK'));
     };
+    
     document.body.appendChild(script);
   });
 };
@@ -31,14 +40,14 @@ export const validatePaymentForm = (formData) => {
 
 export const initializeRazorpayPayment = async (orderData, amount, customerDetails, onSuccess, onError) => {
   try {
-    console.log('Starting Razorpay payment initialization...');
+    console.log('Starting payment initialization...');
     
-    // Ensure Razorpay SDK is loaded
+    // Load Razorpay SDK
     await loadRazorpayScript();
-    console.log('Razorpay SDK loaded');
     
     const apiUrl = `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''}`;
     
+    // Create order
     const response = await fetch(`${apiUrl}/api/create-order`, {
       method: 'POST',
       headers: {
@@ -51,16 +60,15 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || 'Failed to create order');
+      throw new Error('Failed to create order');
     }
 
     const data = await response.json();
+    console.log('Order created:', data);
+
     if (!data.order || !data.order.id) {
       throw new Error('Invalid order response');
     }
-
-    console.log('Order created:', data.order);
 
     const options = {
       key: 'rzp_live_VMhrs1uuU9TTJq',
@@ -89,13 +97,11 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
           });
 
           if (!verifyResponse.ok) {
-            const errorData = await verifyResponse.json();
-            throw new Error(errorData.error || 'Payment verification failed');
+            throw new Error('Payment verification failed');
           }
 
-          const verifyData = await verifyResponse.json();
           console.log('Payment verified successfully');
-          if (onSuccess) onSuccess(verifyData);
+          if (onSuccess) onSuccess(response);
         } catch (error) {
           console.error('Payment verification error:', error);
           if (onError) onError(error);
@@ -112,13 +118,9 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       }
     };
 
-    // Wait for window.Razorpay to be definitely available
-    if (typeof window.Razorpay !== 'function') {
-      throw new Error('Razorpay SDK not initialized properly');
-    }
-
-    console.log('Creating Razorpay instance...');
-    const rzp = new window.Razorpay(options);
+    // Create and open Razorpay instance
+    const RazorpayCheckout = window.Razorpay;
+    const rzp = new RazorpayCheckout(options);
     console.log('Opening payment modal...');
     rzp.open();
 

@@ -66,7 +66,7 @@ const PricingTabs = () => {
                 <h3 className="text-xl font-bold text-green-800 mb-2">{package_.name}</h3>
                 <p className="text-2xl font-bold text-green-800 mb-4">{package_.price}</p>
                 <p className="text-gray-600 mb-2">{package_.description}</p>
-                <p className="text-gray-500 text-sm mb-4">Duration: {package_.duration}</p>
+                <p className="text-gray-500 text-sm mb-4">{package_.duration}</p>
                 <button className="btn-primary w-full">Request to Book</button>
               </motion.div>
             ))}
@@ -86,7 +86,7 @@ const PricingTabs = () => {
                 <h3 className="text-xl font-bold text-green-800 mb-2">{package_.name}</h3>
                 <p className="text-2xl font-bold text-green-800 mb-4">{package_.price}</p>
                 <p className="text-gray-600 mb-2">{package_.description}</p>
-                <p className="text-gray-500 text-sm mb-4">Duration: {package_.duration}</p>
+                <p className="text-gray-500 text-sm mb-4">{package_.duration}</p>
                 <button className="btn-primary w-full">Request to Book</button>
               </motion.div>
             ))}

@@ -6,42 +6,42 @@ const PricingTabs = () => {
   const handPricing = [
     {
       name: "Silver Package",
-      price: "₹2,500",
+      
       description: "Simple Arabic design for both hands",
-      duration: "1-2 hours"
+      
     },
     {
       name: "Gold Package",
-      price: "₹5,000",
+     
       description: "Full hand Arabic design with intricate patterns",
-      duration: "2-3 hours"
+      
     },
     {
       name: "Platinum Package",
-      price: "₹8,000",
+     
       description: "Full arm bridal design with premium details",
-      duration: "3-4 hours"
+      
     },
     {
       name: "Diamond Package",
-      price: "₹12,000",
+     
       description: "Exclusive bridal design with crystals and glitter",
-      duration: "4-5 hours"
+     
     }
   ];
 
   const feetPricing = [
     {
       name: "Simple Package",
-      price: "₹2,000",
+      
       description: "Basic design for feet",
-      duration: "1 hour"
+    
     },
     {
       name: "Heavy Package",
-      price: "₹4,000",
+     
       description: "Intricate bridal design for feet",
-      duration: "2-3 hours"
+     
     }
   ];
 

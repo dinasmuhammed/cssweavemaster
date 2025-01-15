@@ -7,25 +7,25 @@ const PricingTabs = () => {
     {
       name: "Silver Package",
       
-      description: "Simple yet elegant party henna designs, perfect for bridesmaids or special occasions. Starting at ₹200 per side, these designs are minimal and customizable. Prices may vary based on the intricacy of the design.",
+      description: "Simple Arabic design for both hands",
       
     },
     {
       name: "Gold Package",
      
-      description: "Semi-bridal henna designs that start from the wrist (where you tie a watch) and extend upwards. These designs offer a perfect balance of simplicity and elegance, ideal for engagement ceremonies or other grand events.",
+      description: "Full hand Arabic design with intricate patterns",
       
     },
     {
       name: "Platinum Package",
      
-      description: "Mid-length bridal henna designs that begin midway between the wrist and the elbow. These designs are intricate and detailed, perfect for brides seeking a traditional yet modest look.",
+      description: "Full arm bridal design with premium details",
       
     },
     {
       name: "Diamond Package",
      
-      description: "Full bridal henna designs that start from the elbow and are highly intricate. These luxurious designs are tailored to make your special day unforgettable.",
+      description: "Exclusive bridal design with crystals and glitter",
      
     }
   ];
@@ -34,13 +34,13 @@ const PricingTabs = () => {
     {
       name: "Simple Package",
       
-      description: "Minimalistic henna designs focused on the upper foot area, featuring elegant patterns such as mandalas or custom designs of your choice. Perfect for a subtle and graceful look.",
+      description: "Basic design for feet",
     
     },
     {
       name: "Heavy Package",
      
-      description: "Intricate henna designs that cover the entire foot up to the ankle. For those who wish to extend the design above the ankle or up to the knee, customization is available upon discussion.",
+      description: "Intricate bridal design for feet",
      
     }
   ];

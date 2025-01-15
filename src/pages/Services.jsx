@@ -1,116 +1,181 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import ServicePackage from '../components/ServicePackage';
 import PricingTabs from '../components/services/PricingTabs';
-import PricingToggle from '../components/services/PricingToggle';
+import ServicePackage from '../components/ServicePackage';
+import TestimonialCard from '../components/TestimonialCard';
+import BookingForm from '../components/services/BookingForm';
 
 const Services = () => {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        delayChildren: 0.3,
-        staggerChildren: 0.2
-      }
+  const packages = [
+    {
+      id: 1,
+      title: "Bridal Henna",
+      image: "https://i.ibb.co/nRc8Y29/IMG-0528.jpg",
+      description: "Exclusive bridal designs for your special day"
+    },
+    {
+      id: 2,
+      title: "Party Henna",
+      image: "https://i.ibb.co/FBFVzHg/Whats-App-Image-2024-12-07-at-23-54-31-3f69a50b.jpg",
+      description: "Beautiful designs for all occasions"
+    },
+    {
+      id: 3,
+      title: "Kids Henna",
+      image: "https://i.ibb.co/r2gjMxV/Whats-App-Image-2024-12-07-at-23-57-57-e16b4952.jpg",
+      description: "Simple and fun designs for children"
+    },
+    {
+      id: 4,
+      title: "Group Bookings",
+      image: "https://i.postimg.cc/2SGPxtQr/Screenshot-2024-10-13-173602.png",
+      description: "Special rates for group events"
+    },
+    {
+      id: 5,
+      title: "Corporate Events",
+      image: "https://i.postimg.cc/bNxXZrdG/Screenshot-2024-10-13-173523.png",
+      description: "Professional henna services for corporate functions"
+    },
+    {
+      id: 6,
+      title: "Custom Designs",
+      image: "https://i.ibb.co/nRc8Y29/IMG-0528.jpg",
+      description: "Personalized designs tailored to your preferences",
+      interactive: true
     }
-  };
+  ];
 
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.5
-      }
+  const testimonials = [
+    {
+      name: "Priya Shah",
+      rating: 5,
+      text: "Absolutely stunning bridal henna! The designs were intricate and beautiful, exactly what I wanted for my wedding."
+    },
+    {
+      name: "Aisha Khan",
+      rating: 5,
+      text: "Professional service and gorgeous designs. The artist was patient and created exactly what I envisioned."
+    },
+    {
+      name: "Sarah Patel",
+      rating: 5,
+      text: "Amazing experience! The designs were perfect and lasted really well. Highly recommend!"
     }
-  };
-
-  const bridalPackage = {
-    title: "Bridal Henna Package",
-    details: [
-      "Full bridal henna design for hands and feet",
-      "Complimentary trial session",
-      "Natural organic henna paste",
-      "Touch-up service available",
-      "Duration: 4-6 hours"
-    ],
-    images: [
-      "https://i.ibb.co/nRc8Y29/IMG-0528.jpg",
-      "https://i.ibb.co/vmcsFYm/IMG-20250115-WA0002.jpg",
-      "https://i.ibb.co/FBFVzHg/Whats-App-Image-2024-12-07-at-23-54-31-3f69a50b.jpg",
-      "https://i.ibb.co/r2gjMxV/Whats-App-Image-2024-12-07-at-23-57-57-e16b4952.jpg"
-    ]
-  };
-
-  const partyPackage = {
-    title: "Party Henna Package",
-    details: [
-      "Customizable designs for any occasion",
-      "Group bookings available",
-      "Perfect for events and celebrations",
-      "Natural organic henna paste",
-      "Duration: 15-30 minutes per person"
-    ],
-    images: [
-      "https://i.ibb.co/FBFVzHg/Whats-App-Image-2024-12-07-at-23-54-31-3f69a50b.jpg",
-      "https://i.ibb.co/r2gjMxV/Whats-App-Image-2024-12-07-at-23-57-57-e16b4952.jpg",
-      "https://i.ibb.co/nRc8Y29/IMG-0528.jpg",
-      "https://i.ibb.co/vmcsFYm/IMG-20250115-WA0002.jpg"
-    ]
-  };
+  ];
 
   return (
-    <motion.div
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
-      className="min-h-screen bg-cream-50"
-    >
-      {/* Hero Section */}
-      <div className="relative h-[400px] overflow-hidden">
+    <div className="min-h-screen bg-cream-100">
+      {/* Hero Banner */}
+      <div className="relative h-[400px] md:h-[500px] overflow-hidden">
         <motion.img
-          src="https://i.ibb.co/vmcsFYm/IMG-20250115-WA0002.jpg"
-          alt="Henna Services Banner"
-          className="w-full h-full object-cover"
           initial={{ scale: 1.1 }}
           animate={{ scale: 1 }}
           transition={{ duration: 1.5 }}
+          src="https://i.ibb.co/nRc8Y29/IMG-0528.jpg"
+          alt="Beautiful Henna Design"
+          className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
           <motion.div
-            className="text-center text-white px-4"
-            variants={itemVariants}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="text-center px-4"
           >
-            <h1 className="text-4xl md:text-5xl font-serif mb-4">Our Services</h1>
-            <p className="text-lg md:text-xl max-w-2xl mx-auto">
-              Experience the art of traditional henna with our customized packages
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading text-white mb-4">
+              Exquisite Henna Artistry
+            </h1>
+            <p className="text-lg md:text-xl text-white max-w-2xl mx-auto">
+              From Bridal Mehendi to Party Henna, we create designs that make your moments unforgettable
             </p>
           </motion.div>
         </div>
       </div>
 
-      {/* Packages Section */}
-      <div className="container mx-auto px-4 py-16 space-y-16">
-        <ServicePackage {...bridalPackage} />
-        <ServicePackage {...partyPackage} isReversed />
-      </div>
+      {/* Packages Grid Section */}
+      <section className="py-16 px-4">
+        <div className="container mx-auto">
+          <h2 className="text-2xl md:text-3xl font-heading text-center text-green-800 mb-12">
+            Our Packages
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {packages.map((pkg) => (
+              <motion.div
+                key={pkg.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                whileHover={{ y: -5 }}
+                className="relative group overflow-hidden rounded-lg shadow-lg"
+              >
+                <div className="aspect-w-3 aspect-h-4">
+                  <img
+                    src={pkg.image}
+                    alt={pkg.title}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                  />
+                </div>
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <div className="text-center p-4">
+                    <h3 className="text-xl font-heading text-white mb-2">{pkg.title}</h3>
+                    <p className="text-white mb-4">{pkg.description}</p>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="bg-cream-100 text-green-800 px-6 py-2 rounded-full font-medium hover:bg-cream-200 transition-colors"
+                    >
+                      Learn More
+                    </motion.button>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* Pricing Section */}
-      <div className="bg-white py-16">
-        <div className="container mx-auto px-4">
-          <motion.h2
-            className="text-3xl font-serif text-center text-green-800 mb-12"
-            variants={itemVariants}
-          >
+      <section className="py-16 px-4 bg-white">
+        <div className="container mx-auto">
+          <h2 className="text-2xl md:text-3xl font-heading text-center text-green-800 mb-12">
             Our Pricing
-          </motion.h2>
-          <PricingToggle />
+          </h2>
           <PricingTabs />
         </div>
-      </div>
-    </motion.div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-16 px-4 bg-cream-50">
+        <div className="container mx-auto">
+          <h2 className="text-2xl md:text-3xl font-heading text-center text-green-800 mb-12">
+            Client Reviews
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {testimonials.map((testimonial, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <TestimonialCard {...testimonial} />
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Booking Form Section */}
+      <section className="py-16 px-4 bg-cream-100">
+        <div className="container mx-auto max-w-2xl">
+          <h2 className="text-2xl md:text-3xl font-heading text-center text-green-800 mb-12">
+            Book Your Session
+          </h2>
+          <BookingForm />
+        </div>
+      </section>
+    </div>
   );
 };
 

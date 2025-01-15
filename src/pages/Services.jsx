@@ -97,7 +97,7 @@ const Services = () => {
       <section className="py-16 px-4">
         <div className="container mx-auto">
           <h2 className="text-2xl md:text-3xl font-heading text-center text-green-800 mb-12">
-            Our Packages
+            Packages
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {packages.map((pkg) => (

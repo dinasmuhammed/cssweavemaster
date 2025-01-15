@@ -7,25 +7,25 @@ const PricingTabs = () => {
     {
       name: "Silver Package",
       
-      description: "Simple Arabic design for both hands",
+      description: "Simple yet elegant party henna designs, perfect for bridesmaids or special occasions. Starting at ₹200 per side, these designs are minimal and customizable. Prices may vary based on the intricacy of the design.",
       
     },
     {
       name: "Gold Package",
      
-      description: "Full hand Arabic design with intricate patterns",
+      description: "Semi-bridal henna designs that start from the wrist (where you tie a watch) and extend upwards. These designs offer a perfect balance of simplicity and elegance, ideal for engagement ceremonies or other grand events.",
       
     },
     {
       name: "Platinum Package",
      
-      description: "Full arm bridal design with premium details",
+      description: "Mid-length bridal henna designs that begin midway between the wrist and the elbow. These designs are intricate and detailed, perfect for brides seeking a traditional yet modest look.",
       
     },
     {
       name: "Diamond Package",
      
-      description: "Exclusive bridal design with crystals and glitter",
+      description: "Full bridal henna designs that start from the elbow and are highly intricate. These luxurious designs are tailored to make your special day unforgettable.",
      
     }
   ];
@@ -34,13 +34,13 @@ const PricingTabs = () => {
     {
       name: "Simple Package",
       
-      description: "Basic design for feet",
+      description: "Minimalistic henna designs focused on the upper foot area, featuring elegant patterns such as mandalas or custom designs of your choice. Perfect for a subtle and graceful look.",
     
     },
     {
       name: "Heavy Package",
      
-      description: "Intricate bridal design for feet",
+      description: "Intricate henna designs that cover the entire foot up to the ankle. For those who wish to extend the design above the ankle or up to the knee, customization is available upon discussion.",
      
     }
   ];

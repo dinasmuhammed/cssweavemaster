@@ -112,7 +112,7 @@ const BookingForm = () => {
       </div>
 
       <Button type="submit" className="w-full">
-        Submit Booking Request
+        Submit
       </Button>
     </form>
   );

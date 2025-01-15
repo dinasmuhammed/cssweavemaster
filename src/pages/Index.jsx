@@ -8,6 +8,12 @@ import WhyHennaByFathima from '../components/WhyHennaByFathima';
 import OurHappyStore from '../components/OurHappyStore';
 
 const Index = () => {
+  // Using React.useEffect to ensure proper initialization
+  React.useEffect(() => {
+    // Initialize any necessary functionality here
+    console.log('Index component mounted');
+  }, []);
+
   return (
     <div className="flex flex-col w-full">
       <HeroSection />

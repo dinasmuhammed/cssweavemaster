@@ -1,90 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import useEmblaCarousel from 'embla-carousel-react';
-import AutoplayPlugin from 'embla-carousel-autoplay';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import React from 'react';
 
 const HeroSection = () => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  
-  const autoplay = AutoplayPlugin({
-    delay: 3000,
-    stopOnInteraction: false,
-    playOnInit: true
-  });
-  
-  const [emblaRef, emblaApi] = useEmblaCarousel(
-    { 
-      loop: true,
-      skipSnaps: false
-    }, 
-    [autoplay]
-  );
-  
-  const images = [
-    "https://i.ibb.co/nRc8Y29/IMG-0528.jpg",
-    "https://i.ibb.co/7bHppwL/Whats-App-Image-2025-01-14-at-23-27-10-b9e93189.jpg",
-    "https://i.ibb.co/WzrLjQH/f326d2f8-4802-4000-b53b-b987f7a5a291.jpg",
-  ];
-
-  useEffect(() => {
-    if (!emblaApi) return;
-
-    emblaApi.on('select', () => {
-      setSelectedIndex(emblaApi.selectedScrollSnap());
-    });
-
-    return () => {
-      if (emblaApi) {
-        emblaApi.off('select');
-      }
-    };
-  }, [emblaApi]);
-
-  const scrollPrev = () => {
-    if (emblaApi) emblaApi.scrollPrev();
-  };
-
-  const scrollNext = () => {
-    if (emblaApi) emblaApi.scrollNext();
-  };
+  React.useEffect(() => {
+    console.log('HeroSection mounted');
+  }, []);
 
   return (
-    <section className="relative h-[250px] sm:h-[400px] md:h-[500px] lg:h-[570px] w-full overflow-hidden">
-      <div className="relative h-full group touch-pan-y">
-        <div className="embla h-full" ref={emblaRef}>
-          <div className="embla__container h-full flex">
-            {images.map((image, index) => (
-              <div 
-                key={index} 
-                className="embla__slide relative flex-[0_0_100%] h-full"
-              >
-                <img 
-                  src={image} 
-                  alt={`Slide ${index + 1}`}
-                  className="w-full h-full object-cover"
-                  loading={index === 0 ? "eager" : "lazy"}
-                  decoding="async"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <button
-          onClick={scrollPrev}
-          className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 sm:p-3 shadow-lg transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 z-10 touch-manipulation"
-          aria-label="Previous slide"
-        >
-          <ChevronLeft className="w-4 h-4 sm:w-6 sm:h-6 text-green-800" />
-        </button>
-        
-        <button
-          onClick={scrollNext}
-          className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 sm:p-3 shadow-lg transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 z-10 touch-manipulation"
-          aria-label="Next slide"
-        >
-          <ChevronRight className="w-4 h-4 sm:w-6 sm:h-6 text-green-800" />
-        </button>
+    <section className="relative w-full min-h-screen flex items-center justify-center bg-gradient-to-r from-green-50 to-green-100">
+      <div className="container mx-auto px-4 py-16 text-center">
+        <h1 className="text-4xl md:text-6xl font-bold text-green-900 mb-6">
+          Welcome to Henna by Fathima
+        </h1>
+        <p className="text-xl md:text-2xl text-green-800 mb-8">
+          Premium Bridal Mehndi Artist & Organic Henna Products
+        </p>
       </div>
     </section>
   );

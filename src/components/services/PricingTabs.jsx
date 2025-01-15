@@ -5,25 +5,25 @@ import { motion } from 'framer-motion';
 const PricingTabs = () => {
   const handPricing = [
     {
-      name: "Silver Package",
+      name: "Silver ",
       
       description: "Simple Arabic design for both hands",
       
     },
     {
-      name: "Gold Package",
+      name: "Gold ",
      
       description: "Full hand Arabic design with intricate patterns",
       
     },
     {
-      name: "Platinum Package",
+      name: "Platinum ",
      
       description: "Full arm bridal design with premium details",
       
     },
     {
-      name: "Diamond Package",
+      name: "Diamond ",
      
       description: "Exclusive bridal design with crystals and glitter",
      
@@ -32,13 +32,13 @@ const PricingTabs = () => {
 
   const feetPricing = [
     {
-      name: "Simple Package",
+      name: "Simple ",
       
       description: "Basic design for feet",
     
     },
     {
-      name: "Heavy Package",
+      name: "Heavy ",
      
       description: "Intricate bridal design for feet",
      

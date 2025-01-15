@@ -6,6 +6,46 @@ import TestimonialCard from '../components/TestimonialCard';
 import BookingForm from '../components/services/BookingForm';
 
 const Services = () => {
+  const packages = [
+    {
+      id: 1,
+      title: "Bridal Henna",
+      image: "https://i.ibb.co/nRc8Y29/IMG-0528.jpg",
+      description: "Exclusive bridal designs for your special day"
+    },
+    {
+      id: 2,
+      title: "Party Henna",
+      image: "https://i.ibb.co/FBFVzHg/Whats-App-Image-2024-12-07-at-23-54-31-3f69a50b.jpg",
+      description: "Beautiful designs for all occasions"
+    },
+    {
+      id: 3,
+      title: "Kids Henna",
+      image: "https://i.ibb.co/r2gjMxV/Whats-App-Image-2024-12-07-at-23-57-57-e16b4952.jpg",
+      description: "Simple and fun designs for children"
+    },
+    {
+      id: 4,
+      title: "Group Bookings",
+      image: "https://i.postimg.cc/2SGPxtQr/Screenshot-2024-10-13-173602.png",
+      description: "Special rates for group events"
+    },
+    {
+      id: 5,
+      title: "Corporate Events",
+      image: "https://i.postimg.cc/bNxXZrdG/Screenshot-2024-10-13-173523.png",
+      description: "Professional henna services for corporate functions"
+    },
+    {
+      id: 6,
+      title: "Custom Designs",
+      image: "https://i.ibb.co/nRc8Y29/IMG-0528.jpg",
+      description: "Personalized designs tailored to your preferences",
+      interactive: true
+    }
+  ];
+
   const testimonials = [
     {
       name: "Priya Shah",
@@ -21,35 +61,6 @@ const Services = () => {
       name: "Sarah Patel",
       rating: 5,
       text: "Amazing experience! The designs were perfect and lasted really well. Highly recommend!"
-    }
-  ];
-
-  const packages = [
-    {
-      title: "Bridal Henna",
-      details: [
-        "Full hands and feet coverage",
-        "Intricate traditional designs",
-        "Premium natural henna",
-        "Touch-up service included"
-      ],
-      images: [
-        "https://i.ibb.co/nRc8Y29/IMG-0528.jpg",
-        "https://i.ibb.co/nRc8Y29/IMG-0528.jpg"
-      ]
-    },
-    {
-      title: "Party Henna",
-      details: [
-        "Customizable designs",
-        "Quick application",
-        "Perfect for events",
-        "Modern or traditional patterns"
-      ],
-      images: [
-        "https://i.ibb.co/nRc8Y29/IMG-0528.jpg",
-        "https://i.ibb.co/nRc8Y29/IMG-0528.jpg"
-      ]
     }
   ];
 
@@ -82,21 +93,43 @@ const Services = () => {
         </div>
       </div>
 
-      {/* Packages Section */}
+      {/* Packages Grid Section */}
       <section className="py-16 px-4">
         <div className="container mx-auto">
           <h2 className="text-2xl md:text-3xl font-heading text-center text-green-800 mb-12">
             Our Packages
           </h2>
-          <div className="space-y-16">
-            {packages.map((pkg, index) => (
-              <ServicePackage
-                key={index}
-                title={pkg.title}
-                details={pkg.details}
-                images={pkg.images}
-                isReversed={index % 2 !== 0}
-              />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {packages.map((pkg) => (
+              <motion.div
+                key={pkg.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                whileHover={{ y: -5 }}
+                className="relative group overflow-hidden rounded-lg shadow-lg"
+              >
+                <div className="aspect-w-3 aspect-h-4">
+                  <img
+                    src={pkg.image}
+                    alt={pkg.title}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                  />
+                </div>
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <div className="text-center p-4">
+                    <h3 className="text-xl font-heading text-white mb-2">{pkg.title}</h3>
+                    <p className="text-white mb-4">{pkg.description}</p>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="bg-cream-100 text-green-800 px-6 py-2 rounded-full font-medium hover:bg-cream-200 transition-colors"
+                    >
+                      Learn More
+                    </motion.button>
+                  </div>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>

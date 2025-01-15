@@ -1,0 +1,100 @@
+import React from 'react';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { motion } from 'framer-motion';
+
+const PricingTabs = () => {
+  const handPricing = [
+    {
+      name: "Silver Package",
+      price: "₹2,500",
+      description: "Simple Arabic design for both hands",
+      duration: "1-2 hours"
+    },
+    {
+      name: "Gold Package",
+      price: "₹5,000",
+      description: "Full hand Arabic design with intricate patterns",
+      duration: "2-3 hours"
+    },
+    {
+      name: "Platinum Package",
+      price: "₹8,000",
+      description: "Full arm bridal design with premium details",
+      duration: "3-4 hours"
+    },
+    {
+      name: "Diamond Package",
+      price: "₹12,000",
+      description: "Exclusive bridal design with crystals and glitter",
+      duration: "4-5 hours"
+    }
+  ];
+
+  const feetPricing = [
+    {
+      name: "Simple Package",
+      price: "₹2,000",
+      description: "Basic design for feet",
+      duration: "1 hour"
+    },
+    {
+      name: "Heavy Package",
+      price: "₹4,000",
+      description: "Intricate bridal design for feet",
+      duration: "2-3 hours"
+    }
+  ];
+
+  return (
+    <div className="w-full max-w-4xl mx-auto p-6">
+      <Tabs defaultValue="hands" className="w-full">
+        <TabsList className="grid w-full grid-cols-2 mb-8">
+          <TabsTrigger value="hands">Hands</TabsTrigger>
+          <TabsTrigger value="feet">Feet</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="hands">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {handPricing.map((package_, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all"
+              >
+                <h3 className="text-xl font-bold text-green-800 mb-2">{package_.name}</h3>
+                <p className="text-2xl font-bold text-green-800 mb-4">{package_.price}</p>
+                <p className="text-gray-600 mb-2">{package_.description}</p>
+                <p className="text-gray-500 text-sm mb-4">Duration: {package_.duration}</p>
+                <button className="btn-primary w-full">Request to Book</button>
+              </motion.div>
+            ))}
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="feet">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {feetPricing.map((package_, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all"
+              >
+                <h3 className="text-xl font-bold text-green-800 mb-2">{package_.name}</h3>
+                <p className="text-2xl font-bold text-green-800 mb-4">{package_.price}</p>
+                <p className="text-gray-600 mb-2">{package_.description}</p>
+                <p className="text-gray-500 text-sm mb-4">Duration: {package_.duration}</p>
+                <button className="btn-primary w-full">Request to Book</button>
+              </motion.div>
+            ))}
+          </div>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+};
+
+export default PricingTabs;

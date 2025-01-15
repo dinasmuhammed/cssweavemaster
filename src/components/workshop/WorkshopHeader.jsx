@@ -58,7 +58,7 @@ const WorkshopHeader = () => {
         Learn the Art of Henna Application – Join Our Workshop Today!
       </motion.h1>
 <br />
-      <br />
+      
       <motion.p
         className="text-green-800 font-medium text-xs sm:text-sm md:text-base mb-2"
         variants={itemVariants}

@@ -1,6 +1,33 @@
-// Ensure Razorpay script is loaded properly
+import { toast } from "sonner";
+
+export const validatePaymentForm = (formData) => {
+  const errors = {};
+  
+  if (!formData.name?.trim()) errors.name = "Name is required";
+  if (!formData.email?.trim()) {
+    errors.email = "Email is required";
+  } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    errors.email = "Invalid email format";
+  }
+  if (!formData.mobile?.trim()) {
+    errors.mobile = "Mobile number is required";
+  } else if (!/^\d{10}$/.test(formData.mobile)) {
+    errors.mobile = "Invalid mobile number";
+  }
+  if (!formData.address?.trim()) errors.address = "Address is required";
+  
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors
+  };
+};
+
 const loadRazorpayScript = () => {
   return new Promise((resolve) => {
+    if (window.Razorpay) {
+      resolve(true);
+      return;
+    }
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.async = true;
@@ -11,7 +38,6 @@ const loadRazorpayScript = () => {
 
 export const initializeRazorpayPayment = async (orderData, amount, customerDetails, onSuccess, onError) => {
   try {
-    // Ensure Razorpay script is loaded
     await loadRazorpayScript();
     
     if (typeof window.Razorpay !== 'function') {
@@ -25,7 +51,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        amount: Math.round(amount * 100), // Convert to smallest currency unit
+        amount: Math.round(amount * 100),
         currency: 'INR',
         orderData
       })
@@ -72,14 +98,17 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
             throw new Error('Payment verification failed');
           }
 
+          toast.success("Payment successful!");
           if (onSuccess) onSuccess(response);
         } catch (error) {
           console.error('Payment verification error:', error);
+          toast.error(error.message || "Payment verification failed");
           if (onError) onError(error);
         }
       },
       modal: {
         ondismiss: function() {
+          toast.error("Payment cancelled");
           if (onError) onError(new Error('Payment cancelled by user'));
         }
       },
@@ -88,12 +117,12 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       }
     };
 
-    // Create Razorpay instance and open payment modal
     const razorpay = new window.Razorpay(options);
     razorpay.open();
 
   } catch (error) {
     console.error('Payment initialization error:', error);
+    toast.error(error.message || "Failed to initialize payment");
     if (onError) onError(error);
   }
 };

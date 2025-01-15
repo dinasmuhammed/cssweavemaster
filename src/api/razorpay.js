@@ -10,8 +10,8 @@ const supabase = createClient(
 
 // Initialize Razorpay with environment variables
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET
+  key_id: process.env.RAZORPAY_KEY_ID || 'rzp_live_VMhrs1uuU9TTJq',
+  key_secret: process.env.RAZORPAY_KEY_SECRET || 'lEV2FCzPMS4n7c23VfnUQd5W'
 });
 
 const createOrder = async (amount, currency = 'INR') => {
@@ -35,15 +35,20 @@ const createOrder = async (amount, currency = 'INR') => {
     }
     
     // Log order creation in Supabase
-    await supabase
-      .from('payment_logs')
-      .insert([{
-        order_id: order.id,
-        amount: amount,
-        currency: currency,
-        status: 'created',
-        created_at: new Date().toISOString()
-      }]);
+    try {
+      await supabase
+        .from('payment_logs')
+        .insert([{
+          order_id: order.id,
+          amount: amount,
+          currency: currency,
+          status: 'created',
+          created_at: new Date().toISOString()
+        }]);
+    } catch (supabaseError) {
+      console.error('Error logging to Supabase:', supabaseError);
+      // Continue with order creation even if logging fails
+    }
     
     console.log('Order created successfully:', order);
     return order;

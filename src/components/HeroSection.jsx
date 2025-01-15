@@ -6,18 +6,21 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 const HeroSection = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   
-  const autoplayPlugin = AutoplayPlugin({
+  // Create autoplay plugin instance outside of the hook
+  const autoplayOptions = {
     delay: 3000,
     stopOnInteraction: false,
     playOnInit: true
-  });
+  };
   
+  // Initialize carousel with proper plugin instance
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { 
       loop: true,
-      skipSnaps: false
+      skipSnaps: false,
+      draggable: true
     }, 
-    [autoplayPlugin]
+    [AutoplayPlugin(autoplayOptions)]
   );
   
   const images = [

@@ -49,8 +49,8 @@ const PricingTabs = () => {
     <div className="w-full max-w-4xl mx-auto p-6">
       <Tabs defaultValue="hands" className="w-full">
         <TabsList className="grid w-full grid-cols-2 mb-8">
-          <TabsTrigger value="hands">Hands</TabsTrigger>
-          <TabsTrigger value="feet">Feet</TabsTrigger>
+          <TabsTrigger value="hands">HANDS</TabsTrigger>
+          <TabsTrigger value="feet">FEET</TabsTrigger>
         </TabsList>
         
         <TabsContent value="hands">

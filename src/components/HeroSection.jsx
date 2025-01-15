@@ -18,7 +18,7 @@ const HeroSection = () => {
   const images = [
     "https://i.ibb.co/nRc8Y29/IMG-0528.jpg",
     "https://i.ibb.co/7bHppwL/Whats-App-Image-2025-01-14-at-23-27-10-b9e93189.jpg",
-    "https://i.ibb.co/WzrLjQH/f326d2f8-4802-4000-b53b-b987f7a5a291.jpg",
+    "https://i.ibb.co/2FSrS78/Whats-App-Image-2025-01-15-at-12-52-50-fe690a03.jpg",
   ];
 
   useEffect(() => {

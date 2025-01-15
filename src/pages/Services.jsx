@@ -83,13 +83,14 @@ const Services = () => {
             transition={{ delay: 0.5 }}
             className="text-center px-4"
           >
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading text-white mb-4">
+           
+          </motion.div>
+           <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading text-white mb-4">
               Exquisite Henna Artistry
             </h1>
             <p className="text-lg md:text-xl text-white max-w-2xl mx-auto">
               From Bridal Mehendi to Party Henna, we create designs that make your moments unforgettable
             </p>
-          </motion.div>
         </div>
       </div>
 

@@ -72,7 +72,7 @@ const Services = () => {
           initial={{ scale: 1.1 }}
           animate={{ scale: 1 }}
           transition={{ duration: 1.5 }}
-          src="https://i.ibb.co/nRc8Y29/IMG-0528.jpg"
+          src="https://i.ibb.co/vmcsFYm/IMG-20250115-WA0002.jpg"
           alt="Beautiful Henna Design"
           className="w-full h-full object-cover"
         />

@@ -1,10 +1,17 @@
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
+const { createClient } = require('@supabase/supabase-js');
 
-// Initialize Razorpay with your key credentials
+// Initialize Supabase client
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
+);
+
+// Initialize Razorpay with environment variables
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID || 'rzp_live_VMhrs1uuU9TTJq',
-  key_secret: process.env.RAZORPAY_KEY_SECRET || 'lEV2FCzPMS4n7c23VfnUQd5W'
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET
 });
 
 const createOrder = async (amount, currency = 'INR') => {
@@ -27,15 +34,26 @@ const createOrder = async (amount, currency = 'INR') => {
       throw new Error('Invalid order response from Razorpay');
     }
     
+    // Log order creation in Supabase
+    await supabase
+      .from('payment_logs')
+      .insert([{
+        order_id: order.id,
+        amount: amount,
+        currency: currency,
+        status: 'created',
+        created_at: new Date().toISOString()
+      }]);
+    
     console.log('Order created successfully:', order);
     return order;
   } catch (error) {
     console.error('Error creating Razorpay order:', error);
-    throw error; // Propagate the error to be handled by the caller
+    throw error;
   }
 };
 
-const verifyPayment = (orderId, paymentId, signature) => {
+const verifyPayment = async (orderId, paymentId, signature) => {
   try {
     if (!orderId || !paymentId || !signature) {
       throw new Error('Missing required payment verification parameters');
@@ -44,16 +62,27 @@ const verifyPayment = (orderId, paymentId, signature) => {
     console.log('Verifying payment:', { orderId, paymentId });
     const text = `${orderId}|${paymentId}`;
     const generated_signature = crypto
-      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET || 'lEV2FCzPMS4n7c23VfnUQd5W')
+      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
       .update(text)
       .digest('hex');
     
     const isValid = generated_signature === signature;
+
+    // Log payment verification in Supabase
+    await supabase
+      .from('payment_logs')
+      .update({ 
+        status: isValid ? 'verified' : 'failed',
+        payment_id: paymentId,
+        verified_at: new Date().toISOString()
+      })
+      .match({ order_id: orderId });
+
     console.log('Payment verification result:', { isValid, orderId, paymentId });
     return isValid;
   } catch (error) {
     console.error('Error verifying payment:', error);
-    throw error; // Propagate the error to be handled by the caller
+    throw error;
   }
 };
 

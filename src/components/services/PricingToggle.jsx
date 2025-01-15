@@ -24,7 +24,7 @@ const PricingToggle = () => {
       transition={{ duration: 0.5 }}
       className="w-full max-w-3xl mx-auto p-6"
     >
-      <h2 className="text-2xl sm:text-3xl font-bold text-green-800 text-center mb-8">Our Pricing</h2>
+      <h2 className="text-2xl sm:text-3xl font-bold text-green-800 text-center mb-8">Pricing</h2>
       
       <Tabs defaultValue="hands" className="w-full">
         <TabsList className="grid w-full grid-cols-2 mb-8">

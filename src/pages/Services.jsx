@@ -139,7 +139,7 @@ const Services = () => {
       <section className="py-16 px-4 bg-white">
         <div className="container mx-auto">
           <h2 className="text-2xl md:text-3xl font-heading text-center text-green-800 mb-12">
-            Our Pricing
+            Pricing
           </h2>
           <PricingTabs />
         </div>
@@ -170,7 +170,7 @@ const Services = () => {
       <section className="py-16 px-4 bg-cream-100">
         <div className="container mx-auto max-w-2xl">
           <h2 className="text-2xl md:text-3xl font-heading text-center text-green-800 mb-12">
-            Book Your Session
+            Book Now
           </h2>
           <BookingForm />
         </div>

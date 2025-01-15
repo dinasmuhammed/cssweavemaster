@@ -10,37 +10,37 @@ const Services = () => {
     {
       id: 1,
       title: "Bridal Henna",
-      image: "https://i.ibb.co/nRc8Y29/IMG-0528.jpg",
+      image: "https://i.ibb.co/stCpYRJ/IMG-20250115-WA0009.jpg",
       description: "Exclusive bridal designs for your special day"
     },
     {
       id: 2,
       title: "Party Henna",
-      image: "https://i.ibb.co/FBFVzHg/Whats-App-Image-2024-12-07-at-23-54-31-3f69a50b.jpg",
+      image: "https://i.ibb.co/P9vLvmg/IMG-20250115-WA0008.jpg",
       description: "Beautiful designs for all occasions"
     },
     {
       id: 3,
       title: "Kids Henna",
-      image: "https://i.ibb.co/r2gjMxV/Whats-App-Image-2024-12-07-at-23-57-57-e16b4952.jpg",
+      image: "https://i.ibb.co/mt1dh33/IMG-20250115-WA0010.jpg",
       description: "Simple and fun designs for children"
     },
     {
       id: 4,
       title: "Group Bookings",
-      image: "https://i.postimg.cc/2SGPxtQr/Screenshot-2024-10-13-173602.png",
+      image: "https://i.ibb.co/wSMGnJT/IMG-20250115-WA0013.jpg",
       description: "Special rates for group events"
     },
     {
       id: 5,
       title: "Corporate Events",
-      image: "https://i.postimg.cc/bNxXZrdG/Screenshot-2024-10-13-173523.png",
+      image: "https://i.ibb.co/jDxTTsR/IMG-20250115-WA0011.jpg",
       description: "Professional henna services for corporate functions"
     },
     {
       id: 6,
       title: "Custom Designs",
-      image: "https://i.ibb.co/nRc8Y29/IMG-0528.jpg",
+      image: "https://i.ibb.co/mt1dh33/IMG-20250115-WA0010.jpg",
       description: "Personalized designs tailored to your preferences",
       interactive: true
     }

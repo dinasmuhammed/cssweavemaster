@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 
-export const validatePaymentForm = (formData) => {
+const validatePaymentForm = (formData) => {
   const errors = {};
   
   if (!formData.name?.trim()) errors.name = "Name is required";
@@ -36,7 +36,7 @@ const loadRazorpayScript = () => {
   });
 };
 
-export const initializeRazorpayPayment = async (orderData, amount, customerDetails, onSuccess, onError) => {
+const initializeRazorpayPayment = async (orderData, amount, customerDetails, onSuccess, onError) => {
   try {
     await loadRazorpayScript();
     
@@ -44,7 +44,6 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       throw new Error('Razorpay SDK failed to load');
     }
 
-    // Create order on server
     const response = await fetch('/api/create-order', {
       method: 'POST',
       headers: {
@@ -68,7 +67,6 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       throw new Error('Invalid order response from server');
     }
 
-    // Initialize Razorpay options
     const options = {
       key: 'rzp_live_VMhrs1uuU9TTJq',
       amount: data.order.amount,
@@ -125,4 +123,9 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     toast.error(error.message || "Failed to initialize payment");
     if (onError) onError(error);
   }
+};
+
+export {
+  validatePaymentForm,
+  initializeRazorpayPayment
 };

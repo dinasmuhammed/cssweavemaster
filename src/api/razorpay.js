@@ -1,6 +1,7 @@
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
 
+// Initialize Razorpay with your key credentials
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID || 'rzp_live_VMhrs1uuU9TTJq',
   key_secret: process.env.RAZORPAY_KEY_SECRET || 'lEV2FCzPMS4n7c23VfnUQd5W'
@@ -30,12 +31,16 @@ const createOrder = async (amount, currency = 'INR') => {
     return order;
   } catch (error) {
     console.error('Error creating Razorpay order:', error);
-    throw new Error(error.message || 'Failed to create order');
+    throw error; // Propagate the error to be handled by the caller
   }
 };
 
 const verifyPayment = (orderId, paymentId, signature) => {
   try {
+    if (!orderId || !paymentId || !signature) {
+      throw new Error('Missing required payment verification parameters');
+    }
+
     console.log('Verifying payment:', { orderId, paymentId });
     const text = `${orderId}|${paymentId}`;
     const generated_signature = crypto
@@ -48,7 +53,7 @@ const verifyPayment = (orderId, paymentId, signature) => {
     return isValid;
   } catch (error) {
     console.error('Error verifying payment:', error);
-    return false;
+    throw error; // Propagate the error to be handled by the caller
   }
 };
 

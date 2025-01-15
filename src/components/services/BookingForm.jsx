@@ -1,111 +1,120 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { useForm } from 'react-hook-form';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
 
 const BookingForm = () => {
-  const [date, setDate] = React.useState();
-  const [loading, setLoading] = React.useState(false);
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
+  const onSubmit = async (data) => {
     try {
-      // Simulate form submission
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      toast.success("Booking request submitted successfully!");
-      e.target.reset();
-      setDate(undefined);
+      // Here you would typically send the data to your backend
+      console.log('Form data:', data);
+      toast.success('Booking request sent successfully!');
     } catch (error) {
-      toast.error("Failed to submit booking request");
-    } finally {
-      setLoading(false);
+      console.error('Error submitting form:', error);
+      toast.error('Failed to send booking request. Please try again.');
     }
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="w-full max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md"
-    >
-      <h3 className="text-2xl font-bold text-green-800 mb-6">Request to Book</h3>
-      
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <Label htmlFor="name">Name</Label>
-          <Input id="name" required className="mt-1" />
-        </div>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <div className="space-y-2">
+        <Label htmlFor="name">Name</Label>
+        <Input
+          id="name"
+          {...register('name', { required: 'Name is required' })}
+          placeholder="Your name"
+        />
+        {errors.name && (
+          <p className="text-red-500 text-sm">{errors.name.message}</p>
+        )}
+      </div>
 
-        <div>
-          <Label htmlFor="location">Location</Label>
-          <Input id="location" required className="mt-1" />
-        </div>
+      <div className="space-y-2">
+        <Label htmlFor="location">Location</Label>
+        <Input
+          id="location"
+          {...register('location', { required: 'Location is required' })}
+          placeholder="Your location"
+        />
+        {errors.location && (
+          <p className="text-red-500 text-sm">{errors.location.message}</p>
+        )}
+      </div>
 
-        <div>
-          <Label htmlFor="contact">Contact Number</Label>
-          <Input id="contact" type="tel" required className="mt-1" />
-        </div>
+      <div className="space-y-2">
+        <Label htmlFor="contact">Contact Number</Label>
+        <Input
+          id="contact"
+          type="tel"
+          {...register('contact', { 
+            required: 'Contact number is required',
+            pattern: {
+              value: /^[0-9]{10}$/,
+              message: 'Please enter a valid 10-digit phone number'
+            }
+          })}
+          placeholder="Your contact number"
+        />
+        {errors.contact && (
+          <p className="text-red-500 text-sm">{errors.contact.message}</p>
+        )}
+      </div>
 
-        <div>
-          <Label htmlFor="bookingType">Type of Booking</Label>
-          <Select required>
-            <SelectTrigger className="mt-1">
-              <SelectValue placeholder="Select booking type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="party">Party Henna</SelectItem>
-              <SelectItem value="bridal">Bridal Henna</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+      <div className="space-y-2">
+        <Label htmlFor="bookingType">Type of Booking</Label>
+        <Select {...register('bookingType', { required: 'Please select booking type' })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Select booking type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="party">Party Henna</SelectItem>
+            <SelectItem value="bridal">Bridal Henna</SelectItem>
+          </SelectContent>
+        </Select>
+        {errors.bookingType && (
+          <p className="text-red-500 text-sm">{errors.bookingType.message}</p>
+        )}
+      </div>
 
-        <div>
-          <Label>Date of Booking</Label>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className={cn(
-                  "w-full mt-1 justify-start text-left font-normal",
-                  !date && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {date ? format(date, "PPP") : <span>Pick a date</span>}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
-        </div>
+      <div className="space-y-2">
+        <Label htmlFor="date">Date of Booking</Label>
+        <Input
+          id="date"
+          type="date"
+          {...register('date', { required: 'Date is required' })}
+          min={new Date().toISOString().split('T')[0]}
+        />
+        {errors.date && (
+          <p className="text-red-500 text-sm">{errors.date.message}</p>
+        )}
+      </div>
 
-        <div>
-          <Label htmlFor="message">Additional Message</Label>
-          <Textarea id="message" className="mt-1" rows={4} />
-        </div>
+      <div className="space-y-2">
+        <Label htmlFor="message">Additional Message</Label>
+        <Textarea
+          id="message"
+          {...register('message')}
+          placeholder="Any special requirements or questions?"
+          className="h-32"
+        />
+      </div>
 
-        <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? "Submitting..." : "Submit Booking Request"}
-        </Button>
-      </form>
-    </motion.div>
+      <Button type="submit" className="w-full">
+        Submit Booking Request
+      </Button>
+    </form>
   );
 };
 

@@ -1,8 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import PricingTabs from '../components/services/PricingTabs';
-import BookingForm from '../components/services/BookingForm';
+import ServicePackage from '../components/ServicePackage';
 import TestimonialCard from '../components/TestimonialCard';
+import BookingForm from '../components/services/BookingForm';
 
 const Services = () => {
   const testimonials = [
@@ -20,6 +21,35 @@ const Services = () => {
       name: "Sarah Patel",
       rating: 5,
       text: "Amazing experience! The designs were perfect and lasted really well. Highly recommend!"
+    }
+  ];
+
+  const packages = [
+    {
+      title: "Bridal Henna",
+      details: [
+        "Full hands and feet coverage",
+        "Intricate traditional designs",
+        "Premium natural henna",
+        "Touch-up service included"
+      ],
+      images: [
+        "https://i.ibb.co/nRc8Y29/IMG-0528.jpg",
+        "https://i.ibb.co/nRc8Y29/IMG-0528.jpg"
+      ]
+    },
+    {
+      title: "Party Henna",
+      details: [
+        "Customizable designs",
+        "Quick application",
+        "Perfect for events",
+        "Modern or traditional patterns"
+      ],
+      images: [
+        "https://i.ibb.co/nRc8Y29/IMG-0528.jpg",
+        "https://i.ibb.co/nRc8Y29/IMG-0528.jpg"
+      ]
     }
   ];
 
@@ -58,12 +88,32 @@ const Services = () => {
           <h2 className="text-2xl md:text-3xl font-heading text-center text-green-800 mb-12">
             Our Packages
           </h2>
+          <div className="space-y-16">
+            {packages.map((pkg, index) => (
+              <ServicePackage
+                key={index}
+                title={pkg.title}
+                details={pkg.details}
+                images={pkg.images}
+                isReversed={index % 2 !== 0}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="py-16 px-4 bg-white">
+        <div className="container mx-auto">
+          <h2 className="text-2xl md:text-3xl font-heading text-center text-green-800 mb-12">
+            Our Pricing
+          </h2>
           <PricingTabs />
         </div>
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-16 px-4 bg-white">
+      <section className="py-16 px-4 bg-cream-50">
         <div className="container mx-auto">
           <h2 className="text-2xl md:text-3xl font-heading text-center text-green-800 mb-12">
             Client Reviews
@@ -85,7 +135,7 @@ const Services = () => {
 
       {/* Booking Form Section */}
       <section className="py-16 px-4 bg-cream-100">
-        <div className="container mx-auto">
+        <div className="container mx-auto max-w-2xl">
           <h2 className="text-2xl md:text-3xl font-heading text-center text-green-800 mb-12">
             Book Your Session
           </h2>

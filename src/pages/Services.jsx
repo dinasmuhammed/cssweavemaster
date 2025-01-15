@@ -64,6 +64,21 @@ const Services = () => {
     }
   ];
 
+   <motion.div
+        className="mt-6"
+        variants={itemVariants}
+      >
+        <a
+          href="https://drive.google.com/file/d/1-GABqdAgeDW67-sfH25WVkFq6Dq_DLx9/view"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 text-green-800 hover:text-green-900 font-medium"
+        >
+          <Download className="w-4 h-4" />
+          Download Aftercare Details
+
+        </a>
+      </motion.div>
   return (
     <div className="min-h-screen bg-cream-100">
       {/* Hero Banner */}

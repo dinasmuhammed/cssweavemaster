@@ -1,6 +1,16 @@
 import { supabase } from '../lib/supabase';
 import { toast } from "sonner";
 
+const loadRazorpayScript = () => {
+  return new Promise((resolve) => {
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.async = true;
+    script.onload = () => resolve(true);
+    document.body.appendChild(script);
+  });
+};
+
 export const validatePaymentForm = (formData) => {
   const errors = {};
   
@@ -23,17 +33,7 @@ export const validatePaymentForm = (formData) => {
   };
 };
 
-const loadRazorpayScript = () => {
-  return new Promise((resolve) => {
-    const script = document.createElement('script');
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-    script.async = true;
-    script.onload = () => resolve(true);
-    document.body.appendChild(script);
-  });
-};
-
-const SERVER_URL = 'http://localhost:3001'; // Make sure this matches your server port
+const SERVER_URL = 'http://localhost:3001';
 
 export const initializeRazorpayPayment = async (orderData, amount, customerDetails, onSuccess, onError) => {
   try {
@@ -43,7 +43,11 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
 
     const response = await fetch(`${SERVER_URL}/api/create-order`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      mode: 'cors',
       body: JSON.stringify({
         amount: Math.round(amount),
         currency: 'INR',
@@ -92,7 +96,11 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
 
           const verifyResponse = await fetch(`${SERVER_URL}/api/verify-payment`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            mode: 'cors',
             body: JSON.stringify({
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,

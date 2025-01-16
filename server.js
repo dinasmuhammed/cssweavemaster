@@ -13,10 +13,12 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET
 });
 
+// Configure CORS to allow requests from any origin
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST'],
-  credentials: true
+  credentials: true,
+  optionsSuccessStatus: 200
 }));
 
 app.use(express.json());

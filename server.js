@@ -76,13 +76,11 @@ app.post('/api/verify-payment', async (req, res) => {
       return res.status(400).json({ error: 'Invalid payment signature' });
     }
 
-    // Send order confirmation email
     try {
       await sendOrderEmail(orderData);
       console.log('Order confirmation email sent successfully');
     } catch (emailError) {
       console.error('Error sending order email:', emailError);
-      // Continue with payment success even if email fails
     }
 
     console.log('Payment verified successfully');

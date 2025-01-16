@@ -61,19 +61,19 @@ const initializeRazorpayPayment = async (orderData, amount, customerDetails, onS
       throw new Error(errorData.message || 'Failed to create order');
     }
 
-    const data = await response.json();
+    const { order } = await response.json();
     
-    if (!data.order?.id) {
+    if (!order?.id) {
       throw new Error('Invalid order response from server');
     }
 
     const options = {
-      key: 'rzp_live_VMhrs1uuU9TTJq',
-      amount: data.order.amount,
-      currency: data.order.currency,
+      key: 'rzp_live_VMhrs1uuU9TTJq', // This should be moved to env in production
+      amount: order.amount,
+      currency: order.currency,
       name: "Henna by Fathima",
       description: "Order Payment",
-      order_id: data.order.id,
+      order_id: order.id,
       prefill: {
         name: customerDetails.name,
         email: customerDetails.email,
@@ -92,8 +92,10 @@ const initializeRazorpayPayment = async (orderData, amount, customerDetails, onS
             }),
           });
 
+          const verifyData = await verifyResponse.json();
+
           if (!verifyResponse.ok) {
-            throw new Error('Payment verification failed');
+            throw new Error(verifyData.error || 'Payment verification failed');
           }
 
           toast.success("Payment successful!");

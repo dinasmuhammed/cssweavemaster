@@ -24,39 +24,22 @@ const queryClient = new QueryClient({
   },
 });
 
-// Optimized lazy loading with prefetch
-const lazyLoadWithPrefetch = (importFn, displayName) => {
-  const Component = lazy(() => {
-    const componentPromise = importFn();
-    componentPromise.then((module) => {
-      Object.values(module).forEach((exported) => {
-        if (typeof exported === 'function' && 'preload' in exported) {
-          exported.preload();
-        }
-      });
-    });
-    return componentPromise;
-  });
-  Component.displayName = displayName;
-  return Component;
-};
-
-// Lazy load components with prefetching
-const Header = lazyLoadWithPrefetch(() => import('./components/Header'), 'Header');
-const Footer = lazyLoadWithPrefetch(() => import('./components/Footer'), 'Footer');
-const Index = lazyLoadWithPrefetch(() => import('./pages/Index'), 'Index');
-const Home = lazyLoadWithPrefetch(() => import('./pages/Home'), 'Home');
-const Shop = lazyLoadWithPrefetch(() => import('./pages/Shop'), 'Shop');
-const Services = lazyLoadWithPrefetch(() => import('./pages/Services'), 'Services');
-const Workshop = lazyLoadWithPrefetch(() => import('./pages/Workshop'), 'Workshop');
-const Contact = lazyLoadWithPrefetch(() => import('./pages/Contact'), 'Contact');
-const Cart = lazyLoadWithPrefetch(() => import('./pages/Cart'), 'Cart');
-const About = lazyLoadWithPrefetch(() => import('./pages/About'), 'About');
-const SavedItems = lazyLoadWithPrefetch(() => import('./pages/SavedItems'), 'SavedItems');
-const SearchResults = lazyLoadWithPrefetch(() => import('./pages/SearchResults'), 'SearchResults');
-const TermsAndConditions = lazyLoadWithPrefetch(() => import('./pages/TermsAndConditions'), 'TermsAndConditions');
-const CancellationAndRefund = lazyLoadWithPrefetch(() => import('./pages/CancellationAndRefund'), 'CancellationAndRefund');
-const ShippingAndPrivacy = lazyLoadWithPrefetch(() => import('./pages/ShippingAndPrivacy'), 'ShippingAndPrivacy');
+// Simple lazy loading without prefetch to fix dynamic import issues
+const Header = lazy(() => import('./components/Header'));
+const Footer = lazy(() => import('./components/Footer'));
+const Index = lazy(() => import('./pages/Index'));
+const Home = lazy(() => import('./pages/Home'));
+const Shop = lazy(() => import('./pages/Shop'));
+const Services = lazy(() => import('./pages/Services'));
+const Workshop = lazy(() => import('./pages/Workshop'));
+const Contact = lazy(() => import('./pages/Contact'));
+const Cart = lazy(() => import('./pages/Cart'));
+const About = lazy(() => import('./pages/About'));
+const SavedItems = lazy(() => import('./pages/SavedItems'));
+const SearchResults = lazy(() => import('./pages/SearchResults'));
+const TermsAndConditions = lazy(() => import('./pages/TermsAndConditions'));
+const CancellationAndRefund = lazy(() => import('./pages/CancellationAndRefund'));
+const ShippingAndPrivacy = lazy(() => import('./pages/ShippingAndPrivacy'));
 
 const App = () => {
   return (

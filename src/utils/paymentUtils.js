@@ -54,7 +54,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     const { order } = await response.json();
 
     const options = {
-      key: process.env.RAZORPAY_KEY_ID,
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
       amount: order.amount,
       currency: order.currency,
       name: "Henna by Fathima",

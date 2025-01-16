@@ -4,6 +4,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
 import {
   Select,
   SelectContent,
@@ -11,19 +13,49 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 const BookingForm = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm({
+    defaultValues: {
+      bookingType: '',
+      date: new Date(),
+    }
+  });
 
-  const onSubmit = async (data) => {
+  const date = watch('date');
+
+  const onSubmit = (data) => {
     try {
-      // Here you would typically send the data to your backend
-      console.log('Form data:', data);
-      toast.success('Booking request sent successfully!');
+      // Format the data for WhatsApp
+      const message = `
+New Booking Request:
+Name: ${data.name}
+Location: ${data.location}
+Contact: ${data.contact}
+Type: ${data.bookingType}
+Date: ${format(data.date, 'PPP')}
+Message: ${data.message || 'No additional message'}
+      `.trim();
+
+      // Encode the message for WhatsApp URL
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappUrl = `https://wa.me/918086647124?text=${encodedMessage}`;
+      
+      // Open WhatsApp in a new window
+      window.open(whatsappUrl, '_blank');
+      
+      toast.success('Booking request prepared for WhatsApp!');
     } catch (error) {
-      console.error('Error submitting form:', error);
-      toast.error('Failed to send booking request. Please try again.');
+      console.error('Error handling form submission:', error);
+      toast.error('Failed to process booking request. Please try again.');
     }
   };
 
@@ -74,7 +106,10 @@ const BookingForm = () => {
 
       <div className="space-y-2">
         <Label htmlFor="bookingType">Type of Booking</Label>
-        <Select {...register('bookingType', { required: 'Please select booking type' })}>
+        <Select 
+          onValueChange={(value) => setValue('bookingType', value)}
+          {...register('bookingType', { required: 'Please select booking type' })}
+        >
           <SelectTrigger>
             <SelectValue placeholder="Select booking type" />
           </SelectTrigger>
@@ -89,13 +124,29 @@ const BookingForm = () => {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="date">Date of Booking</Label>
-        <Input
-          id="date"
-          type="date"
-          {...register('date', { required: 'Date is required' })}
-          min={new Date().toISOString().split('T')[0]}
-        />
+        <Label>Date of Booking</Label>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              className={cn(
+                "w-full justify-start text-left font-normal",
+                !date && "text-muted-foreground"
+              )}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {date ? format(date, "PPP") : <span>Pick a date</span>}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={(date) => setValue('date', date)}
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
         {errors.date && (
           <p className="text-red-500 text-sm">{errors.date.message}</p>
         )}
@@ -112,7 +163,7 @@ const BookingForm = () => {
       </div>
 
       <Button type="submit" className="w-full">
-        Submit
+        Submit via WhatsApp
       </Button>
     </form>
   );

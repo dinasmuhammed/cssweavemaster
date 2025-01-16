@@ -4,6 +4,8 @@ import PricingTabs from '../components/services/PricingTabs';
 import ServicePackage from '../components/ServicePackage';
 import TestimonialCard from '../components/TestimonialCard';
 import BookingForm from '../components/services/BookingForm';
+import { ArrowDown } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const Services = () => {
   const packages = [
@@ -165,6 +167,25 @@ const Services = () => {
           </div>
         </div>
       </section>
+
+      {/* Download Button Section */}
+      <div className="flex justify-center py-12 bg-white">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          whileHover={{ scale: 1.05 }}
+          transition={{ duration: 0.3 }}
+        >
+          <Button 
+            variant="secondary"
+            className="group flex items-center gap-2 px-6 py-3 bg-green-800 text-white hover:bg-green-900 transition-all duration-300"
+            onClick={() => window.open('/workshop-brochure.pdf', '_blank')}
+          >
+            Download
+            <ArrowDown className="w-4 h-4 group-hover:translate-y-1 transition-transform duration-300" />
+          </Button>
+        </motion.div>
+      </div>
 
       {/* Booking Form Section */}
       <section className="py-16 px-4 bg-cream-100">

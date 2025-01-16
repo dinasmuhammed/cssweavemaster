@@ -1,9 +1,16 @@
 const express = require('express');
 const cors = require('cors');
+const Razorpay = require('razorpay');
 const { sendOrderEmail } = require('./src/utils/emailUtils');
-const { createOrder, verifyPayment } = require('./src/api/razorpay');
+require('dotenv').config();
 
 const app = express();
+
+// Initialize Razorpay
+const razorpay = new Razorpay({
+  key_id: process.env.VITE_RAZORPAY_KEY_ID,
+  key_secret: process.env.VITE_RAZORPAY_KEY_SECRET
+});
 
 app.use(cors({
   origin: '*',
@@ -19,7 +26,7 @@ app.get('/', (req, res) => {
 
 app.post('/api/create-order', async (req, res) => {
   try {
-    const { amount, currency } = req.body;
+    const { amount, currency = 'INR' } = req.body;
     
     if (!amount) {
       console.error('Missing amount in request body:', req.body);
@@ -27,7 +34,17 @@ app.post('/api/create-order', async (req, res) => {
     }
 
     console.log('Creating order with amount:', amount, 'currency:', currency);
-    const order = await createOrder(amount, currency);
+    
+    // Create Razorpay order
+    const options = {
+      amount: Math.round(amount * 100), // Convert to smallest currency unit (paise)
+      currency,
+      receipt: `receipt_${Date.now()}`,
+    };
+
+    console.log('Razorpay order options:', options);
+
+    const order = await razorpay.orders.create(options);
     console.log('Order created successfully:', order);
     
     if (!order || !order.id) {
@@ -65,11 +82,14 @@ app.post('/api/verify-payment', async (req, res) => {
       paymentId: razorpay_payment_id
     });
 
-    const isValid = verifyPayment(
-      razorpay_order_id,
-      razorpay_payment_id,
-      razorpay_signature
-    );
+    // Verify payment signature
+    const text = `${razorpay_order_id}|${razorpay_payment_id}`;
+    const generated_signature = crypto
+      .createHmac('sha256', process.env.VITE_RAZORPAY_KEY_SECRET)
+      .update(text)
+      .digest('hex');
+
+    const isValid = generated_signature === razorpay_signature;
 
     if (!isValid) {
       console.error('Invalid payment signature');

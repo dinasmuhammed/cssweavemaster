@@ -179,10 +179,10 @@ const Services = () => {
           <Button 
             variant="secondary"
             className="group flex items-center gap-2 px-6 py-3 text-white transition-all duration-300"
-            onClick={() => window.open('/hennabyfathima.pdf', '_blank')}
+            onClick={() => window.open('https://drive.google.com/file/d/1-fRCsLtt8Movc7CCq-sw9UtgEth-V0vj/view', '_blank')}
           >
             Download
-            <ArrowDown className="w-4 h-4 group-hover:translate-y-1 transition-transform duration-300" />
+            <ArrowDown className="w-4 h-4 group-hover:translate-y-1 group-hover:bg-green-500 transition-transform duration-300" />
           </Button>
         </motion.div>
       </div>

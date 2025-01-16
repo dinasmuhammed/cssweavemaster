@@ -1,6 +1,7 @@
+import { supabase } from '../lib/supabase';
 import { toast } from "sonner";
 
-const validatePaymentForm = (formData) => {
+export const validatePaymentForm = (formData) => {
   const errors = {};
   
   if (!formData.name?.trim()) errors.name = "Name is required";
@@ -24,10 +25,6 @@ const validatePaymentForm = (formData) => {
 
 const loadRazorpayScript = () => {
   return new Promise((resolve) => {
-    if (window.Razorpay) {
-      resolve(true);
-      return;
-    }
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.async = true;
@@ -36,19 +33,13 @@ const loadRazorpayScript = () => {
   });
 };
 
-const initializeRazorpayPayment = async (orderData, amount, customerDetails, onSuccess, onError) => {
+export const initializeRazorpayPayment = async (orderData, amount, customerDetails, onSuccess, onError) => {
   try {
     await loadRazorpayScript();
-    
-    if (typeof window.Razorpay !== 'function') {
-      throw new Error('Razorpay SDK failed to load');
-    }
 
     const response = await fetch('/api/create-order', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         amount: Math.round(amount * 100),
         currency: 'INR',
@@ -57,18 +48,13 @@ const initializeRazorpayPayment = async (orderData, amount, customerDetails, onS
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to create order');
+      throw new Error('Failed to create order');
     }
 
     const { order } = await response.json();
-    
-    if (!order?.id) {
-      throw new Error('Invalid order response from server');
-    }
 
     const options = {
-      key: 'rzp_live_VMhrs1uuU9TTJq', // This should be moved to env in production
+      key: process.env.RAZORPAY_KEY_ID,
       amount: order.amount,
       currency: order.currency,
       name: "Henna by Fathima",
@@ -81,6 +67,17 @@ const initializeRazorpayPayment = async (orderData, amount, customerDetails, onS
       },
       handler: async function(response) {
         try {
+          // Log payment attempt to Supabase
+          await supabase.from('payment_logs').insert([
+            {
+              order_id: order.id,
+              payment_id: response.razorpay_payment_id,
+              amount: amount,
+              status: 'processing',
+              customer_details: customerDetails
+            }
+          ]);
+
           const verifyResponse = await fetch('/api/verify-payment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -92,22 +89,41 @@ const initializeRazorpayPayment = async (orderData, amount, customerDetails, onS
             }),
           });
 
-          const verifyData = await verifyResponse.json();
-
           if (!verifyResponse.ok) {
-            throw new Error(verifyData.error || 'Payment verification failed');
+            throw new Error('Payment verification failed');
           }
+
+          // Update payment status in Supabase
+          await supabase
+            .from('payment_logs')
+            .update({ status: 'completed' })
+            .match({ order_id: order.id });
 
           toast.success("Payment successful!");
           if (onSuccess) onSuccess(response);
         } catch (error) {
           console.error('Payment verification error:', error);
+          // Update payment status in Supabase
+          await supabase
+            .from('payment_logs')
+            .update({ 
+              status: 'failed',
+              error_message: error.message 
+            })
+            .match({ order_id: order.id });
+
           toast.error(error.message || "Payment verification failed");
           if (onError) onError(error);
         }
       },
       modal: {
-        ondismiss: function() {
+        ondismiss: async function() {
+          // Log cancelled payment in Supabase
+          await supabase
+            .from('payment_logs')
+            .update({ status: 'cancelled' })
+            .match({ order_id: order.id });
+
           toast.error("Payment cancelled");
           if (onError) onError(new Error('Payment cancelled by user'));
         }
@@ -125,9 +141,4 @@ const initializeRazorpayPayment = async (orderData, amount, customerDetails, onS
     toast.error(error.message || "Failed to initialize payment");
     if (onError) onError(error);
   }
-};
-
-export {
-  validatePaymentForm,
-  initializeRazorpayPayment
 };

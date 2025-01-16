@@ -182,7 +182,7 @@ const Services = () => {
             onClick={() => window.open('https://drive.google.com/file/d/1-fRCsLtt8Movc7CCq-sw9UtgEth-V0vj/view', '_blank')}
           >
             Download
-            <ArrowDown className="w-4 h-4 group-hover:translate-y-1 group-hover:bg-green-500 transition-transform duration-300" />
+            <ArrowDown className="inline-flex items-center gap-2 text-green-800 hover:text-green-900 font-medium" />
           </Button>
         </motion.div>
       </div>

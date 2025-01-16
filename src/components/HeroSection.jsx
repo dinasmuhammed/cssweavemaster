@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
-import AutoplayPlugin from 'embla-carousel-autoplay';
+import AutoPlay from 'embla-carousel-autoplay';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const HeroSection = () => {
@@ -12,7 +12,7 @@ const HeroSection = () => {
       skipSnaps: false,
       draggable: true
     }, 
-    [AutoplayPlugin()]
+    [AutoPlay({ delay: 5000, stopOnInteraction: false })]
   );
   
   const images = [

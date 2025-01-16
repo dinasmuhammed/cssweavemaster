@@ -4,14 +4,14 @@ const { createClient } = require('@supabase/supabase-js');
 
 // Initialize Supabase client
 const supabase = createClient(
-  process.env.SUPABASE_URL || 'https://aibpalskveawzdqyjwaq.supabase.co',
-  process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFpYnBhbHNrdmVhd3pkcXlqd2FxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU2MzE5MTksImV4cCI6MjA1MTIwNzkxOX0.tpd64y6jHkHxJ_2KHlePfYswBdTU4FNUuEfvF8qC0DY'
+  process.env.SUPABASE_URL || 'https://kgemzehqmlgizepnvlsk.supabase.co',
+  process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtnZW16ZWhxbWxnaXplcG52bHNrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU5OTYyOTIsImV4cCI6MjA1MTU3MjI5Mn0.zeQu-Gh7saqytq4B93PtEh2gpKjKUT4zvD70vovckBw'
 );
 
 // Initialize Razorpay with environment variables
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID || 'rzp_live_VMhrs1uuU9TTJq',
-  key_secret: process.env.RAZORPAY_KEY_SECRET || 'lEV2FCzPMS4n7c23VfnUQd5W'
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET
 });
 
 const createOrder = async (amount, currency = 'INR') => {
@@ -67,7 +67,7 @@ const verifyPayment = async (orderId, paymentId, signature) => {
     console.log('Verifying payment:', { orderId, paymentId });
     const text = `${orderId}|${paymentId}`;
     const generated_signature = crypto
-      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET || 'lEV2FCzPMS4n7c23VfnUQd5W')
+      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
       .update(text)
       .digest('hex');
     

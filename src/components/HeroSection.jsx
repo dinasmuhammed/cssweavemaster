@@ -6,12 +6,11 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 const HeroSection = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   
-  // Create autoplay plugin instance
-  const autoplayOptions = {
+  // Create autoplay plugin instance with proper initialization
+  const autoplay = AutoPlay({
     delay: 5000,
-    stopOnInteraction: false,
-    rootNode: (emblaRoot) => emblaRoot.parentElement,
-  };
+    stopOnInteraction: false
+  });
   
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { 
@@ -19,7 +18,7 @@ const HeroSection = () => {
       skipSnaps: false,
       draggable: true
     }, 
-    [AutoPlay(autoplayOptions)]
+    [autoplay]
   );
   
   const images = [

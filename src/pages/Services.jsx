@@ -178,7 +178,7 @@ const Services = () => {
         >
          <Button
   variant="secondary"
-  className="group flex items-center gap-2 px-6 py-3 bg-transparent text-green-800 font-medium rounded-lg border border-green-800 hover:bg-green-100 transition-all duration-300"
+  className="group flex items-center gap-2 px-6 py-3 bg-transparent text-green-800 font-medium rounded-lg border-2 border-green-800 hover:bg-green-100 transition-all duration-300"
   onClick={() => window.open('https://drive.google.com/file/d/1-fRCsLtt8Movc7CCq-sw9UtgEth-V0vj/view', '_blank')}
 >
   <ArrowDown className="text-green-800 group-hover:text-green-900" />

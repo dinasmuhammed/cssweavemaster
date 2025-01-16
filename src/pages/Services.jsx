@@ -182,7 +182,7 @@ const Services = () => {
   onClick={() => window.open('https://drive.google.com/file/d/1-fRCsLtt8Movc7CCq-sw9UtgEth-V0vj/view', '_blank')}
 >
   <ArrowDown className="text-green-800 group-hover:text-green-900" />
-  Download Aftercare Details
+ Aftercare Details
 </Button>
 
         </motion.div>

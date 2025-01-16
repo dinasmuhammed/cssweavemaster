@@ -178,8 +178,8 @@ const Services = () => {
         >
           <Button 
             variant="secondary"
-            className="group flex items-center gap-2 px-6 py-3 bg-green-800 text-white hover:bg-green-900 transition-all duration-300"
-            onClick={() => window.open('/Copy of HENNA SERVICES.pdf', '_blank')}
+            className="group flex items-center gap-2 px-6 py-3 text-white transition-all duration-300"
+            onClick={() => window.open('/hennabyfathima.pdf', '_blank')}
           >
             Download
             <ArrowDown className="w-4 h-4 group-hover:translate-y-1 transition-transform duration-300" />

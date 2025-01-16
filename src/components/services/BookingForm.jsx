@@ -163,7 +163,7 @@ Message: ${data.message || 'No additional message'}
       </div>
 
       <Button type="submit" className="w-full">
-        Submit via WhatsApp
+        Submit
       </Button>
     </form>
   );

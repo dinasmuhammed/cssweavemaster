@@ -11,19 +11,19 @@ const Services = () => {
   const packages = [
     {
       id: 1,
-      title: "Bridal Henna",
+      title: "party henna",
       image: "https://i.ibb.co/stCpYRJ/IMG-20250115-WA0009.jpg",
-      description: "Exclusive bridal designs for your special day"
+      description: ""
     },
     {
       id: 2,
-      title: "Party Henna",
+      title: "Bridal Henna",
       image: "https://i.ibb.co/P9vLvmg/IMG-20250115-WA0008.jpg",
-      description: "Beautiful designs for all occasions"
+      description: "Exclusive bridal designs for your special day"
     },
     {
       id: 3,
-      title: "Kids Henna",
+      title: "haldi Henna",
       image: "https://i.ibb.co/mt1dh33/IMG-20250115-WA0010.jpg",
       description: "Simple and fun designs for children"
     },

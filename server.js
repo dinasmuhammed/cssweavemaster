@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const Razorpay = require('razorpay');
+const crypto = require('crypto');
 const { sendOrderEmail } = require('./src/utils/emailUtils');
 require('dotenv').config();
 
@@ -8,8 +9,8 @@ const app = express();
 
 // Initialize Razorpay
 const razorpay = new Razorpay({
-  key_id: process.env.VITE_RAZORPAY_KEY_ID,
-  key_secret: process.env.VITE_RAZORPAY_KEY_SECRET
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET
 });
 
 app.use(cors({
@@ -31,6 +32,11 @@ app.post('/api/create-order', async (req, res) => {
     if (!amount) {
       console.error('Missing amount in request body:', req.body);
       return res.status(400).json({ error: 'Amount is required' });
+    }
+
+    if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+      console.error('Missing Razorpay credentials');
+      return res.status(500).json({ error: 'Server configuration error' });
     }
 
     console.log('Creating order with amount:', amount, 'currency:', currency);
@@ -85,7 +91,7 @@ app.post('/api/verify-payment', async (req, res) => {
     // Verify payment signature
     const text = `${razorpay_order_id}|${razorpay_payment_id}`;
     const generated_signature = crypto
-      .createHmac('sha256', process.env.VITE_RAZORPAY_KEY_SECRET)
+      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
       .update(text)
       .digest('hex');
 

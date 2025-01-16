@@ -33,25 +33,36 @@ const loadRazorpayScript = () => {
   });
 };
 
+const SERVER_URL = 'http://localhost:3001'; // Make sure this matches your server port
+
 export const initializeRazorpayPayment = async (orderData, amount, customerDetails, onSuccess, onError) => {
   try {
     await loadRazorpayScript();
 
-    const response = await fetch('/api/create-order', {
+    console.log('Initializing payment with amount:', amount);
+
+    const response = await fetch(`${SERVER_URL}/api/create-order`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        amount: Math.round(amount * 100),
+        amount: Math.round(amount),
         currency: 'INR',
         orderData
       })
     });
 
     if (!response.ok) {
-      throw new Error('Failed to create order');
+      const errorData = await response.json().catch(() => ({}));
+      console.error('Order creation failed:', errorData);
+      throw new Error(errorData.error || 'Failed to create order');
     }
 
     const { order } = await response.json();
+    console.log('Order created:', order);
+
+    if (!order || !order.id) {
+      throw new Error('Invalid order response');
+    }
 
     const options = {
       key: import.meta.env.VITE_RAZORPAY_KEY_ID,
@@ -67,7 +78,8 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       },
       handler: async function(response) {
         try {
-          // Log payment attempt to Supabase
+          console.log('Payment successful, verifying...', response);
+          
           await supabase.from('payment_logs').insert([
             {
               order_id: order.id,
@@ -78,7 +90,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
             }
           ]);
 
-          const verifyResponse = await fetch('/api/verify-payment', {
+          const verifyResponse = await fetch(`${SERVER_URL}/api/verify-payment`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -93,7 +105,6 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
             throw new Error('Payment verification failed');
           }
 
-          // Update payment status in Supabase
           await supabase
             .from('payment_logs')
             .update({ status: 'completed' })
@@ -103,7 +114,6 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
           if (onSuccess) onSuccess(response);
         } catch (error) {
           console.error('Payment verification error:', error);
-          // Update payment status in Supabase
           await supabase
             .from('payment_logs')
             .update({ 
@@ -118,7 +128,6 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       },
       modal: {
         ondismiss: async function() {
-          // Log cancelled payment in Supabase
           await supabase
             .from('payment_logs')
             .update({ status: 'cancelled' })

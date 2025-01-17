@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 import PricingTabs from '../components/services/PricingTabs';
 import ServicePackage from '../components/ServicePackage';
@@ -8,6 +8,12 @@ import { ArrowDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Services = () => {
+  const bookingRef = useRef(null);
+
+  const scrollToBooking = () => {
+    bookingRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   const packages = [
     {
       id: 1,
@@ -126,6 +132,7 @@ const Services = () => {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       className="bg-cream-100 text-green-800 px-6 py-2 rounded-full font-medium hover:bg-cream-200 transition-colors"
+                      onClick={scrollToBooking}
                     >
                       Learn More
                     </motion.button>
@@ -143,7 +150,7 @@ const Services = () => {
           <h2 className="text-2xl md:text-3xl font-heading text-center text-green-800 mb-12">
             Pricing
           </h2>
-          <PricingTabs />
+          <PricingTabs onBookClick={scrollToBooking} />
         </div>
       </section>
 
@@ -176,20 +183,19 @@ const Services = () => {
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.3 }}
         >
-         <Button
-  variant="secondary"
-  className="group flex items-center gap-2 px-6 py-3 bg-transparent text-green-800 font-medium rounded-lg border-2 border-green-800 hover:bg-green-100 transition-all duration-300"
-  onClick={() => window.open('https://drive.google.com/file/d/1-fRCsLtt8Movc7CCq-sw9UtgEth-V0vj/view', '_blank')}
->
-  <ArrowDown className="text-green-800 group-hover:text-green-900" />
- Aftercare Details
-</Button>
-
+          <Button
+            variant="secondary"
+            className="group flex items-center gap-2 px-6 py-3 bg-transparent text-green-800 font-medium rounded-lg border-2 border-green-800 hover:bg-green-100 transition-all duration-300"
+            onClick={() => window.open('https://drive.google.com/file/d/1-fRCsLtt8Movc7CCq-sw9UtgEth-V0vj/view', '_blank')}
+          >
+            <ArrowDown className="text-green-800 group-hover:text-green-900" />
+            Aftercare Details
+          </Button>
         </motion.div>
       </div>
 
       {/* Booking Form Section */}
-      <section className="py-16 px-4 bg-cream-100">
+      <section ref={bookingRef} className="py-16 px-4 bg-cream-100">
         <div className="container mx-auto max-w-2xl">
           <h2 className="text-2xl md:text-3xl font-heading text-center text-green-800 mb-12">
             Book Now

@@ -5,22 +5,27 @@ import { Button } from "@/components/ui/button";
 import { validatePaymentForm, initializeRazorpayPayment } from '@/utils/paymentUtils';
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { useNavigate } from 'react-router-dom';
 
 const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     try {
+      console.log('Starting payment process...');
       const validation = validatePaymentForm(formData);
       setErrors(validation.errors);
 
       if (!validation.isValid) {
+        console.log('Form validation failed:', validation.errors);
         toast.error("Please fill all required fields correctly");
         return;
       }
 
       if (!cartItems?.length) {
+        console.log('Cart is empty');
         toast.error("Your cart is empty");
         return;
       }
@@ -40,23 +45,28 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
         }))
       };
 
+      console.log('Order data prepared:', orderData);
+
       await initializeRazorpayPayment(
         orderData,
         totalAmount,
         formData,
         () => {
+          console.log('Payment successful');
           setIsProcessing(false);
-          toast.success("Payment successful!");
+          toast.success("Payment successful! Thank you for your order.");
+          navigate('/');
         },
         (error) => {
+          console.error('Payment failed:', error);
           setIsProcessing(false);
           toast.error(error.message || "Payment failed. Please try again.");
         }
       );
     } catch (error) {
+      console.error('Payment initialization error:', error);
       setIsProcessing(false);
       toast.error("An unexpected error occurred. Please try again.");
-      console.error('Payment initialization error:', error);
     }
   };
 

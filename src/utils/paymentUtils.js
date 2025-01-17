@@ -37,11 +37,14 @@ const SERVER_URL = 'http://localhost:3001';
 
 export const initializeRazorpayPayment = async (orderData, amount, customerDetails, onSuccess, onError) => {
   try {
-    const user = supabase.auth.getUser();
-    if (!user) {
-      throw new Error('User must be logged in to make a payment');
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    
+    if (userError || !user) {
+      console.error('User authentication error:', userError);
+      throw new Error('Please log in to make a payment');
     }
 
+    console.log('Loading Razorpay script...');
     await loadRazorpayScript();
     console.log('Initializing payment with amount:', amount);
 
@@ -59,9 +62,11 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       .single();
 
     if (insertError) {
+      console.error('Failed to create payment record:', insertError);
       throw new Error('Failed to create payment record');
     }
 
+    console.log('Creating order with Razorpay...');
     const response = await fetch(`${SERVER_URL}/api/create-order`, {
       method: 'POST',
       headers: { 
@@ -145,6 +150,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
             throw new Error('Payment verification failed');
           }
 
+          console.log('Payment verified successfully');
           toast.success("Payment successful!");
           if (onSuccess) onSuccess(response);
         } catch (error) {
@@ -165,6 +171,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       },
       modal: {
         ondismiss: async function() {
+          console.log('Payment modal dismissed');
           // Update payment status to failed when modal is dismissed
           await supabase
             .from('payments')
@@ -183,6 +190,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       }
     };
 
+    console.log('Opening Razorpay payment modal...');
     const razorpay = new window.Razorpay(options);
     razorpay.open();
 

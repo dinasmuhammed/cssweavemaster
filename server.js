@@ -19,7 +19,6 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET
 });
 
-// Configure CORS
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin) return callback(null, true);
@@ -42,6 +41,55 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
+// Webhook handler for Razorpay events
+app.post('/api/razorpay-webhook', async (req, res) => {
+  try {
+    const signature = req.headers['x-razorpay-signature'];
+    const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
+    
+    const isValid = razorpay.webhooks.verifySignature(
+      JSON.stringify(req.body),
+      signature,
+      secret
+    );
+
+    if (!isValid) {
+      throw new Error('Invalid webhook signature');
+    }
+
+    // Log webhook event
+    await supabase
+      .from('webhook_logs')
+      .insert({
+        event_type: req.body.event,
+        payload: req.body,
+        status: 'received'
+      });
+
+    // Process the webhook event
+    const event = req.body.event;
+    const paymentId = req.body.payload.payment?.entity?.id;
+
+    if (event === 'payment.captured') {
+      await supabase
+        .from('razorpay_payments')
+        .update({ 
+          status: 'completed',
+          updated_at: new Date().toISOString()
+        })
+        .eq('payment_id', paymentId);
+    }
+
+    res.json({ status: 'success' });
+  } catch (error) {
+    console.error('Webhook error:', error);
+    res.status(400).json({ 
+      error: 'Webhook processing failed',
+      details: error.message
+    });
+  }
+});
 
 app.post('/api/create-order', async (req, res) => {
   try {

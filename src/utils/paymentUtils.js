@@ -11,26 +11,14 @@ const loadRazorpayScript = () => {
   });
 };
 
-export const validatePaymentForm = (formData) => {
-  const errors = {};
+// Get the API base URL based on environment
+const getApiBaseUrl = () => {
+  if (typeof window === 'undefined') return '/api';
   
-  if (!formData.name?.trim()) errors.name = "Name is required";
-  if (!formData.email?.trim()) {
-    errors.email = "Email is required";
-  } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-    errors.email = "Invalid email format";
-  }
-  if (!formData.mobile?.trim()) {
-    errors.mobile = "Mobile number is required";
-  } else if (!/^\d{10}$/.test(formData.mobile)) {
-    errors.mobile = "Invalid mobile number";
-  }
-  if (!formData.address?.trim()) errors.address = "Address is required";
-  
-  return {
-    isValid: Object.keys(errors).length === 0,
-    errors
-  };
+  const currentOrigin = window.location.origin;
+  return process.env.NODE_ENV === 'production'
+    ? `${currentOrigin}/api`
+    : 'http://localhost:3001/api';
 };
 
 export const initializeRazorpayPayment = async (orderData, amount, customerDetails, onSuccess, onError) => {
@@ -39,12 +27,10 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     await loadRazorpayScript();
     console.log('Initializing payment with amount:', amount);
 
-    // Get current origin for API calls
-    const apiBaseUrl = process.env.NODE_ENV === 'production' 
-      ? '/api' // In production, use relative path
-      : 'http://localhost:3001/api'; // In development, use localhost
+    const apiBaseUrl = getApiBaseUrl();
+    console.log('Using API base URL:', apiBaseUrl);
 
-    // Create payment record in Supabase if user is logged in
+    // Get user if logged in, but proceed even if not authenticated
     const { data: { user } } = await supabase.auth.getUser().catch(() => ({ data: { user: null } }));
     let paymentRecord = null;
 
@@ -69,7 +55,6 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
         }
       } catch (dbError) {
         console.error('Database operation failed:', dbError);
-        // Continue with payment even if record creation fails
       }
     }
 
@@ -80,6 +65,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
         'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
+      credentials: 'include',
       body: JSON.stringify({
         amount: Math.round(amount),
         currency: 'INR',
@@ -103,7 +89,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       throw new Error('Invalid order response');
     }
 
-    // Update payment record with Razorpay order ID if user is logged in
+    // Update payment record with Razorpay order ID
     if (user && paymentRecord) {
       await supabase
         .from('payments')
@@ -128,7 +114,6 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
         try {
           console.log('Payment successful, verifying...', response);
           
-          // Update payment status in Supabase if user is logged in
           if (user && paymentRecord) {
             await supabase
               .from('payments')
@@ -146,6 +131,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
               'Content-Type': 'application/json',
               'Accept': 'application/json'
             },
+            credentials: 'include',
             body: JSON.stringify({
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
@@ -167,7 +153,6 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
         } catch (error) {
           console.error('Payment verification error:', error);
           
-          // Update payment status to failed if user is logged in
           if (user && paymentRecord) {
             await supabase
               .from('payments')
@@ -186,7 +171,6 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       modal: {
         ondismiss: async function() {
           console.log('Payment modal dismissed');
-          // Update payment status to failed if user is logged in
           if (user && paymentRecord) {
             await supabase
               .from('payments')

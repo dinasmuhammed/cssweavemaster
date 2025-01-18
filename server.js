@@ -13,9 +13,11 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET
 });
 
-// Configure CORS to allow requests from any origin
+// Configure CORS to allow requests from specific origins
 app.use(cors({
-  origin: '*',
+  origin: process.env.NODE_ENV === 'production' 
+    ? ['https://your-production-domain.com'] 
+    : ['http://localhost:5173', 'http://127.0.0.1:5173'],
   methods: ['GET', 'POST'],
   credentials: true,
   optionsSuccessStatus: 200

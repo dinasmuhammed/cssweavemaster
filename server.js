@@ -2,10 +2,16 @@ const express = require('express');
 const cors = require('cors');
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
-const { sendOrderEmail } = require('./src/utils/emailUtils');
+const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config();
 
 const app = express();
+
+// Initialize Supabase
+const supabase = createClient(
+  process.env.VITE_SUPABASE_URL,
+  process.env.VITE_SUPABASE_ANON_KEY
+);
 
 // Initialize Razorpay
 const razorpay = new Razorpay({
@@ -13,11 +19,9 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET
 });
 
-// Configure CORS to allow requests from all origins in development
-// and specific origins in production
+// Configure CORS
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
     const allowedOrigins = [
@@ -34,47 +38,36 @@ app.use(cors({
   },
   credentials: true,
   methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  optionsSuccessStatus: 200
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.json({ status: 'ok' });
-});
-
 app.post('/api/create-order', async (req, res) => {
   try {
-    const { amount, currency = 'INR' } = req.body;
+    const { amount, currency = 'INR', orderData } = req.body;
     
     if (!amount) {
-      console.error('Missing amount in request body:', req.body);
       return res.status(400).json({ error: 'Amount is required' });
     }
 
-    if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
-      console.error('Missing Razorpay credentials');
-      return res.status(500).json({ error: 'Server configuration error' });
-    }
-
-    console.log('Creating order with amount:', amount, 'currency:', currency);
-    
-    // Create Razorpay order
     const options = {
-      amount: Math.round(amount * 100), // Convert to smallest currency unit (paise)
+      amount: Math.round(amount * 100),
       currency,
       receipt: `receipt_${Date.now()}`,
     };
 
-    console.log('Razorpay order options:', options);
-
     const order = await razorpay.orders.create(options);
-    console.log('Order created successfully:', order);
     
-    if (!order || !order.id) {
-      console.error('Invalid order response:', order);
-      return res.status(500).json({ error: 'Failed to create order: Invalid response' });
+    // Update Supabase payment record with order details
+    if (orderData?.paymentLogId) {
+      await supabase
+        .from('razorpay_payments')
+        .update({ 
+          order_id: order.id,
+          status: 'created'
+        })
+        .eq('id', orderData.paymentLogId);
     }
     
     res.json({ order });
@@ -82,8 +75,7 @@ app.post('/api/create-order', async (req, res) => {
     console.error('Error creating order:', error);
     res.status(500).json({ 
       error: 'Failed to create order', 
-      details: error.message,
-      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+      details: error.message
     });
   }
 });
@@ -97,17 +89,6 @@ app.post('/api/verify-payment', async (req, res) => {
       orderData 
     } = req.body;
 
-    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
-      console.error('Missing payment verification parameters:', req.body);
-      return res.status(400).json({ error: 'Missing required payment verification parameters' });
-    }
-
-    console.log('Verifying payment:', {
-      orderId: razorpay_order_id,
-      paymentId: razorpay_payment_id
-    });
-
-    // Verify payment signature
     const text = `${razorpay_order_id}|${razorpay_payment_id}`;
     const generated_signature = crypto
       .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
@@ -117,25 +98,36 @@ app.post('/api/verify-payment', async (req, res) => {
     const isValid = generated_signature === razorpay_signature;
 
     if (!isValid) {
-      console.error('Invalid payment signature');
+      // Update payment status in Supabase
+      if (orderData?.paymentLogId) {
+        await supabase
+          .from('razorpay_payments')
+          .update({ 
+            status: 'failed',
+            error_message: 'Invalid payment signature'
+          })
+          .eq('id', orderData.paymentLogId);
+      }
       return res.status(400).json({ error: 'Invalid payment signature' });
     }
 
-    try {
-      await sendOrderEmail(orderData);
-      console.log('Order confirmation email sent successfully');
-    } catch (emailError) {
-      console.error('Error sending order email:', emailError);
+    // Update payment status in Supabase
+    if (orderData?.paymentLogId) {
+      await supabase
+        .from('razorpay_payments')
+        .update({ 
+          status: 'completed',
+          payment_id: razorpay_payment_id
+        })
+        .eq('id', orderData.paymentLogId);
     }
 
-    console.log('Payment verified successfully');
     res.status(200).json({ message: 'Payment verified successfully' });
   } catch (error) {
     console.error('Error verifying payment:', error);
     res.status(500).json({ 
       error: 'Payment verification failed', 
-      details: error.message,
-      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+      details: error.message
     });
   }
 });

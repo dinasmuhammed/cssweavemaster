@@ -13,13 +13,28 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET
 });
 
-// Configure CORS to allow requests from specific origins
+// Configure CORS to allow requests from all origins in development
+// and specific origins in production
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? ['https://your-production-domain.com'] 
-    : ['http://localhost:5173', 'http://127.0.0.1:5173'],
-  methods: ['GET', 'POST'],
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'http://127.0.0.1:5173',
+      'https://cd184ac6-e88a-46fc-b24e-0c575231c18c.lovableproject.com'
+    ];
+    
+    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   optionsSuccessStatus: 200
 }));
 

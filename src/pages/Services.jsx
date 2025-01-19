@@ -200,11 +200,17 @@ const Services = () => {
         className="py-16 px-4 bg-cream-100 scroll-mt-16 border-t border-green-800/10"
       >
         <div className="container mx-auto max-w-2xl">
-          <div className="bg-white rounded-2xl shadow-sm p-8 sm:p-10">
-            <h2 className="text-2xl md:text-3xl font-heading text-center text-green-800 mb-8">
+          <div className="bg-white rounded-2xl shadow-lg p-8 sm:p-10 border border-green-800/10 backdrop-blur-sm relative overflow-hidden">
+            {/* Premium decorative elements */}
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-800 to-green-900 opacity-80" />
+            <div className="absolute top-0 right-0 w-24 h-24 -translate-y-1/2 translate-x-1/2 bg-gradient-to-br from-cream-100 to-cream-200 rounded-full opacity-20" />
+            
+            <h2 className="text-2xl md:text-3xl font-heading text-center text-green-800 mb-8 relative">
               Book Now
+              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-12 h-1 bg-green-800/20 rounded-full" />
             </h2>
-            <div className="relative">
+            
+            <div className="relative bg-white/95 rounded-xl p-6 shadow-sm border border-green-800/5">
               <BookingForm />
             </div>
           </div>

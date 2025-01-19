@@ -58,7 +58,19 @@ const BookingRequestForm = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button>Request to Book</Button>
+        <Button 
+          className="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 font-medium tracking-wide text-base sm:text-lg relative overflow-hidden group"
+          style={{
+            background: "linear-gradient(135deg, #0F4C3A 0%, #00332B 100%)",
+            boxShadow: "0 4px 15px rgba(15, 76, 58, 0.2)"
+          }}
+        >
+          <span className="relative z-10 flex items-center justify-center gap-2">
+            Book Now
+            <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
+          </span>
+          <div className="absolute inset-0 bg-white/10 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -126,7 +138,11 @@ const BookingRequestForm = () => {
             </Popover>
           </div>
           
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
+          <Button 
+            type="submit" 
+            className="w-full bg-primary hover:bg-primary/90 text-white shadow-md hover:shadow-lg transition-all duration-300"
+            disabled={isSubmitting}
+          >
             {isSubmitting ? 'Submitting...' : 'Submit Booking Request'}
           </Button>
         </form>

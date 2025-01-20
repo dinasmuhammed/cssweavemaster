@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { initializeRazorpayPayment } from '../utils/payment/razorpay';
+import { initializePayment, verifyPayment } from '../services/paymentService';
 import { loadRazorpayScript } from '../utils/payment/config';
 
 const RazorpayTest = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [scriptLoaded, setScriptLoaded] = useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const loadScript = async () => {
       try {
         await loadRazorpayScript();
@@ -33,8 +33,8 @@ const RazorpayTest = () => {
       console.log('Starting test payment...');
       
       const testOrderData = {
-        orderId: `TEST_${Date.now()}`,
         amount: 1,
+        currency: 'INR',
         customerDetails: {
           name: 'Test User',
           email: 'test@example.com',
@@ -42,26 +42,45 @@ const RazorpayTest = () => {
         }
       };
 
-      console.log('Test order data:', testOrderData);
+      const { order, paymentRecord } = await initializePayment(testOrderData);
 
-      await initializeRazorpayPayment(
-        testOrderData,
-        1, // 1 rupee test amount
-        testOrderData.customerDetails,
-        () => {
-          console.log('Test payment successful');
-          toast.success("Test payment successful!");
-          setIsLoading(false);
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: order.amount,
+        currency: order.currency,
+        name: "Henna by Fathima",
+        description: "Test Payment",
+        order_id: order.id,
+        handler: async function(response) {
+          try {
+            await verifyPayment({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              paymentRecordId: paymentRecord.id
+            });
+            toast.success("Test payment successful!");
+          } catch (error) {
+            console.error('Payment verification failed:', error);
+            toast.error("Payment verification failed");
+          }
         },
-        (error) => {
-          console.error('Test payment failed:', error);
-          toast.error(error.message || "Test payment failed");
-          setIsLoading(false);
+        prefill: {
+          name: testOrderData.customerDetails.name,
+          email: testOrderData.customerDetails.email,
+          contact: testOrderData.customerDetails.mobile
+        },
+        theme: {
+          color: "#607973"
         }
-      );
+      };
+
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
     } catch (error) {
       console.error('Payment initialization error:', error);
-      toast.error(error.message || "Failed to initialize payment. Please check console for details.");
+      toast.error(error.message || "Failed to initialize payment");
+    } finally {
       setIsLoading(false);
     }
   };

@@ -7,6 +7,15 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     console.log('Loading Razorpay script...');
     await loadRazorpayScript();
     
+    // Validate inputs
+    if (!amount || amount <= 0) {
+      throw new Error('Invalid payment amount');
+    }
+    
+    if (!customerDetails?.name || !customerDetails?.email || !customerDetails?.mobile) {
+      throw new Error('Missing customer details');
+    }
+
     // Create payment record in Supabase
     const { data: paymentLog, error: logError } = await supabase
       .from('razorpay_payments')
@@ -14,7 +23,8 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
         amount: amount,
         currency: 'INR',
         customer_details: customerDetails,
-        status: 'initiated'
+        status: 'initiated',
+        created_at: new Date().toISOString()
       }])
       .select()
       .single();
@@ -52,13 +62,18 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     console.log('Order created:', order);
 
     // Update payment record with order ID
-    await supabase
+    const { error: updateError } = await supabase
       .from('razorpay_payments')
       .update({ 
         order_id: order.id,
-        status: 'created'
+        status: 'created',
+        updated_at: new Date().toISOString()
       })
       .eq('id', paymentLog.id);
+
+    if (updateError) {
+      console.error('Error updating payment record:', updateError);
+    }
 
     const options = {
       key: import.meta.env.VITE_RAZORPAY_KEY_ID,
@@ -76,14 +91,18 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
         try {
           console.log('Payment successful, verifying...', response);
           
-          // Update payment status in Supabase
-          await supabase
+          const { error: statusError } = await supabase
             .from('razorpay_payments')
             .update({ 
               status: 'processing',
-              payment_id: response.razorpay_payment_id
+              payment_id: response.razorpay_payment_id,
+              updated_at: new Date().toISOString()
             })
             .eq('id', paymentLog.id);
+
+          if (statusError) {
+            console.error('Error updating payment status:', statusError);
+          }
 
           const verifyResponse = await fetch(`${apiBaseUrl}/verify-payment`, {
             method: 'POST',
@@ -107,25 +126,25 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
             throw new Error('Payment verification failed');
           }
 
-          // Update payment status to completed
           await supabase
             .from('razorpay_payments')
             .update({ 
-              status: 'completed'
+              status: 'completed',
+              updated_at: new Date().toISOString()
             })
             .eq('id', paymentLog.id);
 
-          toast.success("Payment successful!");
+          toast.success("Payment successful! Thank you for your order.");
           if (onSuccess) onSuccess(response);
         } catch (error) {
           console.error('Payment verification error:', error);
           
-          // Log failure in Supabase
           await supabase
             .from('razorpay_payments')
             .update({ 
               status: 'failed',
-              error_message: error.message 
+              error_message: error.message,
+              updated_at: new Date().toISOString()
             })
             .eq('id', paymentLog.id);
 
@@ -136,12 +155,12 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       modal: {
         ondismiss: async function() {
           console.log('Payment modal dismissed');
-          // Update payment status to cancelled
           await supabase
             .from('razorpay_payments')
             .update({ 
               status: 'cancelled',
-              error_message: 'Payment cancelled by user'
+              error_message: 'Payment cancelled by user',
+              updated_at: new Date().toISOString()
             })
             .eq('id', paymentLog.id);
 

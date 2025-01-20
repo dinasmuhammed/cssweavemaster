@@ -4,9 +4,21 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 const CartItem = ({ item, removeFromCart, updateQuantity }) => {
+  if (!item?.id || !item?.name || !item?.price) {
+    return null;
+  }
+
   const handleDelete = () => {
-    removeFromCart(item.id);
-    toast.success(`${item.name} removed from cart`);
+    if (removeFromCart && typeof removeFromCart === 'function') {
+      removeFromCart(item.id);
+    }
+  };
+
+  const handleQuantityChange = (change) => {
+    if (updateQuantity && typeof updateQuantity === 'function') {
+      const newQuantity = Math.max(1, item.quantity + change);
+      updateQuantity(item.id, newQuantity);
+    }
   };
 
   return (
@@ -16,6 +28,10 @@ const CartItem = ({ item, removeFromCart, updateQuantity }) => {
           src={item.image} 
           alt={item.name} 
           className="w-full sm:w-24 h-24 object-cover rounded" 
+          onError={(e) => {
+            e.target.src = '/placeholder.svg';
+            toast.error(`Failed to load image for ${item.name}`);
+          }}
         />
       </div>
       <div className="flex-grow w-full">
@@ -25,7 +41,7 @@ const CartItem = ({ item, removeFromCart, updateQuantity }) => {
             {item?.weight && <span className="text-sm text-gray-500">{item.weight}g</span>}
           </div>
           <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
-            <span className="text-lg font-medium">₹{item.price * item.quantity}</span>
+            <span className="text-lg font-medium">₹{(item.price * item.quantity).toFixed(2)}</span>
             <Button
               variant="ghost"
               size="icon"
@@ -38,14 +54,15 @@ const CartItem = ({ item, removeFromCart, updateQuantity }) => {
         </div>
         <div className="flex items-center gap-4 mt-4">
           <button 
-            onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
-            className="w-8 h-8 flex items-center justify-center border-2 border-gray-300 rounded-full text-gray-600 hover:bg-gray-50 touch-manipulation"
+            onClick={() => handleQuantityChange(-1)}
+            className="w-8 h-8 flex items-center justify-center border-2 border-gray-300 rounded-full text-gray-600 hover:bg-gray-50 touch-manipulation disabled:opacity-50"
+            disabled={item.quantity <= 1}
           >
             -
           </button>
           <span className="text-lg w-6 text-center">{item.quantity}</span>
           <button 
-            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+            onClick={() => handleQuantityChange(1)}
             className="w-8 h-8 flex items-center justify-center border-2 border-gray-300 rounded-full text-gray-600 hover:bg-gray-50 touch-manipulation"
           >
             +

@@ -1,5 +1,3 @@
-import { supabase } from '../../lib/supabase';
-
 export const getApiBaseUrl = () => {
   if (typeof window === 'undefined') return '/api';
   
@@ -10,39 +8,41 @@ export const getApiBaseUrl = () => {
 };
 
 export const loadRazorpayScript = () => {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
+    if (window.Razorpay) {
+      console.log('Razorpay already loaded');
+      resolve(true);
+      return;
+    }
+
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.async = true;
-    script.onload = () => resolve(true);
+    script.onload = () => {
+      console.log('Razorpay script loaded');
+      resolve(true);
+    };
+    script.onerror = (error) => {
+      console.error('Error loading Razorpay script:', error);
+      reject(new Error('Failed to load Razorpay script'));
+    };
     document.body.appendChild(script);
   });
 };
 
-export const getRazorpayConfig = async () => {
-  try {
-    const { data: secrets, error } = await supabase
-      .from('secrets')
-      .select('value')
-      .in('name', ['RAZORPAY_KEY_ID', 'RAZORPAY_KEY_SECRET'])
-      .throwOnError();
-
-    if (error) throw error;
-
-    const config = {
-      keyId: secrets.find(s => s.name === 'RAZORPAY_KEY_ID')?.value || import.meta.env.VITE_RAZORPAY_KEY_ID,
-      keySecret: secrets.find(s => s.name === 'RAZORPAY_KEY_SECRET')?.value,
-      currency: 'INR',
-      name: "Henna by Fathima",
-      description: "Order Payment",
-      theme: {
-        color: "#607973"
-      }
-    };
-
-    return config;
-  } catch (error) {
-    console.error('Error fetching Razorpay config:', error);
-    throw error;
+export const getRazorpayConfig = () => {
+  const keyId = import.meta.env.VITE_RAZORPAY_KEY_ID;
+  if (!keyId) {
+    throw new Error('Razorpay Key ID is not configured');
   }
+
+  return {
+    keyId,
+    currency: 'INR',
+    name: "Henna by Fathima",
+    description: "Order Payment",
+    theme: {
+      color: "#607973"
+    }
+  };
 };

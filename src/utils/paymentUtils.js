@@ -1,16 +1,6 @@
 import { supabase } from '../lib/supabase';
 import { toast } from "sonner";
 
-const loadRazorpayScript = () => {
-  return new Promise((resolve) => {
-    const script = document.createElement('script');
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-    script.async = true;
-    script.onload = () => resolve(true);
-    document.body.appendChild(script);
-  });
-};
-
 export const validatePaymentForm = (formData) => {
   const errors = {};
   
@@ -33,12 +23,21 @@ export const validatePaymentForm = (formData) => {
   };
 };
 
-const SERVER_URL = 'http://localhost:3001';
+const loadRazorpayScript = () => {
+  return new Promise((resolve) => {
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.async = true;
+    script.onload = () => resolve(true);
+    document.body.appendChild(script);
+  });
+};
+
+const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3001';
 
 export const initializeRazorpayPayment = async (orderData, amount, customerDetails, onSuccess, onError) => {
   try {
     await loadRazorpayScript();
-
     console.log('Initializing payment with amount:', amount);
 
     const response = await fetch(`${SERVER_URL}/api/create-order`, {
@@ -47,7 +46,6 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
         'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
-      mode: 'cors',
       body: JSON.stringify({
         amount: Math.round(amount),
         currency: 'INR',
@@ -84,23 +82,12 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
         try {
           console.log('Payment successful, verifying...', response);
           
-          await supabase.from('payment_logs').insert([
-            {
-              order_id: order.id,
-              payment_id: response.razorpay_payment_id,
-              amount: amount,
-              status: 'processing',
-              customer_details: customerDetails
-            }
-          ]);
-
           const verifyResponse = await fetch(`${SERVER_URL}/api/verify-payment`, {
             method: 'POST',
             headers: { 
               'Content-Type': 'application/json',
               'Accept': 'application/json'
             },
-            mode: 'cors',
             body: JSON.stringify({
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
@@ -113,34 +100,16 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
             throw new Error('Payment verification failed');
           }
 
-          await supabase
-            .from('payment_logs')
-            .update({ status: 'completed' })
-            .match({ order_id: order.id });
-
           toast.success("Payment successful!");
           if (onSuccess) onSuccess(response);
         } catch (error) {
           console.error('Payment verification error:', error);
-          await supabase
-            .from('payment_logs')
-            .update({ 
-              status: 'failed',
-              error_message: error.message 
-            })
-            .match({ order_id: order.id });
-
           toast.error(error.message || "Payment verification failed");
           if (onError) onError(error);
         }
       },
       modal: {
-        ondismiss: async function() {
-          await supabase
-            .from('payment_logs')
-            .update({ status: 'cancelled' })
-            .match({ order_id: order.id });
-
+        ondismiss: function() {
           toast.error("Payment cancelled");
           if (onError) onError(new Error('Payment cancelled by user'));
         }

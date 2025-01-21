@@ -14,7 +14,7 @@ const CartItem = ({
   return (
     <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 py-6 border-b relative">
       {isLoading && (
-        <div className="absolute inset-0 bg-white/50 flex items-center justify-center">
+        <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10">
           <LoadingSpinner size="small" />
         </div>
       )}
@@ -56,6 +56,7 @@ const CartItem = ({
             onClick={() => onUpdateQuantity(item.id, Math.max(1, item.quantity - 1))}
             disabled={isLoading || item.quantity <= 1}
             className="w-8 h-8 flex items-center justify-center border-2 border-gray-300 rounded-full text-gray-600 hover:bg-gray-50 touch-manipulation disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="Decrease quantity"
           >
             -
           </button>
@@ -64,6 +65,7 @@ const CartItem = ({
             onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
             disabled={isLoading}
             className="w-8 h-8 flex items-center justify-center border-2 border-gray-300 rounded-full text-gray-600 hover:bg-gray-50 touch-manipulation disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="Increase quantity"
           >
             +
           </button>

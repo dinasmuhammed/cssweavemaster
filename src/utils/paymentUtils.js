@@ -11,6 +11,16 @@ const loadRazorpayScript = () => {
   });
 };
 
+// Get the API base URL based on environment
+const getApiBaseUrl = () => {
+  if (typeof window === 'undefined') return '/api';
+  
+  const currentOrigin = window.location.origin;
+  return process.env.NODE_ENV === 'production'
+    ? `${currentOrigin}/api`
+    : 'http://localhost:3001/api';
+};
+
 export const validatePaymentForm = (formData) => {
   const errors = {};
   
@@ -33,53 +43,57 @@ export const validatePaymentForm = (formData) => {
   };
 };
 
-const SERVER_URL = 'http://localhost:3001';
-
 export const initializeRazorpayPayment = async (orderData, amount, customerDetails, onSuccess, onError) => {
   try {
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
-    
-    if (userError || !user) {
-      console.error('User authentication error:', userError);
-      throw new Error('Please log in to make a payment');
-    }
-
     console.log('Loading Razorpay script...');
     await loadRazorpayScript();
     console.log('Initializing payment with amount:', amount);
 
-    // Create payment record in Supabase
-    const { data: paymentRecord, error: insertError } = await supabase
-      .from('payments')
-      .insert([{
-        user_id: user.id,
-        amount: amount,
-        currency: 'INR',
-        status: 'pending',
-        customer_details: customerDetails
-      }])
-      .select()
-      .single();
+    const apiBaseUrl = getApiBaseUrl();
+    console.log('Using API base URL:', apiBaseUrl);
 
-    if (insertError) {
-      console.error('Failed to create payment record:', insertError);
-      throw new Error('Failed to create payment record');
+    // Get user if logged in, but proceed even if not authenticated
+    const { data: { user } } = await supabase.auth.getUser().catch(() => ({ data: { user: null } }));
+    let paymentRecord = null;
+
+    if (user) {
+      try {
+        const { data: record, error: insertError } = await supabase
+          .from('payments')
+          .insert([{
+            user_id: user.id,
+            amount: amount,
+            currency: 'INR',
+            status: 'pending',
+            customer_details: customerDetails
+          }])
+          .select()
+          .single();
+
+        if (insertError) {
+          console.error('Failed to create payment record:', insertError);
+        } else {
+          paymentRecord = record;
+        }
+      } catch (dbError) {
+        console.error('Database operation failed:', dbError);
+      }
     }
 
     console.log('Creating order with Razorpay...');
-    const response = await fetch(`${SERVER_URL}/api/create-order`, {
+    const response = await fetch(`${apiBaseUrl}/create-order`, {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
-      mode: 'cors',
+      credentials: 'include',
       body: JSON.stringify({
         amount: Math.round(amount),
         currency: 'INR',
         orderData: {
           ...orderData,
-          paymentId: paymentRecord.id
+          paymentId: paymentRecord?.id
         }
       })
     });
@@ -98,10 +112,13 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     }
 
     // Update payment record with Razorpay order ID
-    await supabase
-      .from('payments')
-      .update({ razorpay_order_id: order.id })
-      .eq('id', paymentRecord.id);
+    if (user && paymentRecord) {
+      await supabase
+        .from('payments')
+        .update({ razorpay_order_id: order.id })
+        .eq('id', paymentRecord.id)
+        .catch(console.error);
+    }
 
     const options = {
       key: import.meta.env.VITE_RAZORPAY_KEY_ID,
@@ -119,29 +136,31 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
         try {
           console.log('Payment successful, verifying...', response);
           
-          // Update payment status in Supabase
-          await supabase
-            .from('payments')
-            .update({ 
-              status: 'success',
-              razorpay_payment_id: response.razorpay_payment_id
-            })
-            .eq('id', paymentRecord.id);
+          if (user && paymentRecord) {
+            await supabase
+              .from('payments')
+              .update({ 
+                status: 'success',
+                razorpay_payment_id: response.razorpay_payment_id
+              })
+              .eq('id', paymentRecord.id)
+              .catch(console.error);
+          }
 
-          const verifyResponse = await fetch(`${SERVER_URL}/api/verify-payment`, {
+          const verifyResponse = await fetch(`${apiBaseUrl}/verify-payment`, {
             method: 'POST',
             headers: { 
               'Content-Type': 'application/json',
               'Accept': 'application/json'
             },
-            mode: 'cors',
+            credentials: 'include',
             body: JSON.stringify({
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
               orderData: {
                 ...orderData,
-                paymentId: paymentRecord.id
+                paymentId: paymentRecord?.id
               }
             }),
           });
@@ -156,14 +175,16 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
         } catch (error) {
           console.error('Payment verification error:', error);
           
-          // Update payment status to failed
-          await supabase
-            .from('payments')
-            .update({ 
-              status: 'failed',
-              error_message: error.message 
-            })
-            .eq('id', paymentRecord.id);
+          if (user && paymentRecord) {
+            await supabase
+              .from('payments')
+              .update({ 
+                status: 'failed',
+                error_message: error.message 
+              })
+              .eq('id', paymentRecord.id)
+              .catch(console.error);
+          }
 
           toast.error(error.message || "Payment verification failed");
           if (onError) onError(error);
@@ -172,14 +193,16 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       modal: {
         ondismiss: async function() {
           console.log('Payment modal dismissed');
-          // Update payment status to failed when modal is dismissed
-          await supabase
-            .from('payments')
-            .update({ 
-              status: 'failed',
-              error_message: 'Payment cancelled by user'
-            })
-            .eq('id', paymentRecord.id);
+          if (user && paymentRecord) {
+            await supabase
+              .from('payments')
+              .update({ 
+                status: 'failed',
+                error_message: 'Payment cancelled by user'
+              })
+              .eq('id', paymentRecord.id)
+              .catch(console.error);
+          }
 
           toast.error("Payment cancelled");
           if (onError) onError(new Error('Payment cancelled by user'));

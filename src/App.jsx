@@ -9,11 +9,12 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { WhatsAppWidget } from 'react-whatsapp-widget';
 import 'react-whatsapp-widget/dist/index.css';
 
+// Configure QueryClient with optimized settings
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5,
-      cacheTime: 1000 * 60 * 30,
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      cacheTime: 1000 * 60 * 30, // 30 minutes
       retry: 1,
       suspense: true,
       useErrorBoundary: true,
@@ -23,7 +24,7 @@ const queryClient = new QueryClient({
   },
 });
 
-// Lazy load components with error boundaries
+// Simple lazy loading without prefetch to fix dynamic import issues
 const Header = lazy(() => import('./components/Header'));
 const Footer = lazy(() => import('./components/Footer'));
 const Index = lazy(() => import('./pages/Index'));
@@ -62,11 +63,9 @@ const App = () => {
                 <LoadingSpinner size="large" />
               </div>
             }>
-              <Router>
+              <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
                 <div className="flex flex-col min-h-screen bg-white">
-                  <Suspense fallback={<LoadingSpinner />}>
-                    <Header />
-                  </Suspense>
+                  <Header />
                   <main className="flex-grow container mx-auto px-4 py-8 w-full max-w-7xl">
                     <Routes>
                       <Route path="/" element={<Index />} />
@@ -84,14 +83,12 @@ const App = () => {
                       <Route path="/shipping-and-privacy" element={<ShippingAndPrivacy />} />
                     </Routes>
                   </main>
-                  <Suspense fallback={<LoadingSpinner />}>
-                    <Footer />
-                  </Suspense>
+                  <Footer />
                   <WhatsAppWidget 
                     phoneNumber="+918086647124"
                     companyName="Henna by Fathima"
                     message="Hello! How can we help you?"
-                    className="!bottom-20 sm:!bottom-4"
+                    className="!bottom-20 sm:!bottom-4" // Make it responsive
                   />
                 </div>
               </Router>

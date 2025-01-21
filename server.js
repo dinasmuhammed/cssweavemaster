@@ -1,24 +1,14 @@
 const express = require('express');
 const cors = require('cors');
-const Razorpay = require('razorpay');
-const crypto = require('crypto');
 const { sendOrderEmail } = require('./src/utils/emailUtils');
-require('dotenv').config();
+const { createOrder, verifyPayment } = require('./src/api/razorpay');
 
 const app = express();
 
-// Initialize Razorpay
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET
-});
-
-// Configure CORS to allow requests from any origin
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST'],
-  credentials: true,
-  optionsSuccessStatus: 200
+  credentials: true
 }));
 
 app.use(express.json());
@@ -29,30 +19,15 @@ app.get('/', (req, res) => {
 
 app.post('/api/create-order', async (req, res) => {
   try {
-    const { amount, currency = 'INR' } = req.body;
+    const { amount, currency } = req.body;
     
     if (!amount) {
       console.error('Missing amount in request body:', req.body);
       return res.status(400).json({ error: 'Amount is required' });
     }
 
-    if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
-      console.error('Missing Razorpay credentials');
-      return res.status(500).json({ error: 'Server configuration error' });
-    }
-
     console.log('Creating order with amount:', amount, 'currency:', currency);
-    
-    // Create Razorpay order
-    const options = {
-      amount: Math.round(amount * 100), // Convert to smallest currency unit (paise)
-      currency,
-      receipt: `receipt_${Date.now()}`,
-    };
-
-    console.log('Razorpay order options:', options);
-
-    const order = await razorpay.orders.create(options);
+    const order = await createOrder(amount, currency);
     console.log('Order created successfully:', order);
     
     if (!order || !order.id) {
@@ -90,25 +65,24 @@ app.post('/api/verify-payment', async (req, res) => {
       paymentId: razorpay_payment_id
     });
 
-    // Verify payment signature
-    const text = `${razorpay_order_id}|${razorpay_payment_id}`;
-    const generated_signature = crypto
-      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
-      .update(text)
-      .digest('hex');
-
-    const isValid = generated_signature === razorpay_signature;
+    const isValid = verifyPayment(
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature
+    );
 
     if (!isValid) {
       console.error('Invalid payment signature');
       return res.status(400).json({ error: 'Invalid payment signature' });
     }
 
+    // Send order confirmation email
     try {
       await sendOrderEmail(orderData);
       console.log('Order confirmation email sent successfully');
     } catch (emailError) {
       console.error('Error sending order email:', emailError);
+      // Continue with payment success even if email fails
     }
 
     console.log('Payment verified successfully');

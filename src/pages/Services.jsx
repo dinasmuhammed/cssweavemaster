@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import PricingTabs from '../components/services/PricingTabs';
 import ServicePackage from '../components/ServicePackage';
@@ -8,28 +8,22 @@ import { ArrowDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Services = () => {
-  const bookingRef = useRef(null);
-
-  const scrollToBooking = () => {
-    bookingRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   const packages = [
     {
       id: 1,
-      title: "party henna",
-      image: "https://i.ibb.co/stCpYRJ/IMG-20250115-WA0009.jpg",
-      description: ""
-    },
-    {
-      id: 2,
       title: "Bridal Henna",
-      image: "https://i.ibb.co/P9vLvmg/IMG-20250115-WA0008.jpg",
+      image: "https://i.ibb.co/stCpYRJ/IMG-20250115-WA0009.jpg",
       description: "Exclusive bridal designs for your special day"
     },
     {
+      id: 2,
+      title: "Party Henna",
+      image: "https://i.ibb.co/P9vLvmg/IMG-20250115-WA0008.jpg",
+      description: "Beautiful designs for all occasions"
+    },
+    {
       id: 3,
-      title: "haldi Henna",
+      title: "Kids Henna",
       image: "https://i.ibb.co/mt1dh33/IMG-20250115-WA0010.jpg",
       description: "Simple and fun designs for children"
     },
@@ -132,7 +126,6 @@ const Services = () => {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       className="bg-cream-100 text-green-800 px-6 py-2 rounded-full font-medium hover:bg-cream-200 transition-colors"
-                      onClick={scrollToBooking}
                     >
                       Learn More
                     </motion.button>
@@ -150,7 +143,7 @@ const Services = () => {
           <h2 className="text-2xl md:text-3xl font-heading text-center text-green-800 mb-12">
             Pricing
           </h2>
-          <PricingTabs onBookClick={scrollToBooking} />
+          <PricingTabs />
         </div>
       </section>
 
@@ -183,19 +176,19 @@ const Services = () => {
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.3 }}
         >
-          <Button
+          <Button 
             variant="secondary"
-            className="group flex items-center gap-2 px-6 py-3 bg-transparent text-green-800 font-medium rounded-lg border-2 border-green-800 hover:bg-green-100 transition-all duration-300"
-            onClick={() => window.open('https://drive.google.com/file/d/1-fRCsLtt8Movc7CCq-sw9UtgEth-V0vj/view', '_blank')}
+            className="group flex items-center gap-2 px-6 py-3 bg-green-800 text-white hover:bg-green-900 transition-all duration-300"
+            onClick={() => window.open('/workshop-brochure.pdf', '_blank')}
           >
-            <ArrowDown className="text-green-800 group-hover:text-green-900" />
-            Aftercare Details
+            Download
+            <ArrowDown className="w-4 h-4 group-hover:translate-y-1 transition-transform duration-300" />
           </Button>
         </motion.div>
       </div>
 
       {/* Booking Form Section */}
-      <section ref={bookingRef} className="py-16 px-4 bg-cream-100">
+      <section className="py-16 px-4 bg-cream-100">
         <div className="container mx-auto max-w-2xl">
           <h2 className="text-2xl md:text-3xl font-heading text-center text-green-800 mb-12">
             Book Now

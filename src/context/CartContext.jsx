@@ -1,10 +1,21 @@
 import React, { createContext, useState, useContext } from 'react';
 
-const CartContext = createContext(undefined);
+// Initialize context with default values
+const CartContext = createContext({
+  cartItems: [],
+  savedItems: [],
+  addToCart: () => {},
+  removeFromCart: () => {},
+  updateQuantity: () => {},
+  saveForLater: () => {},
+  moveToCart: () => {},
+  removeSavedItem: () => {},
+  clearCart: () => {},
+});
 
 export const useCart = () => {
   const context = useContext(CartContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useCart must be used within a CartProvider');
   }
   return context;
@@ -65,14 +76,14 @@ export const CartProvider = ({ children }) => {
 
   const value = {
     cartItems,
+    savedItems,
     addToCart,
     removeFromCart,
     updateQuantity,
     saveForLater,
     moveToCart,
     removeSavedItem,
-    savedItems,
-    clearCart
+    clearCart,
   };
 
   return (

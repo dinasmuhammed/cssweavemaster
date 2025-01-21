@@ -1,6 +1,4 @@
-import { toast } from "sonner";
-
-const validatePaymentForm = (formData) => {
+export const validatePaymentForm = (formData) => {
   const errors = {};
   
   if (!formData.name?.trim()) errors.name = "Name is required";
@@ -22,29 +20,19 @@ const validatePaymentForm = (formData) => {
   };
 };
 
-const loadRazorpayScript = () => {
-  return new Promise((resolve) => {
-    if (window.Razorpay) {
-      resolve(true);
-      return;
-    }
-    const script = document.createElement('script');
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-    script.async = true;
-    script.onload = () => resolve(true);
-    document.body.appendChild(script);
-  });
-};
-
-const initializeRazorpayPayment = async (orderData, amount, customerDetails, onSuccess, onError) => {
+export const initializeRazorpayPayment = async (orderData, amount, customerDetails, onSuccess, onError) => {
   try {
-    await loadRazorpayScript();
-    
-    if (typeof window.Razorpay !== 'function') {
-      throw new Error('Razorpay SDK failed to load');
+    if (!window.Razorpay) {
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.async = true;
+      await new Promise((resolve) => {
+        script.onload = resolve;
+        document.body.appendChild(script);
+      });
     }
 
-    const response = await fetch('/api/create-order', {
+    const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/create-order`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -68,7 +56,7 @@ const initializeRazorpayPayment = async (orderData, amount, customerDetails, onS
     }
 
     const options = {
-      key: 'rzp_live_VMhrs1uuU9TTJq',
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
       amount: data.order.amount,
       currency: data.order.currency,
       name: "Henna by Fathima",
@@ -81,7 +69,7 @@ const initializeRazorpayPayment = async (orderData, amount, customerDetails, onS
       },
       handler: async function(response) {
         try {
-          const verifyResponse = await fetch('/api/verify-payment', {
+          const verifyResponse = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/verify-payment`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -96,17 +84,14 @@ const initializeRazorpayPayment = async (orderData, amount, customerDetails, onS
             throw new Error('Payment verification failed');
           }
 
-          toast.success("Payment successful!");
           if (onSuccess) onSuccess(response);
         } catch (error) {
           console.error('Payment verification error:', error);
-          toast.error(error.message || "Payment verification failed");
           if (onError) onError(error);
         }
       },
       modal: {
         ondismiss: function() {
-          toast.error("Payment cancelled");
           if (onError) onError(new Error('Payment cancelled by user'));
         }
       },
@@ -120,12 +105,6 @@ const initializeRazorpayPayment = async (orderData, amount, customerDetails, onS
 
   } catch (error) {
     console.error('Payment initialization error:', error);
-    toast.error(error.message || "Failed to initialize payment");
     if (onError) onError(error);
   }
-};
-
-export {
-  validatePaymentForm,
-  initializeRazorpayPayment
 };

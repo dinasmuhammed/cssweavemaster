@@ -7,8 +7,8 @@ import DeliveryForm from '../components/checkout/DeliveryForm';
 import { toast } from "sonner";
 
 const Cart = () => {
-  const { cartItems, removeFromCart, updateQuantity, clearCart } = useCart();
   const navigate = useNavigate();
+  const { cartItems = [], removeFromCart, updateQuantity, clearCart } = useCart();
   const [formData, setFormData] = useState({
     address: '',
     area: '',
@@ -20,7 +20,7 @@ const Cart = () => {
     pincode: ''
   });
 
-  const totalPrice = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const totalPrice = cartItems?.reduce((sum, item) => sum + (item.price * item.quantity), 0) || 0;
   const shippingCharge = 0;
   const totalAmount = totalPrice + shippingCharge;
 
@@ -30,12 +30,14 @@ const Cart = () => {
   };
 
   const handleCheckout = (paymentResponse) => {
-    clearCart();
-    toast.success("Order placed successfully!");
-    navigate('/');
+    if (clearCart) {
+      clearCart();
+      toast.success("Order placed successfully!");
+      navigate('/');
+    }
   };
 
-  if (cartItems.length === 0) {
+  if (!cartItems || cartItems.length === 0) {
     return (
       <div className="container mx-auto px-4 py-8 text-center">
         <h1 className="text-2xl font-semibold mb-4">Your Cart is Empty</h1>

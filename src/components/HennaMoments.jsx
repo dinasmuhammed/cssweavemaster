@@ -16,36 +16,53 @@ const HennaMoments = () => {
 
   useEffect(() => {
     let isActive = true;
+    let animationTimeout;
 
     const startAutoScroll = async () => {
-      const container = scrollRef.current;
-      if (!container || !isActive) return;
+      if (!scrollRef.current || !isActive) return;
 
+      const container = scrollRef.current;
       const scrollWidth = container.scrollWidth - container.clientWidth;
-      
-      while (isActive) {
-        await controls.start({
-          x: -scrollWidth,
-          transition: { duration: 20, ease: "linear" }
-        });
-        
-        if (isActive) {
+
+      const animate = async () => {
+        if (!isActive) return;
+
+        try {
           await controls.start({
-            x: 0,
-            transition: { duration: 0 }
+            x: -scrollWidth,
+            transition: { duration: 20, ease: "linear" }
           });
+
+          if (isActive) {
+            await controls.start({
+              x: 0,
+              transition: { duration: 0 }
+            });
+
+            // Schedule the next animation
+            animationTimeout = setTimeout(animate, 100);
+          }
+        } catch (error) {
+          console.error('Animation error:', error);
         }
-      }
+      };
+
+      // Start the initial animation
+      animate();
     };
 
-    startAutoScroll();
+    // Add a small delay before starting the animation to ensure component is mounted
+    const initTimeout = setTimeout(() => {
+      startAutoScroll();
+    }, 100);
 
-    // Cleanup function
     return () => {
       isActive = false;
+      clearTimeout(animationTimeout);
+      clearTimeout(initTimeout);
       controls.stop();
     };
-  }, [controls]); // Only re-run if controls changes
+  }, [controls]);
 
   return (
     <section className="py-12 sm:py-16">

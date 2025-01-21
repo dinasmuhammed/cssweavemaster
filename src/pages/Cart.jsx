@@ -8,7 +8,7 @@ import { toast } from "sonner";
 
 const Cart = () => {
   const navigate = useNavigate();
-  const { cartItems = [], removeFromCart, updateQuantity, clearCart } = useCart();
+  const { cartItems = [], removeFromCart, updateQuantity, clearCart } = useCart() || {};
   const [formData, setFormData] = useState({
     address: '',
     area: '',
@@ -37,7 +37,7 @@ const Cart = () => {
     }
   };
 
-  if (!cartItems || cartItems.length === 0) {
+  if (!cartItems?.length) {
     return (
       <div className="container mx-auto px-4 py-8 text-center">
         <h1 className="text-2xl font-semibold mb-4">Your Cart is Empty</h1>

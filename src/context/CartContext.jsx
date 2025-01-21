@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext } from 'react';
 
-// Initialize context with default values
+// Define the shape of our context with default values
 const CartContext = createContext({
   cartItems: [],
   savedItems: [],
@@ -92,3 +92,5 @@ export const CartProvider = ({ children }) => {
     </CartContext.Provider>
   );
 };
+
+export default CartProvider;

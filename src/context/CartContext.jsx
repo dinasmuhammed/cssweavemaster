@@ -1,8 +1,17 @@
 import React, { createContext, useState, useContext } from 'react';
 import { toast } from "sonner";
 
-// Define the CartContext with proper typing
-const CartContext = createContext(null);
+const CartContext = createContext({
+  cartItems: [],
+  savedItems: [],
+  addToCart: () => {},
+  removeFromCart: () => {},
+  updateQuantity: () => {},
+  saveForLater: () => {},
+  moveToCart: () => {},
+  removeSavedItem: () => {},
+  clearCart: () => {},
+});
 
 export const useCart = () => {
   const context = useContext(CartContext);

@@ -9,12 +9,11 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { WhatsAppWidget } from 'react-whatsapp-widget';
 import 'react-whatsapp-widget/dist/index.css';
 
-// Configure QueryClient with optimized settings
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      cacheTime: 1000 * 60 * 30, // 30 minutes
+      staleTime: 1000 * 60 * 5,
+      cacheTime: 1000 * 60 * 30,
       retry: 1,
       suspense: true,
       useErrorBoundary: true,
@@ -24,7 +23,6 @@ const queryClient = new QueryClient({
   },
 });
 
-// Simple lazy loading without prefetch to fix dynamic import issues
 const Header = lazy(() => import('./components/Header'));
 const Footer = lazy(() => import('./components/Footer'));
 const Index = lazy(() => import('./pages/Index'));

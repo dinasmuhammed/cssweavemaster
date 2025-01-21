@@ -195,19 +195,12 @@ const Services = () => {
       </div>
 
       {/* Booking Form Section */}
-      <section 
-        ref={bookingRef} 
-        className="py-16 px-4 bg-cream-100 scroll-mt-16 border-t border-green-800/10"
-      >
+      <section ref={bookingRef} className="py-16 px-4 bg-cream-100">
         <div className="container mx-auto max-w-2xl">
-          <div className="bg-white rounded-2xl shadow-sm p-8 sm:p-10">
-            <h2 className="text-2xl md:text-3xl font-heading text-center text-green-800 mb-8">
-              Book Now
-            </h2>
-            <div className="relative">
-              <BookingForm />
-            </div>
-          </div>
+          <h2 className="text-2xl md:text-3xl font-heading text-center text-green-800 mb-12">
+            Book Now
+          </h2>
+          <BookingForm />
         </div>
       </section>
     </div>

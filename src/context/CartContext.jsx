@@ -1,19 +1,8 @@
 import React, { createContext, useState, useContext } from 'react';
+import { toast } from "sonner";
 
-// Define initial state
-const initialState = {
-  cartItems: [],
-  savedItems: [],
-  addToCart: () => {},
-  removeFromCart: () => {},
-  updateQuantity: () => {},
-  saveForLater: () => {},
-  moveToCart: () => {},
-  removeSavedItem: () => {},
-  clearCart: () => {},
-};
-
-const CartContext = createContext(initialState);
+// Define the CartContext with proper typing
+const CartContext = createContext(null);
 
 export const useCart = () => {
   const context = useContext(CartContext);
@@ -37,10 +26,12 @@ export const CartProvider = ({ children }) => {
       }
       return [...prevItems, { ...item, quantity: 1 }];
     });
+    toast.success(`${item.name} added to cart`);
   };
 
   const removeFromCart = (itemId) => {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+    toast.success("Item removed from cart");
   };
 
   const updateQuantity = (itemId, newQuantity) => {
@@ -66,14 +57,17 @@ export const CartProvider = ({ children }) => {
   const moveToCart = (item) => {
     addToCart(item);
     setSavedItems((prevItems) => prevItems.filter((i) => i.id !== item.id));
+    toast.success(`${item.name} moved to cart`);
   };
 
   const removeSavedItem = (itemId) => {
     setSavedItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+    toast.success("Item removed from saved items");
   };
 
   const clearCart = () => {
     setCartItems([]);
+    toast.success("Cart cleared");
   };
 
   const value = {

@@ -58,13 +58,13 @@ const App = () => {
                 duration: 3000,
               }}
             />
-            <Suspense fallback={
-              <div className="flex items-center justify-center h-screen bg-white">
-                <LoadingSpinner size="large" />
-              </div>
-            }>
-              <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-                <div className="flex flex-col min-h-screen bg-white">
+            <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+              <div className="flex flex-col min-h-screen bg-white">
+                <Suspense fallback={
+                  <div className="flex items-center justify-center h-screen bg-white">
+                    <LoadingSpinner size="large" />
+                  </div>
+                }>
                   <Header />
                   <main className="flex-grow container mx-auto px-4 py-8 w-full max-w-7xl">
                     <Routes>
@@ -84,15 +84,15 @@ const App = () => {
                     </Routes>
                   </main>
                   <Footer />
-                  <WhatsAppWidget 
-                    phoneNumber="+918086647124"
-                    companyName="Henna by Fathima"
-                    message="Hello! How can we help you?"
-                    className="!bottom-20 sm:!bottom-4" // Make it responsive
-                  />
-                </div>
-              </Router>
-            </Suspense>
+                </Suspense>
+                <WhatsAppWidget 
+                  phoneNumber="+918086647124"
+                  companyName="Henna by Fathima"
+                  message="Hello! How can we help you?"
+                  className="!bottom-20 sm:!bottom-4"
+                />
+              </div>
+            </Router>
           </ErrorBoundary>
         </CartProvider>
       </TooltipProvider>

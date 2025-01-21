@@ -16,58 +16,41 @@ const HennaMoments = () => {
 
   useEffect(() => {
     let isActive = true;
-    let animationFrame;
 
     const startAutoScroll = async () => {
-      if (!isActive || !scrollRef.current) return;
-
       const container = scrollRef.current;
+      if (!container || !isActive) return;
+
       const scrollWidth = container.scrollWidth - container.clientWidth;
-
-      const animate = async () => {
-        if (!isActive) return;
-
-        try {
+      
+      while (isActive) {
+        await controls.start({
+          x: -scrollWidth,
+          transition: { duration: 20, ease: "linear" }
+        });
+        
+        if (isActive) {
           await controls.start({
-            x: -scrollWidth,
-            transition: { duration: 20, ease: "linear" }
+            x: 0,
+            transition: { duration: 0 }
           });
-
-          if (isActive) {
-            await controls.start({
-              x: 0,
-              transition: { duration: 0 }
-            });
-            
-            if (isActive) {
-              animationFrame = requestAnimationFrame(animate);
-            }
-          }
-        } catch (error) {
-          console.error('Animation error:', error);
         }
-      };
-
-      animationFrame = requestAnimationFrame(animate);
+      }
     };
 
     startAutoScroll();
 
+    // Cleanup function
     return () => {
       isActive = false;
-      if (animationFrame) {
-        cancelAnimationFrame(animationFrame);
-      }
       controls.stop();
     };
-  }, [controls]);
+  }, [controls]); // Only re-run if controls changes
 
   return (
     <section className="py-12 sm:py-16">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-green-800 mb-4">
-          Henna Moments
-        </h2>
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-green-800 mb-4">Henna Moments</h2>
         <p className="text-center mb-8 sm:mb-12 text-sm sm:text-base text-gray-600">
           Follow our instagram page{' '}
           <a 

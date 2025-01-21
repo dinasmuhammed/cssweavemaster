@@ -5,12 +5,10 @@ import CartItem from '../components/CartItem';
 import { useNavigate } from 'react-router-dom';
 import DeliveryForm from '../components/checkout/DeliveryForm';
 import { toast } from "sonner";
-import { ShoppingBag } from 'lucide-react';
 
 const Cart = () => {
-  const { cartItems, removeFromCart, updateQuantity, clearCart, getCartTotal } = useCart();
+  const { cartItems, removeFromCart, updateQuantity, clearCart } = useCart();
   const navigate = useNavigate();
-  const [isProcessing, setIsProcessing] = useState(false);
   const [formData, setFormData] = useState({
     address: '',
     area: '',
@@ -22,55 +20,37 @@ const Cart = () => {
     pincode: ''
   });
 
+  const totalPrice = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const shippingCharge = 0;
+  const totalAmount = totalPrice + shippingCharge;
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleCheckout = async (e) => {
-    e.preventDefault();
-    if (cartItems.length === 0) {
-      toast.error("Your cart is empty");
-      return;
-    }
-
-    try {
-      setIsProcessing(true);
+  const handleCheckout = (paymentResponse) => {
     clearCart();
     toast.success("Order placed successfully!");
     navigate('/');
-    } catch (error) {
-      toast.error(error.message || "Failed to process payment");
-    } finally {
-      setIsProcessing(false);
-    }
   };
 
   if (cartItems.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] px-4">
-        <ShoppingBag className="w-16 h-16 text-gray-400 mb-4" />
+      <div className="container mx-auto px-4 py-8 text-center">
         <h1 className="text-2xl font-semibold mb-4">Your Cart is Empty</h1>
-        <p className="text-gray-600 mb-8 text-center">
-          Looks like you haven't added anything to your cart yet.
-        </p>
-        <Button 
-          onClick={() => navigate('/shop')}
-          className="bg-green-800 hover:bg-green-700"
-        >
-          Continue Shopping
-        </Button>
+        <Button onClick={() => navigate('/shop')}>Continue Shopping</Button>
       </div>
     );
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 min-h-[600px]">
         <div className="bg-white p-8 rounded-lg shadow-sm h-full flex flex-col">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-2xl font-medium">Order Summary</h2>
-            <p className="text-gray-600">Total Amount: ₹{getCartTotal().toFixed(2)}</p>
+            <p className="text-gray-600">Total Amount Payable: ₹{totalAmount}</p>
           </div>
           
           <div className="divide-y border-y border-gray-100 flex-grow">
@@ -84,24 +64,29 @@ const Cart = () => {
             ))}
           </div>
 
-          <div className="mt-6">
-            <Button
-              variant="outline"
-              onClick={clearCart}
-              className="w-full mb-4 text-red-600 hover:text-red-700 hover:bg-red-50"
-            >
-              Clear Cart
-            </Button>
+          <div className="space-y-4 mt-8">
+            <div className="flex justify-between text-lg">
+              <span className="text-gray-600">Total Price</span>
+              <span>₹{totalPrice}</span>
+            </div>
+            <div className="flex justify-between text-lg">
+              <span className="text-gray-600">Shipping Charge</span>
+              <span>₹{shippingCharge}</span>
+            </div>
+            <div className="flex justify-between text-xl font-medium pt-4 border-t">
+              <span>Grand Total</span>
+              <span>₹{totalAmount}</span>
+            </div>
           </div>
         </div>
 
-        <div className="bg-white p-8 rounded-lg shadow-sm h-full">
+        <div className="bg-white p-8 rounded-lg shadow-sm h-full flex flex-col">
           <DeliveryForm 
             formData={formData}
             onChange={handleInputChange}
             onSubmit={handleCheckout}
-            isProcessing={isProcessing}
             cartItems={cartItems}
+            totalAmount={totalAmount}
           />
         </div>
       </div>

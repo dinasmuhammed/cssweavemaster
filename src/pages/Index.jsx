@@ -1,18 +1,28 @@
 import React from 'react';
 import HeroSection from '../components/HeroSection';
-import WhyHennaByFathima from '../components/WhyHennaByFathima';
+import WelcomeSection from '../components/WelcomeSection';
 import OurServices from '../components/OurServices';
 import OurHappyClients from '../components/OurHappyClients';
-import RazorpayTest from '../components/RazorpayTest';
+import HennaMoments from '../components/HennaMoments';
+import WhyHennaByFathima from '../components/WhyHennaByFathima';
+import OurHappyStore from '../components/OurHappyStore';
 
 const Index = () => {
+  // Using React.useEffect to ensure proper initialization
+  React.useEffect(() => {
+    // Initialize any necessary functionality here
+    console.log('Index component mounted');
+  }, []);
+
   return (
-    <div className="min-h-screen">
+    <div className="flex flex-col w-full">
       <HeroSection />
-      <WhyHennaByFathima />
+      <WelcomeSection />
       <OurServices />
+      <WhyHennaByFathima />
       <OurHappyClients />
-      <RazorpayTest />
+      <HennaMoments />
+      <OurHappyStore />
     </div>
   );
 };

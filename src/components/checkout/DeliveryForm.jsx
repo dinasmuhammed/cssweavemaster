@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { validatePaymentForm } from '@/utils/paymentUtils';
+import { validatePaymentForm, initializeRazorpayPayment } from '@/utils/paymentUtils';
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
-import { initializeRazorpayPayment } from '../../utils/payment/razorpay';
 
 const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
   const [isProcessing, setIsProcessing] = useState(false);
@@ -28,12 +27,6 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
       if (!cartItems?.length) {
         console.log('Cart is empty');
         toast.error("Your cart is empty");
-        return;
-      }
-
-      if (!totalAmount || totalAmount <= 0) {
-        console.log('Invalid total amount:', totalAmount);
-        toast.error("Invalid order amount");
         return;
       }
 
@@ -90,7 +83,6 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
             onChange={onChange}
             className={`mt-1 ${errors.name ? 'border-red-500' : ''}`}
             disabled={isProcessing}
-            required
           />
           {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
         </div>
@@ -105,7 +97,6 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
             onChange={onChange}
             className={`mt-1 ${errors.email ? 'border-red-500' : ''}`}
             disabled={isProcessing}
-            required
           />
           {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
         </div>
@@ -123,7 +114,6 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
               onChange={onChange}
               className={`rounded-l-none ${errors.mobile ? 'border-red-500' : ''}`}
               disabled={isProcessing}
-              required
             />
           </div>
           {errors.mobile && <p className="text-red-500 text-sm mt-1">{errors.mobile}</p>}
@@ -138,7 +128,6 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
             onChange={onChange}
             className={`mt-1 ${errors.address ? 'border-red-500' : ''}`}
             disabled={isProcessing}
-            required
           />
           {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
         </div>

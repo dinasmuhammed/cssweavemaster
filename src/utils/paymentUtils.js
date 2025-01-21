@@ -11,7 +11,6 @@ const loadRazorpayScript = () => {
   });
 };
 
-// Get the API base URL based on environment
 const getApiBaseUrl = () => {
   if (typeof window === 'undefined') return '/api';
   

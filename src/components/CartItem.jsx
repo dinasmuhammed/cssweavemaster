@@ -7,13 +7,16 @@ const CartItem = ({
   item, 
   onRemove, 
   onUpdateQuantity, 
-  isLoading 
+  isLoading,
+  activeOperation 
 }) => {
   if (!item) return null;
 
+  const isItemLoading = isLoading && activeOperation === item.id;
+
   return (
     <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 py-6 border-b relative">
-      {isLoading && (
+      {isItemLoading && (
         <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10">
           <LoadingSpinner size="small" />
         </div>
@@ -43,8 +46,9 @@ const CartItem = ({
               variant="ghost"
               size="icon"
               onClick={() => onRemove(item.id)}
-              disabled={isLoading}
+              disabled={isItemLoading}
               className="text-red-500 hover:text-red-700 hover:bg-red-50"
+              aria-label="Remove item"
             >
               <Trash2 className="h-5 w-5" />
             </Button>
@@ -54,16 +58,18 @@ const CartItem = ({
         <div className="flex items-center gap-4 mt-4">
           <button 
             onClick={() => onUpdateQuantity(item.id, Math.max(1, item.quantity - 1))}
-            disabled={isLoading || item.quantity <= 1}
+            disabled={isItemLoading || item.quantity <= 1}
             className="w-8 h-8 flex items-center justify-center border-2 border-gray-300 rounded-full text-gray-600 hover:bg-gray-50 touch-manipulation disabled:opacity-50 disabled:cursor-not-allowed"
             aria-label="Decrease quantity"
           >
             -
           </button>
-          <span className="text-lg w-6 text-center">{item.quantity}</span>
+          <span className="text-lg w-6 text-center" aria-label="Current quantity">
+            {item.quantity}
+          </span>
           <button 
             onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
-            disabled={isLoading}
+            disabled={isItemLoading}
             className="w-8 h-8 flex items-center justify-center border-2 border-gray-300 rounded-full text-gray-600 hover:bg-gray-50 touch-manipulation disabled:opacity-50 disabled:cursor-not-allowed"
             aria-label="Increase quantity"
           >

@@ -1,22 +1,19 @@
 import React from 'react';
 import { ShoppingCart, Heart } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
-import { useCart } from '../context/CartContext';
+import { useShoppingOperations } from '../hooks/useShoppingOperations';
 
 const ProductCard = ({ product }) => {
-  const { addToCart, savedItems, saveForLater } = useCart();
+  const { 
+    savedItems, 
+    handleAddToCart, 
+    handleSaveForLater,
+    isLoading,
+    activeOperation 
+  } = useShoppingOperations();
+  
   const isSaved = savedItems.some(item => item.id === product.id);
-
-  const handleSaveForLater = () => {
-    saveForLater(product);
-    toast.success(`${product.name} ${isSaved ? 'removed from' : 'added to'} favorites`);
-  };
-
-  const handleAddToCart = () => {
-    addToCart(product);
-    toast.success(`${product.name} added to cart`);
-  };
+  const isItemLoading = isLoading && activeOperation === product.id;
 
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
@@ -38,24 +35,39 @@ const ProductCard = ({ product }) => {
         <div className="flex gap-2">
           <Button 
             variant="outline"
-            onClick={handleSaveForLater}
+            onClick={() => handleSaveForLater(product)}
+            disabled={isItemLoading}
             className={`w-12 h-12 rounded-lg border-2 border-green-800 ${
               isSaved ? 'bg-green-50' : 'bg-white hover:bg-green-50'
             }`}
+            aria-label={`${isSaved ? 'Remove from' : 'Add to'} favorites`}
+            aria-pressed={isSaved}
           >
-            <Heart 
-              className={`w-5 h-5 ${
-                isSaved ? 'text-green-600 fill-green-600' : 'text-green-800'
-              }`} 
-              fill={isSaved ? "currentColor" : "none"}
-            />
+            {isItemLoading ? (
+              <LoadingSpinner size="small" />
+            ) : (
+              <Heart 
+                className={`w-5 h-5 ${
+                  isSaved ? 'text-green-600 fill-green-600' : 'text-green-800'
+                }`} 
+                fill={isSaved ? "currentColor" : "none"}
+              />
+            )}
           </Button>
           <Button 
-            onClick={handleAddToCart}
+            onClick={() => handleAddToCart(product)}
+            disabled={isItemLoading}
             className="flex-1 bg-green-800 hover:bg-green-700 text-white rounded-lg h-12 flex items-center justify-between px-4"
+            aria-label={`Add ${product.name} to cart`}
           >
-            <span className="text-base font-medium">Add to Bag</span>
-            <ShoppingCart className="w-5 h-5" />
+            {isItemLoading ? (
+              <LoadingSpinner size="small" />
+            ) : (
+              <>
+                <span className="text-base font-medium">Add to Bag</span>
+                <ShoppingCart className="w-5 h-5" />
+              </>
+            )}
           </Button>
         </div>
       </div>

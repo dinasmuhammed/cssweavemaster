@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext } from 'react';
 
-// Define the shape of our context with default values
-const CartContext = createContext({
+// Define initial state
+const initialState = {
   cartItems: [],
   savedItems: [],
   addToCart: () => {},
@@ -11,7 +11,9 @@ const CartContext = createContext({
   moveToCart: () => {},
   removeSavedItem: () => {},
   clearCart: () => {},
-});
+};
+
+const CartContext = createContext(initialState);
 
 export const useCart = () => {
   const context = useContext(CartContext);

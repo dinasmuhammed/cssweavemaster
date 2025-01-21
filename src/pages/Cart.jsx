@@ -8,7 +8,7 @@ import { toast } from "sonner";
 
 const Cart = () => {
   const navigate = useNavigate();
-  const { cartItems = [], removeFromCart, updateQuantity, clearCart } = useCart() || {};
+  const { cartItems = [], removeFromCart, updateQuantity, clearCart } = useCart();
   const [formData, setFormData] = useState({
     address: '',
     area: '',
@@ -20,7 +20,7 @@ const Cart = () => {
     pincode: ''
   });
 
-  const totalPrice = cartItems?.reduce((sum, item) => sum + (item.price * item.quantity), 0) || 0;
+  const totalPrice = cartItems?.reduce((sum, item) => sum + (item.price * item.quantity), 0) ?? 0;
   const shippingCharge = 0;
   const totalAmount = totalPrice + shippingCharge;
 

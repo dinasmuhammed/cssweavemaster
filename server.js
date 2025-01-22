@@ -65,7 +65,7 @@ app.post('/api/verify-payment', async (req, res) => {
       paymentId: razorpay_payment_id
     });
 
-    const isValid = verifyPayment(
+    const isValid = await verifyPayment(
       razorpay_order_id,
       razorpay_payment_id,
       razorpay_signature

@@ -6,6 +6,7 @@ import OrderSummary from '../components/checkout/OrderSummary';
 import DeliveryForm from '../components/checkout/DeliveryForm';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
+import { ShoppingBag } from 'lucide-react';
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -66,11 +67,24 @@ const Cart = () => {
     }
   };
 
-  if (!cartItems.length) {
+  if (!cartItems?.length) {
     return (
-      <div className="container mx-auto px-4 py-8 text-center">
-        <h1 className="text-2xl font-semibold mb-4">Your Cart is Empty</h1>
-        <Button onClick={() => navigate('/shop')}>Continue Shopping</Button>
+      <div className="flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <ShoppingBag className="mx-auto h-12 w-12 text-gray-400" />
+          <h2 className="mt-2 text-lg font-medium text-gray-900">Your cart is empty</h2>
+          <p className="mt-1 text-sm text-gray-500">
+            Start adding some items to your cart and they will appear here
+          </p>
+          <div className="mt-6">
+            <Button 
+              onClick={() => navigate('/shop')}
+              className="bg-green-800 hover:bg-green-700 text-white"
+            >
+              Continue Shopping
+            </Button>
+          </div>
+        </div>
       </div>
     );
   }

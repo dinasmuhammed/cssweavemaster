@@ -25,53 +25,53 @@ export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [savedItems, setSavedItems] = useState([]);
 
-  const addToCart = (item) => {
-    setCartItems((prevItems) => {
-      const existingItem = prevItems.find((i) => i.id === item.id);
+  const addToCart = (product) => {
+    setCartItems(prevItems => {
+      const existingItem = prevItems.find(item => item.id === product.id);
       if (existingItem) {
-        return prevItems.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-        );
+        toast.info("Item already in cart");
+        return prevItems;
       }
-      return [...prevItems, { ...item, quantity: 1 }];
+      toast.success("Added to cart");
+      return [...prevItems, { ...product, quantity: 1 }];
     });
-    toast.success(`${item.name} added to cart`);
   };
 
-  const removeFromCart = (itemId) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
-    toast.success("Item removed from cart");
+  const removeFromCart = (productId) => {
+    setCartItems(prevItems => prevItems.filter(item => item.id !== productId));
+    toast.success("Removed from cart");
   };
 
-  const updateQuantity = (itemId, newQuantity) => {
+  const updateQuantity = (productId, newQuantity) => {
     if (newQuantity < 1) return;
-    
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === itemId ? { ...item, quantity: newQuantity } : item
+    setCartItems(prevItems =>
+      prevItems.map(item =>
+        item.id === productId ? { ...item, quantity: newQuantity } : item
       )
     );
+    toast.success("Quantity updated");
   };
 
-  const saveForLater = (item) => {
-    setSavedItems((prevItems) => {
-      const isItemSaved = prevItems.some((i) => i.id === item.id);
-      if (isItemSaved) {
-        return prevItems.filter((i) => i.id !== item.id);
+  const saveForLater = (product) => {
+    removeFromCart(product.id);
+    setSavedItems(prevItems => {
+      if (prevItems.find(item => item.id === product.id)) {
+        toast.info("Item already saved");
+        return prevItems;
       }
-      return [...prevItems, item];
+      toast.success("Saved for later");
+      return [...prevItems, product];
     });
   };
 
-  const moveToCart = (item) => {
-    addToCart(item);
-    setSavedItems((prevItems) => prevItems.filter((i) => i.id !== item.id));
-    toast.success(`${item.name} moved to cart`);
+  const moveToCart = (product) => {
+    removeSavedItem(product.id);
+    addToCart(product);
   };
 
-  const removeSavedItem = (itemId) => {
-    setSavedItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
-    toast.success("Item removed from saved items");
+  const removeSavedItem = (productId) => {
+    setSavedItems(prevItems => prevItems.filter(item => item.id !== productId));
+    toast.success("Removed from saved items");
   };
 
   const clearCart = () => {
@@ -91,11 +91,5 @@ export const CartProvider = ({ children }) => {
     clearCart,
   };
 
-  return (
-    <CartContext.Provider value={value}>
-      {children}
-    </CartContext.Provider>
-  );
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };
-
-export default CartProvider;

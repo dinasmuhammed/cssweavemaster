@@ -15,15 +15,16 @@ const OrderSummary = ({
   const calculateShippingCharge = () => {
     const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
     
-    if (totalItems >= 6) {
-      return 80;
-    } else if (totalItems === 1) {
-      return 35;
-    } else {
-      const baseCharge = 25;
-      const additionalCharge = 35;
-      return baseCharge + (Math.floor((totalItems - 1) / 2) * additionalCharge);
-    }
+    if (totalItems === 0) return 0;
+    if (totalItems === 1) return 35;
+    if (totalItems === 2) return 36;
+    
+    // For 3 or more items, increase by ₹15 per additional item
+    const baseCharge = 36; // Base charge for 2 items
+    const additionalItems = totalItems - 2;
+    const additionalCharge = additionalItems * 15;
+    
+    return baseCharge + additionalCharge;
   };
 
   const validateCoupon = () => {

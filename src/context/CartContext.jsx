@@ -16,6 +16,7 @@ const CartContext = createContext({
 export const useCart = () => {
   const context = useContext(CartContext);
   if (!context) {
+    console.error('useCart must be used within a CartProvider');
     throw new Error('useCart must be used within a CartProvider');
   }
   return context;
@@ -26,6 +27,12 @@ export const CartProvider = ({ children }) => {
   const [savedItems, setSavedItems] = useState([]);
 
   const addToCart = (product) => {
+    if (!product?.id) {
+      console.error('Invalid product:', product);
+      toast.error("Unable to add invalid product to cart");
+      return;
+    }
+
     setCartItems(prevItems => {
       const existingItem = prevItems.find(item => item.id === product.id);
       if (existingItem) {
@@ -38,21 +45,49 @@ export const CartProvider = ({ children }) => {
   };
 
   const removeFromCart = (productId) => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== productId));
-    toast.success("Removed from cart");
+    if (!productId) {
+      console.error('Invalid productId:', productId);
+      return;
+    }
+
+    setCartItems(prevItems => {
+      const newItems = prevItems.filter(item => item.id !== productId);
+      if (newItems.length === prevItems.length) {
+        console.warn('Product not found in cart:', productId);
+      } else {
+        toast.success("Removed from cart");
+      }
+      return newItems;
+    });
   };
 
   const updateQuantity = (productId, newQuantity) => {
-    if (newQuantity < 1) return;
-    setCartItems(prevItems =>
-      prevItems.map(item =>
+    if (!productId || typeof newQuantity !== 'number' || newQuantity < 1) {
+      console.error('Invalid updateQuantity parameters:', { productId, newQuantity });
+      return;
+    }
+
+    setCartItems(prevItems => {
+      const itemExists = prevItems.some(item => item.id === productId);
+      if (!itemExists) {
+        console.warn('Product not found for quantity update:', productId);
+        return prevItems;
+      }
+
+      const updatedItems = prevItems.map(item =>
         item.id === productId ? { ...item, quantity: newQuantity } : item
-      )
-    );
-    toast.success("Quantity updated");
+      );
+      toast.success("Quantity updated");
+      return updatedItems;
+    });
   };
 
   const saveForLater = (product) => {
+    if (!product?.id) {
+      console.error('Invalid product for save later:', product);
+      return;
+    }
+
     removeFromCart(product.id);
     setSavedItems(prevItems => {
       if (prevItems.find(item => item.id === product.id)) {
@@ -65,13 +100,30 @@ export const CartProvider = ({ children }) => {
   };
 
   const moveToCart = (product) => {
+    if (!product?.id) {
+      console.error('Invalid product for move to cart:', product);
+      return;
+    }
+
     removeSavedItem(product.id);
     addToCart(product);
   };
 
   const removeSavedItem = (productId) => {
-    setSavedItems(prevItems => prevItems.filter(item => item.id !== productId));
-    toast.success("Removed from saved items");
+    if (!productId) {
+      console.error('Invalid productId for remove saved item:', productId);
+      return;
+    }
+
+    setSavedItems(prevItems => {
+      const newItems = prevItems.filter(item => item.id !== productId);
+      if (newItems.length === prevItems.length) {
+        console.warn('Product not found in saved items:', productId);
+      } else {
+        toast.success("Removed from saved items");
+      }
+      return newItems;
+    });
   };
 
   const clearCart = () => {

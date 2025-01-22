@@ -7,13 +7,21 @@ import { toast } from "sonner";
 const OrderSummary = ({ 
   cartItems, 
   onQuantityChange,
-  totalPrice
+  totalPrice = 0
 }) => {
   const [couponCode, setCouponCode] = useState('');
   const [discount, setDiscount] = useState(0);
 
   const calculateShippingCharge = () => {
-    const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    if (!Array.isArray(cartItems)) {
+      console.error('Invalid cartItems:', cartItems);
+      return 0;
+    }
+
+    const totalItems = cartItems.reduce((sum, item) => {
+      const quantity = Number(item.quantity) || 0;
+      return sum + quantity;
+    }, 0);
     
     if (totalItems === 0) return 0;
     if (totalItems === 1) return 35;
@@ -28,6 +36,11 @@ const OrderSummary = ({
   };
 
   const validateCoupon = () => {
+    if (!couponCode?.trim()) {
+      toast.error('Please enter a coupon code');
+      return;
+    }
+
     // Example coupon codes
     const validCoupons = {
       'WELCOME10': 10,
@@ -37,7 +50,7 @@ const OrderSummary = ({
 
     const discountPercentage = validCoupons[couponCode.toUpperCase()];
     if (discountPercentage) {
-      const discountAmount = (totalPrice * discountPercentage) / 100;
+      const discountAmount = Math.round((totalPrice * discountPercentage) / 100);
       setDiscount(discountAmount);
       toast.success(`Coupon applied! ${discountPercentage}% discount`);
     } else {
@@ -47,7 +60,7 @@ const OrderSummary = ({
   };
 
   const shippingCharge = calculateShippingCharge();
-  const finalTotal = totalPrice + shippingCharge - discount;
+  const finalTotal = Math.max(0, (totalPrice || 0) + shippingCharge - discount);
 
   return (
     <div className="space-y-6">
@@ -57,7 +70,7 @@ const OrderSummary = ({
       </div>
       
       <div className="divide-y border-y">
-        {cartItems.map((item) => (
+        {Array.isArray(cartItems) && cartItems.map((item) => (
           <OrderSummaryItem 
             key={item.id} 
             item={item} 
@@ -86,7 +99,7 @@ const OrderSummary = ({
         <div className="space-y-3">
           <div className="flex justify-between text-sm">
             <span className="text-gray-600">Total Price</span>
-            <span className="text-rose-600">₹{totalPrice}</span>
+            <span className="text-rose-600">₹{totalPrice || 0}</span>
           </div>
           {discount > 0 && (
             <div className="flex justify-between text-sm">

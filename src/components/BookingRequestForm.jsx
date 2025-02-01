@@ -42,26 +42,27 @@ const BookingRequestForm = () => {
     if (!validateForm()) return;
     
     setIsSubmitting(true);
-    console.log('Submitting booking request:', formData);
+    console.log('Preparing WhatsApp message with booking details:', formData);
 
     try {
-      const response = await fetch('https://formspree.io/f/mvgonojq', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          ...formData,
-          date: format(formData.date, 'PPP')
-        })
-      });
+      // Format the message for WhatsApp
+      const message = `
+Hello! I would like to make a booking:
+Name: ${formData.name}
+Address: ${formData.address}
+Budget: ₹${formData.budget}
+Preferred Date: ${format(formData.date, 'PPP')}
+      `.trim();
 
-      if (!response.ok) {
-        throw new Error('Failed to submit form');
-      }
-
-      toast.success("Booking request submitted successfully!");
-      console.log('Booking request submitted successfully');
+      // Encode the message for WhatsApp URL
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappUrl = `https://wa.me/918086647124?text=${encodedMessage}`;
+      
+      // Open WhatsApp in a new window
+      window.open(whatsappUrl, '_blank');
+      
+      toast.success("Redirecting to WhatsApp...");
+      console.log('WhatsApp redirection successful');
       
       setFormData({
         name: '',
@@ -71,8 +72,8 @@ const BookingRequestForm = () => {
       });
       setIsOpen(false);
     } catch (error) {
-      console.error('Error submitting booking request:', error);
-      toast.error("Failed to submit booking request. Please try again.");
+      console.error('Error preparing WhatsApp redirect:', error);
+      toast.error("Failed to open WhatsApp. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -154,7 +155,7 @@ const BookingRequestForm = () => {
             className="w-full"
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Submitting...' : 'Submit Booking Request'}
+            {isSubmitting ? 'Preparing WhatsApp Message...' : 'Submit via WhatsApp'}
           </Button>
         </form>
       </DialogContent>

@@ -3,7 +3,7 @@ import useEmblaCarousel from 'embla-carousel-react';
 import AutoPlay from 'embla-carousel-autoplay';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-const HeroSection = () => {
+const HeroSection = ({ onNavigate }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   
   // Create autoplay plugin instance with proper initialization

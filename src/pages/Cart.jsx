@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { toast } from "sonner";
 import { initializeRazorpayPayment } from '../utils/paymentUtils';
 import OrderSummary from '../components/checkout/OrderSummary';
 import DeliveryForm from '../components/checkout/DeliveryForm';
-import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { ShoppingBag } from 'lucide-react';
 
@@ -19,7 +19,7 @@ const Cart = () => {
     address: ''
   });
 
-  const totalPrice = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const totalPrice = cartItems?.reduce((sum, item) => sum + (item.price * item.quantity), 0) || 0;
   const shippingCharge = 0;
   const totalAmount = totalPrice + shippingCharge;
 
@@ -29,7 +29,7 @@ const Cart = () => {
   };
 
   const handleQuantityChange = (itemId, change) => {
-    const item = cartItems.find(item => item.id === itemId);
+    const item = cartItems?.find(item => item.id === itemId);
     if (item) {
       const newQuantity = Math.max(1, item.quantity + change);
       updateQuantity(itemId, newQuantity);
@@ -45,26 +45,6 @@ const Cart = () => {
   const handlePaymentError = (error) => {
     toast.error(error.message || "Payment failed. Please try again.");
     setIsProcessing(false);
-  };
-
-  const handleCheckout = async () => {
-    setIsProcessing(true);
-    
-    try {
-      await initializeRazorpayPayment(
-        {
-          orderId: `ORDER_${Date.now()}`,
-          items: cartItems,
-          customerDetails: formData
-        },
-        totalAmount,
-        formData,
-        handlePaymentSuccess,
-        handlePaymentError
-      );
-    } catch (error) {
-      handlePaymentError(error);
-    }
   };
 
   if (!cartItems?.length) {
@@ -104,8 +84,8 @@ const Cart = () => {
           <DeliveryForm 
             formData={formData}
             onChange={handleInputChange}
-            onSubmit={handleCheckout}
-            isProcessing={isProcessing}
+            cartItems={cartItems}
+            totalAmount={totalAmount}
           />
         </div>
       </div>

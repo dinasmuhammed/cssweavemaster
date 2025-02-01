@@ -14,8 +14,8 @@ const Cart = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
-    mobile: '',
     email: '',
+    mobile: '',
     address: ''
   });
 
@@ -45,6 +45,26 @@ const Cart = () => {
   const handlePaymentError = (error) => {
     toast.error(error.message || "Payment failed. Please try again.");
     setIsProcessing(false);
+  };
+
+  const handleCheckout = async () => {
+    setIsProcessing(true);
+    
+    try {
+      await initializeRazorpayPayment(
+        {
+          orderId: `ORDER_${Date.now()}`,
+          items: cartItems,
+          customerDetails: formData
+        },
+        totalAmount,
+        formData,
+        handlePaymentSuccess,
+        handlePaymentError
+      );
+    } catch (error) {
+      handlePaymentError(error);
+    }
   };
 
   if (!cartItems?.length) {
@@ -84,6 +104,8 @@ const Cart = () => {
           <DeliveryForm 
             formData={formData}
             onChange={handleInputChange}
+            onSubmit={handleCheckout}
+            isProcessing={isProcessing}
             cartItems={cartItems}
             totalAmount={totalAmount}
           />

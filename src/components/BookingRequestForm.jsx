@@ -20,9 +20,29 @@ const BookingRequestForm = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const validateForm = () => {
+    if (!formData.name.trim()) {
+      toast.error("Please enter your name");
+      return false;
+    }
+    if (!formData.address.trim()) {
+      toast.error("Please enter your address");
+      return false;
+    }
+    if (!formData.budget || Number(formData.budget) <= 0) {
+      toast.error("Please enter a valid budget");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) return;
+    
     setIsSubmitting(true);
+    console.log('Submitting booking request:', formData);
 
     try {
       const response = await fetch('https://formspree.io/f/mvgonojq', {
@@ -36,19 +56,22 @@ const BookingRequestForm = () => {
         })
       });
 
-      if (response.ok) {
-        toast.success("Booking request submitted successfully!");
-        setFormData({
-          name: '',
-          address: '',
-          budget: '',
-          date: new Date(),
-        });
-        setIsOpen(false);
-      } else {
+      if (!response.ok) {
         throw new Error('Failed to submit form');
       }
+
+      toast.success("Booking request submitted successfully!");
+      console.log('Booking request submitted successfully');
+      
+      setFormData({
+        name: '',
+        address: '',
+        budget: '',
+        date: new Date(),
+      });
+      setIsOpen(false);
     } catch (error) {
+      console.error('Error submitting booking request:', error);
       toast.error("Failed to submit booking request. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -66,42 +89,42 @@ const BookingRequestForm = () => {
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <div className="space-y-2">
-            <Label htmlFor="name" className="font-semibold">Name</Label>
+            <Label htmlFor="name">Name</Label>
             <Input
               id="name"
-              required
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              placeholder="Enter your name"
               className="w-full"
             />
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="address" className="font-semibold">Address</Label>
+            <Label htmlFor="address">Address</Label>
             <Input
               id="address"
-              required
               value={formData.address}
               onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+              placeholder="Enter your address"
               className="w-full"
             />
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="budget" className="font-semibold">Budget</Label>
+            <Label htmlFor="budget">Budget</Label>
             <Input
               id="budget"
-              required
               type="number"
               value={formData.budget}
               onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-              className="w-full"
               placeholder="Enter amount in ₹"
+              className="w-full"
+              min="0"
             />
           </div>
           
           <div className="space-y-2">
-            <Label className="font-semibold">Preferred Date</Label>
+            <Label>Preferred Date</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -126,7 +149,11 @@ const BookingRequestForm = () => {
             </Popover>
           </div>
           
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
+          <Button 
+            type="submit" 
+            className="w-full"
+            disabled={isSubmitting}
+          >
             {isSubmitting ? 'Submitting...' : 'Submit Booking Request'}
           </Button>
         </form>

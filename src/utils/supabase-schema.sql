@@ -1,4 +1,5 @@
-create table payment_logs (
+-- Create payment_logs table if it doesn't exist
+create table if not exists payment_logs (
   id uuid default uuid_generate_v4() primary key,
   order_id text not null,
   payment_id text,
@@ -10,20 +11,21 @@ create table payment_logs (
   metadata jsonb default '{}'::jsonb
 );
 
--- Add RLS policies
+-- Enable RLS
 alter table payment_logs enable row level security;
 
-create policy "Allow insert for authenticated users only"
-  on payment_logs for insert
-  to authenticated
-  with check (true);
-
-create policy "Allow select for authenticated users only"
+-- Create policies
+create policy "Enable read access for authenticated users"
   on payment_logs for select
   to authenticated
   using (true);
 
-create policy "Allow update for authenticated users only"
+create policy "Enable insert for authenticated users"
+  on payment_logs for insert
+  to authenticated
+  with check (true);
+
+create policy "Enable update for authenticated users"
   on payment_logs for update
   to authenticated
   using (true);

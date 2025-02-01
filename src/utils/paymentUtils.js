@@ -36,7 +36,8 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       console.log('Razorpay script loaded successfully');
     }
 
-    const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/create-order`, {
+    // Use the proxy URL defined in vite.config.js
+    const response = await fetch('/api/create-order', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -77,7 +78,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       handler: async function(response) {
         console.log('Payment successful:', response);
         try {
-          const verifyResponse = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/verify-payment`, {
+          const verifyResponse = await fetch('/api/verify-payment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

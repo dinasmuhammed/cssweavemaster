@@ -2,10 +2,10 @@ const Razorpay = require('razorpay');
 const crypto = require('crypto');
 const { createClient } = require('@supabase/supabase-js');
 
-// Create Supabase client
+// Create Supabase client with specific URL
 const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_ANON_KEY
+  'https://kgemzehqmlgizepnvlsk.supabase.co',
+  process.env.SUPABASE_KEY
 );
 
 // Initialize Razorpay with credentials from Supabase

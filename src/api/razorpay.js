@@ -29,9 +29,8 @@ export const createOrder = async (amount, currency = 'INR') => {
       throw new Error('Razorpay keys not found');
     }
 
-    // Amount should already be in paise from paymentUtils.js
     const options = {
-      amount: amount, 
+      amount: amount,
       currency,
       receipt: `rcpt_${uuidv4()}`,
     };

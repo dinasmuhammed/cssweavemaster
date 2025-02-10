@@ -1,3 +1,4 @@
+
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
@@ -24,13 +25,18 @@ export default defineConfig(({ mode }) => ({
     },
   },
   server: {
-    host: "::",
+    host: true, // Listen on all addresses
     port: 8080,
+    strictPort: true,
+    hmr: {
+      clientPort: 443 // Force client to use HTTPS port
+    },
     proxy: {
       '/api': {
         target: 'http://localhost:3001',
         changeOrigin: true,
         secure: false,
+        ws: true
       },
     },
   },

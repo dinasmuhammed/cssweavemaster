@@ -1,6 +1,7 @@
 
 import { createClient } from '@supabase/supabase-js';
 import { v4 as uuidv4 } from 'uuid';
+import Razorpay from 'razorpay';
 
 // Initialize Supabase client
 const supabase = createClient(
@@ -8,10 +9,10 @@ const supabase = createClient(
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
-// Initialize Razorpay
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET
+// Initialize Razorpay (moved outside the function)
+const razorpayInstance = new Razorpay({
+  key_id: import.meta.env.VITE_RAZORPAY_KEY_ID,
+  key_secret: import.meta.env.VITE_RAZORPAY_KEY_SECRET
 });
 
 export const createOrder = async (amount, currency = 'INR') => {
@@ -28,7 +29,7 @@ export const createOrder = async (amount, currency = 'INR') => {
       receipt: `rcpt_${uuidv4()}`,
     };
     
-    const order = await razorpay.orders.create(options);
+    const order = await razorpayInstance.orders.create(options);
     
     if (!order || !order.id) {
       throw new Error('Invalid order response from Razorpay');
@@ -65,7 +66,7 @@ export const verifyPayment = async (orderId, paymentId, signature) => {
 
     const text = `${orderId}|${paymentId}`;
     const generated_signature = crypto
-      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+      .createHmac('sha256', import.meta.env.VITE_RAZORPAY_KEY_SECRET)
       .update(text)
       .digest('hex');
     

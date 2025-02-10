@@ -10,13 +10,15 @@ export default async function handler(req, res) {
     const { amount, currency = 'INR' } = req.body;
 
     if (!amount) {
+      console.error('Missing amount in request:', req.body);
       return res.status(400).json({ error: 'Amount is required' });
     }
 
+    console.log('Creating order with amount:', amount, 'currency:', currency);
     const order = await createOrder(amount, currency);
-    console.log('Order created:', order);
     
     if (!order || !order.id) {
+      console.error('Invalid order response:', order);
       return res.status(500).json({ error: 'Invalid order response from Razorpay' });
     }
 

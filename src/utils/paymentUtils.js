@@ -1,3 +1,4 @@
+
 export const validatePaymentForm = (formData) => {
   const errors = {};
   
@@ -25,7 +26,6 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     console.log('Initializing payment with amount:', amount);
     
     if (!window.Razorpay) {
-      console.log('Loading Razorpay script...');
       const script = document.createElement('script');
       script.src = 'https://checkout.razorpay.com/v1/checkout.js';
       script.async = true;
@@ -33,33 +33,27 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
         script.onload = resolve;
         document.body.appendChild(script);
       });
-      console.log('Razorpay script loaded successfully');
     }
 
-    // Use the proxy URL defined in vite.config.js
     const response = await fetch('/api/create-order', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        amount: Math.round(amount * 100), // Convert to smallest currency unit (paise)
+        amount: amount,
         currency: 'INR',
-        orderData
       })
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error('Error creating order:', errorData);
-      throw new Error(errorData.message || 'Failed to create order');
+      throw new Error(errorData.error || 'Failed to create order');
     }
 
     const data = await response.json();
-    console.log('Order created:', data);
     
     if (!data.order?.id) {
-      console.error('Invalid order response:', data);
       throw new Error('Invalid order response from server');
     }
 
@@ -76,7 +70,6 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
         contact: customerDetails.mobile,
       },
       handler: async function(response) {
-        console.log('Payment successful:', response);
         try {
           const verifyResponse = await fetch('/api/verify-payment', {
             method: 'POST',
@@ -91,11 +84,9 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
 
           if (!verifyResponse.ok) {
             const errorData = await verifyResponse.json();
-            console.error('Payment verification failed:', errorData);
-            throw new Error('Payment verification failed');
+            throw new Error(errorData.error || 'Payment verification failed');
           }
 
-          console.log('Payment verified successfully');
           if (onSuccess) onSuccess(response);
         } catch (error) {
           console.error('Payment verification error:', error);
@@ -104,7 +95,6 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       },
       modal: {
         ondismiss: function() {
-          console.log('Payment modal dismissed');
           if (onError) onError(new Error('Payment cancelled by user'));
         }
       },
@@ -113,7 +103,6 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       }
     };
 
-    console.log('Initializing Razorpay with options:', options);
     const razorpay = new window.Razorpay(options);
     razorpay.open();
 

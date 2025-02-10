@@ -9,7 +9,7 @@ const supabase = createClient(
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
-// Initialize Razorpay (moved outside the function)
+// Initialize Razorpay
 const razorpayInstance = new Razorpay({
   key_id: import.meta.env.VITE_RAZORPAY_KEY_ID,
   key_secret: import.meta.env.VITE_RAZORPAY_KEY_SECRET

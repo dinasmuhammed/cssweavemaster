@@ -48,17 +48,28 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
 
     if (!response.ok) {
       const errorData = await response.json();
+      console.error('Error creating order:', errorData);
       throw new Error(errorData.error || 'Failed to create order');
     }
 
     const data = await response.json();
+    console.log('Order created successfully:', data);
     
     if (!data.order?.id) {
       throw new Error('Invalid order response from server');
     }
 
+    const { data: { RAZORPAY_KEY_ID } } = await supabase
+      .functions.invoke('get-secrets', {
+        body: { keys: ['RAZORPAY_KEY_ID'] }
+      });
+
+    if (!RAZORPAY_KEY_ID) {
+      throw new Error('Razorpay key not found');
+    }
+
     const options = {
-      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+      key: RAZORPAY_KEY_ID,
       amount: data.order.amount,
       currency: data.order.currency,
       name: "Henna by Fathima",
@@ -87,6 +98,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
             throw new Error(errorData.error || 'Payment verification failed');
           }
 
+          console.log('Payment verified successfully');
           if (onSuccess) onSuccess(response);
         } catch (error) {
           console.error('Payment verification error:', error);

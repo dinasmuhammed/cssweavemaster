@@ -3,40 +3,62 @@ import { createClient } from '@supabase/supabase-js';
 import { v4 as uuidv4 } from 'uuid';
 import Razorpay from 'razorpay';
 
-// Initialize Supabase client
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
-// Initialize Razorpay
-const razorpayInstance = new Razorpay({
-  key_id: import.meta.env.VITE_RAZORPAY_KEY_ID,
-  key_secret: import.meta.env.VITE_RAZORPAY_KEY_SECRET
-});
+let razorpayInstance = null;
+
+const initializeRazorpay = async () => {
+  try {
+    const { data: { RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET } } = await supabase
+      .functions.invoke('get-secrets', {
+        body: { keys: ['RAZORPAY_KEY_ID', 'RAZORPAY_KEY_SECRET'] }
+      });
+
+    if (!RAZORPAY_KEY_ID || !RAZORPAY_KEY_SECRET) {
+      throw new Error('Razorpay keys not found');
+    }
+
+    razorpayInstance = new Razorpay({
+      key_id: RAZORPAY_KEY_ID,
+      key_secret: RAZORPAY_KEY_SECRET
+    });
+
+    return razorpayInstance;
+  } catch (error) {
+    console.error('Failed to initialize Razorpay:', error);
+    throw new Error('Failed to initialize payment gateway');
+  }
+};
 
 export const createOrder = async (amount, currency = 'INR') => {
   try {
-    console.log('Creating order with amount:', amount, 'currency:', currency);
-    
+    if (!razorpayInstance) {
+      await initializeRazorpay();
+    }
+
     if (!amount || isNaN(amount)) {
       throw new Error('Invalid amount provided');
     }
 
     const options = {
-      amount: Math.round(amount * 100), // Convert to smallest currency unit (paise)
+      amount: Math.round(amount * 100), // Convert to paise
       currency,
       receipt: `rcpt_${uuidv4()}`,
     };
+
+    console.log('Creating order with options:', options);
     
     const order = await razorpayInstance.orders.create(options);
     
     if (!order || !order.id) {
       throw new Error('Invalid order response from Razorpay');
     }
-    
-    // Log order creation in Supabase
-    const { error: logError } = await supabase
+
+    // Log order creation
+    await supabase
       .from('payment_logs')
       .insert([{
         order_id: order.id,
@@ -47,10 +69,6 @@ export const createOrder = async (amount, currency = 'INR') => {
         metadata: { receipt: options.receipt }
       }]);
 
-    if (logError) {
-      console.error('Error logging payment:', logError);
-    }
-    
     return order;
   } catch (error) {
     console.error('Error creating Razorpay order:', error);

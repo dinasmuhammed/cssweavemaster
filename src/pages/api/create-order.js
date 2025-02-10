@@ -14,6 +14,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Amount is required' });
     }
 
+    // Use the raw amount from the request, conversion handled in razorpay.js
     console.log('Creating order with amount:', amount, 'currency:', currency);
     const order = await createOrder(amount, currency);
     
@@ -27,7 +28,7 @@ export default async function handler(req, res) {
     console.error('Error in create-order API:', error);
     return res.status(500).json({ 
       error: 'Failed to create order',
-      details: error.message
+      details: error.message || 'Unknown error occurred'
     });
   }
 }

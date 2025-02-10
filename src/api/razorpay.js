@@ -13,10 +13,17 @@ export const createOrder = async (amount, currency = 'INR') => {
       throw new Error('Invalid amount provided');
     }
 
-    const { data: { RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET } } = await supabase
+    const { data, error } = await supabase
       .functions.invoke('get-secrets', {
         body: { keys: ['RAZORPAY_KEY_ID', 'RAZORPAY_KEY_SECRET'] }
       });
+
+    if (error) {
+      console.error('Error fetching Razorpay keys:', error);
+      throw new Error('Failed to fetch Razorpay keys');
+    }
+
+    const { RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET } = data;
 
     if (!RAZORPAY_KEY_ID || !RAZORPAY_KEY_SECRET) {
       throw new Error('Razorpay keys not found');
@@ -28,7 +35,7 @@ export const createOrder = async (amount, currency = 'INR') => {
       receipt: `rcpt_${uuidv4()}`,
     };
 
-    console.log('Creating order with options:', options);
+    console.log('Creating order with options:', { ...options, amount: options.amount });
     
     const response = await fetch('https://api.razorpay.com/v1/orders', {
       method: 'POST',
@@ -39,14 +46,14 @@ export const createOrder = async (amount, currency = 'INR') => {
       body: JSON.stringify(options)
     });
 
+    const responseData = await response.json();
+
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error?.description || 'Failed to create Razorpay order');
+      console.error('Razorpay API error:', responseData);
+      throw new Error(responseData.error?.description || 'Failed to create Razorpay order');
     }
 
-    const order = await response.json();
-    
-    if (!order || !order.id) {
+    if (!responseData || !responseData.id) {
       throw new Error('Invalid order response from Razorpay');
     }
 
@@ -54,7 +61,7 @@ export const createOrder = async (amount, currency = 'INR') => {
     await supabase
       .from('payment_logs')
       .insert([{
-        order_id: order.id,
+        order_id: responseData.id,
         amount: amount,
         currency: currency,
         status: 'created',
@@ -62,7 +69,7 @@ export const createOrder = async (amount, currency = 'INR') => {
         metadata: { receipt: options.receipt }
       }]);
 
-    return order;
+    return responseData;
   } catch (error) {
     console.error('Error creating Razorpay order:', error);
     throw error;

@@ -41,35 +41,35 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        amount: Math.round(amount * 100), // Convert to paise
+        amount: amount, // Send raw amount, conversion handled in backend
         currency: 'INR',
       })
     });
 
+    const data = await response.json();
+
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ error: 'Failed to parse error response' }));
-      console.error('Error creating order:', errorData);
-      throw new Error(errorData.error || 'Failed to create order');
+      console.error('Error creating order:', data);
+      throw new Error(data.error || data.details || 'Failed to create order');
     }
 
-    const data = await response.json();
     console.log('Order created successfully:', data);
     
     if (!data.order?.id) {
       throw new Error('Invalid order response from server');
     }
 
-    const { data: { RAZORPAY_KEY_ID } } = await supabase
+    const { data: secretsData, error: secretsError } = await supabase
       .functions.invoke('get-secrets', {
         body: { keys: ['RAZORPAY_KEY_ID'] }
       });
 
-    if (!RAZORPAY_KEY_ID) {
-      throw new Error('Razorpay key not found');
+    if (secretsError || !secretsData.RAZORPAY_KEY_ID) {
+      throw new Error('Failed to fetch Razorpay key');
     }
 
     const options = {
-      key: RAZORPAY_KEY_ID,
+      key: secretsData.RAZORPAY_KEY_ID,
       amount: data.order.amount,
       currency: data.order.currency,
       name: "Henna by Fathima",
@@ -93,9 +93,10 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
             }),
           });
 
+          const verifyData = await verifyResponse.json();
+
           if (!verifyResponse.ok) {
-            const errorData = await verifyResponse.json();
-            throw new Error(errorData.error || 'Payment verification failed');
+            throw new Error(verifyData.error || 'Payment verification failed');
           }
 
           console.log('Payment verified successfully');

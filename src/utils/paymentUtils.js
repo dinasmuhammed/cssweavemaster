@@ -41,13 +41,13 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        amount: amount,
+        amount: Math.round(amount * 100), // Convert to paise
         currency: 'INR',
       })
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorData = await response.json().catch(() => ({ error: 'Failed to parse error response' }));
       console.error('Error creating order:', errorData);
       throw new Error(errorData.error || 'Failed to create order');
     }

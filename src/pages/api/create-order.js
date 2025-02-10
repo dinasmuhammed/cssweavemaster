@@ -22,10 +22,10 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Invalid order response from Razorpay' });
     }
 
-    res.status(200).json({ order });
+    return res.status(200).json({ success: true, order });
   } catch (error) {
     console.error('Error in create-order API:', error);
-    res.status(500).json({ 
+    return res.status(500).json({ 
       error: 'Failed to create order',
       details: error.message
     });

@@ -1,3 +1,4 @@
+
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
 const { createClient } = require('@supabase/supabase-js');
@@ -83,7 +84,8 @@ const verifyPayment = async (orderId, paymentId, signature) => {
   }
 };
 
-module.exports = {
+// Export as ES modules
+export {
   createOrder,
   verifyPayment
 };

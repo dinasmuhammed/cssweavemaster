@@ -29,8 +29,9 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       const script = document.createElement('script');
       script.src = 'https://checkout.razorpay.com/v1/checkout.js';
       script.async = true;
-      await new Promise((resolve) => {
+      await new Promise((resolve, reject) => {
         script.onload = resolve;
+        script.onerror = () => reject(new Error('Failed to load Razorpay script'));
         document.body.appendChild(script);
       });
     }
@@ -41,18 +42,18 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        amount: amount, // Send raw amount, conversion handled in backend
+        amount: Math.round(amount * 100), // Convert to paise here
         currency: 'INR',
       })
     });
 
-    const data = await response.json();
-
     if (!response.ok) {
-      console.error('Error creating order:', data);
-      throw new Error(data.error || data.details || 'Failed to create order');
+      const errorData = await response.json();
+      console.error('Error response from server:', errorData);
+      throw new Error(errorData.error || errorData.details || 'Failed to create order');
     }
 
+    const data = await response.json();
     console.log('Order created successfully:', data);
     
     if (!data.order?.id) {
@@ -93,10 +94,9 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
             }),
           });
 
-          const verifyData = await verifyResponse.json();
-
           if (!verifyResponse.ok) {
-            throw new Error(verifyData.error || 'Payment verification failed');
+            const errorData = await verifyResponse.json();
+            throw new Error(errorData.error || 'Payment verification failed');
           }
 
           console.log('Payment verified successfully');

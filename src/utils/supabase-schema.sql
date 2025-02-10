@@ -1,3 +1,4 @@
+
 -- Create payment_logs table if it doesn't exist
 create table if not exists payment_logs (
   id uuid default uuid_generate_v4() primary key,
@@ -19,7 +20,8 @@ create table if not exists webhook_logs (
   payload jsonb not null,
   signature text not null,
   processed_at timestamp with time zone default timezone('utc'::text, now()),
-  status text default 'processed'
+  status text default 'processed',
+  metadata jsonb default '{}'::jsonb
 );
 
 -- Enable RLS
@@ -46,3 +48,9 @@ create policy "Enable webhook logs access for service role only"
   on webhook_logs for all
   to service_role
   using (true);
+
+-- Create indexes for better performance
+create index if not exists idx_payment_logs_order_id on payment_logs(order_id);
+create index if not exists idx_payment_logs_payment_id on payment_logs(payment_id);
+create index if not exists idx_payment_logs_status on payment_logs(status);
+create index if not exists idx_webhook_logs_event_type on webhook_logs(event_type);

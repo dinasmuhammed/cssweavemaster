@@ -25,11 +25,11 @@ export default defineConfig(({ mode }) => ({
     },
   },
   server: {
-    host: true, // Listen on all addresses
+    host: true,
     port: 8080,
     strictPort: true,
     hmr: {
-      clientPort: 443 // Force client to use HTTPS port
+      clientPort: 443
     },
     proxy: {
       '/api': {
@@ -41,3 +41,4 @@ export default defineConfig(({ mode }) => ({
     },
   },
 }));
+

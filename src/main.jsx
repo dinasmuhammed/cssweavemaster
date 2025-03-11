@@ -21,7 +21,7 @@ if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
   });
 }
 
-// Add performance monitoring
+// Add performance monitoring with latest web-vitals integration
 if (process.env.NODE_ENV === 'production') {
   const reportWebVitals = onPerfEntry => {
     if (onPerfEntry && onPerfEntry instanceof Function) {

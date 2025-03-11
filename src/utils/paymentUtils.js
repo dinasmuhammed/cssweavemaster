@@ -36,13 +36,14 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       });
     }
 
+    // Amount should be in rupees here, will be converted to paise in the API
     const response = await fetch('/api/create-order', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        amount: Math.round(amount * 100), // Convert to paise
+        amount: amount, // Send in rupees, API will handle conversion
         currency: 'INR',
       })
     });
@@ -71,7 +72,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
 
     const options = {
       key: secretsData.RAZORPAY_KEY_ID,
-      amount: data.order.amount,
+      amount: data.order.amount, // Amount is already in paise from the API
       currency: data.order.currency,
       name: "Henna by Fathima",
       description: "Order Payment",

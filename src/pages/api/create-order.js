@@ -23,7 +23,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Amount is required' });
     }
 
-    console.log('Creating order with amount:', amount, 'currency:', currency);
+    console.log('Creating order with amount (in rupees):', amount, 'currency:', currency);
     const order = await createOrder(amount, currency);
     
     if (!order || !order.id) {

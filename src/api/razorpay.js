@@ -1,4 +1,3 @@
-
 import { createClient } from '@supabase/supabase-js';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -12,6 +11,9 @@ export const createOrder = async (amount, currency = 'INR') => {
     if (!amount || isNaN(amount)) {
       throw new Error('Invalid amount provided');
     }
+
+    // Convert amount to paise if needed (if it's in rupees)
+    const amountInPaise = amount < 100 ? Math.round(amount * 100) : amount;
 
     const { data, error } = await supabase
       .functions.invoke('get-secrets', {
@@ -30,12 +32,12 @@ export const createOrder = async (amount, currency = 'INR') => {
     }
 
     const options = {
-      amount: amount,
+      amount: amountInPaise,
       currency,
       receipt: `rcpt_${uuidv4()}`,
     };
 
-    console.log('Creating order with options:', { ...options });
+    console.log('Creating order with options:', { ...options, amount_in_rupees: amountInPaise / 100 });
     
     const response = await fetch('https://api.razorpay.com/v1/orders', {
       method: 'POST',
@@ -46,12 +48,13 @@ export const createOrder = async (amount, currency = 'INR') => {
       body: JSON.stringify(options)
     });
 
-    const responseData = await response.json();
-
     if (!response.ok) {
-      console.error('Razorpay API error:', responseData);
-      throw new Error(responseData.error?.description || 'Failed to create Razorpay order');
+      const errorData = await response.json();
+      console.error('Razorpay API error:', errorData);
+      throw new Error(errorData.error?.description || 'Failed to create Razorpay order');
     }
+
+    const responseData = await response.json();
 
     if (!responseData || !responseData.id) {
       throw new Error('Invalid order response from Razorpay');
@@ -62,11 +65,14 @@ export const createOrder = async (amount, currency = 'INR') => {
       .from('payment_logs')
       .insert([{
         order_id: responseData.id,
-        amount: amount,
+        amount: amountInPaise / 100, // Store in rupees for readability
         currency: currency,
         status: 'created',
         created_at: new Date().toISOString(),
-        metadata: { receipt: options.receipt }
+        metadata: { 
+          receipt: options.receipt,
+          amount_in_paise: amountInPaise
+        }
       }]);
 
     return responseData;

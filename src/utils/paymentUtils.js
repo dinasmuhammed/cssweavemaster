@@ -64,7 +64,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     }
 
     const options = {
-      key: 'rzp_test_yourkeyhere', // Replace with your actual test key
+      key: 'rzp_live_VMhrs1uuU9TTJq', // Updated to live key
       amount: data.order.amount, // Amount is already in paise from the API
       currency: data.order.currency,
       name: "Henna by Fathima",

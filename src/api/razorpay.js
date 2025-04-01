@@ -1,10 +1,9 @@
 
 import { v4 as uuidv4 } from 'uuid';
 
-// Replace with environment variables or directly input your keys for development
-// In production, you should use a more secure method to store these keys
-const RAZORPAY_KEY_ID = 'rzp_test_yourkeyhere'; // Replace with your test key
-const RAZORPAY_KEY_SECRET = ''; // This should be kept on the server side only
+// Updated with the provided live keys
+const RAZORPAY_KEY_ID = 'rzp_live_VMhrs1uuU9TTJq';
+const RAZORPAY_KEY_SECRET = 'lEV2FCzPMS4n7c23VfnUQd5W'; // This should be kept on the server side only
 
 export const createOrder = async (amount, currency = 'INR') => {
   try {

@@ -65,7 +65,7 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
       
       // Configure Razorpay options
       const options = {
-        key: 'rzp_test_yourkeyhere', // Replace with your actual Razorpay key
+        key: 'rzp_live_VMhrs1uuU9TTJq', // Updated to live key
         amount: order.amount,
         currency: order.currency,
         name: "Henna by Fathima",

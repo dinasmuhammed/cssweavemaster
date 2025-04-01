@@ -11,7 +11,7 @@ export const fetchApi = async (endpoint, options = {}) => {
     // Ensure the URL has a leading slash if needed
     const url = `${BASE_URL}${endpoint.startsWith('/') ? endpoint : `/${endpoint}`}`;
 
-    console.log(`Fetching: ${url}`);
+    console.log(`Fetching API: ${url}`);
     
     const response = await fetch(url, {
       ...options,
@@ -37,22 +37,29 @@ export const fetchApi = async (endpoint, options = {}) => {
   }
 };
 
+// Centralized API methods for Razorpay integration
 export const api = {
+  // Create a Razorpay order
   createOrder: async (amount, currency = 'INR') => {
+    console.log(`Creating Razorpay order for amount: ${amount} ${currency}`);
     return fetchApi('/api/create-order', {
       method: 'POST',
       body: JSON.stringify({ amount, currency }),
     });
   },
   
+  // Verify a Razorpay payment
   verifyPayment: async (paymentData) => {
+    console.log('Verifying Razorpay payment:', paymentData.razorpay_payment_id);
     return fetchApi('/api/verify-payment', {
       method: 'POST',
       body: JSON.stringify(paymentData),
     });
   },
   
+  // Send order confirmation email
   sendOrderEmail: async (orderDetails) => {
+    console.log('Sending order confirmation email');
     return fetchApi('/api/send-order-email', {
       method: 'POST',
       body: JSON.stringify(orderDetails),

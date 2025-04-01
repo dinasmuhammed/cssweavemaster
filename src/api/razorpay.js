@@ -2,7 +2,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { api } from '../utils/apiUtils';
 
-// Updated with the provided live keys - for client-side reference only
+// Razorpay live key for client-side
 const RAZORPAY_KEY_ID = 'rzp_live_VMhrs1uuU9TTJq';
 
 export const createOrder = async (amount, currency = 'INR') => {
@@ -20,9 +20,9 @@ export const createOrder = async (amount, currency = 'INR') => {
       receipt: `rcpt_${uuidv4()}`,
     };
 
-    console.log('Creating order with options:', { ...options, amount_in_rupees: amountInPaise / 100 });
+    console.log('Creating Razorpay order with options:', { ...options, amount_in_rupees: amountInPaise / 100 });
     
-    // Use the API utility
+    // Use the API utility to communicate with server
     const responseData = await api.createOrder(amountInPaise, currency);
 
     if (!responseData || !responseData.order?.id) {
@@ -42,7 +42,7 @@ export const verifyPayment = async (orderId, paymentId, signature) => {
       throw new Error('Missing required payment verification parameters');
     }
 
-    // Use the API utility
+    // Use the API utility to verify payment
     const data = await api.verifyPayment({
       razorpay_order_id: orderId,
       razorpay_payment_id: paymentId,
@@ -51,7 +51,18 @@ export const verifyPayment = async (orderId, paymentId, signature) => {
     
     return data.success || data.message === 'Payment verified successfully';
   } catch (error) {
-    console.error('Error verifying payment:', error);
+    console.error('Error verifying Razorpay payment:', error);
     throw error;
   }
 };
+
+// Export for client-side use
+export const getRazorpayConfig = () => ({
+  key_id: RAZORPAY_KEY_ID,
+  currency: 'INR',
+  name: "Henna by Fathima",
+  description: "Order Payment",
+  theme: {
+    color: "#607973"
+  }
+});

@@ -1,3 +1,4 @@
+
 import { verifyPayment } from '../../api/razorpay';
 
 export default async function handler(req, res) {
@@ -8,18 +9,30 @@ export default async function handler(req, res) {
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderData } = req.body;
     
-    const isValid = verifyPayment(razorpay_order_id, razorpay_payment_id, razorpay_signature);
+    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+      return res.status(400).json({ message: 'Missing required payment details' });
+    }
+    
+    // Verify the Razorpay payment signature
+    const isValid = await verifyPayment(razorpay_order_id, razorpay_payment_id, razorpay_signature);
     
     if (!isValid) {
       return res.status(400).json({ message: 'Invalid payment signature' });
     }
 
-    // Here you would typically save the order to your database
-    // and perform any other necessary actions
-
-    res.status(200).json({ message: 'Payment verified successfully' });
+    // Payment is valid, return success response
+    res.status(200).json({ 
+      success: true,
+      message: 'Payment verified successfully',
+      orderId: razorpay_order_id,
+      paymentId: razorpay_payment_id
+    });
   } catch (error) {
     console.error('Error in verify-payment API:', error);
-    res.status(500).json({ message: 'Failed to verify payment' });
+    res.status(500).json({ 
+      success: false,
+      message: 'Failed to verify payment',
+      error: error.message
+    });
   }
 }

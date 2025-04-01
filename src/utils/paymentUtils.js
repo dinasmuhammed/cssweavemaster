@@ -38,8 +38,8 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       });
     }
 
-    // Amount should be in rupees here, will be converted to paise in the API
-    const response = await fetch('http://localhost:3001/api/create-order', {
+    // Use the deployed server URL instead of localhost
+    const response = await fetch('https://henna-by-fathima-server.vercel.app/api/create-order', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     }
 
     const options = {
-      key: 'rzp_live_VMhrs1uuU9TTJq', // Updated to live key
+      key: 'rzp_live_VMhrs1uuU9TTJq', // Live key
       amount: data.order.amount, // Amount is already in paise from the API
       currency: data.order.currency,
       name: "Henna by Fathima",
@@ -77,7 +77,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       },
       handler: async function(response) {
         try {
-          const verifyResponse = await fetch('http://localhost:3001/api/verify-payment', {
+          const verifyResponse = await fetch('https://henna-by-fathima-server.vercel.app/api/verify-payment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

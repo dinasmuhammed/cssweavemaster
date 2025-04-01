@@ -23,7 +23,7 @@ export const createOrder = async (amount, currency = 'INR') => {
     console.log('Creating order with options:', { ...options, amount_in_rupees: amountInPaise / 100 });
     
     // Now we'll send this to our server endpoint
-    const response = await fetch('/api/create-order', {
+    const response = await fetch('https://henna-by-fathima-server.vercel.app/api/create-order', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ export const verifyPayment = async (orderId, paymentId, signature) => {
     }
 
     // Send verification request to our server
-    const response = await fetch('/api/verify-payment', {
+    const response = await fetch('https://henna-by-fathima-server.vercel.app/api/verify-payment', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -46,7 +46,7 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
       }
 
       // Create an order on the server
-      const response = await fetch('http://localhost:3001/api/create-order', {
+      const response = await fetch('https://henna-by-fathima-server.vercel.app/api/create-order', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -58,14 +58,16 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create order');
+        const errorData = await response.json();
+        console.error('Error creating order:', errorData);
+        throw new Error(errorData.error || 'Failed to create order');
       }
 
       const { order } = await response.json();
       
       // Configure Razorpay options
       const options = {
-        key: 'rzp_live_VMhrs1uuU9TTJq', // Updated to live key
+        key: 'rzp_live_VMhrs1uuU9TTJq', // Live key
         amount: order.amount,
         currency: order.currency,
         name: "Henna by Fathima",
@@ -78,7 +80,7 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
         },
         handler: async function(response) {
           try {
-            const verifyResponse = await fetch('http://localhost:3001/api/verify-payment', {
+            const verifyResponse = await fetch('https://henna-by-fathima-server.vercel.app/api/verify-payment', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -94,13 +96,15 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
             });
 
             if (!verifyResponse.ok) {
-              throw new Error('Payment verification failed');
+              const errorData = await verifyResponse.json();
+              throw new Error(errorData.error || 'Payment verification failed');
             }
 
             toast.success("Payment successful! Thank you for your order.");
             clearCart();
             navigate('/');
           } catch (error) {
+            console.error('Payment verification failed:', error);
             toast.error("Payment verification failed. Please contact support.");
             setIsProcessing(false);
           }

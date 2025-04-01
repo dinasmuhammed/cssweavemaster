@@ -1,5 +1,4 @@
-
-import { createClient } from '@supabase/supabase-js';
+import { api } from './apiUtils';
 
 export const validatePaymentForm = (formData) => {
   const errors = {};
@@ -38,25 +37,8 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       });
     }
 
-    // Use the deployed server URL instead of localhost
-    const response = await fetch('https://henna-by-fathima-server.vercel.app/api/create-order', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        amount: amount, // Send in rupees, API will handle conversion
-        currency: 'INR',
-      })
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Error response from server:', errorData);
-      throw new Error(errorData.error || errorData.details || 'Failed to create order');
-    }
-
-    const data = await response.json();
+    // Use the API utility for creating order
+    const data = await api.createOrder(amount);
     console.log('Order created successfully:', data);
     
     if (!data.order?.id) {
@@ -77,21 +59,13 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       },
       handler: async function(response) {
         try {
-          const verifyResponse = await fetch('https://henna-by-fathima-server.vercel.app/api/verify-payment', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-              orderData
-            }),
+          // Use the API utility for verifying payment
+          const verifyResult = await api.verifyPayment({
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+            orderData
           });
-
-          if (!verifyResponse.ok) {
-            const errorData = await verifyResponse.json();
-            throw new Error(errorData.error || 'Payment verification failed');
-          }
 
           console.log('Payment verified successfully');
           if (onSuccess) onSuccess(response);

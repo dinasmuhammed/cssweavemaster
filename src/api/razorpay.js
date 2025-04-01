@@ -1,9 +1,9 @@
 
 import { v4 as uuidv4 } from 'uuid';
+import { api } from '../utils/apiUtils';
 
-// Updated with the provided live keys
+// Updated with the provided live keys - for client-side reference only
 const RAZORPAY_KEY_ID = 'rzp_live_VMhrs1uuU9TTJq';
-const RAZORPAY_KEY_SECRET = 'lEV2FCzPMS4n7c23VfnUQd5W'; // This should be kept on the server side only
 
 export const createOrder = async (amount, currency = 'INR') => {
   try {
@@ -22,28 +22,14 @@ export const createOrder = async (amount, currency = 'INR') => {
 
     console.log('Creating order with options:', { ...options, amount_in_rupees: amountInPaise / 100 });
     
-    // Now we'll send this to our server endpoint
-    const response = await fetch('https://henna-by-fathima-server.vercel.app/api/create-order', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(options)
-    });
+    // Use the API utility
+    const responseData = await api.createOrder(amountInPaise, currency);
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Razorpay API error:', errorData);
-      throw new Error(errorData.error?.description || 'Failed to create Razorpay order');
-    }
-
-    const responseData = await response.json();
-
-    if (!responseData || !responseData.id) {
+    if (!responseData || !responseData.order?.id) {
       throw new Error('Invalid order response from Razorpay');
     }
 
-    return responseData;
+    return responseData.order;
   } catch (error) {
     console.error('Error creating Razorpay order:', error);
     throw error;
@@ -56,25 +42,14 @@ export const verifyPayment = async (orderId, paymentId, signature) => {
       throw new Error('Missing required payment verification parameters');
     }
 
-    // Send verification request to our server
-    const response = await fetch('https://henna-by-fathima-server.vercel.app/api/verify-payment', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        orderId,
-        paymentId,
-        signature
-      })
+    // Use the API utility
+    const data = await api.verifyPayment({
+      razorpay_order_id: orderId,
+      razorpay_payment_id: paymentId,
+      razorpay_signature: signature
     });
-
-    if (!response.ok) {
-      throw new Error('Payment verification failed');
-    }
-
-    const data = await response.json();
-    return data.success;
+    
+    return data.success || data.message === 'Payment verified successfully';
   } catch (error) {
     console.error('Error verifying payment:', error);
     throw error;

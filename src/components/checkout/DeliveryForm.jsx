@@ -1,14 +1,19 @@
+
 import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { validatePaymentForm, initializeRazorpayPayment } from '@/utils/paymentUtils';
+import { validatePaymentForm } from '@/utils/paymentUtils';
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { useCart } from '@/context/CartContext';
+import { useNavigate } from 'react-router-dom';
 
 const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [errors, setErrors] = useState({});
+  const { clearCart } = useCart();
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     try {
@@ -28,35 +33,96 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
       setIsProcessing(true);
       toast.info("Initializing payment...");
 
-      const orderData = {
-        orderId: `ORDER_${Date.now()}`,
-        amount: totalAmount,
-        customerDetails: formData,
-        items: cartItems.map(item => ({
-          id: item.id,
-          name: item.name,
-          quantity: item.quantity,
-          price: item.price
-        }))
+      // Load Razorpay script if it's not already loaded
+      if (!window.Razorpay) {
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.async = true;
+        await new Promise((resolve, reject) => {
+          script.onload = resolve;
+          script.onerror = () => reject(new Error('Failed to load Razorpay script'));
+          document.body.appendChild(script);
+        });
+      }
+
+      // Create an order on the server
+      const response = await fetch('http://localhost:3001/api/create-order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount: totalAmount,
+          currency: 'INR',
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create order');
+      }
+
+      const { order } = await response.json();
+      
+      // Configure Razorpay options
+      const options = {
+        key: 'rzp_test_yourkeyhere', // Replace with your actual Razorpay key
+        amount: order.amount,
+        currency: order.currency,
+        name: "Henna by Fathima",
+        description: "Order Payment",
+        order_id: order.id,
+        prefill: {
+          name: formData.name,
+          email: formData.email,
+          contact: formData.mobile,
+        },
+        handler: async function(response) {
+          try {
+            const verifyResponse = await fetch('http://localhost:3001/api/verify-payment', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                orderData: {
+                  items: cartItems,
+                  customerDetails: formData,
+                  amount: totalAmount
+                }
+              }),
+            });
+
+            if (!verifyResponse.ok) {
+              throw new Error('Payment verification failed');
+            }
+
+            toast.success("Payment successful! Thank you for your order.");
+            clearCart();
+            navigate('/');
+          } catch (error) {
+            toast.error("Payment verification failed. Please contact support.");
+            setIsProcessing(false);
+          }
+        },
+        modal: {
+          ondismiss: function() {
+            toast.error("Payment cancelled.");
+            setIsProcessing(false);
+          }
+        },
+        theme: {
+          color: "#607973"
+        }
       };
 
-      await initializeRazorpayPayment(
-        orderData,
-        totalAmount,
-        formData,
-        () => {
-          setIsProcessing(false);
-          toast.success("Payment successful!");
-        },
-        (error) => {
-          setIsProcessing(false);
-          toast.error(error.message || "Payment failed. Please try again.");
-        }
-      );
+      // Initialize Razorpay
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
     } catch (error) {
+      console.error("Payment error:", error);
+      toast.error("Payment initialization failed. Please try again later.");
       setIsProcessing(false);
-      toast.error("An unexpected error occurred. Please try again.");
-      console.error('Payment initialization error:', error);
     }
   };
 

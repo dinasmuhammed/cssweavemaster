@@ -1,4 +1,6 @@
 
+import { createClient } from '@supabase/supabase-js';
+
 export const validatePaymentForm = (formData) => {
   const errors = {};
   
@@ -37,7 +39,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     }
 
     // Amount should be in rupees here, will be converted to paise in the API
-    const response = await fetch('/api/create-order', {
+    const response = await fetch('http://localhost:3001/api/create-order', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -61,17 +63,8 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       throw new Error('Invalid order response from server');
     }
 
-    const { data: secretsData, error: secretsError } = await supabase
-      .functions.invoke('get-secrets', {
-        body: { keys: ['RAZORPAY_KEY_ID'] }
-      });
-
-    if (secretsError || !secretsData.RAZORPAY_KEY_ID) {
-      throw new Error('Failed to fetch Razorpay key');
-    }
-
     const options = {
-      key: secretsData.RAZORPAY_KEY_ID,
+      key: 'rzp_test_yourkeyhere', // Replace with your actual test key
       amount: data.order.amount, // Amount is already in paise from the API
       currency: data.order.currency,
       name: "Henna by Fathima",
@@ -84,7 +77,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
       },
       handler: async function(response) {
         try {
-          const verifyResponse = await fetch('/api/verify-payment', {
+          const verifyResponse = await fetch('http://localhost:3001/api/verify-payment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

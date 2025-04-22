@@ -7,13 +7,70 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { useCart } from '@/context/CartContext';
 import { useNavigate } from 'react-router-dom';
-import { getRazorpayConfig, createOrder } from '@/api/razorpay';
+import { getRazorpayConfig } from '@/api/razorpay';
+import { v4 as uuidv4 } from 'uuid';
 
 const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [errors, setErrors] = useState({});
   const { clearCart } = useCart();
   const navigate = useNavigate();
+
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) {
+        resolve();
+        return;
+      }
+      
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.async = true;
+      script.onload = () => {
+        resolve();
+      };
+      document.body.appendChild(script);
+    });
+  };
+
+  const createDirectOrder = async (amount) => {
+    const amountInPaise = amount < 100 ? Math.round(amount * 100) : amount;
+    
+    return {
+      id: `order_${uuidv4()}`,
+      amount: amountInPaise,
+      currency: 'INR',
+      receipt: `rcpt_${uuidv4()}`
+    };
+  };
+
+  const initializePayment = (orderData) => {
+    return new Promise((resolve, reject) => {
+      const razorpayConfig = getRazorpayConfig();
+      const options = {
+        ...razorpayConfig,
+        order_id: orderData.id,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        prefill: {
+          name: formData.name,
+          email: formData.email,
+          contact: formData.mobile,
+        },
+        handler: function(response) {
+          resolve(response);
+        },
+        modal: {
+          ondismiss: function() {
+            reject(new Error('Payment cancelled by user'));
+          }
+        }
+      };
+      
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
+    });
+  };
 
   const handleSubmit = async () => {
     try {
@@ -35,31 +92,71 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
 
       await loadRazorpayScript();
       
-      const orderData = await createOrder(totalAmount);
+      let orderData;
       
-      const options = {
-        ...getRazorpayConfig(formData),
-        amount: orderData.amount,
-        order_id: orderData.id,
-        handler: function(response) {
-          toast.success("Payment successful! Thank you for your order.");
-          clearCart();
-          navigate('/');
-        },
-        modal: {
-          ondismiss: function() {
-            setIsProcessing(false);
-            toast.error("Payment cancelled");
-          }
+      try {
+        const response = await fetch('https://henna-by-fathima-server.vercel.app/api/create-order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            amount: totalAmount,
+            currency: 'INR',
+          })
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          orderData = data.order;
+          console.log('Server order created:', orderData);
+        } else {
+          throw new Error('Server order creation failed');
         }
-      };
-
-      const razorpay = new window.Razorpay(options);
-      razorpay.open();
-
+      } catch (serverError) {
+        console.warn('Server order creation failed, using direct integration:', serverError);
+        orderData = await createDirectOrder(totalAmount);
+        console.log('Direct order created:', orderData);
+      }
+      
+      if (!orderData || !orderData.id) {
+        throw new Error('Failed to create payment order');
+      }
+      
+      const paymentResponse = await initializePayment(orderData);
+      console.log('Payment successful:', paymentResponse);
+      
+      try {
+        const verifyResponse = await fetch('https://henna-by-fathima-server.vercel.app/api/verify-payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            razorpay_order_id: paymentResponse.razorpay_order_id,
+            razorpay_payment_id: paymentResponse.razorpay_payment_id,
+            razorpay_signature: paymentResponse.razorpay_signature,
+            orderData: {
+              items: cartItems,
+              customerDetails: formData,
+              amount: totalAmount
+            }
+          }),
+        });
+        
+        if (verifyResponse.ok) {
+          console.log('Payment verified on server');
+        } else {
+          console.warn('Server verification failed, but proceeding with payment');
+        }
+      } catch (verifyError) {
+        console.warn('Payment verification on server failed:', verifyError);
+      }
+      
+      toast.success("Payment successful! Thank you for your order.");
+      clearCart();
+      navigate('/');
     } catch (error) {
       console.error("Payment error:", error);
-      toast.error(error.message || "Payment initialization failed");
+      toast.error(error.message || "Payment initialization failed. Please try again later.");
       setIsProcessing(false);
     }
   };

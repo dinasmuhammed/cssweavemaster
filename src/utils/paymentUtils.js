@@ -1,6 +1,4 @@
 
-import { validatePaymentForm } from './formValidation';
-
 export const loadRazorpayScript = async () => {
   if (window.Razorpay) {
     return Promise.resolve();
@@ -16,4 +14,4 @@ export const loadRazorpayScript = async () => {
   });
 };
 
-export { validatePaymentForm };
+export { validatePaymentForm } from './formValidation';

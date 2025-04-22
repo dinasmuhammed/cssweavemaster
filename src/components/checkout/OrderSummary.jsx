@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import OrderSummaryItem from './OrderSummaryItem';
 import { Input } from "@/components/ui/input";
@@ -6,10 +5,11 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Info } from "lucide-react";
 
-const OrderSummary = ({ 
-  cartItems, 
+const OrderSummary = ({
+  cartItems,
   onQuantityChange,
-  totalPrice = 0
+  totalPrice = 0,
+  shippingCharge = 0
 }) => {
   const [couponCode, setCouponCode] = useState('');
   const [discount, setDiscount] = useState(0);
@@ -78,7 +78,7 @@ const OrderSummary = ({
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold">Order Summary</h2>
-        <p className="text-sm text-gray-600">Total Amount Payable: ₹{finalTotal}</p>
+        <p className="text-sm text-gray-600">Total Amount Payable: <span className="font-bold text-rose-600">₹{finalTotal}</span></p>
       </div>
       
       <div className="divide-y border-y">
@@ -128,24 +128,24 @@ const OrderSummary = ({
           </div>
         )}
 
-        <div className="space-y-3">
+        <div className="p-4 rounded border shadow-sm space-y-3 bg-gray-50">
           <div className="flex justify-between text-sm">
-            <span className="text-gray-600">Total Price</span>
-            <span className="text-rose-600">₹{totalPrice || 0}</span>
+            <span>Subtotal:</span>
+            <span>₹{totalPrice || 0}</span>
+          </div>
+          <div className="flex justify-between text-sm">
+            <span>Shipping Charges:</span>
+            <span>₹{shippingCharge}</span>
           </div>
           {discount > 0 && (
             <div className="flex justify-between text-sm">
-              <span className="text-gray-600">Discount</span>
+              <span className="text-green-600">Discount:</span>
               <span className="text-green-600">-₹{discount}</span>
             </div>
           )}
-          <div className="flex justify-between text-sm">
-            <span className="text-gray-600">Shipping Charge</span>
-            <span className="text-rose-600">₹{shippingCharge}</span>
-          </div>
-          <div className="flex justify-between font-medium pt-3 border-t">
-            <span>Grand Total</span>
-            <span className="text-rose-600">₹{finalTotal}</span>
+          <div className="flex justify-between font-semibold border-t pt-2 mt-2">
+            <span>Total Payable:</span>
+            <span className="text-xl text-rose-600">₹{finalTotal}</span>
           </div>
         </div>
         

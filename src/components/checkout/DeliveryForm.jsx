@@ -1,14 +1,13 @@
-
 import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { validatePaymentForm } from '@/utils/paymentUtils';
+import { validatePaymentForm } from '@/utils/formValidation';
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { useCart } from '@/context/CartContext';
 import { useNavigate } from 'react-router-dom';
-import { initializeRazorpayPayment } from '@/utils/paymentUtils';
+import { initializeRazorpayPayment, generateOrderId } from '@/utils/paymentUtils';
 import { v4 as uuidv4 } from 'uuid';
 
 const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
@@ -18,10 +17,7 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
   const navigate = useNavigate();
 
   const formatCartForRazorpay = (items) => {
-    if (!Array.isArray(items) || items.length === 0) {
-      return 'No items';
-    }
-    
+    if (!Array.isArray(items) || items.length === 0) return 'No items';
     return items.map(item => `${item.name} x${item.quantity}`).join(', ');
   };
 
@@ -41,13 +37,11 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
       }
 
       setIsProcessing(true);
-      
-      // Generate a unique order ID
-      const orderId = `ORD_${Date.now()}_${uuidv4().substring(0, 8)}`;
 
-      // Order data to pass to payment processor
+      const orderId = generateOrderId();
+
       const orderData = {
-        orderId: orderId,
+        orderId,
         items: cartItems,
         timestamp: new Date().toISOString(),
         customerEmail: formData.email,
@@ -65,11 +59,7 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
           mobile: formData.mobile,
           address: formData.address
         },
-        // On success
         (response) => {
-          console.log('Payment successful, response:', response);
-          
-          // Store order in localStorage for reference
           try {
             const orders = JSON.parse(localStorage.getItem('orders') || '[]');
             orders.push({
@@ -79,19 +69,12 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
               amount: totalAmount
             });
             localStorage.setItem('orders', JSON.stringify(orders));
-          } catch (err) {
-            console.error('Error storing order data:', err);
-          }
-          
+          } catch (err) {}
           toast.success("Order placed successfully! Thank you for shopping with us.");
           clearCart();
           navigate('/');
         },
-        // On error
         (error) => {
-          console.error('Payment error:', error);
-          
-          // Store failed order attempt
           try {
             const failedOrders = JSON.parse(localStorage.getItem('failed_orders') || '[]');
             failedOrders.push({
@@ -100,17 +83,29 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
               timestamp: new Date().toISOString()
             });
             localStorage.setItem('failed_orders', JSON.stringify(failedOrders));
-          } catch (err) {
-            console.error('Error storing failed order data:', err);
-          }
-          
-          toast.error(`Payment failed: ${error.message || 'Please try again'}`);
+          } catch (err) {}
+          toast.error(
+            <>
+              Payment failed: {error.message || 'Please try again'}.
+              <div className="mt-1 flex gap-2 justify-center">
+                <button className="underline" onClick={() => window.location.reload()}>Retry</button>
+                <button className="underline" onClick={() => navigate('/shop')}>Back to Shop</button>
+              </div>
+            </>
+          );
           setIsProcessing(false);
         }
       );
     } catch (error) {
-      console.error("Payment error:", error);
-      toast.error(error.message || "Payment initialization failed. Please try again later.");
+      toast.error(
+        <>
+          Payment error: {error.message || "Initialization failed"}.
+          <div className="mt-1 flex gap-2 justify-center">
+            <button className="underline" onClick={() => window.location.reload()}>Retry</button>
+            <button className="underline" onClick={() => navigate('/shop')}>Back to Shop</button>
+          </div>
+        </>
+      );
       setIsProcessing(false);
     }
   };

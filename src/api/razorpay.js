@@ -1,4 +1,3 @@
-
 import { v4 as uuidv4 } from 'uuid';
 import { api } from '../utils/apiUtils';
 
@@ -6,48 +5,33 @@ import { api } from '../utils/apiUtils';
 const RAZORPAY_KEY_ID = 'rzp_live_VMhrs1uuU9TTJq';
 const DOMAIN_NAME = 'hennabyfathima.in';
 
-export const createOrder = async (amount, currency = 'INR') => {
+export const createOrder = async (amountPaise, currency = 'INR') => {
+  // Paise must always be int
+  const amountInPaise = Math.round(Number(amountPaise));
+  // Robust receipt generation
+  const receipt = `rcpt_${Date.now()}_${(Math.random() * 10000).toFixed(0)}`
+  const options = {
+    amount: amountInPaise,
+    currency,
+    receipt
+  };
   try {
-    if (!amount || isNaN(amount)) {
-      throw new Error('Invalid amount provided');
+    // Use the API utility to communicate with server
+    const responseData = await api.createOrder(amountInPaise, currency);
+    
+    if (!responseData || !responseData.order?.id) {
+      throw new Error('Invalid order response from Razorpay');
     }
-
-    // Convert amount to paise if needed (if it's in rupees)
-    const amountInPaise = amount < 100 ? Math.round(amount * 100) : amount;
-
-    const options = {
+    
+    return responseData.order;
+  } catch (serverError) {
+    // Generate client-side order ID with timestamp for uniqueness
+    return {
+      id: `order_${Date.now()}_${Math.floor(Math.random() * 1e6)}`,
       amount: amountInPaise,
       currency,
-      receipt: `rcpt_${uuidv4()}`,
+      receipt
     };
-
-    console.log('Creating Razorpay order with options:', { ...options, amount_in_rupees: amountInPaise / 100 });
-    
-    try {
-      // Use the API utility to communicate with server
-      const responseData = await api.createOrder(amountInPaise, currency);
-      
-      if (!responseData || !responseData.order?.id) {
-        throw new Error('Invalid order response from Razorpay');
-      }
-      
-      return responseData.order;
-    } catch (serverError) {
-      console.warn('Server error, using direct Razorpay integration:', serverError);
-      // Generate client-side order ID with timestamp for uniqueness
-      const timestamp = new Date().getTime();
-      const randomSuffix = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
-      
-      return {
-        id: `order_${timestamp}_${randomSuffix}_${uuidv4().substring(0, 8)}`,
-        amount: amountInPaise,
-        currency,
-        receipt: options.receipt
-      };
-    }
-  } catch (error) {
-    console.error('Error creating Razorpay order:', error);
-    throw error;
   }
 };
 

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,7 +8,7 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { useCart } from '@/context/CartContext';
 import { useNavigate } from 'react-router-dom';
-import { getRazorpayConfig } from '@/api/razorpay';
+import { initializeRazorpayPayment } from '@/utils/paymentUtils';
 import { v4 as uuidv4 } from 'uuid';
 
 const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
@@ -16,60 +17,12 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
   const { clearCart } = useCart();
   const navigate = useNavigate();
 
-  const loadRazorpayScript = () => {
-    return new Promise((resolve) => {
-      if (window.Razorpay) {
-        resolve();
-        return;
-      }
-      
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-      script.async = true;
-      script.onload = () => {
-        resolve();
-      };
-      document.body.appendChild(script);
-    });
-  };
-
-  const createDirectOrder = async (amount) => {
-    const amountInPaise = amount < 100 ? Math.round(amount * 100) : amount;
+  const formatCartForRazorpay = (items) => {
+    if (!Array.isArray(items) || items.length === 0) {
+      return 'No items';
+    }
     
-    return {
-      id: `order_${uuidv4()}`,
-      amount: amountInPaise,
-      currency: 'INR',
-      receipt: `rcpt_${uuidv4()}`
-    };
-  };
-
-  const initializePayment = (orderData) => {
-    return new Promise((resolve, reject) => {
-      const razorpayConfig = getRazorpayConfig();
-      const options = {
-        ...razorpayConfig,
-        order_id: orderData.id,
-        amount: orderData.amount,
-        currency: orderData.currency,
-        prefill: {
-          name: formData.name,
-          email: formData.email,
-          contact: formData.mobile,
-        },
-        handler: function(response) {
-          resolve(response);
-        },
-        modal: {
-          ondismiss: function() {
-            reject(new Error('Payment cancelled by user'));
-          }
-        }
-      };
-      
-      const razorpay = new window.Razorpay(options);
-      razorpay.open();
-    });
+    return items.map(item => `${item.name} x${item.quantity}`).join(', ');
   };
 
   const handleSubmit = async () => {
@@ -88,72 +41,73 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
       }
 
       setIsProcessing(true);
-      toast.info("Initializing payment...");
+      
+      // Generate a unique order ID
+      const orderId = `ORD_${Date.now()}_${uuidv4().substring(0, 8)}`;
 
-      await loadRazorpayScript();
-      
-      let orderData;
-      
-      try {
-        const response = await fetch('https://henna-by-fathima-server.vercel.app/api/create-order', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            amount: totalAmount,
-            currency: 'INR',
-          })
-        });
-        
-        if (response.ok) {
-          const data = await response.json();
-          orderData = data.order;
-          console.log('Server order created:', orderData);
-        } else {
-          throw new Error('Server order creation failed');
-        }
-      } catch (serverError) {
-        console.warn('Server order creation failed, using direct integration:', serverError);
-        orderData = await createDirectOrder(totalAmount);
-        console.log('Direct order created:', orderData);
-      }
-      
-      if (!orderData || !orderData.id) {
-        throw new Error('Failed to create payment order');
-      }
-      
-      const paymentResponse = await initializePayment(orderData);
-      console.log('Payment successful:', paymentResponse);
-      
-      try {
-        const verifyResponse = await fetch('https://henna-by-fathima-server.vercel.app/api/verify-payment', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            razorpay_order_id: paymentResponse.razorpay_order_id,
-            razorpay_payment_id: paymentResponse.razorpay_payment_id,
-            razorpay_signature: paymentResponse.razorpay_signature,
-            orderData: {
-              items: cartItems,
-              customerDetails: formData,
+      // Order data to pass to payment processor
+      const orderData = {
+        orderId: orderId,
+        items: cartItems,
+        timestamp: new Date().toISOString(),
+        customerEmail: formData.email,
+        customerPhone: formData.mobile,
+        deliveryAddress: formData.address,
+        cartSummary: formatCartForRazorpay(cartItems)
+      };
+
+      await initializeRazorpayPayment(
+        orderData,
+        totalAmount,
+        {
+          name: formData.name,
+          email: formData.email,
+          mobile: formData.mobile,
+          address: formData.address
+        },
+        // On success
+        (response) => {
+          console.log('Payment successful, response:', response);
+          
+          // Store order in localStorage for reference
+          try {
+            const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+            orders.push({
+              ...orderData,
+              paymentId: response.razorpay_payment_id,
+              paymentStatus: 'completed',
               amount: totalAmount
-            }
-          }),
-        });
-        
-        if (verifyResponse.ok) {
-          console.log('Payment verified on server');
-        } else {
-          console.warn('Server verification failed, but proceeding with payment');
+            });
+            localStorage.setItem('orders', JSON.stringify(orders));
+          } catch (err) {
+            console.error('Error storing order data:', err);
+          }
+          
+          toast.success("Order placed successfully! Thank you for shopping with us.");
+          clearCart();
+          navigate('/');
+        },
+        // On error
+        (error) => {
+          console.error('Payment error:', error);
+          
+          // Store failed order attempt
+          try {
+            const failedOrders = JSON.parse(localStorage.getItem('failed_orders') || '[]');
+            failedOrders.push({
+              ...orderData,
+              error: error.message,
+              timestamp: new Date().toISOString()
+            });
+            localStorage.setItem('failed_orders', JSON.stringify(failedOrders));
+          } catch (err) {
+            console.error('Error storing failed order data:', err);
+          }
+          
+          toast.error(`Payment failed: ${error.message || 'Please try again'}`);
+          setIsProcessing(false);
         }
-      } catch (verifyError) {
-        console.warn('Payment verification on server failed:', verifyError);
-      }
-      
-      toast.success("Payment successful! Thank you for your order.");
-      clearCart();
-      navigate('/');
+      );
     } catch (error) {
       console.error("Payment error:", error);
       toast.error(error.message || "Payment initialization failed. Please try again later.");
@@ -174,6 +128,7 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
             onChange={onChange}
             className={`mt-1 ${errors.name ? 'border-red-500' : ''}`}
             disabled={isProcessing}
+            placeholder="Enter your full name"
           />
           {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
         </div>
@@ -188,6 +143,7 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
             onChange={onChange}
             className={`mt-1 ${errors.email ? 'border-red-500' : ''}`}
             disabled={isProcessing}
+            placeholder="Enter your email"
           />
           {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
         </div>
@@ -205,13 +161,17 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
               onChange={onChange}
               className={`rounded-l-none ${errors.mobile ? 'border-red-500' : ''}`}
               disabled={isProcessing}
+              placeholder="10-digit mobile number"
+              maxLength={10}
+              pattern="[0-9]*"
+              inputMode="numeric"
             />
           </div>
           {errors.mobile && <p className="text-red-500 text-sm mt-1">{errors.mobile}</p>}
         </div>
 
         <div>
-          <Label htmlFor="address" className="text-gray-600">Address Line*</Label>
+          <Label htmlFor="address" className="text-gray-600">Delivery Address*</Label>
           <Input
             id="address"
             name="address"
@@ -219,8 +179,29 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
             onChange={onChange}
             className={`mt-1 ${errors.address ? 'border-red-500' : ''}`}
             disabled={isProcessing}
+            placeholder="Enter your full delivery address"
           />
           {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
+        </div>
+
+        <div className="mt-4 p-3 bg-gray-50 rounded-md border border-gray-200">
+          <h3 className="text-sm font-medium text-gray-700">Order Summary</h3>
+          <ul className="mt-2 space-y-1 text-sm text-gray-600">
+            {Array.isArray(cartItems) && cartItems.length > 0 ? (
+              cartItems.map(item => (
+                <li key={item.id} className="flex justify-between">
+                  <span>{item.name} × {item.quantity}</span>
+                  <span>₹{item.price * item.quantity}</span>
+                </li>
+              ))
+            ) : (
+              <li>No items in cart</li>
+            )}
+          </ul>
+          <div className="mt-2 pt-2 border-t border-gray-200 text-sm font-medium flex justify-between">
+            <span>Total Amount:</span>
+            <span className="text-rose-600">₹{totalAmount}</span>
+          </div>
         </div>
 
         <Button 
@@ -237,6 +218,11 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
             'Proceed to Payment'
           )}
         </Button>
+        
+        <div className="text-center text-xs text-gray-500 mt-4">
+          <p>By proceeding, you agree to our Terms & Conditions</p>
+          <p className="mt-1">Secure payment powered by Razorpay</p>
+        </div>
       </div>
     </div>
   );

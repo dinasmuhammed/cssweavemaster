@@ -1,8 +1,10 @@
+
 import React, { useState } from 'react';
 import OrderSummaryItem from './OrderSummaryItem';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { Info } from "lucide-react";
 
 const OrderSummary = ({ 
   cartItems, 
@@ -11,10 +13,10 @@ const OrderSummary = ({
 }) => {
   const [couponCode, setCouponCode] = useState('');
   const [discount, setDiscount] = useState(0);
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
 
   const calculateShippingCharge = () => {
-    if (!Array.isArray(cartItems)) {
-      console.error('Invalid cartItems:', cartItems);
+    if (!Array.isArray(cartItems) || cartItems.length === 0) {
       return 0;
     }
 
@@ -41,22 +43,32 @@ const OrderSummary = ({
       return;
     }
 
-    // Example coupon codes
+    // Example coupon codes - in a real app, this would come from a backend
     const validCoupons = {
-      'WELCOME10': 10,
-      'SPECIAL20': 20,
-      'HENNA25': 25
+      'WELCOME10': {discount: 10, name: 'New Customer Discount'},
+      'SPECIAL20': {discount: 20, name: 'Special Offer'},
+      'HENNA25': {discount: 25, name: 'Loyalty Discount'}
     };
 
-    const discountPercentage = validCoupons[couponCode.toUpperCase()];
-    if (discountPercentage) {
-      const discountAmount = Math.round((totalPrice * discountPercentage) / 100);
+    const couponInfo = validCoupons[couponCode.toUpperCase()];
+    
+    if (couponInfo) {
+      const discountAmount = Math.round((totalPrice * couponInfo.discount) / 100);
       setDiscount(discountAmount);
-      toast.success(`Coupon applied! ${discountPercentage}% discount`);
+      setAppliedCoupon(couponInfo.name);
+      toast.success(`Coupon applied! ${couponInfo.discount}% ${couponInfo.name}`);
     } else {
       toast.error('Invalid coupon code');
       setDiscount(0);
+      setAppliedCoupon(null);
     }
+  };
+
+  const removeCoupon = () => {
+    setDiscount(0);
+    setCouponCode('');
+    setAppliedCoupon(null);
+    toast.info('Coupon removed');
   };
 
   const shippingCharge = calculateShippingCharge();
@@ -70,31 +82,51 @@ const OrderSummary = ({
       </div>
       
       <div className="divide-y border-y">
-        {Array.isArray(cartItems) && cartItems.map((item) => (
-          <OrderSummaryItem 
-            key={item.id} 
-            item={item} 
-            onQuantityChange={onQuantityChange}
-          />
-        ))}
+        {Array.isArray(cartItems) && cartItems.length > 0 ? (
+          cartItems.map((item) => (
+            <OrderSummaryItem 
+              key={item.id} 
+              item={item} 
+              onQuantityChange={onQuantityChange}
+            />
+          ))
+        ) : (
+          <div className="py-4 text-center text-gray-500">Your cart is empty</div>
+        )}
       </div>
 
       <div className="space-y-4">
-        <div className="flex gap-2">
-          <Input
-            placeholder="Have a coupon code?"
-            value={couponCode}
-            onChange={(e) => setCouponCode(e.target.value)}
-            className="flex-1"
-          />
-          <Button 
-            onClick={validateCoupon}
-            variant="outline"
-            className="whitespace-nowrap"
-          >
-            Apply Coupon
-          </Button>
-        </div>
+        {appliedCoupon ? (
+          <div className="flex items-center justify-between bg-green-50 p-2 rounded-md border border-green-200">
+            <div>
+              <span className="text-sm font-medium text-green-700">Applied: {appliedCoupon}</span>
+              <span className="ml-2 text-sm text-green-600">(-₹{discount})</span>
+            </div>
+            <Button 
+              onClick={removeCoupon}
+              variant="ghost" 
+              className="h-8 text-sm text-red-500 hover:text-red-700 hover:bg-red-50"
+            >
+              Remove
+            </Button>
+          </div>
+        ) : (
+          <div className="flex gap-2">
+            <Input
+              placeholder="Have a coupon code?"
+              value={couponCode}
+              onChange={(e) => setCouponCode(e.target.value)}
+              className="flex-1"
+            />
+            <Button 
+              onClick={validateCoupon}
+              variant="outline"
+              className="whitespace-nowrap"
+            >
+              Apply Coupon
+            </Button>
+          </div>
+        )}
 
         <div className="space-y-3">
           <div className="flex justify-between text-sm">
@@ -114,6 +146,18 @@ const OrderSummary = ({
           <div className="flex justify-between font-medium pt-3 border-t">
             <span>Grand Total</span>
             <span className="text-rose-600">₹{finalTotal}</span>
+          </div>
+        </div>
+        
+        <div className="flex items-start gap-2 text-xs bg-blue-50 p-2 rounded border border-blue-100">
+          <Info className="h-4 w-4 text-blue-500 flex-shrink-0 mt-0.5" />
+          <div className="text-blue-700">
+            <p>Shipping charges are calculated based on the number of items:</p>
+            <ul className="mt-1 list-disc list-inside">
+              <li>1 item: ₹35</li>
+              <li>2 items: ₹36</li>
+              <li>3+ items: ₹36 + ₹15 per additional item</li>
+            </ul>
           </div>
         </div>
       </div>

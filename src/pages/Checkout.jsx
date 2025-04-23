@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { toast } from "sonner";
-import { initializeRazorpayPayment } from '../utils/paymentUtils';
 import OrderSummary from '../components/checkout/OrderSummary';
 import DeliveryForm from '../components/checkout/DeliveryForm';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
+import { ShoppingBag } from 'lucide-react';
 
 const Checkout = () => {
   const { cartItems, updateQuantity, clearCart } = useCart();
@@ -18,8 +19,15 @@ const Checkout = () => {
     address: ''
   });
 
-  const totalPrice = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const shippingCharge = 0;
+  // Calculate total price from cart items
+  const totalPrice = cartItems?.reduce((sum, item) => sum + (item.price * item.quantity), 0) || 0;
+  
+  useEffect(() => {
+    // Check if cart is empty on component mount
+    if (!cartItems?.length) {
+      toast.info("Your cart is empty");
+    }
+  }, [cartItems]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -27,55 +35,60 @@ const Checkout = () => {
   };
 
   const handleQuantityChange = (itemId, change) => {
-    const item = cartItems.find(item => item.id === itemId);
+    const item = cartItems?.find(item => item.id === itemId);
     if (item) {
       const newQuantity = Math.max(1, item.quantity + change);
       updateQuantity(itemId, newQuantity);
     }
   };
 
-  const handlePaymentSuccess = (response) => {
-    toast.success("Payment successful! Thank you for your order.");
-    clearCart();
-    navigate('/');
-  };
-
-  const handlePaymentError = (error) => {
-    toast.error(error.message || "Payment failed. Please try again.");
-    setIsProcessing(false);
-  };
-
-  const handleCheckout = async () => {
-    setIsProcessing(true);
+  // Calculate shipping charges based on the items in cart
+  const calculateShippingCharge = () => {
+    if (!cartItems?.length) return 0;
     
-    try {
-      await initializeRazorpayPayment(
-        {
-          orderId: `ORDER_${Date.now()}`,
-          items: cartItems,
-          customerDetails: formData
-        },
-        totalPrice + shippingCharge,
-        formData,
-        handlePaymentSuccess,
-        handlePaymentError
-      );
-    } catch (error) {
-      handlePaymentError(error);
-    }
+    const totalItems = cartItems.reduce((sum, item) => sum + (item.quantity || 0), 0);
+    
+    if (totalItems === 0) return 0;
+    if (totalItems === 1) return 35;
+    if (totalItems === 2) return 36;
+    
+    // For 3 or more items, increase by ₹15 per additional item
+    const baseCharge = 36; // Base charge for 2 items
+    const additionalItems = totalItems - 2;
+    const additionalCharge = additionalItems * 15;
+    
+    return baseCharge + additionalCharge;
   };
 
-  if (cartItems.length === 0) {
+  const shippingCharge = calculateShippingCharge();
+  const totalAmount = totalPrice + shippingCharge;
+
+  if (!cartItems?.length) {
     return (
-      <div className="container mx-auto px-4 py-8 text-center">
-        <h1 className="text-2xl font-semibold mb-4">Your Cart is Empty</h1>
-        <Button onClick={() => navigate('/shop')}>Continue Shopping</Button>
+      <div className="flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <ShoppingBag className="mx-auto h-12 w-12 text-gray-400" />
+          <h2 className="mt-2 text-lg font-medium text-gray-900">Your cart is empty</h2>
+          <p className="mt-1 text-sm text-gray-500">
+            Start adding some items to your cart and they will appear here
+          </p>
+          <div className="mt-6">
+            <Button 
+              onClick={() => navigate('/shop')}
+              className="bg-green-800 hover:bg-green-700 text-white"
+            >
+              Browse Shop
+            </Button>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <h1 className="text-2xl font-bold mb-6 text-center">Checkout</h1>
+      
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="bg-white p-6 rounded-lg shadow-md">
           <OrderSummary 
@@ -89,8 +102,8 @@ const Checkout = () => {
           <DeliveryForm 
             formData={formData}
             onChange={handleInputChange}
-            onSubmit={handleCheckout}
-            isProcessing={isProcessing}
+            cartItems={cartItems}
+            totalAmount={totalAmount}
           />
         </div>
       </div>

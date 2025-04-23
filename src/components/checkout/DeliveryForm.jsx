@@ -1,20 +1,46 @@
+
 import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { validatePaymentForm } from '@/utils/formValidation';
+import { validatePaymentForm, validateField } from '@/utils/formValidation';
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { useCart } from '@/context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import { initializeRazorpayPayment, generateOrderId } from '@/utils/paymentUtils';
-import { v4 as uuidv4 } from 'uuid';
 
 const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [errors, setErrors] = useState({});
   const { clearCart } = useCart();
   const navigate = useNavigate();
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    
+    // Update the form data through parent component
+    if (onChange) {
+      onChange(e);
+    }
+    
+    // Clear error for this field when typing
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ""
+      }));
+    }
+    
+    // Validate field on blur
+    const fieldError = validateField(name, value);
+    if (fieldError) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: fieldError
+      }));
+    }
+  };
 
   const formatCartForRazorpay = (items) => {
     if (!Array.isArray(items) || items.length === 0) return 'No items';
@@ -23,6 +49,8 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
 
   const handleSubmit = async () => {
     try {
+      console.log("Payment submission started with form data:", formData);
+      
       const validation = validatePaymentForm(formData);
       setErrors(validation.errors);
 
@@ -39,6 +67,7 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
       setIsProcessing(true);
 
       const orderId = generateOrderId();
+      console.log("Generated order ID:", orderId);
 
       const orderData = {
         orderId,
@@ -50,6 +79,9 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
         cartSummary: formatCartForRazorpay(cartItems)
       };
 
+      console.log("Initializing payment with order data:", orderData);
+      console.log("Total amount:", totalAmount);
+
       await initializeRazorpayPayment(
         orderData,
         totalAmount,
@@ -60,7 +92,9 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
           address: formData.address
         },
         (response) => {
+          console.log("Payment success callback received:", response);
           try {
+            // Store order in local storage
             const orders = JSON.parse(localStorage.getItem('orders') || '[]');
             orders.push({
               ...orderData,
@@ -69,13 +103,19 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
               amount: totalAmount
             });
             localStorage.setItem('orders', JSON.stringify(orders));
-          } catch (err) {}
+          } catch (err) {
+            console.error("Error storing order:", err);
+          }
           toast.success("Order placed successfully! Thank you for shopping with us.");
           clearCart();
           navigate('/');
         },
         (error) => {
+          console.log("Payment error callback received:", error);
+          setIsProcessing(false);
+          
           try {
+            // Store failed order attempt
             const failedOrders = JSON.parse(localStorage.getItem('failed_orders') || '[]');
             failedOrders.push({
               ...orderData,
@@ -83,7 +123,10 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
               timestamp: new Date().toISOString()
             });
             localStorage.setItem('failed_orders', JSON.stringify(failedOrders));
-          } catch (err) {}
+          } catch (err) {
+            console.error("Error storing failed order:", err);
+          }
+          
           toast.error(
             <>
               Payment failed: {error.message || 'Please try again'}.
@@ -93,10 +136,11 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
               </div>
             </>
           );
-          setIsProcessing(false);
         }
       );
     } catch (error) {
+      console.error("Error in payment submission:", error);
+      setIsProcessing(false);
       toast.error(
         <>
           Payment error: {error.message || "Initialization failed"}.
@@ -106,7 +150,6 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
           </div>
         </>
       );
-      setIsProcessing(false);
     }
   };
 
@@ -120,7 +163,7 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
             id="name"
             name="name"
             value={formData.name || ''}
-            onChange={onChange}
+            onChange={handleInputChange}
             className={`mt-1 ${errors.name ? 'border-red-500' : ''}`}
             disabled={isProcessing}
             placeholder="Enter your full name"
@@ -135,7 +178,7 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
             name="email"
             type="email"
             value={formData.email || ''}
-            onChange={onChange}
+            onChange={handleInputChange}
             className={`mt-1 ${errors.email ? 'border-red-500' : ''}`}
             disabled={isProcessing}
             placeholder="Enter your email"
@@ -153,7 +196,7 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
               id="mobile"
               name="mobile"
               value={formData.mobile || ''}
-              onChange={onChange}
+              onChange={handleInputChange}
               className={`rounded-l-none ${errors.mobile ? 'border-red-500' : ''}`}
               disabled={isProcessing}
               placeholder="10-digit mobile number"
@@ -171,7 +214,7 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
             id="address"
             name="address"
             value={formData.address || ''}
-            onChange={onChange}
+            onChange={handleInputChange}
             className={`mt-1 ${errors.address ? 'border-red-500' : ''}`}
             disabled={isProcessing}
             placeholder="Enter your full delivery address"

@@ -2,19 +2,10 @@
 import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { validatePaymentForm, validateField } from '@/utils/formValidation';
-import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
-import { useCart } from '@/context/CartContext';
-import { useNavigate } from 'react-router-dom';
-import { initializeRazorpayPayment, generateOrderId } from '@/utils/paymentUtils';
+import { validateField } from '@/utils/formValidation';
 
-const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
-  const [isProcessing, setIsProcessing] = useState(false);
+const DeliveryForm = ({ formData, onChange, isProcessing }) => {
   const [errors, setErrors] = useState({});
-  const { clearCart } = useCart();
-  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -42,120 +33,9 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
     }
   };
 
-  const formatCartForRazorpay = (items) => {
-    if (!Array.isArray(items) || items.length === 0) return 'No items';
-    return items.map(item => `${item.name} x${item.quantity}`).join(', ');
-  };
-
-  const handleSubmit = async () => {
-    try {
-      console.log("Payment submission started with form data:", formData);
-      
-      const validation = validatePaymentForm(formData);
-      setErrors(validation.errors);
-
-      if (!validation.isValid) {
-        toast.error("Please fill all required fields correctly");
-        return;
-      }
-
-      if (!cartItems?.length) {
-        toast.error("Your cart is empty");
-        return;
-      }
-
-      setIsProcessing(true);
-
-      const orderId = generateOrderId();
-      console.log("Generated order ID:", orderId);
-
-      const orderData = {
-        orderId,
-        items: cartItems,
-        timestamp: new Date().toISOString(),
-        customerEmail: formData.email,
-        customerPhone: formData.mobile,
-        deliveryAddress: formData.address,
-        cartSummary: formatCartForRazorpay(cartItems)
-      };
-
-      console.log("Initializing payment with order data:", orderData);
-      console.log("Total amount:", totalAmount);
-
-      await initializeRazorpayPayment(
-        orderData,
-        totalAmount,
-        {
-          name: formData.name,
-          email: formData.email,
-          mobile: formData.mobile,
-          address: formData.address
-        },
-        (response) => {
-          console.log("Payment success callback received:", response);
-          try {
-            // Store order in local storage
-            const orders = JSON.parse(localStorage.getItem('orders') || '[]');
-            orders.push({
-              ...orderData,
-              paymentId: response.razorpay_payment_id,
-              paymentStatus: 'completed',
-              amount: totalAmount
-            });
-            localStorage.setItem('orders', JSON.stringify(orders));
-          } catch (err) {
-            console.error("Error storing order:", err);
-          }
-          toast.success("Order placed successfully! Thank you for shopping with us.");
-          clearCart();
-          navigate('/');
-        },
-        (error) => {
-          console.log("Payment error callback received:", error);
-          setIsProcessing(false);
-          
-          try {
-            // Store failed order attempt
-            const failedOrders = JSON.parse(localStorage.getItem('failed_orders') || '[]');
-            failedOrders.push({
-              ...orderData,
-              error: error.message,
-              timestamp: new Date().toISOString()
-            });
-            localStorage.setItem('failed_orders', JSON.stringify(failedOrders));
-          } catch (err) {
-            console.error("Error storing failed order:", err);
-          }
-          
-          toast.error(
-            <>
-              Payment failed: {error.message || 'Please try again'}.
-              <div className="mt-1 flex gap-2 justify-center">
-                <button className="underline" onClick={() => window.location.reload()}>Retry</button>
-                <button className="underline" onClick={() => navigate('/shop')}>Back to Shop</button>
-              </div>
-            </>
-          );
-        }
-      );
-    } catch (error) {
-      console.error("Error in payment submission:", error);
-      setIsProcessing(false);
-      toast.error(
-        <>
-          Payment error: {error.message || "Initialization failed"}.
-          <div className="mt-1 flex gap-2 justify-center">
-            <button className="underline" onClick={() => window.location.reload()}>Retry</button>
-            <button className="underline" onClick={() => navigate('/shop')}>Back to Shop</button>
-          </div>
-        </>
-      );
-    }
-  };
-
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold">Delivery Address</h2>
+      <h2 className="text-xl font-semibold">Delivery Details</h2>
       <div className="space-y-4">
         <div>
           <Label htmlFor="name" className="text-gray-600">Full Name*</Label>
@@ -221,41 +101,6 @@ const DeliveryForm = ({ formData, onChange, cartItems, totalAmount }) => {
           />
           {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
         </div>
-
-        <div className="mt-4 p-3 bg-gray-50 rounded-md border border-gray-200">
-          <h3 className="text-sm font-medium text-gray-700">Order Summary</h3>
-          <ul className="mt-2 space-y-1 text-sm text-gray-600">
-            {Array.isArray(cartItems) && cartItems.length > 0 ? (
-              cartItems.map(item => (
-                <li key={item.id} className="flex justify-between">
-                  <span>{item.name} × {item.quantity}</span>
-                  <span>₹{item.price * item.quantity}</span>
-                </li>
-              ))
-            ) : (
-              <li>No items in cart</li>
-            )}
-          </ul>
-          <div className="mt-2 pt-2 border-t border-gray-200 text-sm font-medium flex justify-between">
-            <span>Total Amount:</span>
-            <span className="text-rose-600">₹{totalAmount}</span>
-          </div>
-        </div>
-
-        <Button 
-          onClick={handleSubmit}
-          disabled={isProcessing}
-          className="w-full bg-[#607973] hover:bg-[#4c615c] text-white mt-6"
-        >
-          {isProcessing ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Processing Payment...
-            </>
-          ) : (
-            'Proceed to Payment'
-          )}
-        </Button>
         
         <div className="text-center text-xs text-gray-500 mt-4">
           <p>By proceeding, you agree to our Terms & Conditions</p>

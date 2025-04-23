@@ -1,5 +1,9 @@
 
-import { verifyPayment } from '../../api/razorpay';
+import { supabase } from '../../utils/supabaseClient';
+import crypto from 'crypto';
+
+// Get Razorpay secret key from environment variables
+const RAZORPAY_KEY_SECRET = import.meta.env.VITE_RAZORPAY_KEY_SECRET || 'lEV2FCzPMS4n7c23VfnUQd5W';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -14,11 +18,43 @@ export default async function handler(req, res) {
     }
     
     // Verify the Razorpay payment signature
-    const isValid = await verifyPayment(razorpay_order_id, razorpay_payment_id, razorpay_signature);
+    const body = razorpay_order_id + "|" + razorpay_payment_id;
+    const expectedSignature = crypto
+      .createHmac("sha256", RAZORPAY_KEY_SECRET)
+      .update(body)
+      .digest("hex");
+    
+    const isValid = expectedSignature === razorpay_signature;
     
     if (!isValid) {
-      return res.status(400).json({ message: 'Invalid payment signature' });
+      // Update payment status in Supabase
+      await supabase
+        .from('payment_logs')
+        .update({ 
+          status: 'invalid_signature',
+          verified_at: new Date().toISOString(),
+          metadata: {
+            verification_error: 'Invalid signature',
+            verified_at: new Date().toISOString()
+          }
+        })
+        .eq('order_id', razorpay_order_id);
+        
+      return res.status(400).json({ success: false, message: 'Invalid payment signature' });
     }
+
+    // Update payment status in Supabase
+    await supabase
+      .from('payment_logs')
+      .update({ 
+        status: 'verified',
+        payment_id: razorpay_payment_id,
+        verified_at: new Date().toISOString(),
+        metadata: {
+          verified_at: new Date().toISOString()
+        }
+      })
+      .eq('order_id', razorpay_order_id);
 
     // Payment is valid, return success response
     res.status(200).json({ 

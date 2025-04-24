@@ -1,94 +1,108 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { processPayment } from '../services/paymentProcessingService';
 import { toast } from "sonner";
-import { initializeRazorpayPayment } from '../utils/paymentUtils';
-import OrderSummary from '../components/checkout/OrderSummary';
-import DeliveryForm from '../components/checkout/DeliveryForm';
 import { Button } from "@/components/ui/button";
-import { ShoppingBag } from 'lucide-react';
+import { Loader2 } from "lucide-react";
+import { v4 as uuidv4 } from 'uuid';
+import CartItem from '../components/CartItem';
+import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
-  const navigate = useNavigate();
-  const { cartItems, updateQuantity, clearCart } = useCart();
+  const { cartItems, totalAmount, updateQuantity, removeItem } = useCart();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    mobile: '',
-    email: '',
-    address: ''
-  });
+  const navigate = useNavigate();
 
-  const totalPrice = cartItems?.reduce((sum, item) => sum + (item.price * item.quantity), 0) || 0;
-  const shippingCharge = 0;
-  const totalAmount = totalPrice + shippingCharge;
+  const handleCheckout = async () => {
+    if (!cartItems?.length) {
+      toast.error("Your cart is empty");
+      return;
+    }
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
+    setIsProcessing(true);
 
-  const handleQuantityChange = (itemId, change) => {
-    const item = cartItems?.find(item => item.id === itemId);
-    if (item) {
-      const newQuantity = Math.max(1, item.quantity + change);
-      updateQuantity(itemId, newQuantity);
+    try {
+      const orderData = {
+        orderId: `order_${uuidv4()}`,
+        amount: totalAmount,
+        items: cartItems,
+        description: `Order for ${cartItems.length} items`
+      };
+
+      const customerDetails = {
+        // These would typically come from a form or user profile
+        name: '',
+        email: '',
+        mobile: '',
+        address: ''
+      };
+
+      const result = await processPayment(orderData, customerDetails);
+      
+      if (!result) {
+        toast.error("Payment initialization failed");
+        return;
+      }
+
+      // Payment successful
+      toast.success("Payment processed successfully!");
+      navigate('/checkout');
+      
+    } catch (error) {
+      console.error('Checkout error:', error);
+      toast.error("Checkout failed. Please try again.");
+    } finally {
+      setIsProcessing(false);
     }
   };
 
-  const handlePaymentSuccess = (response) => {
-    toast.success("Payment successful! Thank you for your order.");
-    clearCart();
-    navigate('/');
+  const handleQuantityChange = (itemId, change) => {
+    updateQuantity(itemId, change);
   };
 
-  const handlePaymentError = (error) => {
-    toast.error(error.message || "Payment failed. Please try again.");
-    setIsProcessing(false);
+  const handleRemoveItem = (itemId) => {
+    removeItem(itemId);
   };
-
-  if (!cartItems?.length) {
-    return (
-      <div className="flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <ShoppingBag className="mx-auto h-12 w-12 text-gray-400" />
-          <h2 className="mt-2 text-lg font-medium text-gray-900">Your cart is empty</h2>
-          <p className="mt-1 text-sm text-gray-500">
-            Start adding some items to your cart and they will appear here
-          </p>
-          <div className="mt-6">
-            <Button 
-              onClick={() => navigate('/shop')}
-              className="bg-green-800 hover:bg-green-700 text-white"
-            >
-              Continue Shopping
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <OrderSummary 
-            cartItems={cartItems}
-            onQuantityChange={handleQuantityChange}
-            totalPrice={totalPrice}
-            shippingCharge={shippingCharge}
-          />
+      <h1 className="text-2xl font-bold mb-6">Shopping Cart</h1>
+      
+      {cartItems?.length > 0 ? (
+        <>
+          <div className="space-y-4">
+            {cartItems.map((item) => (
+              <CartItem
+                key={item.id}
+                item={item}
+                onQuantityChange={handleQuantityChange}
+                onRemove={handleRemoveItem}
+              />
+            ))}
+          </div>
+          
+          <div className="mt-6">
+            <Button
+              onClick={handleCheckout}
+              disabled={isProcessing}
+              className="w-full bg-[#607973] hover:bg-[#4c615c] text-white"
+            >
+              {isProcessing ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                `Proceed to Pay (₹${totalAmount})`
+              )}
+            </Button>
+          </div>
+        </>
+      ) : (
+        <div className="text-center py-8">
+          <p className="text-gray-500">Your cart is empty</p>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <DeliveryForm 
-            formData={formData}
-            onChange={handleInputChange}
-            cartItems={cartItems}
-            totalAmount={totalAmount}
-          />
-        </div>
-      </div>
+      )}
     </div>
   );
 };

@@ -6,7 +6,7 @@ import OrderSummary from '../components/checkout/OrderSummary';
 import DeliveryForm from '../components/checkout/DeliveryForm';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { ShoppingBag } from 'lucide-react';
+import { ShoppingBag, Loader2 } from 'lucide-react';
 import { initializePayment } from '../services/paymentService';
 import { supabase } from '../utils/supabaseClient';
 
@@ -20,6 +20,7 @@ const Checkout = () => {
     email: '',
     address: ''
   });
+  const [formErrors, setFormErrors] = useState({});
   const [userId, setUserId] = useState(null);
 
   // Calculate total price from cart items
@@ -29,6 +30,8 @@ const Checkout = () => {
     // Check if cart is empty on component mount
     if (!cartItems?.length) {
       toast.info("Your cart is empty");
+      navigate('/shop');
+      return;
     }
     
     // Try to get current user
@@ -58,11 +61,32 @@ const Checkout = () => {
     };
     
     fetchUser().catch(console.error);
-  }, [cartItems]);
+  }, [cartItems, navigate]);
+
+  const validateForm = () => {
+    const errors = {};
+    
+    if (!formData.name.trim()) errors.name = 'Name is required';
+    if (!formData.email.trim()) errors.email = 'Email is required';
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) errors.email = 'Email is invalid';
+    
+    if (!formData.mobile.trim()) errors.mobile = 'Phone number is required';
+    else if (!/^\d{10}$/.test(formData.mobile.replace(/\D/g, ''))) 
+      errors.mobile = 'Enter a valid 10-digit phone number';
+    
+    if (!formData.address.trim()) errors.address = 'Address is required';
+    
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    // Clear error when user starts typing
+    if (formErrors[name]) {
+      setFormErrors(prev => ({ ...prev, [name]: null }));
+    }
   };
 
   const handleQuantityChange = (itemId, change) => {
@@ -118,12 +142,18 @@ const Checkout = () => {
       
       toast.success("Payment successful! Thank you for your order.");
       clearCart();
-      navigate('/order-confirmation', { state: { orderId: response.orderId } });
+      navigate('/order-confirmation', { state: { 
+        orderId: response.orderId,
+        paymentId: response.paymentId,
+        customerName: formData.name
+      }});
     } catch (error) {
       console.error('Error processing successful payment:', error);
       toast.success("Payment completed, but order processing had an issue.");
       clearCart();
       navigate('/');
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -134,14 +164,15 @@ const Checkout = () => {
 
   const handleProceedToPayment = async () => {
     try {
-      // Basic validation
-      if (!formData.name || !formData.email || !formData.mobile || !formData.address) {
-        toast.error("Please fill all the required fields");
+      // Form validation
+      if (!validateForm()) {
+        toast.error("Please fill all the required fields correctly");
         return;
       }
       
       if (!cartItems?.length) {
         toast.error("Your cart is empty");
+        navigate('/shop');
         return;
       }
       
@@ -187,8 +218,6 @@ const Checkout = () => {
       handlePaymentSuccess(paymentResult);
     } catch (error) {
       handlePaymentError(error);
-    } finally {
-      setIsProcessing(false);
     }
   };
 
@@ -232,7 +261,12 @@ const Checkout = () => {
             disabled={isProcessing}
             className="w-full mt-6 bg-[#607973] hover:bg-[#4c615c] text-white"
           >
-            {isProcessing ? 'Processing...' : 'Proceed to Payment'}
+            {isProcessing ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Processing...
+              </>
+            ) : 'Proceed to Payment'}
           </Button>
         </div>
         
@@ -241,6 +275,7 @@ const Checkout = () => {
             formData={formData}
             onChange={handleInputChange}
             isProcessing={isProcessing}
+            errors={formErrors}
           />
         </div>
       </div>

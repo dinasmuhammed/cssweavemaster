@@ -1,3 +1,4 @@
+
 import { serve } from 'https://deno.fresh.dev/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1';
 import * as crypto from 'https://deno.land/std@0.177.0/crypto/mod.ts';
@@ -27,6 +28,7 @@ serve(async (req) => {
       throw new Error('Missing webhook signature');
     }
 
+    // Verify webhook signature
     const text = JSON.stringify(payload);
     const secret = Deno.env.get('RAZORPAY_WEBHOOK_SECRET') ?? '';
     const hmac = crypto.createHmac('sha256', secret);
@@ -37,6 +39,7 @@ serve(async (req) => {
       throw new Error('Invalid webhook signature');
     }
 
+    // Log the webhook event
     const { error: logError } = await supabase
       .from('webhook_logs')
       .insert([{
@@ -48,6 +51,7 @@ serve(async (req) => {
 
     if (logError) throw logError;
 
+    // Process different event types
     switch (event) {
       case 'payment.captured':
         await supabase
@@ -62,6 +66,21 @@ serve(async (req) => {
             }
           })
           .eq('order_id', eventPayload.payment.entity.order_id);
+          
+        // Also update orders table if it exists
+        try {
+          await supabase
+            .from('orders')
+            .update({ 
+              status: 'completed',
+              payment_id: eventPayload.payment.entity.id,
+              updated_at: new Date().toISOString()
+            })
+            .eq('order_id', eventPayload.payment.entity.order_id);
+        } catch (orderError) {
+          // Orders table might not exist or order record might not be found
+          console.error('Error updating order:', orderError);
+        }
         break;
 
       case 'payment.failed':
@@ -77,9 +96,51 @@ serve(async (req) => {
             }
           })
           .eq('order_id', eventPayload.payment.entity.order_id);
+          
+        // Update orders table
+        try {
+          await supabase
+            .from('orders')
+            .update({ 
+              status: 'payment_failed',
+              payment_id: eventPayload.payment.entity.id,
+              updated_at: new Date().toISOString()
+            })
+            .eq('order_id', eventPayload.payment.entity.order_id);
+        } catch (orderError) {
+          console.error('Error updating order status:', orderError);
+        }
+        break;
+        
+      case 'refund.processed':
+        await supabase
+          .from('payment_logs')
+          .update({ 
+            status: 'refunded',
+            webhook_processed_at: new Date().toISOString(),
+            metadata: {
+              refund_details: eventPayload.refund.entity,
+              processed_at: new Date().toISOString()
+            }
+          })
+          .eq('payment_id', eventPayload.refund.entity.payment_id);
+          
+        // Update orders table for refunds
+        try {
+          await supabase
+            .from('orders')
+            .update({ 
+              status: 'refunded',
+              updated_at: new Date().toISOString()
+            })
+            .eq('payment_id', eventPayload.refund.entity.payment_id);
+        } catch (refundError) {
+          console.error('Error updating refund status:', refundError);
+        }
         break;
     }
 
+    // Update webhook log status
     await supabase
       .from('webhook_logs')
       .update({ status: 'processed' })

@@ -1,6 +1,8 @@
+
 import { v4 as uuidv4 } from 'uuid';
 import { supabase } from '../utils/supabaseClient';
 import { loadRazorpayScript } from '../utils/paymentUtils';
+import { toast } from "sonner";
 
 // Razorpay live key for client-side
 const RAZORPAY_KEY_ID = 'rzp_live_VMhrs1uuU9TTJq';
@@ -172,6 +174,9 @@ export const initializePayment = async (orderData, customerDetails) => {
       // Ensure Razorpay is loaded
       await loadRazorpayScript();
       
+      // Show a loading indicator
+      const loadingToast = toast.loading('Preparing payment...');
+      
       // Get the Razorpay order
       const order = await createOrder(
         orderData.amount,
@@ -184,6 +189,7 @@ export const initializePayment = async (orderData, customerDetails) => {
       );
       
       if (!window.Razorpay) {
+        toast.dismiss(loadingToast);
         throw new Error('Failed to load Razorpay SDK');
       }
       
@@ -211,7 +217,9 @@ export const initializePayment = async (orderData, customerDetails) => {
           color: "#607973"
         },
         handler: async function(response) {
+          toast.dismiss(loadingToast);
           console.log("Payment success response:", response);
+          toast.success('Payment received! Processing...');
           
           try {
             // Verify the payment
@@ -232,6 +240,7 @@ export const initializePayment = async (orderData, customerDetails) => {
             console.error("Payment verification failed:", verifyError);
             
             // Still resolve as success since payment was made
+            toast.warning('Payment received but verification pending');
             resolve({
               success: true,
               orderId: response.razorpay_order_id,
@@ -244,6 +253,7 @@ export const initializePayment = async (orderData, customerDetails) => {
         modal: {
           escape: false,
           ondismiss: function() {
+            toast.dismiss(loadingToast);
             // Log cancellation
             try {
               supabase.from('payment_logs')
@@ -258,6 +268,7 @@ export const initializePayment = async (orderData, customerDetails) => {
               console.error('Failed to log cancellation:', dbError);
             }
             
+            toast.error('Payment cancelled');
             reject(new Error('Payment cancelled by user'));
           }
         }
@@ -266,6 +277,7 @@ export const initializePayment = async (orderData, customerDetails) => {
       const razorpay = new window.Razorpay(options);
       
       razorpay.on('payment.failed', async function(failedResponse) {
+        toast.dismiss(loadingToast);
         console.error("Payment failed:", failedResponse.error);
         
         // Log failure to Supabase
@@ -285,19 +297,22 @@ export const initializePayment = async (orderData, customerDetails) => {
           console.error('Failed to log payment failure:', dbError);
         }
         
+        toast.error(`Payment failed: ${failedResponse.error.description || 'Please try again'}`);
         reject(new Error(failedResponse.error.description || 'Payment failed'));
       });
       
       // Open Razorpay payment modal
+      toast.dismiss(loadingToast);
       razorpay.open();
     } catch (error) {
       console.error("Error initializing payment:", error);
+      toast.error(`Payment setup failed: ${error.message}`);
       reject(error);
     }
   });
 };
 
-// New function to update order status in Supabase
+// Update order status in Supabase
 export const updateOrderStatus = async (orderId, status, details = {}) => {
   try {
     const { error } = await supabase
@@ -316,5 +331,24 @@ export const updateOrderStatus = async (orderId, status, details = {}) => {
   } catch (error) {
     console.error('Error updating order status:', error);
     return false;
+  }
+};
+
+// Get payment history for a user
+export const getPaymentHistory = async (userId) => {
+  if (!userId) return [];
+  
+  try {
+    const { data, error } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+      
+    if (error) throw error;
+    return data || [];
+  } catch (error) {
+    console.error('Error fetching payment history:', error);
+    return [];
   }
 };

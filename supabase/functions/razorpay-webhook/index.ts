@@ -1,4 +1,3 @@
-
 import { serve } from 'https://deno.fresh.dev/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1';
 import * as crypto from 'https://deno.land/std@0.177.0/crypto/mod.ts';
@@ -28,7 +27,6 @@ serve(async (req) => {
       throw new Error('Missing webhook signature');
     }
 
-    // Verify webhook signature
     const text = JSON.stringify(payload);
     const secret = Deno.env.get('RAZORPAY_WEBHOOK_SECRET') ?? '';
     const hmac = crypto.createHmac('sha256', secret);
@@ -39,32 +37,31 @@ serve(async (req) => {
       throw new Error('Invalid webhook signature');
     }
 
-    // Log webhook event
     const { error: logError } = await supabase
       .from('webhook_logs')
       .insert([{
         event_type: event,
         payload: eventPayload,
-        signature: webhookSignature
+        signature: webhookSignature,
+        status: 'received'
       }]);
 
     if (logError) throw logError;
 
-    // Handle different webhook events
     switch (event) {
       case 'payment.captured':
         await supabase
           .from('payment_logs')
           .update({ 
             status: 'completed',
+            payment_id: eventPayload.payment.entity.id,
             webhook_processed_at: new Date().toISOString(),
             metadata: {
-              ...eventPayload,
-              webhook_event: event,
+              payment_details: eventPayload.payment.entity,
               processed_at: new Date().toISOString()
             }
           })
-          .match({ payment_id: eventPayload.payment.entity.id });
+          .eq('order_id', eventPayload.payment.entity.order_id);
         break;
 
       case 'payment.failed':
@@ -72,37 +69,32 @@ serve(async (req) => {
           .from('payment_logs')
           .update({ 
             status: 'failed',
+            payment_id: eventPayload.payment.entity.id,
             webhook_processed_at: new Date().toISOString(),
             metadata: {
-              ...eventPayload,
-              webhook_event: event,
-              processed_at: new Date().toISOString()
+              error_details: eventPayload.payment.entity,
+              failed_at: new Date().toISOString()
             }
           })
-          .match({ payment_id: eventPayload.payment.entity.id });
+          .eq('order_id', eventPayload.payment.entity.order_id);
         break;
     }
 
+    await supabase
+      .from('webhook_logs')
+      .update({ status: 'processed' })
+      .eq('event_type', event)
+      .eq('signature', webhookSignature);
+
     return new Response(
       JSON.stringify({ success: true }),
-      { 
-        headers: { 
-          ...corsHeaders,
-          'Content-Type': 'application/json'
-        }
-      }
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   } catch (error) {
     console.error('Webhook processing error:', error);
     return new Response(
       JSON.stringify({ error: error.message }),
-      { 
-        status: 400,
-        headers: { 
-          ...corsHeaders,
-          'Content-Type': 'application/json'
-        }
-      }
+      { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
 });

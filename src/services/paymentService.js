@@ -1,4 +1,3 @@
-
 import { v4 as uuidv4 } from 'uuid';
 import { supabase } from '../utils/supabaseClient';
 import { loadRazorpayScript } from '../utils/paymentUtils';
@@ -7,7 +6,7 @@ import { loadRazorpayScript } from '../utils/paymentUtils';
 const RAZORPAY_KEY_ID = 'rzp_live_VMhrs1uuU9TTJq';
 const DOMAIN_NAME = 'hennabyfathima.in';
 
-// Convert amount to paise (Razorpay uses amount in paise)
+// Utility to reliably convert amount to paise
 const toPaise = (amount) => {
   const numAmount = typeof amount === 'string' ? Number(amount) : amount;
   return Math.round(numAmount * 100);
@@ -22,7 +21,28 @@ export const createOrder = async (amount, currency = 'INR', metadata = {}) => {
     // Generate a receipt ID
     const receipt = `rcpt_${Date.now()}_${uuidv4().substring(0, 8)}`;
     
-    // Create order in server
+    // First, create a record in Supabase
+    const { data: orderRecord, error: dbError } = await supabase
+      .from('payment_logs')
+      .insert([{
+        amount: amount,
+        currency,
+        status: 'initiated',
+        metadata: {
+          ...metadata,
+          receipt,
+          initiated_at: new Date().toISOString()
+        }
+      }])
+      .select()
+      .single();
+
+    if (dbError) {
+      console.error('Error creating order record:', dbError);
+      // Continue with payment even if DB fails
+    }
+
+    // Create order in Razorpay
     const response = await fetch('/api/create-order', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -41,56 +61,25 @@ export const createOrder = async (amount, currency = 'INR', metadata = {}) => {
       throw new Error('Invalid order response');
     }
     
-    // Store order in Supabase
-    const { error: insertError } = await supabase
-      .from('payment_logs')
-      .insert([{
-        order_id: order.id,
-        amount: amountInPaise / 100, // Store in rupees for readability
-        currency,
-        status: 'created',
-        metadata: {
-          ...metadata,
-          receipt,
-          created_at: new Date().toISOString()
-        }
-      }]);
-      
-    if (insertError) {
-      console.error('Error storing order in Supabase:', insertError);
-      // Continue even if Supabase storage fails
+    // Update Supabase record with Razorpay order ID
+    if (orderRecord) {
+      await supabase
+        .from('payment_logs')
+        .update({
+          order_id: order.id,
+          status: 'created',
+          metadata: {
+            ...orderRecord.metadata,
+            razorpay_order_created_at: new Date().toISOString()
+          }
+        })
+        .eq('id', orderRecord.id);
     }
     
     return order;
   } catch (error) {
     console.error('Error creating order:', error);
-    
-    // Generate client-side fallback order ID
-    const fallbackOrderId = `order_fallback_${Date.now()}_${uuidv4().substring(0, 8)}`;
-    
-    // Still try to store in Supabase for tracking
-    try {
-      await supabase.from('payment_logs').insert([{
-        order_id: fallbackOrderId,
-        amount: toPaise(amount) / 100,
-        currency,
-        status: 'failed_creation',
-        metadata: {
-          ...metadata,
-          error: error.message,
-          created_at: new Date().toISOString()
-        }
-      }]);
-    } catch (dbError) {
-      console.error('Failed to log order error to Supabase:', dbError);
-    }
-    
-    // Return fallback order for client-side handling
-    return {
-      id: fallbackOrderId,
-      amount: toPaise(amount),
-      currency
-    };
+    throw error;
   }
 };
 
@@ -306,4 +295,26 @@ export const initializePayment = async (orderData, customerDetails) => {
       reject(error);
     }
   });
+};
+
+// New function to update order status in Supabase
+export const updateOrderStatus = async (orderId, status, details = {}) => {
+  try {
+    const { error } = await supabase
+      .from('payment_logs')
+      .update({
+        status,
+        metadata: {
+          ...details,
+          status_updated_at: new Date().toISOString()
+        }
+      })
+      .eq('order_id', orderId);
+
+    if (error) throw error;
+    return true;
+  } catch (error) {
+    console.error('Error updating order status:', error);
+    return false;
+  }
 };

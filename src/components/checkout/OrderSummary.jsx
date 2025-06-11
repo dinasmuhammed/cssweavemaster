@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import OrderSummaryItem from './OrderSummaryItem';
 import { Input } from "@/components/ui/input";
@@ -9,7 +10,7 @@ const OrderSummary = ({
   cartItems,
   onQuantityChange,
   totalPrice = 0,
-  shippingCharge = 0
+  shippingCharge: propShippingCharge = 0
 }) => {
   const [couponCode, setCouponCode] = useState('');
   const [discount, setDiscount] = useState(0);
@@ -71,8 +72,8 @@ const OrderSummary = ({
     toast.info('Coupon removed');
   };
 
-  const shippingCharge = calculateShippingCharge();
-  const finalTotal = Math.max(0, (totalPrice || 0) + shippingCharge - discount);
+  const calculatedShippingCharge = calculateShippingCharge();
+  const finalTotal = Math.max(0, (totalPrice || 0) + calculatedShippingCharge - discount);
 
   return (
     <div className="space-y-6">
@@ -135,7 +136,7 @@ const OrderSummary = ({
           </div>
           <div className="flex justify-between text-sm">
             <span>Shipping Charges:</span>
-            <span>₹{shippingCharge}</span>
+            <span>₹{calculatedShippingCharge}</span>
           </div>
           {discount > 0 && (
             <div className="flex justify-between text-sm">

@@ -158,7 +158,9 @@ const Checkout = () => {
   };
 
   const handlePaymentError = (error) => {
-    toast.error(`Payment failed: ${error.message || "Please try again"}`);
+    if (error.message !== 'Payment cancelled by user') {
+      toast.error(`Payment failed: ${error.message || "Please try again"}`);
+    }
     setIsProcessing(false);
   };
 

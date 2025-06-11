@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
-import { initializePayment } from '../services/paymentService';
+import { processPayment } from '../services/paymentProcessingService';
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
@@ -10,14 +9,9 @@ import CartItem from '../components/CartItem';
 import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
-  const { cartItems, updateQuantity, removeItem, clearCart } = useCart();
+  const { cartItems, totalAmount, updateQuantity, removeItem } = useCart();
   const [isProcessing, setIsProcessing] = useState(false);
   const navigate = useNavigate();
-
-  // Calculate total amount
-  const totalAmount = cartItems?.reduce((sum, item) => {
-    return sum + (item.price * item.quantity);
-  }, 0) || 0;
 
   const handleCheckout = async () => {
     if (!cartItems?.length) {
@@ -31,40 +25,32 @@ const Cart = () => {
       const orderData = {
         orderId: `order_${uuidv4()}`,
         amount: totalAmount,
-        items: cartItems.map(item => ({
-          id: item.id,
-          name: item.name,
-          quantity: item.quantity,
-          price: item.price
-        })),
+        items: cartItems,
         description: `Order for ${cartItems.length} items`
       };
 
       const customerDetails = {
-        name: 'Guest Customer',
-        email: 'guest@example.com',
+        // These would typically come from a form or user profile
+        name: '',
+        email: '',
         mobile: '',
         address: ''
       };
 
-      const result = await initializePayment(orderData, customerDetails);
+      const result = await processPayment(orderData, customerDetails);
       
-      if (result?.success) {
-        toast.success("Payment completed successfully!");
-        clearCart();
-        navigate('/order-confirmation', { 
-          state: { 
-            orderId: result.orderId,
-            paymentId: result.paymentId 
-          }
-        });
+      if (!result) {
+        toast.error("Payment initialization failed");
+        return;
       }
+
+      // Payment successful
+      toast.success("Payment processed successfully!");
+      navigate('/checkout');
       
     } catch (error) {
       console.error('Checkout error:', error);
-      if (error.message !== 'Payment cancelled by user') {
-        toast.error("Checkout failed. Please try again.");
-      }
+      toast.error("Checkout failed. Please try again.");
     } finally {
       setIsProcessing(false);
     }
@@ -95,39 +81,26 @@ const Cart = () => {
             ))}
           </div>
           
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-            <div className="flex justify-between items-center text-lg font-semibold">
-              <span>Total Amount:</span>
-              <span>₹{totalAmount}</span>
-            </div>
-          </div>
-          
           <div className="mt-6">
             <Button
               onClick={handleCheckout}
               disabled={isProcessing}
-              className="w-full bg-[#607973] hover:bg-[#4c615c] text-white py-3 text-lg"
+              className="w-full bg-[#607973] hover:bg-[#4c615c] text-white"
             >
               {isProcessing ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Processing Payment...
+                  Processing...
                 </>
               ) : (
-                `Proceed to Pay ₹${totalAmount}`
+                `Proceed to Pay (₹${totalAmount})`
               )}
             </Button>
           </div>
         </>
       ) : (
         <div className="text-center py-8">
-          <p className="text-gray-500 text-lg">Your cart is empty</p>
-          <Button 
-            onClick={() => navigate('/shop')}
-            className="mt-4 bg-[#607973] hover:bg-[#4c615c] text-white"
-          >
-            Continue Shopping
-          </Button>
+          <p className="text-gray-500">Your cart is empty</p>
         </div>
       )}
     </div>

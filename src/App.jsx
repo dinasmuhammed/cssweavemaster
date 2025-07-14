@@ -7,6 +7,9 @@ import LoadingSpinner from './components/LoadingSpinner';
 import Shop from './pages/Shop';
 import ProductDetails from './pages/ProductDetails';
 import CategoryPage from './pages/CategoryPage';
+import Services from './pages/Services';
+import Workshop from './pages/Workshop';
+import Contact from './pages/Contact';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import { CartProvider } from './context/CartContext';
@@ -29,6 +32,9 @@ function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/shop" element={<Shop />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/workshop" element={<Workshop />} />
+                <Route path="/contact" element={<Contact />} />
                 <Route path="/product/:id" element={<ProductDetails />} />
                 <Route path="/category/:categoryName" element={<CategoryPage />} />
                 <Route path="/cart" element={<Cart />} />

@@ -52,7 +52,7 @@ const Services = () => {
     rating: 5,
     text: "Amazing experience! The designs were perfect and lasted really well. Highly recommend!"
   }];
-  return <div className="min-h-screen bg-cream-100">
+  return <div className="min-h-screen bg-secondary">
       {/* Hero Banner */}
       <div className="relative h-[400px] md:h-[500px] overflow-hidden">
         <motion.img initial={{
@@ -85,7 +85,7 @@ const Services = () => {
       {/* Packages Grid Section */}
       <section className="py-16 px-4">
         <div className="container mx-auto">
-          <h2 className="text-2xl md:text-3xl font-heading text-center text-green-800 mb-12">
+          <h2 className="text-2xl md:text-3xl font-heading text-center text-primary mb-12">
             Packages
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -99,8 +99,8 @@ const Services = () => {
             duration: 0.5
           }} whileHover={{
             y: -5
-          }} className="relative group overflow-hidden rounded-lg shadow-lg">
-                <div className="aspect-w-3 aspect-h-4">
+          }} className="relative group overflow-hidden rounded-lg shadow-lg bg-card">
+                <div className="aspect-w-3 aspect-h-4 h-64">
                   <img src={pkg.image} alt={pkg.title} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
                 </div>
                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
@@ -111,7 +111,7 @@ const Services = () => {
                   scale: 1.05
                 }} whileTap={{
                   scale: 0.95
-                }} className="bg-cream-100 text-green-800 px-6 py-2 rounded-full font-medium hover:bg-cream-200 transition-colors">
+                }} className="bg-secondary text-primary px-6 py-2 rounded-full font-medium hover:bg-accent transition-colors">
                       Learn More
                     </motion.button>
                   </div>
@@ -122,9 +122,9 @@ const Services = () => {
       </section>
 
       {/* Pricing Section */}
-      <section className="py-16 px-4 bg-white">
+      <section className="py-16 px-4 bg-card">
         <div className="container mx-auto">
-          <h2 className="text-2xl md:text-3xl font-heading text-center text-green-800 mb-12">
+          <h2 className="text-2xl md:text-3xl font-heading text-center text-primary mb-12">
             Pricing
           </h2>
           <PricingTabs />
@@ -132,9 +132,9 @@ const Services = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-16 px-4 bg-cream-50">
+      <section className="py-16 px-4 bg-accent">
         <div className="container mx-auto">
-          <h2 className="text-2xl md:text-3xl font-heading text-center text-green-800 mb-12">
+          <h2 className="text-2xl md:text-3xl font-heading text-center text-primary mb-12">
             Client Reviews
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
@@ -154,7 +154,7 @@ const Services = () => {
       </section>
 
       {/* Download Button Section */}
-      <div className="flex justify-center py-12 bg-white">
+      <div className="flex justify-center py-12 bg-card">
         <motion.div initial={{
         opacity: 0,
         y: 20
@@ -166,7 +166,7 @@ const Services = () => {
       }} transition={{
         duration: 0.3
       }}>
-          <Button variant="secondary" className="group flex items-center gap-2 px-6 py-3 bg-green-800 text-white hover:bg-green-900 transition-all duration-300" onClick={() => window.open('/workshop-brochure.pdf', '_blank')}>
+          <Button variant="default" className="group flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300" onClick={() => window.open('/workshop-brochure.pdf', '_blank')}>
             Download
             <ArrowDown className="w-4 h-4 group-hover:translate-y-1 transition-transform duration-300" />
           </Button>
@@ -174,12 +174,14 @@ const Services = () => {
       </div>
 
       {/* Booking Form Section */}
-      <section className="py-16 px-4 bg-cream-100 bg-slate-50">
-        <div className="container mx-auto max-w-2xl rounded-sm bg-gray-50">
-          <h2 className="text-2xl md:text-3xl font-heading text-center text-green-800 mb-12">
-            Book Now
-          </h2>
-          <BookingForm />
+      <section className="py-16 px-4 bg-secondary">
+        <div className="container mx-auto max-w-2xl">
+          <div className="bg-card rounded-lg p-8 shadow-lg">
+            <h2 className="text-2xl md:text-3xl font-heading text-center text-primary mb-12">
+              Book Now
+            </h2>
+            <BookingForm />
+          </div>
         </div>
       </section>
     </div>;

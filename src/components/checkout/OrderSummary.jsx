@@ -9,7 +9,7 @@ const OrderSummary = ({
   cartItems,
   onQuantityChange,
   totalPrice = 0,
-  shippingCharge = 0
+  initialShippingCharge = 0
 }) => {
   const [couponCode, setCouponCode] = useState('');
   const [discount, setDiscount] = useState(0);

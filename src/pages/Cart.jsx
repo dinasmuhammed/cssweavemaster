@@ -9,9 +9,12 @@ import CartItem from '../components/CartItem';
 import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
-  const { cartItems, totalAmount, updateQuantity, removeItem } = useCart();
+  const { cartItems, updateQuantity, removeFromCart, clearCart } = useCart();
   const [isProcessing, setIsProcessing] = useState(false);
   const navigate = useNavigate();
+
+  // Calculate total amount
+  const totalAmount = cartItems?.reduce((sum, item) => sum + (item.price * item.quantity), 0) || 0;
 
   const handleCheckout = async () => {
     if (!cartItems?.length) {
@@ -57,11 +60,15 @@ const Cart = () => {
   };
 
   const handleQuantityChange = (itemId, change) => {
-    updateQuantity(itemId, change);
+    const item = cartItems?.find(item => item.id === itemId);
+    if (item) {
+      const newQuantity = Math.max(1, item.quantity + change);
+      updateQuantity(itemId, newQuantity);
+    }
   };
 
   const handleRemoveItem = (itemId) => {
-    removeItem(itemId);
+    removeFromCart(itemId);
   };
 
   return (

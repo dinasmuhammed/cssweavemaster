@@ -163,12 +163,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
         escape: false,
         ondismiss: function() {
           toast.dismiss(loadingToast);
-          toast.error(
-            <>
-              Payment cancelled.<br/>
-              <button className="underline" onClick={() => window.location.reload()}>Retry Payment</button> or <button className="underline" onClick={() => window.location.href='/shop'}>Back to Shop</button>
-            </>
-          );
+          toast.error("Payment cancelled. Please try again.");
           persistPaymentAttempt("fail", { ...orderData, error: "cancelled" });
           if (onError) onError(new Error('Payment cancelled by user'));
         }
@@ -184,12 +179,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
     razorpay.on('payment.failed', function(response) {
       console.error("Payment failed:", response.error);
       toast.dismiss(loadingToast);
-      toast.error(
-        <>
-          Payment failed: {response.error.description || "Transaction failed"}.<br/>
-          <button className="underline" onClick={() => window.location.reload()}>Retry Payment</button> or <button className="underline" onClick={() => window.location.href='/shop'}>Back to Shop</button>
-        </>
-      );
+      toast.error(`Payment failed: ${response.error.description || "Transaction failed"}. Please try again.`);
       persistPaymentAttempt("fail", { 
         ...orderData, 
         error: response.error.description,
@@ -205,12 +195,7 @@ export const initializeRazorpayPayment = async (orderData, amount, customerDetai
   } catch (error) {
     console.error("Payment initialization error:", error);
     toast.dismiss(loadingToast);
-    toast.error(
-      <>
-        Payment setup failed: {error.message}.<br />
-        <button className="underline" onClick={() => window.location.reload()}>Retry</button> or <button className="underline" onClick={() => window.location.href='/shop'}>Back</button>
-      </>
-    );
+    toast.error(`Payment setup failed: ${error.message}. Please refresh and try again.`);
     persistPaymentAttempt("fail", { ...orderData, error: error.message });
     if (onError) onError(error);
   }
